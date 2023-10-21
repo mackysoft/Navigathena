@@ -8,7 +8,7 @@ namespace MackySoft.PackageTools.Editor {
 	public static class UnityPackageExporter {
 
 		// The name of the unitypackage to output.
-		const string k_PackageName = "XPool";
+		const string k_PackageName = "Navigathena";
 
 		// The path to the package under the `Assets/` folder.
 		const string k_PackagePath = "MackySoft";
@@ -18,9 +18,8 @@ namespace MackySoft.PackageTools.Editor {
 
 		const string k_SearchPattern = "*";
 		const string k_PackageToolsFolderName = "PackageTools";
-		const string k_ResourcesFolderName = "Resources";
 
-		[MenuItem("Tools/XPool/Export Package")]
+		[MenuItem("Tools/Navigathena/Export Package")]
 		public static void Export () {
 			ExportPackage($"{k_ExportPath}/{k_PackageName}.unitypackage");
 		}
@@ -46,7 +45,7 @@ namespace MackySoft.PackageTools.Editor {
 		public static string[] GetAssetPaths () {
 			var path = Path.Combine(Application.dataPath,k_PackagePath);
 			var assets = Directory.EnumerateFiles(path,k_SearchPattern,SearchOption.AllDirectories)
-				.Where(x => !x.Contains(k_PackageToolsFolderName) && !x.Contains(k_ResourcesFolderName))
+				.Where(x => !x.Contains(k_PackageToolsFolderName))
 				.Select(x => "Assets" + x.Replace(Application.dataPath,"").Replace(@"\","/"))
 				.ToArray();
 			return assets;
