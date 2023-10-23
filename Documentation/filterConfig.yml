@@ -1,6 +1,6 @@
 apiRules:
 - include:
-    uidRegex: ^MackySoft\.XPool
+    uidRegex: ^MackySoft\.Navigathena
     type: Namespace
 - include:
     uidRegex: ^Global

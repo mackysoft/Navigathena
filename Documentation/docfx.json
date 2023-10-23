@@ -19,8 +19,8 @@
     ],
     "build": {
         "globalMetadata": {
-            "_appTitle": "XPool",
-            "_appFooter": "XPool - Object Pooling System",
+            "_appTitle": "Navigathena",
+            "_appFooter": "Navigathena - Scene management framework",
             "_enableSearch": true,
             "_enableNewTab": true,
             "_disableContribution": true
@@ -64,7 +64,7 @@
             }
         ],
         "sitemap": {
-            "baseUrl": "https://mackysoft.github.io/XPool",
+            "baseUrl": "https://mackysoft.github.io/Navigathena",
             "changefreq": "weekly",
             "fileOptions": {
                 "api/*": {
