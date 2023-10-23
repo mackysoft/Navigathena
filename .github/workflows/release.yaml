@@ -14,7 +14,7 @@ jobs:
   update-packagejson:
     runs-on: ubuntu-latest
     env:
-      TARGET_FILE: ./Assets/MackySoft/MackySoft.XPool/package.json
+      TARGET_FILE: ./Assets/MackySoft/MackySoft.Navigathena/package.json
     outputs:
       sha: ${{ steps.commit.outputs.sha }}
     steps:
@@ -61,10 +61,10 @@ jobs:
     needs: [update-packagejson]
     strategy:
       matrix:
-        unity: ["2020.3.24f1"]
+        unity: ["2021.3.12f1"]
         include:
-          - unityVersion: 2020.3.24f1
-            license: UNITY_LICENSE_2020
+          - unityVersion: 2021.3.12f1
+            license: UNITY_LICENSE_2021
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -97,8 +97,8 @@ jobs:
       # Store artifacts.
       - uses: actions/upload-artifact@v2
         with:
-          name: XPool.unitypackage
-          path: ./Build/XPool.unitypackage
+          name: Navigathena.unitypackage
+          path: ./Build/Navigathena.unitypackage
 
   create-release:
     needs: [update-packagejson, build]
@@ -125,6 +125,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./XPool.unitypackage/XPool.unitypackage
-          asset_name: XPool.unitypackage
+          asset_path: ./Navigathena.unitypackage/Navigathena.unitypackage
+          asset_name: Navigathena.unitypackage
           asset_content_type: application/octet-stream
