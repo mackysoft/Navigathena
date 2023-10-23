@@ -1,0 +1,27 @@
+{
+    "name": "MackySoft.Navigathena.SceneManagement.Addressables",
+    "rootNamespace": "MackySoft.Navigathena.SceneManagement.Addressables",
+    "references": [
+        "GUID:8a0ff85ce7ae944459caf8abb9313c06",
+        "GUID:19e824f9fd05b4f4a8cd9aaafc8c4550",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:593a5b492d29ac6448b1ebf7f035ef33",
+        "GUID:9e24947de15b9834991c9d8411ea37cf",
+        "GUID:84651a3751eca9349aac36a66bba901b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.addressables",
+            "expression": "",
+            "define": "ENABLE_NAVIGATHENA_ADDRESSABLES"
+        }
+    ],
+    "noEngineReferences": false
+}

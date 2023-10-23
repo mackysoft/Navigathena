@@ -1,0 +1,26 @@
+{
+    "name": "MackySoft.Navigathena.SceneManagement.VContainer.Editor",
+    "rootNamespace": "MackySoft.Navigathena.SceneManagement.VContainer",
+    "references": [
+        "GUID:19e824f9fd05b4f4a8cd9aaafc8c4550",
+        "GUID:562d48ba35170a7418fc31951b7d8f16",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "jp.hadashikick.vcontainer",
+            "expression": "",
+            "define": "ENABLE_NAVIGATHENA_VCONTAINER"
+        }
+    ],
+    "noEngineReferences": false
+}

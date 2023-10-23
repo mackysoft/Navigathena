@@ -1,0 +1,19 @@
+{
+    "name": "MackySoft.Navigathena.SceneManagement.Editor",
+    "rootNamespace": "MackySoft.Navigathena.SceneManagement",
+    "references": [
+        "GUID:8a0ff85ce7ae944459caf8abb9313c06",
+        "GUID:19e824f9fd05b4f4a8cd9aaafc8c4550"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
