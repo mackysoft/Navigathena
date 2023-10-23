@@ -42,6 +42,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2021 }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+          unityVersion: 2021.3.12f1
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
