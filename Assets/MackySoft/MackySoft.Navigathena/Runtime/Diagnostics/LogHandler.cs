@@ -22,7 +22,6 @@ namespace MackySoft.Navigathena.Diagnostics
 
 		public LogLevel LogLevel { get; set; } = LogLevel.All;
 
-		[HideInCallstack]
 		public void LogFormat (LogType logType, UnityObject context, string format, params object[] args)
 		{
 			if (CanLog(logType))
@@ -31,7 +30,6 @@ namespace MackySoft.Navigathena.Diagnostics
 			}
 		}
 
-		[HideInCallstack]
 		public void LogException (Exception exception, UnityObject context)
 		{
 			if (CanLog(LogType.Exception))
