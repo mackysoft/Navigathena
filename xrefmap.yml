@@ -13,15 +13,6 @@ references:
   commentId: T:MackySoft.Navigathena.AsyncOperation
   fullName: MackySoft.Navigathena.AsyncOperation
   nameWithType: AsyncOperation
-- uid: MackySoft.Navigathena.AsyncOperation.Combine(IEnumerable{MackySoft.Navigathena.IAsyncOperation})
-  name: Combine(IEnumerable<IAsyncOperation>)
-  href: api/MackySoft.Navigathena.AsyncOperation.html#MackySoft_Navigathena_AsyncOperation_Combine_IEnumerable_MackySoft_Navigathena_IAsyncOperation__
-  commentId: M:MackySoft.Navigathena.AsyncOperation.Combine(IEnumerable{MackySoft.Navigathena.IAsyncOperation})
-  name.vb: Combine(IEnumerable(Of IAsyncOperation))
-  fullName: MackySoft.Navigathena.AsyncOperation.Combine(IEnumerable<MackySoft.Navigathena.IAsyncOperation>)
-  fullName.vb: MackySoft.Navigathena.AsyncOperation.Combine(IEnumerable(Of MackySoft.Navigathena.IAsyncOperation))
-  nameWithType: AsyncOperation.Combine(IEnumerable<IAsyncOperation>)
-  nameWithType.vb: AsyncOperation.Combine(IEnumerable(Of IAsyncOperation))
 - uid: MackySoft.Navigathena.AsyncOperation.Combine(MackySoft.Navigathena.IAsyncOperation,MackySoft.Navigathena.IAsyncOperation)
   name: Combine(IAsyncOperation, IAsyncOperation)
   href: api/MackySoft.Navigathena.AsyncOperation.html#MackySoft_Navigathena_AsyncOperation_Combine_MackySoft_Navigathena_IAsyncOperation_MackySoft_Navigathena_IAsyncOperation_
@@ -49,6 +40,15 @@ references:
   fullName.vb: MackySoft.Navigathena.AsyncOperation.Combine(MackySoft.Navigathena.IAsyncOperation())
   nameWithType: AsyncOperation.Combine(IAsyncOperation[])
   nameWithType.vb: AsyncOperation.Combine(IAsyncOperation())
+- uid: MackySoft.Navigathena.AsyncOperation.Combine(System.Collections.Generic.IEnumerable{MackySoft.Navigathena.IAsyncOperation})
+  name: Combine(IEnumerable<IAsyncOperation>)
+  href: api/MackySoft.Navigathena.AsyncOperation.html#MackySoft_Navigathena_AsyncOperation_Combine_System_Collections_Generic_IEnumerable_MackySoft_Navigathena_IAsyncOperation__
+  commentId: M:MackySoft.Navigathena.AsyncOperation.Combine(System.Collections.Generic.IEnumerable{MackySoft.Navigathena.IAsyncOperation})
+  name.vb: Combine(IEnumerable(Of IAsyncOperation))
+  fullName: MackySoft.Navigathena.AsyncOperation.Combine(System.Collections.Generic.IEnumerable<MackySoft.Navigathena.IAsyncOperation>)
+  fullName.vb: MackySoft.Navigathena.AsyncOperation.Combine(System.Collections.Generic.IEnumerable(Of MackySoft.Navigathena.IAsyncOperation))
+  nameWithType: AsyncOperation.Combine(IEnumerable<IAsyncOperation>)
+  nameWithType.vb: AsyncOperation.Combine(IEnumerable(Of IAsyncOperation))
 - uid: MackySoft.Navigathena.AsyncOperation.Combine*
   name: Combine
   href: api/MackySoft.Navigathena.AsyncOperation.html#MackySoft_Navigathena_AsyncOperation_Combine_
@@ -56,13 +56,13 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.AsyncOperation.Combine
   nameWithType: AsyncOperation.Combine
-- uid: MackySoft.Navigathena.AsyncOperation.Create(Func{IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken,UniTask})
+- uid: MackySoft.Navigathena.AsyncOperation.Create(System.Func{System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken,UniTask})
   name: Create(Func<IProgress<IProgressDataStore>, CancellationToken, UniTask>)
-  href: api/MackySoft.Navigathena.AsyncOperation.html#MackySoft_Navigathena_AsyncOperation_Create_Func_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_UniTask__
-  commentId: M:MackySoft.Navigathena.AsyncOperation.Create(Func{IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken,UniTask})
+  href: api/MackySoft.Navigathena.AsyncOperation.html#MackySoft_Navigathena_AsyncOperation_Create_System_Func_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_UniTask__
+  commentId: M:MackySoft.Navigathena.AsyncOperation.Create(System.Func{System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken,UniTask})
   name.vb: Create(Func(Of IProgress(Of IProgressDataStore), CancellationToken, UniTask))
-  fullName: MackySoft.Navigathena.AsyncOperation.Create(Func<IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken, UniTask>)
-  fullName.vb: MackySoft.Navigathena.AsyncOperation.Create(Func(Of IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken, UniTask))
+  fullName: MackySoft.Navigathena.AsyncOperation.Create(System.Func<System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken, UniTask>)
+  fullName.vb: MackySoft.Navigathena.AsyncOperation.Create(System.Func(Of System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken, UniTask))
   nameWithType: AsyncOperation.Create(Func<IProgress<IProgressDataStore>, CancellationToken, UniTask>)
   nameWithType.vb: AsyncOperation.Create(Func(Of IProgress(Of IProgressDataStore), CancellationToken, UniTask))
 - uid: MackySoft.Navigathena.AsyncOperation.Create*
@@ -97,11 +97,11 @@ references:
   commentId: T:MackySoft.Navigathena.Diagnostics.LogHandler
   fullName: MackySoft.Navigathena.Diagnostics.LogHandler
   nameWithType: LogHandler
-- uid: MackySoft.Navigathena.Diagnostics.LogHandler.LogException(Exception,UnityObject)
+- uid: MackySoft.Navigathena.Diagnostics.LogHandler.LogException(System.Exception,UnityObject)
   name: LogException(Exception, UnityObject)
-  href: api/MackySoft.Navigathena.Diagnostics.LogHandler.html#MackySoft_Navigathena_Diagnostics_LogHandler_LogException_Exception_UnityObject_
-  commentId: M:MackySoft.Navigathena.Diagnostics.LogHandler.LogException(Exception,UnityObject)
-  fullName: MackySoft.Navigathena.Diagnostics.LogHandler.LogException(Exception, UnityObject)
+  href: api/MackySoft.Navigathena.Diagnostics.LogHandler.html#MackySoft_Navigathena_Diagnostics_LogHandler_LogException_System_Exception_UnityObject_
+  commentId: M:MackySoft.Navigathena.Diagnostics.LogHandler.LogException(System.Exception,UnityObject)
+  fullName: MackySoft.Navigathena.Diagnostics.LogHandler.LogException(System.Exception, UnityObject)
   nameWithType: LogHandler.LogException(Exception, UnityObject)
 - uid: MackySoft.Navigathena.Diagnostics.LogHandler.LogException*
   name: LogException
@@ -213,13 +213,13 @@ references:
   commentId: T:MackySoft.Navigathena.IAsyncOperation
   fullName: MackySoft.Navigathena.IAsyncOperation
   nameWithType: IAsyncOperation
-- uid: MackySoft.Navigathena.IAsyncOperation.ExecuteAsync(IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+- uid: MackySoft.Navigathena.IAsyncOperation.ExecuteAsync(System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: ExecuteAsync(IProgress<IProgressDataStore>, CancellationToken)
-  href: api/MackySoft.Navigathena.IAsyncOperation.html#MackySoft_Navigathena_IAsyncOperation_ExecuteAsync_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_
-  commentId: M:MackySoft.Navigathena.IAsyncOperation.ExecuteAsync(IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+  href: api/MackySoft.Navigathena.IAsyncOperation.html#MackySoft_Navigathena_IAsyncOperation_ExecuteAsync_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.IAsyncOperation.ExecuteAsync(System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name.vb: ExecuteAsync(IProgress(Of IProgressDataStore), CancellationToken)
-  fullName: MackySoft.Navigathena.IAsyncOperation.ExecuteAsync(IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.IAsyncOperation.ExecuteAsync(IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken)
+  fullName: MackySoft.Navigathena.IAsyncOperation.ExecuteAsync(System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.IAsyncOperation.ExecuteAsync(System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken)
   nameWithType: IAsyncOperation.ExecuteAsync(IProgress<IProgressDataStore>, CancellationToken)
   nameWithType.vb: IAsyncOperation.ExecuteAsync(IProgress(Of IProgressDataStore), CancellationToken)
 - uid: MackySoft.Navigathena.IAsyncOperation.ExecuteAsync*
@@ -394,13 +394,13 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.ProgressDataStore.ConvertFrom
   nameWithType: ProgressDataStore.ConvertFrom
-- uid: MackySoft.Navigathena.ProgressDataStore.ConvertFrom``2(IProgress{``1},Func{``0,``1})
+- uid: MackySoft.Navigathena.ProgressDataStore.ConvertFrom``2(System.IProgress{``1},System.Func{``0,``1})
   name: ConvertFrom<TFrom, TTo>(IProgress<TTo>, Func<TFrom, TTo>)
-  href: api/MackySoft.Navigathena.ProgressDataStore.html#MackySoft_Navigathena_ProgressDataStore_ConvertFrom__2_IProgress___1__Func___0___1__
-  commentId: M:MackySoft.Navigathena.ProgressDataStore.ConvertFrom``2(IProgress{``1},Func{``0,``1})
+  href: api/MackySoft.Navigathena.ProgressDataStore.html#MackySoft_Navigathena_ProgressDataStore_ConvertFrom__2_System_IProgress___1__System_Func___0___1__
+  commentId: M:MackySoft.Navigathena.ProgressDataStore.ConvertFrom``2(System.IProgress{``1},System.Func{``0,``1})
   name.vb: ConvertFrom(Of TFrom, TTo)(IProgress(Of TTo), Func(Of TFrom, TTo))
-  fullName: MackySoft.Navigathena.ProgressDataStore.ConvertFrom<TFrom, TTo>(IProgress<TTo>, Func<TFrom, TTo>)
-  fullName.vb: MackySoft.Navigathena.ProgressDataStore.ConvertFrom(Of TFrom, TTo)(IProgress(Of TTo), Func(Of TFrom, TTo))
+  fullName: MackySoft.Navigathena.ProgressDataStore.ConvertFrom<TFrom, TTo>(System.IProgress<TTo>, System.Func<TFrom, TTo>)
+  fullName.vb: MackySoft.Navigathena.ProgressDataStore.ConvertFrom(Of TFrom, TTo)(System.IProgress(Of TTo), System.Func(Of TFrom, TTo))
   nameWithType: ProgressDataStore.ConvertFrom<TFrom, TTo>(IProgress<TTo>, Func<TFrom, TTo>)
   nameWithType.vb: ProgressDataStore.ConvertFrom(Of TFrom, TTo)(IProgress(Of TTo), Func(Of TFrom, TTo))
 - uid: MackySoft.Navigathena.ProgressDataStore.GetData*
@@ -564,11 +564,11 @@ references:
   commentId: T:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier
   fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier
   nameWithType: BlankSceneIdentifier
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.#ctor(System.String,Type)
+- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.#ctor(System.String,System.Type)
   name: BlankSceneIdentifier(String, Type)
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier__ctor_System_String_Type_
-  commentId: M:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.#ctor(System.String,Type)
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.BlankSceneIdentifier(System.String, Type)
+  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier__ctor_System_String_System_Type_
+  commentId: M:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.#ctor(System.String,System.Type)
+  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.BlankSceneIdentifier(System.String, System.Type)
   nameWithType: BlankSceneIdentifier.BlankSceneIdentifier(String, Type)
 - uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.#ctor*
   name: BlankSceneIdentifier
@@ -670,11 +670,11 @@ references:
   commentId: T:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator
   fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator
   nameWithType: GlobalSceneNavigator
-- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
   name: Change(LoadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Change_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Change_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, System.Threading.CancellationToken)
   nameWithType: GlobalSceneNavigator.Change(LoadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Change*
   name: Change
@@ -752,11 +752,11 @@ references:
   fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.MackySoft.Navigathena.SceneManagement.ISceneNavigator.Initialize
   nameWithType: GlobalSceneNavigator.ISceneNavigator.Initialize
   nameWithType.vb: GlobalSceneNavigator.MackySoft.Navigathena.SceneManagement.ISceneNavigator.Initialize
-- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,System.Threading.CancellationToken)
   name: Pop(PopSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Pop_MackySoft_Navigathena_SceneManagement_PopSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Pop_MackySoft_Navigathena_SceneManagement_PopSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest, System.Threading.CancellationToken)
   nameWithType: GlobalSceneNavigator.Pop(PopSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Pop*
   name: Pop
@@ -765,11 +765,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Pop
   nameWithType: GlobalSceneNavigator.Pop
-- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
   name: Push(LoadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Push_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Push_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, System.Threading.CancellationToken)
   nameWithType: GlobalSceneNavigator.Push(LoadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Push*
   name: Push
@@ -791,11 +791,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Register
   nameWithType: GlobalSceneNavigator.Register
-- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,System.Threading.CancellationToken)
   name: Reload(ReloadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Reload_MackySoft_Navigathena_SceneManagement_ReloadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Reload_MackySoft_Navigathena_SceneManagement_ReloadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest, System.Threading.CancellationToken)
   nameWithType: GlobalSceneNavigator.Reload(ReloadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Reload*
   name: Reload
@@ -804,11 +804,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Reload
   nameWithType: GlobalSceneNavigator.Reload
-- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
   name: Replace(LoadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Replace_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigator_Replace_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, System.Threading.CancellationToken)
   nameWithType: GlobalSceneNavigator.Replace(LoadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Replace*
   name: Replace
@@ -817,25 +817,6 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.Replace
   nameWithType: GlobalSceneNavigator.Replace
-- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor
-  name: GlobalSceneNavigatorEditor
-  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.html
-  commentId: T:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor
-  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor
-  nameWithType: GlobalSceneNavigatorEditor
-- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.OnInspectorGUI
-  name: OnInspectorGUI()
-  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigatorEditor_OnInspectorGUI
-  commentId: M:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.OnInspectorGUI
-  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.OnInspectorGUI()
-  nameWithType: GlobalSceneNavigatorEditor.OnInspectorGUI()
-- uid: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.OnInspectorGUI*
-  name: OnInspectorGUI
-  href: api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.html#MackySoft_Navigathena_SceneManagement_GlobalSceneNavigatorEditor_OnInspectorGUI_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.OnInspectorGUI
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.OnInspectorGUI
-  nameWithType: GlobalSceneNavigatorEditor.OnInspectorGUI
 - uid: MackySoft.Navigathena.SceneManagement.IReadOnlySceneHistoryEntry
   name: IReadOnlySceneHistoryEntry
   href: api/MackySoft.Navigathena.SceneManagement.IReadOnlySceneHistoryEntry.html
@@ -947,11 +928,11 @@ references:
   commentId: T:MackySoft.Navigathena.SceneManagement.ISceneEntryPoint
   fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint
   nameWithType: ISceneEntryPoint
-- uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.Threading.CancellationToken)
   name: OnEnter(ISceneDataReader, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html#MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnEnter_MackySoft_Navigathena_SceneManagement_ISceneDataReader_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html#MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnEnter_MackySoft_Navigathena_SceneManagement_ISceneDataReader_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader, System.Threading.CancellationToken)
   nameWithType: ISceneEntryPoint.OnEnter(ISceneDataReader, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter*
   name: OnEnter
@@ -960,11 +941,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter
   nameWithType: ISceneEntryPoint.OnEnter
-- uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.Threading.CancellationToken)
   name: OnExit(ISceneDataWriter, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html#MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnExit_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html#MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnExit_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, System.Threading.CancellationToken)
   nameWithType: ISceneEntryPoint.OnExit(ISceneDataWriter, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit*
   name: OnExit
@@ -973,13 +954,13 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit
   nameWithType: ISceneEntryPoint.OnExit
-- uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: OnFinalize(ISceneDataWriter, IProgress<IProgressDataStore>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html#MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnFinalize_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html#MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnFinalize_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name.vb: OnFinalize(ISceneDataWriter, IProgress(Of IProgressDataStore), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken)
   nameWithType: ISceneEntryPoint.OnFinalize(ISceneDataWriter, IProgress<IProgressDataStore>, CancellationToken)
   nameWithType.vb: ISceneEntryPoint.OnFinalize(ISceneDataWriter, IProgress(Of IProgressDataStore), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize*
@@ -989,13 +970,13 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize
   nameWithType: ISceneEntryPoint.OnFinalize
-- uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: OnInitialize(ISceneDataReader, IProgress<IProgressDataStore>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html#MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnInitialize_MackySoft_Navigathena_SceneManagement_ISceneDataReader_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html#MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnInitialize_MackySoft_Navigathena_SceneManagement_ISceneDataReader_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name.vb: OnInitialize(ISceneDataReader, IProgress(Of IProgressDataStore), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken)
   nameWithType: ISceneEntryPoint.OnInitialize(ISceneDataReader, IProgress<IProgressDataStore>, CancellationToken)
   nameWithType.vb: ISceneEntryPoint.OnInitialize(ISceneDataReader, IProgress(Of IProgressDataStore), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize*
@@ -1011,13 +992,13 @@ references:
   commentId: T:MackySoft.Navigathena.SceneManagement.ISceneHandle
   fullName: MackySoft.Navigathena.SceneManagement.ISceneHandle
   nameWithType: ISceneHandle
-- uid: MackySoft.Navigathena.SceneManagement.ISceneHandle.Load(IProgress{System.Single},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneHandle.Load(System.IProgress{System.Single},System.Threading.CancellationToken)
   name: Load(IProgress<Single>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneHandle.html#MackySoft_Navigathena_SceneManagement_ISceneHandle_Load_IProgress_System_Single__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneHandle.Load(IProgress{System.Single},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneHandle.html#MackySoft_Navigathena_SceneManagement_ISceneHandle_Load_System_IProgress_System_Single__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneHandle.Load(System.IProgress{System.Single},System.Threading.CancellationToken)
   name.vb: Load(IProgress(Of Single), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneHandle.Load(IProgress<System.Single>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneHandle.Load(IProgress(Of System.Single), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneHandle.Load(System.IProgress<System.Single>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneHandle.Load(System.IProgress(Of System.Single), System.Threading.CancellationToken)
   nameWithType: ISceneHandle.Load(IProgress<Single>, CancellationToken)
   nameWithType.vb: ISceneHandle.Load(IProgress(Of Single), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneHandle.Load*
@@ -1027,13 +1008,13 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.ISceneHandle.Load
   nameWithType: ISceneHandle.Load
-- uid: MackySoft.Navigathena.SceneManagement.ISceneHandle.Unload(IProgress{System.Single},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneHandle.Unload(System.IProgress{System.Single},System.Threading.CancellationToken)
   name: Unload(IProgress<Single>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneHandle.html#MackySoft_Navigathena_SceneManagement_ISceneHandle_Unload_IProgress_System_Single__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneHandle.Unload(IProgress{System.Single},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneHandle.html#MackySoft_Navigathena_SceneManagement_ISceneHandle_Unload_System_IProgress_System_Single__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneHandle.Unload(System.IProgress{System.Single},System.Threading.CancellationToken)
   name.vb: Unload(IProgress(Of Single), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneHandle.Unload(IProgress<System.Single>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneHandle.Unload(IProgress(Of System.Single), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneHandle.Unload(System.IProgress<System.Single>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneHandle.Unload(System.IProgress(Of System.Single), System.Threading.CancellationToken)
   nameWithType: ISceneHandle.Unload(IProgress<Single>, CancellationToken)
   nameWithType.vb: ISceneHandle.Unload(IProgress(Of Single), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneHandle.Unload*
@@ -1139,11 +1120,11 @@ references:
   commentId: T:MackySoft.Navigathena.SceneManagement.ISceneNavigator
   fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator
   nameWithType: ISceneNavigator
-- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
   name: Change(LoadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Change_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Change_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, System.Threading.CancellationToken)
   nameWithType: ISceneNavigator.Change(LoadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Change*
   name: Change
@@ -1178,11 +1159,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Initialize
   nameWithType: ISceneNavigator.Initialize
-- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,System.Threading.CancellationToken)
   name: Pop(PopSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Pop_MackySoft_Navigathena_SceneManagement_PopSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Pop_MackySoft_Navigathena_SceneManagement_PopSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest, System.Threading.CancellationToken)
   nameWithType: ISceneNavigator.Pop(PopSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Pop*
   name: Pop
@@ -1191,11 +1172,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Pop
   nameWithType: ISceneNavigator.Pop
-- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
   name: Push(LoadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Push_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Push_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, System.Threading.CancellationToken)
   nameWithType: ISceneNavigator.Push(LoadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Push*
   name: Push
@@ -1204,11 +1185,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Push
   nameWithType: ISceneNavigator.Push
-- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,System.Threading.CancellationToken)
   name: Reload(ReloadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Reload_MackySoft_Navigathena_SceneManagement_ReloadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Reload_MackySoft_Navigathena_SceneManagement_ReloadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest, System.Threading.CancellationToken)
   nameWithType: ISceneNavigator.Reload(ReloadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Reload*
   name: Reload
@@ -1217,11 +1198,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Reload
   nameWithType: ISceneNavigator.Reload
-- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
   name: Replace(LoadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Replace_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html#MackySoft_Navigathena_SceneManagement_ISceneNavigator_Replace_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, System.Threading.CancellationToken)
   nameWithType: ISceneNavigator.Replace(LoadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.ISceneNavigator.Replace*
   name: Replace
@@ -1236,13 +1217,13 @@ references:
   commentId: T:MackySoft.Navigathena.SceneManagement.ISceneProgressFactory
   fullName: MackySoft.Navigathena.SceneManagement.ISceneProgressFactory
   nameWithType: ISceneProgressFactory
-- uid: MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore,IProgress{MackySoft.Navigathena.IProgressDataStore})
+- uid: MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore,System.IProgress{MackySoft.Navigathena.IProgressDataStore})
   name: CreateProgress(IProgressDataStore, IProgress<IProgressDataStore>)
-  href: api/MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.html#MackySoft_Navigathena_SceneManagement_ISceneProgressFactory_CreateProgress_MackySoft_Navigathena_IProgressDataStore_IProgress_MackySoft_Navigathena_IProgressDataStore__
-  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore,IProgress{MackySoft.Navigathena.IProgressDataStore})
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.html#MackySoft_Navigathena_SceneManagement_ISceneProgressFactory_CreateProgress_MackySoft_Navigathena_IProgressDataStore_System_IProgress_MackySoft_Navigathena_IProgressDataStore__
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore,System.IProgress{MackySoft.Navigathena.IProgressDataStore})
   name.vb: CreateProgress(IProgressDataStore, IProgress(Of IProgressDataStore))
-  fullName: MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore, IProgress<MackySoft.Navigathena.IProgressDataStore>)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore, IProgress(Of MackySoft.Navigathena.IProgressDataStore))
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore, System.IProgress<MackySoft.Navigathena.IProgressDataStore>)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore))
   nameWithType: ISceneProgressFactory.CreateProgress(IProgressDataStore, IProgress<IProgressDataStore>)
   nameWithType.vb: ISceneProgressFactory.CreateProgress(IProgressDataStore, IProgress(Of IProgressDataStore))
 - uid: MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.CreateProgress*
@@ -1553,12 +1534,12 @@ references:
   commentId: T:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase
   fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase
   nameWithType: SceneEntryPointBase
-- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.Threading.CancellationToken)
   name: ISceneEntryPoint.OnEnter(ISceneDataReader, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnEnter_MackySoft_Navigathena_SceneManagement_ISceneDataReader_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnEnter_MackySoft_Navigathena_SceneManagement_ISceneDataReader_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.Threading.CancellationToken)
   name.vb: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(ISceneDataReader, CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader, CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader, System.Threading.CancellationToken)
   nameWithType: SceneEntryPointBase.ISceneEntryPoint.OnEnter(ISceneDataReader, CancellationToken)
   nameWithType.vb: SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter(ISceneDataReader, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnEnter*
@@ -1570,12 +1551,12 @@ references:
   fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter
   nameWithType: SceneEntryPointBase.ISceneEntryPoint.OnEnter
   nameWithType.vb: SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnEnter
-- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.Threading.CancellationToken)
   name: ISceneEntryPoint.OnExit(ISceneDataWriter, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnExit_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnExit_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.Threading.CancellationToken)
   name.vb: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(ISceneDataWriter, CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, System.Threading.CancellationToken)
   nameWithType: SceneEntryPointBase.ISceneEntryPoint.OnExit(ISceneDataWriter, CancellationToken)
   nameWithType.vb: SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit(ISceneDataWriter, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnExit*
@@ -1587,13 +1568,13 @@ references:
   fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit
   nameWithType: SceneEntryPointBase.ISceneEntryPoint.OnExit
   nameWithType.vb: SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnExit
-- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: ISceneEntryPoint.OnFinalize(ISceneDataWriter, IProgress<IProgressDataStore>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnFinalize_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnFinalize_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name.vb: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(ISceneDataWriter, IProgress(Of IProgressDataStore), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken)
   nameWithType: SceneEntryPointBase.ISceneEntryPoint.OnFinalize(ISceneDataWriter, IProgress<IProgressDataStore>, CancellationToken)
   nameWithType.vb: SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize(ISceneDataWriter, IProgress(Of IProgressDataStore), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnFinalize*
@@ -1605,13 +1586,13 @@ references:
   fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize
   nameWithType: SceneEntryPointBase.ISceneEntryPoint.OnFinalize
   nameWithType.vb: SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnFinalize
-- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: ISceneEntryPoint.OnInitialize(ISceneDataReader, IProgress<IProgressDataStore>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnInitialize_MackySoft_Navigathena_SceneManagement_ISceneDataReader_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_OnInitialize_MackySoft_Navigathena_SceneManagement_ISceneDataReader_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name.vb: MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(ISceneDataReader, IProgress(Of IProgressDataStore), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken)
   nameWithType: SceneEntryPointBase.ISceneEntryPoint.OnInitialize(ISceneDataReader, IProgress<IProgressDataStore>, CancellationToken)
   nameWithType.vb: SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize(ISceneDataReader, IProgress(Of IProgressDataStore), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft#Navigathena#SceneManagement#ISceneEntryPoint#OnInitialize*
@@ -1623,11 +1604,11 @@ references:
   fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize
   nameWithType: SceneEntryPointBase.ISceneEntryPoint.OnInitialize
   nameWithType.vb: SceneEntryPointBase.MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.OnInitialize
-- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.Threading.CancellationToken)
   name: OnEnter(ISceneDataReader, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_OnEnter_MackySoft_Navigathena_SceneManagement_ISceneDataReader_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_OnEnter_MackySoft_Navigathena_SceneManagement_ISceneDataReader_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnEnter(MackySoft.Navigathena.SceneManagement.ISceneDataReader, System.Threading.CancellationToken)
   nameWithType: SceneEntryPointBase.OnEnter(ISceneDataReader, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnEnter*
   name: OnEnter
@@ -1636,11 +1617,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnEnter
   nameWithType: SceneEntryPointBase.OnEnter
-- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.Threading.CancellationToken)
   name: OnExit(ISceneDataWriter, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_OnExit_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_OnExit_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnExit(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, System.Threading.CancellationToken)
   nameWithType: SceneEntryPointBase.OnExit(ISceneDataWriter, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnExit*
   name: OnExit
@@ -1649,13 +1630,13 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnExit
   nameWithType: SceneEntryPointBase.OnExit
-- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: OnFinalize(ISceneDataWriter, IProgress<IProgressDataStore>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_OnFinalize_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_OnFinalize_MackySoft_Navigathena_SceneManagement_ISceneDataWriter_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name.vb: OnFinalize(ISceneDataWriter, IProgress(Of IProgressDataStore), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize(MackySoft.Navigathena.SceneManagement.ISceneDataWriter, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken)
   nameWithType: SceneEntryPointBase.OnFinalize(ISceneDataWriter, IProgress<IProgressDataStore>, CancellationToken)
   nameWithType.vb: SceneEntryPointBase.OnFinalize(ISceneDataWriter, IProgress(Of IProgressDataStore), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize*
@@ -1665,13 +1646,13 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnFinalize
   nameWithType: SceneEntryPointBase.OnFinalize
-- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: OnInitialize(ISceneDataReader, IProgress<IProgressDataStore>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_OnInitialize_MackySoft_Navigathena_SceneManagement_ISceneDataReader_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html#MackySoft_Navigathena_SceneManagement_SceneEntryPointBase_OnInitialize_MackySoft_Navigathena_SceneManagement_ISceneDataReader_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name.vb: OnInitialize(ISceneDataReader, IProgress(Of IProgressDataStore), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize(MackySoft.Navigathena.SceneManagement.ISceneDataReader, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken)
   nameWithType: SceneEntryPointBase.OnInitialize(ISceneDataReader, IProgress<IProgressDataStore>, CancellationToken)
   nameWithType.vb: SceneEntryPointBase.OnInitialize(ISceneDataReader, IProgress(Of IProgressDataStore), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize*
@@ -1693,13 +1674,13 @@ references:
   commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor
   fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.SceneHistory()
   nameWithType: SceneHistory.SceneHistory()
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor(IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
+- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor(System.Collections.Generic.IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
   name: SceneHistory(IEnumerable<SceneHistoryEntry>)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory__ctor_IEnumerable_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry__
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor(IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
+  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory__ctor_System_Collections_Generic_IEnumerable_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry__
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor(System.Collections.Generic.IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
   name.vb: SceneHistory(IEnumerable(Of SceneHistoryEntry))
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.SceneHistory(IEnumerable<MackySoft.Navigathena.SceneManagement.SceneHistoryEntry>)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneHistory.SceneHistory(IEnumerable(Of MackySoft.Navigathena.SceneManagement.SceneHistoryEntry))
+  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.SceneHistory(System.Collections.Generic.IEnumerable<MackySoft.Navigathena.SceneManagement.SceneHistoryEntry>)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneHistory.SceneHistory(System.Collections.Generic.IEnumerable(Of MackySoft.Navigathena.SceneManagement.SceneHistoryEntry))
   nameWithType: SceneHistory.SceneHistory(IEnumerable<SceneHistoryEntry>)
   nameWithType.vb: SceneHistory.SceneHistory(IEnumerable(Of SceneHistoryEntry))
 - uid: MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor*
@@ -1831,13 +1812,13 @@ references:
   commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.#ctor
   fullName: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.SceneHistoryBuilderBase()
   nameWithType: SceneHistoryBuilderBase.SceneHistoryBuilderBase()
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.#ctor(IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
+- uid: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.#ctor(System.Collections.Generic.IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
   name: SceneHistoryBuilderBase(IEnumerable<SceneHistoryEntry>)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html#MackySoft_Navigathena_SceneManagement_SceneHistoryBuilderBase__ctor_IEnumerable_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry__
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.#ctor(IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
+  href: api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html#MackySoft_Navigathena_SceneManagement_SceneHistoryBuilderBase__ctor_System_Collections_Generic_IEnumerable_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry__
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.#ctor(System.Collections.Generic.IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
   name.vb: SceneHistoryBuilderBase(IEnumerable(Of SceneHistoryEntry))
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.SceneHistoryBuilderBase(IEnumerable<MackySoft.Navigathena.SceneManagement.SceneHistoryEntry>)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.SceneHistoryBuilderBase(IEnumerable(Of MackySoft.Navigathena.SceneManagement.SceneHistoryEntry))
+  fullName: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.SceneHistoryBuilderBase(System.Collections.Generic.IEnumerable<MackySoft.Navigathena.SceneManagement.SceneHistoryEntry>)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.SceneHistoryBuilderBase(System.Collections.Generic.IEnumerable(Of MackySoft.Navigathena.SceneManagement.SceneHistoryEntry))
   nameWithType: SceneHistoryBuilderBase.SceneHistoryBuilderBase(IEnumerable<SceneHistoryEntry>)
   nameWithType.vb: SceneHistoryBuilderBase.SceneHistoryBuilderBase(IEnumerable(Of SceneHistoryEntry))
 - uid: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.#ctor*
@@ -2011,11 +1992,11 @@ references:
   commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigationException.#ctor(System.String)
   fullName: MackySoft.Navigathena.SceneManagement.SceneNavigationException.SceneNavigationException(System.String)
   nameWithType: SceneNavigationException.SceneNavigationException(String)
-- uid: MackySoft.Navigathena.SceneManagement.SceneNavigationException.#ctor(System.String,Exception)
+- uid: MackySoft.Navigathena.SceneManagement.SceneNavigationException.#ctor(System.String,System.Exception)
   name: SceneNavigationException(String, Exception)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigationException.html#MackySoft_Navigathena_SceneManagement_SceneNavigationException__ctor_System_String_Exception_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigationException.#ctor(System.String,Exception)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigationException.SceneNavigationException(System.String, Exception)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigationException.html#MackySoft_Navigathena_SceneManagement_SceneNavigationException__ctor_System_String_System_Exception_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigationException.#ctor(System.String,System.Exception)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigationException.SceneNavigationException(System.String, System.Exception)
   nameWithType: SceneNavigationException.SceneNavigationException(String, Exception)
 - uid: MackySoft.Navigathena.SceneManagement.SceneNavigationException.#ctor*
   name: SceneNavigationException
@@ -2043,11 +2024,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.CanPop
   nameWithType: SceneNavigatorExtensions.CanPop
-- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Change(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Change(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
   name: Change(ISceneNavigator, ISceneIdentifier, ITransitionDirector, ISceneData, IAsyncOperation, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Change_MackySoft_Navigathena_SceneManagement_ISceneNavigator_MackySoft_Navigathena_SceneManagement_ISceneIdentifier_ITransitionDirector_MackySoft_Navigathena_SceneManagement_ISceneData_MackySoft_Navigathena_IAsyncOperation_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Change(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Change(MackySoft.Navigathena.SceneManagement.ISceneNavigator, MackySoft.Navigathena.SceneManagement.ISceneIdentifier, ITransitionDirector, MackySoft.Navigathena.SceneManagement.ISceneData, MackySoft.Navigathena.IAsyncOperation, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Change_MackySoft_Navigathena_SceneManagement_ISceneNavigator_MackySoft_Navigathena_SceneManagement_ISceneIdentifier_ITransitionDirector_MackySoft_Navigathena_SceneManagement_ISceneData_MackySoft_Navigathena_IAsyncOperation_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Change(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Change(MackySoft.Navigathena.SceneManagement.ISceneNavigator, MackySoft.Navigathena.SceneManagement.ISceneIdentifier, ITransitionDirector, MackySoft.Navigathena.SceneManagement.ISceneData, MackySoft.Navigathena.IAsyncOperation, System.Threading.CancellationToken)
   nameWithType: SceneNavigatorExtensions.Change(ISceneNavigator, ISceneIdentifier, ITransitionDirector, ISceneData, IAsyncOperation, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Change*
   name: Change
@@ -2056,11 +2037,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Change
   nameWithType: SceneNavigatorExtensions.Change
-- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Pop(MackySoft.Navigathena.SceneManagement.ISceneNavigator,ITransitionDirector,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Pop(MackySoft.Navigathena.SceneManagement.ISceneNavigator,ITransitionDirector,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
   name: Pop(ISceneNavigator, ITransitionDirector, IAsyncOperation, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Pop_MackySoft_Navigathena_SceneManagement_ISceneNavigator_ITransitionDirector_MackySoft_Navigathena_IAsyncOperation_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Pop(MackySoft.Navigathena.SceneManagement.ISceneNavigator,ITransitionDirector,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Pop(MackySoft.Navigathena.SceneManagement.ISceneNavigator, ITransitionDirector, MackySoft.Navigathena.IAsyncOperation, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Pop_MackySoft_Navigathena_SceneManagement_ISceneNavigator_ITransitionDirector_MackySoft_Navigathena_IAsyncOperation_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Pop(MackySoft.Navigathena.SceneManagement.ISceneNavigator,ITransitionDirector,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Pop(MackySoft.Navigathena.SceneManagement.ISceneNavigator, ITransitionDirector, MackySoft.Navigathena.IAsyncOperation, System.Threading.CancellationToken)
   nameWithType: SceneNavigatorExtensions.Pop(ISceneNavigator, ITransitionDirector, IAsyncOperation, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Pop*
   name: Pop
@@ -2069,11 +2050,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Pop
   nameWithType: SceneNavigatorExtensions.Pop
-- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Push(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Push(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
   name: Push(ISceneNavigator, ISceneIdentifier, ITransitionDirector, ISceneData, IAsyncOperation, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Push_MackySoft_Navigathena_SceneManagement_ISceneNavigator_MackySoft_Navigathena_SceneManagement_ISceneIdentifier_ITransitionDirector_MackySoft_Navigathena_SceneManagement_ISceneData_MackySoft_Navigathena_IAsyncOperation_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Push(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Push(MackySoft.Navigathena.SceneManagement.ISceneNavigator, MackySoft.Navigathena.SceneManagement.ISceneIdentifier, ITransitionDirector, MackySoft.Navigathena.SceneManagement.ISceneData, MackySoft.Navigathena.IAsyncOperation, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Push_MackySoft_Navigathena_SceneManagement_ISceneNavigator_MackySoft_Navigathena_SceneManagement_ISceneIdentifier_ITransitionDirector_MackySoft_Navigathena_SceneManagement_ISceneData_MackySoft_Navigathena_IAsyncOperation_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Push(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Push(MackySoft.Navigathena.SceneManagement.ISceneNavigator, MackySoft.Navigathena.SceneManagement.ISceneIdentifier, ITransitionDirector, MackySoft.Navigathena.SceneManagement.ISceneData, MackySoft.Navigathena.IAsyncOperation, System.Threading.CancellationToken)
   nameWithType: SceneNavigatorExtensions.Push(ISceneNavigator, ISceneIdentifier, ITransitionDirector, ISceneData, IAsyncOperation, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Push*
   name: Push
@@ -2082,11 +2063,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Push
   nameWithType: SceneNavigatorExtensions.Push
-- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Reload(MackySoft.Navigathena.SceneManagement.ISceneNavigator,ITransitionDirector,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Reload(MackySoft.Navigathena.SceneManagement.ISceneNavigator,ITransitionDirector,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
   name: Reload(ISceneNavigator, ITransitionDirector, IAsyncOperation, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Reload_MackySoft_Navigathena_SceneManagement_ISceneNavigator_ITransitionDirector_MackySoft_Navigathena_IAsyncOperation_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Reload(MackySoft.Navigathena.SceneManagement.ISceneNavigator,ITransitionDirector,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Reload(MackySoft.Navigathena.SceneManagement.ISceneNavigator, ITransitionDirector, MackySoft.Navigathena.IAsyncOperation, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Reload_MackySoft_Navigathena_SceneManagement_ISceneNavigator_ITransitionDirector_MackySoft_Navigathena_IAsyncOperation_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Reload(MackySoft.Navigathena.SceneManagement.ISceneNavigator,ITransitionDirector,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Reload(MackySoft.Navigathena.SceneManagement.ISceneNavigator, ITransitionDirector, MackySoft.Navigathena.IAsyncOperation, System.Threading.CancellationToken)
   nameWithType: SceneNavigatorExtensions.Reload(ISceneNavigator, ITransitionDirector, IAsyncOperation, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Reload*
   name: Reload
@@ -2095,11 +2076,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Reload
   nameWithType: SceneNavigatorExtensions.Reload
-- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Replace(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Replace(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
   name: Replace(ISceneNavigator, ISceneIdentifier, ITransitionDirector, ISceneData, IAsyncOperation, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Replace_MackySoft_Navigathena_SceneManagement_ISceneNavigator_MackySoft_Navigathena_SceneManagement_ISceneIdentifier_ITransitionDirector_MackySoft_Navigathena_SceneManagement_ISceneData_MackySoft_Navigathena_IAsyncOperation_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Replace(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Replace(MackySoft.Navigathena.SceneManagement.ISceneNavigator, MackySoft.Navigathena.SceneManagement.ISceneIdentifier, ITransitionDirector, MackySoft.Navigathena.SceneManagement.ISceneData, MackySoft.Navigathena.IAsyncOperation, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html#MackySoft_Navigathena_SceneManagement_SceneNavigatorExtensions_Replace_MackySoft_Navigathena_SceneManagement_ISceneNavigator_MackySoft_Navigathena_SceneManagement_ISceneIdentifier_ITransitionDirector_MackySoft_Navigathena_SceneManagement_ISceneData_MackySoft_Navigathena_IAsyncOperation_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Replace(MackySoft.Navigathena.SceneManagement.ISceneNavigator,MackySoft.Navigathena.SceneManagement.ISceneIdentifier,ITransitionDirector,MackySoft.Navigathena.SceneManagement.ISceneData,MackySoft.Navigathena.IAsyncOperation,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Replace(MackySoft.Navigathena.SceneManagement.ISceneNavigator, MackySoft.Navigathena.SceneManagement.ISceneIdentifier, ITransitionDirector, MackySoft.Navigathena.SceneManagement.ISceneData, MackySoft.Navigathena.IAsyncOperation, System.Threading.CancellationToken)
   nameWithType: SceneNavigatorExtensions.Replace(ISceneNavigator, ISceneIdentifier, ITransitionDirector, ISceneData, IAsyncOperation, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.Replace*
   name: Replace
@@ -2191,11 +2172,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.StandardSceneNavigator
   nameWithType: StandardSceneNavigator.StandardSceneNavigator
-- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
   name: Change(LoadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Change_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Change_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Change(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, System.Threading.CancellationToken)
   nameWithType: StandardSceneNavigator.Change(LoadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Change*
   name: Change
@@ -2243,11 +2224,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Initialize
   nameWithType: StandardSceneNavigator.Initialize
-- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,System.Threading.CancellationToken)
   name: Pop(PopSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Pop_MackySoft_Navigathena_SceneManagement_PopSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Pop_MackySoft_Navigathena_SceneManagement_PopSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Pop(MackySoft.Navigathena.SceneManagement.PopSceneRequest, System.Threading.CancellationToken)
   nameWithType: StandardSceneNavigator.Pop(PopSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Pop*
   name: Pop
@@ -2256,11 +2237,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Pop
   nameWithType: StandardSceneNavigator.Pop
-- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
   name: Push(LoadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Push_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Push_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Push(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, System.Threading.CancellationToken)
   nameWithType: StandardSceneNavigator.Push(LoadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Push*
   name: Push
@@ -2269,11 +2250,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Push
   nameWithType: StandardSceneNavigator.Push
-- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,System.Threading.CancellationToken)
   name: Reload(ReloadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Reload_MackySoft_Navigathena_SceneManagement_ReloadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Reload_MackySoft_Navigathena_SceneManagement_ReloadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Reload(MackySoft.Navigathena.SceneManagement.ReloadSceneRequest, System.Threading.CancellationToken)
   nameWithType: StandardSceneNavigator.Reload(ReloadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Reload*
   name: Reload
@@ -2282,11 +2263,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Reload
   nameWithType: StandardSceneNavigator.Reload
-- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
   name: Replace(LoadSceneRequest, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Replace_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html#MackySoft_Navigathena_SceneManagement_StandardSceneNavigator_Replace_MackySoft_Navigathena_SceneManagement_LoadSceneRequest_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Replace(MackySoft.Navigathena.SceneManagement.LoadSceneRequest, System.Threading.CancellationToken)
   nameWithType: StandardSceneNavigator.Replace(LoadSceneRequest, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.Replace*
   name: Replace
@@ -2301,13 +2282,13 @@ references:
   commentId: T:MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory
   fullName: MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory
   nameWithType: StandardSceneProgressFactory
-- uid: MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore,IProgress{MackySoft.Navigathena.IProgressDataStore})
+- uid: MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore,System.IProgress{MackySoft.Navigathena.IProgressDataStore})
   name: CreateProgress(IProgressDataStore, IProgress<IProgressDataStore>)
-  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.html#MackySoft_Navigathena_SceneManagement_StandardSceneProgressFactory_CreateProgress_MackySoft_Navigathena_IProgressDataStore_IProgress_MackySoft_Navigathena_IProgressDataStore__
-  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore,IProgress{MackySoft.Navigathena.IProgressDataStore})
+  href: api/MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.html#MackySoft_Navigathena_SceneManagement_StandardSceneProgressFactory_CreateProgress_MackySoft_Navigathena_IProgressDataStore_System_IProgress_MackySoft_Navigathena_IProgressDataStore__
+  commentId: M:MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore,System.IProgress{MackySoft.Navigathena.IProgressDataStore})
   name.vb: CreateProgress(IProgressDataStore, IProgress(Of IProgressDataStore))
-  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore, IProgress<MackySoft.Navigathena.IProgressDataStore>)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore, IProgress(Of MackySoft.Navigathena.IProgressDataStore))
+  fullName: MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore, System.IProgress<MackySoft.Navigathena.IProgressDataStore>)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.CreateProgress(MackySoft.Navigathena.IProgressDataStore, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore))
   nameWithType: StandardSceneProgressFactory.CreateProgress(IProgressDataStore, IProgress<IProgressDataStore>)
   nameWithType.vb: StandardSceneProgressFactory.CreateProgress(IProgressDataStore, IProgress(Of IProgressDataStore))
 - uid: MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.CreateProgress*
@@ -2412,11 +2393,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FindFirstEntryPointInAllScenes
   nameWithType: SceneNavigatorHelper.FindFirstEntryPointInAllScenes
-- uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence(MackySoft.Navigathena.SceneManagement.ISceneEntryPoint,MackySoft.Navigathena.SceneManagement.SceneDataStore,CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence(MackySoft.Navigathena.SceneManagement.ISceneEntryPoint,MackySoft.Navigathena.SceneManagement.SceneDataStore,System.Threading.CancellationToken)
   name: FirstEnterSceneSequence(ISceneEntryPoint, SceneDataStore, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html#MackySoft_Navigathena_SceneManagement_Utilities_SceneNavigatorHelper_FirstEnterSceneSequence_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_MackySoft_Navigathena_SceneManagement_SceneDataStore_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence(MackySoft.Navigathena.SceneManagement.ISceneEntryPoint,MackySoft.Navigathena.SceneManagement.SceneDataStore,CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence(MackySoft.Navigathena.SceneManagement.ISceneEntryPoint, MackySoft.Navigathena.SceneManagement.SceneDataStore, CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html#MackySoft_Navigathena_SceneManagement_Utilities_SceneNavigatorHelper_FirstEnterSceneSequence_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_MackySoft_Navigathena_SceneManagement_SceneDataStore_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence(MackySoft.Navigathena.SceneManagement.ISceneEntryPoint,MackySoft.Navigathena.SceneManagement.SceneDataStore,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence(MackySoft.Navigathena.SceneManagement.ISceneEntryPoint, MackySoft.Navigathena.SceneManagement.SceneDataStore, System.Threading.CancellationToken)
   nameWithType: SceneNavigatorHelper.FirstEnterSceneSequence(ISceneEntryPoint, SceneDataStore, CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence*
   name: FirstEnterSceneSequence
@@ -2425,13 +2406,13 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence
   nameWithType: SceneNavigatorHelper.FirstEnterSceneSequence
-- uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint(MackySoft.Navigathena.SceneManagement.ISceneIdentifier,MackySoft.Navigathena.SceneManagement.ISceneProgressFactory,MackySoft.Navigathena.IProgressDataStore,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint(MackySoft.Navigathena.SceneManagement.ISceneIdentifier,MackySoft.Navigathena.SceneManagement.ISceneProgressFactory,MackySoft.Navigathena.IProgressDataStore,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: LoadSceneAndGetEntryPoint(ISceneIdentifier, ISceneProgressFactory, IProgressDataStore, IProgress<IProgressDataStore>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html#MackySoft_Navigathena_SceneManagement_Utilities_SceneNavigatorHelper_LoadSceneAndGetEntryPoint_MackySoft_Navigathena_SceneManagement_ISceneIdentifier_MackySoft_Navigathena_SceneManagement_ISceneProgressFactory_MackySoft_Navigathena_IProgressDataStore_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint(MackySoft.Navigathena.SceneManagement.ISceneIdentifier,MackySoft.Navigathena.SceneManagement.ISceneProgressFactory,MackySoft.Navigathena.IProgressDataStore,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html#MackySoft_Navigathena_SceneManagement_Utilities_SceneNavigatorHelper_LoadSceneAndGetEntryPoint_MackySoft_Navigathena_SceneManagement_ISceneIdentifier_MackySoft_Navigathena_SceneManagement_ISceneProgressFactory_MackySoft_Navigathena_IProgressDataStore_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint(MackySoft.Navigathena.SceneManagement.ISceneIdentifier,MackySoft.Navigathena.SceneManagement.ISceneProgressFactory,MackySoft.Navigathena.IProgressDataStore,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name.vb: LoadSceneAndGetEntryPoint(ISceneIdentifier, ISceneProgressFactory, IProgressDataStore, IProgress(Of IProgressDataStore), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint(MackySoft.Navigathena.SceneManagement.ISceneIdentifier, MackySoft.Navigathena.SceneManagement.ISceneProgressFactory, MackySoft.Navigathena.IProgressDataStore, IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint(MackySoft.Navigathena.SceneManagement.ISceneIdentifier, MackySoft.Navigathena.SceneManagement.ISceneProgressFactory, MackySoft.Navigathena.IProgressDataStore, IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint(MackySoft.Navigathena.SceneManagement.ISceneIdentifier, MackySoft.Navigathena.SceneManagement.ISceneProgressFactory, MackySoft.Navigathena.IProgressDataStore, System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint(MackySoft.Navigathena.SceneManagement.ISceneIdentifier, MackySoft.Navigathena.SceneManagement.ISceneProgressFactory, MackySoft.Navigathena.IProgressDataStore, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken)
   nameWithType: SceneNavigatorHelper.LoadSceneAndGetEntryPoint(ISceneIdentifier, ISceneProgressFactory, IProgressDataStore, IProgress<IProgressDataStore>, CancellationToken)
   nameWithType.vb: SceneNavigatorHelper.LoadSceneAndGetEntryPoint(ISceneIdentifier, ISceneProgressFactory, IProgressDataStore, IProgress(Of IProgressDataStore), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint*
@@ -2441,13 +2422,13 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint
   nameWithType: SceneNavigatorHelper.LoadSceneAndGetEntryPoint
-- uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.TryExecuteInterruptOperation(MackySoft.Navigathena.IAsyncOperation,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+- uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.TryExecuteInterruptOperation(MackySoft.Navigathena.IAsyncOperation,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: TryExecuteInterruptOperation(IAsyncOperation, IProgress<IProgressDataStore>, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html#MackySoft_Navigathena_SceneManagement_Utilities_SceneNavigatorHelper_TryExecuteInterruptOperation_MackySoft_Navigathena_IAsyncOperation_IProgress_MackySoft_Navigathena_IProgressDataStore__CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.TryExecuteInterruptOperation(MackySoft.Navigathena.IAsyncOperation,IProgress{MackySoft.Navigathena.IProgressDataStore},CancellationToken)
+  href: api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html#MackySoft_Navigathena_SceneManagement_Utilities_SceneNavigatorHelper_TryExecuteInterruptOperation_MackySoft_Navigathena_IAsyncOperation_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.TryExecuteInterruptOperation(MackySoft.Navigathena.IAsyncOperation,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name.vb: TryExecuteInterruptOperation(IAsyncOperation, IProgress(Of IProgressDataStore), CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.TryExecuteInterruptOperation(MackySoft.Navigathena.IAsyncOperation, IProgress<MackySoft.Navigathena.IProgressDataStore>, CancellationToken)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.TryExecuteInterruptOperation(MackySoft.Navigathena.IAsyncOperation, IProgress(Of MackySoft.Navigathena.IProgressDataStore), CancellationToken)
+  fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.TryExecuteInterruptOperation(MackySoft.Navigathena.IAsyncOperation, System.IProgress<MackySoft.Navigathena.IProgressDataStore>, System.Threading.CancellationToken)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.TryExecuteInterruptOperation(MackySoft.Navigathena.IAsyncOperation, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore), System.Threading.CancellationToken)
   nameWithType: SceneNavigatorHelper.TryExecuteInterruptOperation(IAsyncOperation, IProgress<IProgressDataStore>, CancellationToken)
   nameWithType.vb: SceneNavigatorHelper.TryExecuteInterruptOperation(IAsyncOperation, IProgress(Of IProgressDataStore), CancellationToken)
 - uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.TryExecuteInterruptOperation*
@@ -2542,11 +2523,11 @@ references:
   commentId: T:MackySoft.Navigathena.Transitions.ITransitionHandle
   fullName: MackySoft.Navigathena.Transitions.ITransitionHandle
   nameWithType: ITransitionHandle
-- uid: MackySoft.Navigathena.Transitions.ITransitionHandle.End(CancellationToken)
+- uid: MackySoft.Navigathena.Transitions.ITransitionHandle.End(System.Threading.CancellationToken)
   name: End(CancellationToken)
-  href: api/MackySoft.Navigathena.Transitions.ITransitionHandle.html#MackySoft_Navigathena_Transitions_ITransitionHandle_End_CancellationToken_
-  commentId: M:MackySoft.Navigathena.Transitions.ITransitionHandle.End(CancellationToken)
-  fullName: MackySoft.Navigathena.Transitions.ITransitionHandle.End(CancellationToken)
+  href: api/MackySoft.Navigathena.Transitions.ITransitionHandle.html#MackySoft_Navigathena_Transitions_ITransitionHandle_End_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.Transitions.ITransitionHandle.End(System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.Transitions.ITransitionHandle.End(System.Threading.CancellationToken)
   nameWithType: ITransitionHandle.End(CancellationToken)
 - uid: MackySoft.Navigathena.Transitions.ITransitionHandle.End*
   name: End
@@ -2555,11 +2536,11 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.Transitions.ITransitionHandle.End
   nameWithType: ITransitionHandle.End
-- uid: MackySoft.Navigathena.Transitions.ITransitionHandle.Start(CancellationToken)
+- uid: MackySoft.Navigathena.Transitions.ITransitionHandle.Start(System.Threading.CancellationToken)
   name: Start(CancellationToken)
-  href: api/MackySoft.Navigathena.Transitions.ITransitionHandle.html#MackySoft_Navigathena_Transitions_ITransitionHandle_Start_CancellationToken_
-  commentId: M:MackySoft.Navigathena.Transitions.ITransitionHandle.Start(CancellationToken)
-  fullName: MackySoft.Navigathena.Transitions.ITransitionHandle.Start(CancellationToken)
+  href: api/MackySoft.Navigathena.Transitions.ITransitionHandle.html#MackySoft_Navigathena_Transitions_ITransitionHandle_Start_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.Transitions.ITransitionHandle.Start(System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.Transitions.ITransitionHandle.Start(System.Threading.CancellationToken)
   nameWithType: ITransitionHandle.Start(CancellationToken)
 - uid: MackySoft.Navigathena.Transitions.ITransitionHandle.Start*
   name: Start
@@ -2593,13 +2574,13 @@ references:
   commentId: T:MackySoft.Navigathena.Transitions.TransitionDirectorState
   fullName: MackySoft.Navigathena.Transitions.TransitionDirectorState
   nameWithType: TransitionDirectorState
-- uid: MackySoft.Navigathena.Transitions.TransitionDirectorState.#ctor(MackySoft.Navigathena.Transitions.ITransitionHandle,IProgress{MackySoft.Navigathena.IProgressDataStore})
+- uid: MackySoft.Navigathena.Transitions.TransitionDirectorState.#ctor(MackySoft.Navigathena.Transitions.ITransitionHandle,System.IProgress{MackySoft.Navigathena.IProgressDataStore})
   name: TransitionDirectorState(ITransitionHandle, IProgress<IProgressDataStore>)
-  href: api/MackySoft.Navigathena.Transitions.TransitionDirectorState.html#MackySoft_Navigathena_Transitions_TransitionDirectorState__ctor_MackySoft_Navigathena_Transitions_ITransitionHandle_IProgress_MackySoft_Navigathena_IProgressDataStore__
-  commentId: M:MackySoft.Navigathena.Transitions.TransitionDirectorState.#ctor(MackySoft.Navigathena.Transitions.ITransitionHandle,IProgress{MackySoft.Navigathena.IProgressDataStore})
+  href: api/MackySoft.Navigathena.Transitions.TransitionDirectorState.html#MackySoft_Navigathena_Transitions_TransitionDirectorState__ctor_MackySoft_Navigathena_Transitions_ITransitionHandle_System_IProgress_MackySoft_Navigathena_IProgressDataStore__
+  commentId: M:MackySoft.Navigathena.Transitions.TransitionDirectorState.#ctor(MackySoft.Navigathena.Transitions.ITransitionHandle,System.IProgress{MackySoft.Navigathena.IProgressDataStore})
   name.vb: TransitionDirectorState(ITransitionHandle, IProgress(Of IProgressDataStore))
-  fullName: MackySoft.Navigathena.Transitions.TransitionDirectorState.TransitionDirectorState(MackySoft.Navigathena.Transitions.ITransitionHandle, IProgress<MackySoft.Navigathena.IProgressDataStore>)
-  fullName.vb: MackySoft.Navigathena.Transitions.TransitionDirectorState.TransitionDirectorState(MackySoft.Navigathena.Transitions.ITransitionHandle, IProgress(Of MackySoft.Navigathena.IProgressDataStore))
+  fullName: MackySoft.Navigathena.Transitions.TransitionDirectorState.TransitionDirectorState(MackySoft.Navigathena.Transitions.ITransitionHandle, System.IProgress<MackySoft.Navigathena.IProgressDataStore>)
+  fullName.vb: MackySoft.Navigathena.Transitions.TransitionDirectorState.TransitionDirectorState(MackySoft.Navigathena.Transitions.ITransitionHandle, System.IProgress(Of MackySoft.Navigathena.IProgressDataStore))
   nameWithType: TransitionDirectorState.TransitionDirectorState(ITransitionHandle, IProgress<IProgressDataStore>)
   nameWithType.vb: TransitionDirectorState.TransitionDirectorState(ITransitionHandle, IProgress(Of IProgressDataStore))
 - uid: MackySoft.Navigathena.Transitions.TransitionDirectorState.#ctor*

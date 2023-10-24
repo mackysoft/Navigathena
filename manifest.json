@@ -28,7 +28,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.AsyncOperation.html",
-          "hash": "rpYt9jIR7AWu8d5kuY4Fyoshi2HXcjQ4z18ba1rpdOk="
+          "hash": "8ZlsWtbewtRtUgucLG8OOG/Cqb705ahJklWh2azOFlc="
         }
       },
       "is_incremental": false,
@@ -40,7 +40,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.Diagnostics.LogHandler.html",
-          "hash": "ZtLsevg93YUTIKmUzWA9bNNXXJpmYDIxuAVTg3/Kz6I="
+          "hash": "96NaP/Qk0BviTHB5RtIyqxmJ7hdb/d3A2MwO++liPyI="
         }
       },
       "is_incremental": false,
@@ -52,7 +52,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.Diagnostics.LogLevel.html",
-          "hash": "f/ZnaP/pUyY8VYbqnOLh8mANfInC88miFgeiaBn7QYw="
+          "hash": "kiV+341wLdHwVYZ8RtavQ7MFgDUvRj/fSR6F7pXIEUc="
         }
       },
       "is_incremental": false,
@@ -88,7 +88,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.IAsyncOperation.html",
-          "hash": "Y3unIytPZhV7EJOkHgzIinZhYF6aX8etPWoU3j7WYes="
+          "hash": "+2i91/q7Ejn0HHB3dlPHZ2w9Esbb0PaWnmUGfXs5pSo="
         }
       },
       "is_incremental": false,
@@ -124,7 +124,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.ProcessCounter.ProcessScope.html",
-          "hash": "A+KoyMIHWzLZJoELO/laauZ2ctHl0NN8A7nbCzBWzv0="
+          "hash": "OQyO/3xZOL9LfO8rH/ayBQX+wrMQ7s4N6mFdnDCijQk="
         }
       },
       "is_incremental": false,
@@ -160,7 +160,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.ProgressDataStore.html",
-          "hash": "t3C/7k3eTzqTCozMKeDJI79A2d3AwQNpGuTvXLqGrjc="
+          "hash": "v3PnT3DC5uOzZ2kszNPc+O7sTcL8AQu4eB47ez5fhPE="
         }
       },
       "is_incremental": false,
@@ -172,7 +172,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html",
-          "hash": "/LmjFF7sidPE814noC7u/P21f7uZr1LKFOe86T6XPsw="
+          "hash": "fNnIAtZK+1Ne4TP3IElzcsUniycVQKABY4BBzPAFOA8="
         }
       },
       "is_incremental": false,
@@ -196,19 +196,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html",
-          "hash": "UqhUJ/abkm1vGRmM08NwP+NVSjrcSGpftlHLG5ee1pc="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.html",
-          "hash": "5wUReyARm/z7W6F8cliNXGRxIZ1FFeWjxFS1J1V+jNw="
+          "hash": "qF3bBZDYdjPRytKzdsKZwP34VJ51qu8+RUYfz6HfQKI="
         }
       },
       "is_incremental": false,
@@ -268,7 +256,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html",
-          "hash": "qawqQ09Lw1mBzbP0PYjLDoJznFMTCBV1PaodSmGcRu8="
+          "hash": "NdudZTeeq1ft7QMwOb2m/2oUdUbi84njAz2HAvxA6NM="
         }
       },
       "is_incremental": false,
@@ -280,7 +268,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneHandle.html",
-          "hash": "mRZsCWtN3JQLtmH6CDt3Y3/6hVK5g7kBM6JYjsocJtw="
+          "hash": "fXSXmFfFwXR5e8P1hNIeRlgBD2i45NS6z5ZoSK1g6PY="
         }
       },
       "is_incremental": false,
@@ -316,7 +304,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html",
-          "hash": "ro8/ZZdvny3a+sXNpQGCehPsd5AUU6sGdpoa+1djixQ="
+          "hash": "VhS3rbMXcWGmEvB5lA5a/sm5wuIfJgmATMsb4UQ/Vd0="
         }
       },
       "is_incremental": false,
@@ -328,7 +316,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.html",
-          "hash": "dag9wpDyR79+bmNb+rb8sj5KXxgvH07j2LMoZrNBq/k="
+          "hash": "Uj4hh4unH3TTGtKVcomXP1Jx4meGunEZj06szvFIeKA="
         }
       },
       "is_incremental": false,
@@ -400,7 +388,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneDataStoreExtensions.html",
-          "hash": "CAw4LdmTB1nbv5E0YDBvo0wbjT0jc883gZ6OscufpOo="
+          "hash": "xITjHEk+vm71KN9DDY1LrShYLg3tEmMP+R+wCQ+/7F0="
         }
       },
       "is_incremental": false,
@@ -412,7 +400,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html",
-          "hash": "FQsmTCXQLuKxscCoax4sKPkC5sHrCCmrJagf7J5ZlaM="
+          "hash": "rXULw1C/CoUWE+VugtDE+jYlBoaicTsehwp6yoTxcls="
         }
       },
       "is_incremental": false,
@@ -424,7 +412,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistory.html",
-          "hash": "7G5Kdgwm+cT71ddDfbvJEg0Dl0jOg1XMckXF7x4y5lM="
+          "hash": "3EtpJieL7PZOrDSLlnCWBh3BXR/6KP+deEGPu8m9iLk="
         }
       },
       "is_incremental": false,
@@ -436,7 +424,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html",
-          "hash": "FRPXPk07or/l+2gD3ZcYSjswqgU1iqYXZ95H+Heuc9E="
+          "hash": "iGhFLEL+Rx7LQkbKHKzcNhVGU4WCunWY9bJb2sATfQ4="
         }
       },
       "is_incremental": false,
@@ -460,7 +448,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneNavigationException.html",
-          "hash": "Cv5s9r+lympzlpmgXpCQqOz/AVDugswp1lJwoUytb1o="
+          "hash": "jgZWjnIlbahhXJM9pT+OyO2DtmwZD7mPGT9c/c+CZuc="
         }
       },
       "is_incremental": false,
@@ -472,7 +460,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html",
-          "hash": "iQjx5wL1bcA4AoggdTmXmeVB711XvqcVSWUAJ6sMeEM="
+          "hash": "P94UFZIrmEm3kyL3GcjQoCtmMYNJwH0op3UVuGm8mPE="
         }
       },
       "is_incremental": false,
@@ -496,7 +484,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html",
-          "hash": "EUuNiTrpTFLQ+Eq4+sumMH2E38WoSypcqL9t52IfBhg="
+          "hash": "CK5u/CDpGGe39C9LZ44Ly1iJatEHEcHuAIQuc1aYH5c="
         }
       },
       "is_incremental": false,
@@ -508,7 +496,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.html",
-          "hash": "RrFTjhONPq3Zqua/Ys1kJ0xQb8a8z45OZNWk/wbEOYg="
+          "hash": "VgJZRnYDTQIoxUoZnhOnBMwJeu92pbINsc3tBwZVgFk="
         }
       },
       "is_incremental": false,
@@ -556,7 +544,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html",
-          "hash": "qwUUq4nHG9PlmR+StR3aTXjAnMN2kWOr2OKQGymF2sg="
+          "hash": "jmtcTI8ehbfrHYq9zDzYZcv/Fx4lWt508dyiZSE3GP8="
         }
       },
       "is_incremental": false,
@@ -592,7 +580,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.html",
-          "hash": "y3SNFhK/E0bcuk/hJxPEC6dxcIEE7Han6r86wsFABWI="
+          "hash": "eJRN7yx68dcRUvVmBq479bfc+2Kr2VtHcVw7cvpYg6Y="
         }
       },
       "is_incremental": false,
@@ -616,7 +604,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.Transitions.ITransitionHandle.html",
-          "hash": "kvv/MwN6SZp6gdan2EWMlKoO+zYhZWzbrkAfnPNRb5o="
+          "hash": "tCAYU5obN4k/nSD9SoPFhRnTCs9ENw+YLlsOAF8K6Og="
         }
       },
       "is_incremental": false,
@@ -640,7 +628,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.Transitions.TransitionDirectorState.html",
-          "hash": "WakxifHz+CGH8Pe6yVdaTZV0G4qtmZTQs4HNJ9uSNvw="
+          "hash": "KPHJjpncYdku9frQI8DyTCX+B5csvNA80f2RdR9d4Iw="
         }
       },
       "is_incremental": false,
@@ -676,7 +664,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "c6gkCuxidtdGeddqkNMDyw9PnVoevsLuJx4dQdeMouQ="
+          "hash": "mcI8kfAKK3LQ5DYATQVvxrll4niXdhCoxIjhxmtfa6M="
         }
       },
       "is_incremental": false,
@@ -751,7 +739,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 54,
+          "total_file_count": 53,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {
