@@ -115,8 +115,8 @@ public sealed class HomeSceneEntryPoint : SceneEntryPointBase
 }
 ```
 
-> The full Scripting API is [here](https://mackysoft.github.io/Navigahena/api/MackySoft.Navigahena.html).
-> Scripting API: https://mackysoft.github.io/Navigahena/api/MackySoft.Navigahena.html
+> The full Scripting API is [here](https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.html).
+> Scripting API: https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.html
 
 ## <a id="basic-scene-navigation" href="#basic-scene-navigation"> Basic scene navigation </a>
 
