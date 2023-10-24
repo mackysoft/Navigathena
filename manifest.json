@@ -1,0 +1,783 @@
+{
+  "sitemap": {
+    "fileOptions": {
+      "api/*": {
+        "baseUrl": "https://mackysoft.github.io/Navigathena/",
+        "changefreq": "daily"
+      }
+    },
+    "baseUrl": "https://mackysoft.github.io/Navigathena/",
+    "changefreq": "weekly"
+  },
+  "homepages": [],
+  "source_base_path": "D:/a/Navigathena/Navigathena/Documentation",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      },
+      "is_incremental": false
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.AsyncOperation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.AsyncOperation.html",
+          "hash": "rpYt9jIR7AWu8d5kuY4Fyoshi2HXcjQ4z18ba1rpdOk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.Diagnostics.LogHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.Diagnostics.LogHandler.html",
+          "hash": "ZtLsevg93YUTIKmUzWA9bNNXXJpmYDIxuAVTg3/Kz6I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.Diagnostics.LogLevel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.Diagnostics.LogLevel.html",
+          "hash": "f/ZnaP/pUyY8VYbqnOLh8mANfInC88miFgeiaBn7QYw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.Diagnostics.NavigathenaDebug.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.Diagnostics.NavigathenaDebug.html",
+          "hash": "0eSZw/APXGBYbjvuar1Ws+Fl/zU7SkRS8Bd0MNmXRKg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.Diagnostics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.Diagnostics.html",
+          "hash": "s+rRE8xi6JW/UwPIwdSN+h8OPQMDpvlAcy4dMfYs844="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.IAsyncOperation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.IAsyncOperation.html",
+          "hash": "Y3unIytPZhV7EJOkHgzIinZhYF6aX8etPWoU3j7WYes="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.IProgressDataStore-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.IProgressDataStore-1.html",
+          "hash": "8nNXB7EHHJhQ6zvL3wCJnddnjBfRPo5VOFdPM2G7vfA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.IProgressDataStore.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.IProgressDataStore.html",
+          "hash": "rGMZL8sssQQ4lCkeXssAy6IlqcyPNzqRKZmd5uxLGJw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.ProcessCounter.ProcessScope.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.ProcessCounter.ProcessScope.html",
+          "hash": "A+KoyMIHWzLZJoELO/laauZ2ctHl0NN8A7nbCzBWzv0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.ProcessCounter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.ProcessCounter.html",
+          "hash": "Rr72BA2x1c62Od/ZwHTRv4BOiSYFBJt/TC+P+1kh0xM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.ProgressDataStore-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.ProgressDataStore-1.html",
+          "hash": "EXBCHpyqw6EQ9sdlbip54QJ0iL5JxbWHliVanNNkQVU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.ProgressDataStore.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.ProgressDataStore.html",
+          "hash": "t3C/7k3eTzqTCozMKeDJI79A2d3AwQNpGuTvXLqGrjc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html",
+          "hash": "/LmjFF7sidPE814noC7u/P21f7uZr1LKFOe86T6XPsw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.BuiltInSceneIdentifier.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.BuiltInSceneIdentifier.html",
+          "hash": "cVKA5HwObx28S1lh9NGbxqOEA1P96YMpz53Z7UIph/4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html",
+          "hash": "UqhUJ/abkm1vGRmM08NwP+NVSjrcSGpftlHLG5ee1pc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigatorEditor.html",
+          "hash": "5wUReyARm/z7W6F8cliNXGRxIZ1FFeWjxFS1J1V+jNw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.IReadOnlySceneHistoryEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.IReadOnlySceneHistoryEntry.html",
+          "hash": "gA31gXx/Rg54WOoh04nQsiVgbQoeWPbC5pphQkerhTY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneData.html",
+          "hash": "dvsG0CJrhgBnkrBtXOIaEeUiUw8Gz4qHSnDhMoEK9Ec="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneDataReader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneDataReader.html",
+          "hash": "BWYcE5/l89WTs5NGvl9K2pHFtFMelCslqv928WltWis="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneDataWriter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneDataWriter.html",
+          "hash": "YUGrKHLzCHqOM6hSwL6ZuRwp8WmhCil656oXBCHQYaQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html",
+          "hash": "qawqQ09Lw1mBzbP0PYjLDoJznFMTCBV1PaodSmGcRu8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneHandle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneHandle.html",
+          "hash": "mRZsCWtN3JQLtmH6CDt3Y3/6hVK5g7kBM6JYjsocJtw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.html",
+          "hash": "5IqD+9CMGb00nQ44nIjZ9iopPzIqFGOiL3EemCrfYXM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneIdentifier.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneIdentifier.html",
+          "hash": "Pmwm3FHl37/Iu0mnF7GZL+yi5ag5Nsyk0KTaPnISdVM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html",
+          "hash": "ro8/ZZdvny3a+sXNpQGCehPsd5AUU6sGdpoa+1djixQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.html",
+          "hash": "dag9wpDyR79+bmNb+rb8sj5KXxgvH07j2LMoZrNBq/k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.LoadSceneProgressData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.LoadSceneProgressData.html",
+          "hash": "TtCqUM/Q5o6Q4BaNjGMXi3Yl0Lxk+nD0ijrZXvLOMAA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.LoadSceneRequest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.LoadSceneRequest.html",
+          "hash": "coLq76BcYPd0GsRSrrH0pvUVvmeINohqmKeSOtVyvCk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.PopSceneRequest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.PopSceneRequest.html",
+          "hash": "ZTFV5gLAk5E7PHONnOsstxb4AttvgMnpt5Vo2zbdtQk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.ReloadSceneRequest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.ReloadSceneRequest.html",
+          "hash": "dBx4zjRr0021+Seu/ORVDWlOwt/wEyT+/mhMlr4Ww9Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneDataStore.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneDataStore.html",
+          "hash": "S2VmKGvPmSmuJn/FDJQr1Tef4gZhcC0DPKy4aQtxEbc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneDataStoreExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneDataStoreExtensions.html",
+          "hash": "CAw4LdmTB1nbv5E0YDBvo0wbjT0jc883gZ6OscufpOo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html",
+          "hash": "FQsmTCXQLuKxscCoax4sKPkC5sHrCCmrJagf7J5ZlaM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistory.html",
+          "hash": "7G5Kdgwm+cT71ddDfbvJEg0Dl0jOg1XMckXF7x4y5lM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html",
+          "hash": "FRPXPk07or/l+2gD3ZcYSjswqgU1iqYXZ95H+Heuc9E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistoryEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistoryEntry.html",
+          "hash": "9fiL4lKgPdiUbQssxO9jwAFJ6glJnMXys+bC3PYb7/E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneNavigationException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneNavigationException.html",
+          "hash": "Cv5s9r+lympzlpmgXpCQqOz/AVDugswp1lJwoUytb1o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html",
+          "hash": "iQjx5wL1bcA4AoggdTmXmeVB711XvqcVSWUAJ6sMeEM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneState.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneState.html",
+          "hash": "Campy/fseEaS6ck1ZRsNreHuxtxi4xRHMI5xCFaAvP8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html",
+          "hash": "EUuNiTrpTFLQ+Eq4+sumMH2E38WoSypcqL9t52IfBhg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.html",
+          "hash": "RrFTjhONPq3Zqua/Ys1kJ0xQb8a8z45OZNWk/wbEOYg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.Unsafe.IUnsafeSceneNavigator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.Unsafe.IUnsafeSceneNavigator.html",
+          "hash": "DUSV9nlxnCeh+ll1oDCSUYTz06YuBv8SXF1GYRNkFyo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.Unsafe.UnsafeSceneNavigatorExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.Unsafe.UnsafeSceneNavigatorExtensions.html",
+          "hash": "eKleCNJ50mfY1+9G3sQOgRTJRfyEidcWIf/FPV4pBN0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.Unsafe.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.Unsafe.html",
+          "hash": "+3yiSsXh5hvcV1dmKJAWorEFsuIEtTOxROrVpol74Gg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html",
+          "hash": "qwUUq4nHG9PlmR+StR3aTXjAnMN2kWOr2OKQGymF2sg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.Utilities.SceneUtility.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.Utilities.SceneUtility.html",
+          "hash": "g4eubZQWsJ44Z7pJL6crtIj2ODXJYug9XuKblLGR1Zo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.Utilities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.Utilities.html",
+          "hash": "k4rrKlgIh4l7nMkIVvUYdEY38B3NWpJJfO0C5o1pZgw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.html",
+          "hash": "y3SNFhK/E0bcuk/hJxPEC6dxcIEE7Han6r86wsFABWI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.Transitions.ITransitionDirector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.Transitions.ITransitionDirector.html",
+          "hash": "oELQ29sjHKcZ6Kb7lgnrYq4YT1rZBU/ZuWbmAYvASoA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.Transitions.ITransitionHandle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.Transitions.ITransitionHandle.html",
+          "hash": "kvv/MwN6SZp6gdan2EWMlKoO+zYhZWzbrkAfnPNRb5o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.Transitions.TransitionDirector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.Transitions.TransitionDirector.html",
+          "hash": "bhbxuh26/FuLZbjHVphEFGjY5h3+J01a6msCY/iZ+5E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.Transitions.TransitionDirectorState.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.Transitions.TransitionDirectorState.html",
+          "hash": "WakxifHz+CGH8Pe6yVdaTZV0G4qtmZTQs4HNJ9uSNvw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.Transitions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.Transitions.html",
+          "hash": "SMol/NvrZRoIzzzoW1CtrWNQw1Ncy/tf+sHD5HVUi/4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.html",
+          "hash": "nt9C3qnGC8Pk2xLFHlvTK09fiySfPfWRUqWsQPC81/M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "c6gkCuxidtdGeddqkNMDyw9PnVoevsLuJx4dQdeMouQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "changelog/CHANGELOG.md",
+      "output": {
+        ".html": {
+          "relative_path": "changelog/CHANGELOG.html",
+          "hash": "wqLQBa2sdnpRFAHaE96A83jDu60q5dyl5HnIUpToivQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "changelog/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "changelog/toc.html",
+          "hash": "1q1fO7/YyPEGJ89UlRVsP2/QXB8oQ3/9CvSsb1tfrWg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "yCmwQpBkQRpQs48QWhKvIgVqEjMDcXcPcXTcPUu+UIg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "t0n9bRb4Z+acebwc13dDC/4TU7z+j3ks4yQjdZmXwuQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 2,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 54,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

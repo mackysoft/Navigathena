@@ -1,1 +1,656 @@
-`Hello World.` 
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Navigathena - Scene management framework for Unity | Navigathena </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Navigathena - Scene management framework for Unity | Navigathena ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="">
+    <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="navigathena---scene-management-framework-for-unity">Navigathena - Scene management framework for Unity</h1>
+
+<p><a href="https://github.com/mackysoft/Navigathena/actions/workflows/build.yaml"><img src="https://github.com/mackysoft/Navigathena/actions/workflows/build.yaml/badge.svg" alt="Build"></a><a href="https://github.com/mackysoft/Navigathena/releases"><img src="https://img.shields.io/github/v/release/mackysoft/Navigathena" alt="Release"></a> <a href="https://openupm.com/packages/com.mackysoft.navigathena/"><img src="https://img.shields.io/npm/v/com.mackysoft.navigathena?label=openupm&amp;registry_uri=https://package.openupm.com" alt="openupm"></a></p>
+<p><strong>Created by Hiroya Aramaki (<a href="https://twitter.com/makihiro_dev">Makihiro</a>)</strong></p>
+<h2 id="what-is-navigathena-">What is Navigathena ?</h2>
+<p>Navigathena is a scene management framework designed for Unity.</p>
+<ul>
+<li>Scene transition control with basic history feature.</li>
+<li>High functionality, capable of supporting use cases that require more advanced control.</li>
+<li>Highly scalable, most elements can be extended to suit the project.</li>
+<li>Implemented based on a clean design concept, it provides a robust framework that can withstand large-scale development.</li>
+</ul>
+<h2 id="a-idindex-hrefindex-table-of-contents-a"><a id="index" href="#index"> Table of Contents </a></h2>
+<ul>
+<li><a href="#installation">📥 Installation</a></li>
+<li><a href="#usage">🔰 Usage</a><ul>
+<li><a href="#basic-scene-navigation">Basic scene navigation</a><ul>
+<li><a href="#scene-navigator">SceneNavigator</a></li>
+<li><a href="#scene-entry-point">SceneEntryPoint</a></li>
+</ul>
+</li>
+<li><a href="#transition-director">Transition director</a><ul>
+<li><a href="#progress-display">Progress display</a></li>
+<li><a href="#interrupt-operation">Interrupt operation</a></li>
+</ul>
+</li>
+<li><a href="#inter-scene-data-transfer">Inter-scene data transfer</a></li>
+<li><a href="#single-scene-launch">Single scene launch</a></li>
+<li><a href="#interrupt-scene-operation">Interrupt scene operation</a></li>
+<li><a href="#scene-history-editing">Scene history editing</a></li>
+</ul>
+</li>
+<li><a href="#integrations">📚 Integrations</a><ul>
+<li><a href="#addressables-system">Addressables System</a></li>
+<li><a href="#dependency-injection">Dependency injection</a></li>
+</ul>
+</li>
+<li><a href="#faq">❓ FAQ</a><ul>
+<li><a href="#subscene-management">How to load multiple scenes (sub-scenes)?</a></li>
+<li><a href="#root-scene">How to have a scene that is always present throughout the life of the application?</a></li>
+</ul>
+</li>
+<li><a href="#help-and-contribute">✉ Help &amp; Contribute</a></li>
+<li><a href="#author-info">📔 Author Info</a></li>
+<li><a href="#license">📜 License</a></li>
+</ul>
+<h1 id="a-idinstallation-hrefinstallation--installation-a"><a id="installation" href="#installation"> 📥 Installation </a></h1>
+<h2 id="requirement">Requirement</h2>
+<p>Navigathena depends on <a href="https://github.com/Cysharp/UniTask">UniTask</a>, which supports async / await. Please import UniTask into your project first.</p>
+<p>UniTask: <a href="https://github.com/Cysharp/UniTask">https://github.com/Cysharp/UniTask</a></p>
+<h2 id="install-via-unitypackage">Install via .unitypackage</h2>
+<p>Download any version from releases.</p>
+<p>Releases: <a href="https://github.com/mackysoft/Navigathena/releases">https://github.com/mackysoft/Navigathena/releases</a></p>
+<h2 id="install-via-packagemanager">Install via PackageManager</h2>
+<p>Or, you can add this package by opening PackageManager and entering</p>
+<pre><code>https://github.com/mackysoft/Navigathena.git?path=Assets/MackySoft/MackySoft.Navigathena
+</code></pre><p>from the <code>Add package from git URL</code> option.</p>
+<h2 id="install-via-open-upm">Install via Open UPM</h2>
+<p>Or, you can install this package from the <a href="https://openupm.com/packages/com.mackysoft.navigathena/">Open UPM</a> registry.</p>
+<p>More details <a href="https://openupm.com/">here</a>.</p>
+<pre><code>openupm add com.mackysoft.navigathena
+</code></pre><h1 id="a-idusage-hrefusage--usage-a"><a id="usage" href="#usage"> 🔰 Usage </a></h1>
+<p>The following code illustrates the use of Navigathena basic elements.</p>
+<pre><code class="lang-cs">using UnityEngine;
+using UnityEngine.UI;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using MackySoft.Navigathena.SceneManagement;
+
+// Defines the entry point for the scene.
+public sealed class HomeSceneEntryPoint : SceneEntryPointBase
+{
+
+  // Define the scene to be used.
+  static readonly ISceneIdentifier s_GameSceneIdentifier = new BuiltInSceneIdentifier(&quot;Game&quot;);
+
+  [SerializeField]
+  Button m_LoadGameButton;
+
+  IDisposable m_Subscription;
+
+  // The basic lifecycle of the scene is invoked. (OnInitialize, OnEnter, OnExit, OnFinalize...)
+  protected override UniTask OnEnter (ISceneDataReader reader, CancellationToken cancellationToken)
+  {
+    m_Subscription = m_LoadGameButton.OnClickAsAsyncEnumerable().SubscribeAwait(_ =&gt; OnLoadGameButtonClick());
+    return UniTask.CompletedTask;
+  }
+
+  protected override UniTask OnExit (ISceneDataWriter writer, CancellationToken cancellationToken)
+  {
+    m_Subscription?.Dispose();
+    return UniTask.CompletedTask;
+  }
+
+  async UniTask OnLoadGameButtonClick ()
+  {
+    // Perform scene transition operations via GlobalSceneNavigator.
+    await GlobalSceneNavigator.Instance.Push(s_GameSceneIdentifier);
+  }
+}
+</code></pre><blockquote><p>The full Scripting API is <a href="https://mackysoft.github.io/Navigahena/api/MackySoft.Navigahena.html">here</a>.
+Scripting API: <a href="https://mackysoft.github.io/Navigahena/api/MackySoft.Navigahena.html">https://mackysoft.github.io/Navigahena/api/MackySoft.Navigahena.html</a></p>
+</blockquote>
+<h2 id="a-idbasic-scene-navigation-hrefbasic-scene-navigation-basic-scene-navigation-a"><a id="basic-scene-navigation" href="#basic-scene-navigation"> Basic scene navigation </a></h2>
+<p>Navigathena has two basic concepts for scene transitions: SceneNavigator and SceneEntryPoint.</p>
+<h3 id="a-idscene-navigator-hrefscene-navigator-scenenavigator-a"><a id="scene-navigator" href="#scene-navigator"> SceneNavigator </a></h3>
+<p>Navigathena provides an interface called <code>ISceneNavigator</code> for managing and navigating scenes. This interface allows basic transition operations while handling the history of scenes.</p>
+<p>Here&#39;s a simple usage example of <code>ISceneNavigator</code>:</p>
+<pre><code class="lang-cs">ISceneIdentifier identifier = new BuiltInSceneIdentifier(&quot;Game&quot;);
+await GlobalSceneNavigator.Instance.Push(identifier);
+</code></pre><p>To specify a scene, the <code>ISceneIdentifier</code> interface is used. By default, <code>BuiltInSceneIdentifier</code> is implemented, which can be used for standard loading of scenes registered in Unity Build Settings.</p>
+<blockquote><p>For examples using Addressables, refer to the <a href="#addressables">Integration with the Addressables System</a> section below.</p>
+</blockquote>
+<p>Below are the transition operations provided by <code>ISceneNavigator</code>.</p>
+<pre><code class="lang-cs">interface ISceneNavigator
+{
+  // Load the specified scene and add it to the history.
+  UniTask Push (ISceneIdentifier identifier, ITransitionDirector transitionDirector = null, ISceneData sceneData = null, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default);
+
+  // Remove the head scene in the history and load the previous one.
+  UniTask Pop (ITransitionDirector overrideTransitionDirector = null, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default);
+
+  // Load the specified scene and overwrite the history with only that scene.
+  UniTask Change (ISceneIdentifier identifier, ITransitionDirector transitionDirector = null, ISceneData sceneData = null, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default);
+
+  // Load the specified scene and overwrite the head of the history.
+  UniTask Replace (ISceneIdentifier identifier, ITransitionDirector transitionDirector = null, ISceneData sceneData = null, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default);
+
+  // Reload then current scene.
+  UniTask Reload (ITransitionDirector overrideTransitionDirector = null, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default);
+}
+</code></pre><blockquote><p>These methods are actually implemented by extension methods for <code>ISceneNavigator</code>.</p>
+</blockquote>
+<p><code>SceneNavigator</code> is abstracted through an interface, so if unique processing is required in your project, it is possible to implement a custom SceneNavigator. (If not specified, <code>StandardSceneNavigator</code> will be used.)</p>
+<pre><code class="lang-cs">[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+static void Initialize ()
+{
+  // Register a custom SceneNavigator
+  GlobalSceneNavigator.Instance.Register(new MyCustomSceneNavigator());
+}
+</code></pre><p>Since scene management typically uses the same logic from the beginning to the end of a game&#39;s lifespan, a singleton <code>GlobalSceneNavigator</code> component has been implemented. This wraps the registered <code>ISceneNavigator</code> and supports features such as the <a href="#single-scene-launch">single scene launch</a> mentioned later.</p>
+<p>Incidentally, the <code>GlobalSceneNavigator</code> inspector allows you to view the registered <code>ISceneNavigator</code> and its current history.</p>
+<p><img src="https://storage.googleapis.com/zenn-user-upload/af995c2c903c-20231023.png" alt=""></p>
+<h3 id="a-idscene-entry-point-hrefscene-entry-point-sceneentrypoint-a"><a id="scene-entry-point" href="#scene-entry-point"> SceneEntryPoint </a></h3>
+<p>The SceneEntryPoint concept is used to observe the lifecycle of a scene. It is a component that can be placed only once in each scene and plays a role in observing events such as the start and end of a scene, as well as the transfer of data.</p>
+<pre><code class="lang-cs">public interface ISceneEntryPoint
+{
+
+  // Called after the start of the transition direction.
+  UniTask OnInitialize (ISceneDataReader reader, IProgress&lt;IProgressDataStore&gt; transitionProgress, CancellationToken cancellationToken);
+
+  // Called after the end of the transition direction.
+  UniTask OnEnter (ISceneDataReader reader, CancellationToken cancellationToken);
+
+  // Called before the start of the transition direction.
+  UniTask OnExit (ISceneDataWriter writer, CancellationToken cancellationToken);
+
+  // Called after the start of the transition direction.
+  UniTask OnFinalize (ISceneDataWriter writer, IProgress&lt;IProgressDataStore&gt; transitionProgress, CancellationToken cancellationToken);
+
+#if UNITY_EDITOR
+  // Called before `OnInitialize` in the first loaded scene when executed in the editor. (Editor only)
+  UniTask OnEditorFirstPreInitialize (ISceneDataWriter writer, CancellationToken cancellationToken);
+#endif
+}
+</code></pre><p>Basically, SceneEntryPoint is designed to inherit from <code>SceneEntryPointBase</code> or <code>ISceneEntryPoint</code> and override each event.</p>
+<blockquote><p>For a method of implementation that does not depend on inheriting <code>MonoBehaviour</code>, please refer to the <a href="#dependency-injection">Integration with Dependency Injection (DI)</a> section.</p>
+</blockquote>
+<p>When a transition operation is called, the following processes are executed in sequence:</p>
+<ol>
+<li>The <code>OnExit</code> of the origin <code>ISceneEntryPoint</code></li>
+<li>The <code>Start</code> of the <code>ITransitionHandle</code> created from the <code>ITransitionDirector</code> passed during the transition operation</li>
+<li>The <code>OnFinalize</code> of the origin <code>ISceneEntryPoint</code></li>
+<li>Unloading of the origin scene</li>
+<li>The <code>ExecuteAsync</code> of the <code>IAsyncOperation</code> passed during the transition operation</li>
+<li>Loading of the destination scene</li>
+<li>The <code>OnInitialize</code> of the destination <code>ISceneEntryPoint</code></li>
+<li>The <code>End</code> of the <code>ITransitionHandle</code> used in step 2</li>
+<li>The <code>OnEnter</code> of the destination <code>ISceneEntryPoint</code></li>
+</ol>
+<p>The roles of each event will be explained in the topics that follow.</p>
+<h2 id="a-idtransition-director-hreftransition-director-transition-director-a"><a id="transition-director" href="#transition-director"> Transition director </a></h2>
+<p>One of the elements that enhance the gaming experience is the scene transition direction. This could range from a simple fade-in and fade-out to the display of tips or animations of mini characters running across the screen.</p>
+<p>Regardless of how the implementation is done, you might animate the Canvas element, or you might load an additional transition direction scene. In any case, it&#39;s essential for the system to be flexible, meaning that different types of directions can be easily added or changed.</p>
+<p>In Navigathena, the transition direction during scene transitions are defined by the <code>ITransitionDirector</code> interface, and you can pass the <code>ITransitionDirector</code> as an argument when performing a scene transition operation.</p>
+<p>The specific flow is as follows: when a scene transition begins, the transition effect defined by the <code>ITransitionDirector</code> starts first. During this effect, the following processes are executed in order:</p>
+<pre><code class="lang-cs">public interface ITransitionDirector
+{
+  ITransitionHandle CreateHandle ();
+}
+
+public interface ITransitionHandle
+{
+  UniTask Start (CancellationToken cancellationToken = default);
+  UniTask End (CancellationToken cancellationToken = default);
+}
+</code></pre><p>The <code>ITransitionDirector</code> acts as a factory for producing <code>ITransitionHandle</code>, which is an interface to control the start and end of transition directions.</p>
+<p>By extending based on this <code>ITransitionDirector</code> and <code>ITransitionHandle</code>, you can control your own unique transition directions.</p>
+<p>Below is an implementation example of the <code>SimpleTransitionDirector</code>, which realizes a transition through a simple fade direction.</p>
+<pre><code class="lang-cs">public sealed class SimpleTransitionDirector : ITransitionDirector
+{
+
+  readonly CanvasGroup m_CanvasGroup;
+
+  public SimpleTransitionDirector (CanvasGroup canvasGroup)
+  {
+    m_CanvasGroup = canvasGroup;
+  }
+
+  public ITransitionHandle Create ()
+  {
+    return new SimpleTransitionHandle(m_CanvasGroup);
+  }
+
+  sealed class SimpleTransitionHandle : ITransitionHandle
+  {
+
+    readonly CanvasGroup m_CanvasGroup;
+
+    public SimpleTransitionHandle (CanvasGroup canvasGroup)
+    {
+      m_CanvasGroup = canvasGroup;
+    }
+
+    public async UniTask Start (CancellationToken cancellationToken = default)
+    {
+      // Play fade-in with DOTween.
+      await m_CanvasGroup.DOFade(1f, 1f).ToUniTask(cancellationToken: cancellationToken);
+    }
+
+    public async UniTask End (CancellationToken cancellationToken = default)
+    {
+      await m_CanvasGroup.DOFade(0f, 1f).ToUniTask(cancellationToken: cancellationToken);
+    }
+  }
+}
+</code></pre><pre><code class="lang-cs">// Load a new scene while executing the direction with SimpleTransitionDirector.
+await GlobalSceneNavigator.Instance.Push(new BuiltInSceneIdentifier(&quot;MyScene&quot;), new SimpleTransitionDirector(m_CanvasGroup));
+</code></pre><h3 id="a-idprogress-display-hrefprogress-display-progress-display-a"><a id="progress-display" href="#progress-display"> Progress display </a></h3>
+<p>In direction during transitions, it&#39;s not uncommon to require effects that display progress percentages and effects that vary based on the progress percentage.</p>
+<p>With Navigathena, during a transition direction, you can pass any data type through <code>IProgress&lt;IProgressDataStore&gt;</code>. Processes interjected during transition direction (such as <code>ISceneEntryPoint.OnInitialize</code>/<code>OnFinalize</code>, <code>IAsyncOperation.ExecuteAsync</code>) are given <code>IProgress&lt;IProgressDataStore&gt;</code>. By writing data into <code>IProgressDataStore</code> and notifying through <code>IProgress&lt;IProgressDataStore&gt;</code>, you can incorporate information like transition progress or messages that you want to present to the player into the direction.</p>
+<p>Below is an example that extends the earlier mentioned <code>SimpleTransitionDirector</code> to support progress display.</p>
+<pre><code class="lang-cs">// Defines an arbitrary data type to be used as progress information.
+public readonly struct MyProgressData
+{
+
+  public float Progress { get; }
+  public string Message { get; }
+
+  public MyProgressData (float progress, string message)
+  {
+    Progress = progress;
+    Message = message;
+  }
+}
+</code></pre><pre><code class="lang-cs">public sealed class SimpleTransitionDirector : ITransitionDirector
+{
+
+  readonly CanvasGroup m_CanvasGroup;
+  readonly Text m_ProgressText;
+  readonly Text m_MessageText;
+  readonly Slider m_ProgressSlider;
+
+  public SimpleTransitionDirector (CanvasGroup canvasGroup, Text progressText, Text messageText, Slider progressSlider)
+  {
+    m_CanvasGroup = canvasGroup;
+    m_ProgressText = progressText;
+    m_MessageText = messageText;
+    m_ProgressSlider = progressSlider;
+  }
+
+  public ITransitionHandle Create ()
+  {
+    return new SimpleTransitionHandle(m_CanvasGroup, m_ProgressText, m_MessageText, m_ProgressSlider);
+  }
+
+  // By implementing IProgress&lt;IProgressDataStore&gt;, it is possible to receive progress information during the transition direction.
+  sealed class SimpleTransitionHandle : ITransitionHandle, IProgress&lt;IProgressDataStore&gt;
+  {
+
+    readonly CanvasGroup m_CanvasGroup;
+    readonly Text m_ProgressText;
+    readonly Text m_MessageText;
+    readonly Slider m_ProgressSlider;
+
+    public SimpleTransitionHandle (CanvasGroup canvasGroup, Text progressText, Text messageText, SLider progressSlider)
+    {
+      m_CanvasGroup = canvasGroup;
+      m_ProgressText = progressText;
+      m_MessageText = messageText;
+      m_ProgressSlider = progressSlider;
+    }
+
+    public async UniTask Start (CancellationToken cancellationToken = default)
+    {
+      await m_CanvasGroup.DOFade(1f,1f).ToUniTask(cancellationToken: cancellationToken);
+    }
+
+    public async UniTask Complete (CancellationToken cancellationToken = default)
+    {
+      await m_CanvasGroup.DOFade(0f,1f).ToUniTask(cancellationToken: cancellationToken);
+    }
+
+    void IProgress&lt;IProgressDataStore&gt;.Report (IProgressDataStore progressDataStore)
+    {
+      // Extract MyProgressData from IProgressStore.
+      if (progressDataStore.TryGetData(out MyProgressData myProgressData))
+      {
+        m_ProgressText.text = myProgressData.Progress.ToString(&quot;P0&quot;);
+        m_MessageText.text = myProgressData.Message;
+        m_ProgressSlider.value = myProgressData.Progress;
+      }
+    }
+  }
+}
+</code></pre><pre><code class="lang-cs">// Pass SimpleTransitionDirector when performing the transition operation.
+await GlobalSceneNavigator.Instance.Push(new BuiltInSceneIdentifier(&quot;MyScene&quot;), new SimpleTransitionDirector(m_CanvasGroup, m_ProgressText, m_MessageText, m_ProgressSlider));
+</code></pre><pre><code class="lang-cs">// ...
+
+// When notifying progress, it gets notified up to the SimpleTransitionDirector.
+protected override UniTask OnInitialize (ISceneDataReader reader, IProgress&lt;IProgressDataStore&gt; progress, CancellationToken cancellationToken)
+{
+  ProgressDataStore&lt;MyProgressData&gt; store = new();
+
+  progress.Report(store.SetData(new MyProgressData(0.5f, &quot;Generate Map&quot;)));
+
+  await m_MapGenerator.Generate(cancellationToken);
+
+  progress.Report(store.SetData(new MyProgressData(1f, &quot;Complete&quot;)));
+}
+</code></pre><p>To ensure versatility, data can be obtained through <code>IProgressDataStore.TryGetData&lt;T&gt;</code>. (Internally, it casts <code>IProgressDataStore</code> to <code>IProgressDataStore&lt;T&gt;</code> to extract the type.)
+Although it&#39;s not type-safe, i deemed this implementation appropriate to prevent wasteful allocations due to boxing and to avoid losing simplicity due to the propagation of generics.</p>
+<p>When a scene is loaded or unloaded, by default, the <code>StandardSceneNavigator</code> stores <code>LoadSceneProgressData</code> in <code>IProgressDataStore</code>. The behavior here can also be customized from the constructor of <code>StandardSceneNavigator</code>.</p>
+<pre><code class="lang-cs">[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+static void Initialize ()
+{
+  // Initialize and register the StandardSceneNavigator with our own MySceneProgressFactory.
+  GlobalSceneNavigator.Instance.Register(new StandardSceneNavigator(TransitionDirector.Empty(), new MySceneProgressFactory()));
+}
+</code></pre><h3 id="a-idinterrupt-operation-hrefinterrupt-operation-interrupt-operation-a"><a id="interrupt-operation" href="#interrupt-operation"> Interrupt operation </a></h3>
+<p>When scene transitioning, it is sometimes necessary to insert a pre-load process or some kind of pre-check process.</p>
+<p>Navigathena define the <code>IAsyncOperation</code> interface to perform <code>processes to be performed between the unloading of the current scene and the loading of the next scene</code>. The <code>IAsyncOperation</code> can be passed during each transition operation in <code>ISceneNavigator</code>.</p>
+<pre><code class="lang-cs">IAsyncOperation op = m_PreloadAsyncOperation;
+await GlobalSceneNavigator.Push(nextScene, interruptOperation: op);
+</code></pre><p>The structure of <code>IAsyncOperation</code> is very simple, it defines functions to perform asynchronous operations. Since <code>`IProgress&lt;IProgressDataStore&gt;</code> is passed as an argument, it can be integrated with the progress display during transition direction.</p>
+<pre><code class="lang-cs:IAsyncOperation.cs">public interface IAsyncOperation
+{
+  UniTask ExecuteAsync (IProgress&lt;IProgressDataStore&gt; progress, CancellationToken cancellationToken = default);
+}
+</code></pre><p>Basically, you would define a type that implements <code>IAsyncOperation</code>, but there are also some convenience functions for convenient handling.</p>
+<pre><code class="lang-cs">// Create an anonymous IAsyncOperation
+IAsyncOperation operation = AsyncOperation.Create(async (progress, cancellationToken) =&gt; {
+  // Asynchronous processing of some kind
+  await DoSomething(progress, cancellationToken);
+});
+
+// Merge multiple IAsyncOperations
+IAsyncOperation compositeOperation = AsyncOperation.Combine(op1, op2, op3);
+</code></pre><h2 id="a-idinter-scene-data-transfer-hrefinter-scene-data-transfer-inter-scene-data-transfer-a"><a id="inter-scene-data-transfer" href="#inter-scene-data-transfer"> Inter-scene data transfer </a></h2>
+<p>When creating a game, we will encounter situations where you want to pass values to the next scene. A common case is &quot;I want to pass the ID of a selected element (stage, character, etc.) to the next scene&quot;.</p>
+<p>In the <code>ISceneEntryPoint</code> callback, <code>ISceneDataReader</code> is passed to <code>OnInitialize</code> / <code>OnEnter</code> and <code>ISceneDataWriter</code> to <code>OnExit</code> / <code>OnFinalize</code>. These interfaces allow data to be transferred between scenes.</p>
+<p>For example, by passing a data type implementing the <code>ISceneData</code> interface as an argument to <code>ISceneNavigator.Push</code>, you can transfer that data to <code>OnInitialize</code> and <code>OnEnter</code> of the destination <code>ISceneEntryPoint</code>.</p>
+<p>On the other hand, the <code>ISceneDataWriter</code> is passed when leaving a scene. This allows the implementation of a process that stores the state of the scene when leaving the scene in the scene history and restores the state of the scene when returning to that scene.</p>
+<p>For example, when a user transitions to the next scene with &quot;a specific screen open in the scene&quot; and returns to the previous scene, the data written to <code>ISceneDataWriter</code> is passed to <code>OnInitialize</code> / <code>OnEnter</code>, so at scene initialization, information on &quot;which screen was open can be obtained to restore the state of the scene.</p>
+<pre><code class="lang-cs">public sealed class HomeSceneData : ISceneData
+{
+  public HomeScreenType LastDisplayedScreenType { get; init; }
+}
+
+public sealed class HomeSceneEntryPoint : SceneEntryPoint
+{
+
+  [SerializeField]
+  HomeView m_View;
+
+  protected override UniTask OnInitialize (ISceneDataReader reader, CancellationToken cancellationToken)
+  {
+    // At scene startup, retrieve the saved state and apply it to the elements in the scene.
+    if (reader.TryRead(out HomeSceneData sceneData))
+    {
+      m_View.SetScreen(sceneData.LastDisplayedScreenType);
+    }
+  }
+
+  protected override UniTask OnFinalize (ISceneWriter writer, CancellationToken cancellationToken)
+  {
+    // Store data when leaving a scene
+    writer.Write(new HomeSceneData
+    {
+      LastDisplayedScreenType = m_View.ScreenType
+    });
+  }
+}
+</code></pre><blockquote><p>It is recommended that <code>ISceneData</code> type definitions be unified as &quot;one per scene&quot; to avoid compromising type safety.</p>
+</blockquote>
+<h2 id="a-idsingle-scene-launch-hrefsingle-scene-launch-single-scene-launch-a"><a id="single-scene-launch" href="#single-scene-launch"> Single scene launch </a></h2>
+<p>When debugging with the Unity editor, it is sometimes important for debugging efficiency to be able to &quot;successfully launch the game from any scene&quot;.</p>
+<p>In <code>ISceneEntryPoint</code>, there is an editor-specific callback called <code>OnEditorFirstPreInitialize</code> that is called on the &quot;first scene launched on the editor&quot;. With this callback, the <code>ISceneDataWriter</code> is passed when it is invoked the very first time, so that initial data can be written and passed to subsequent <code>OnInitialize</code> / <code>OnEnter</code>.</p>
+<pre><code class="lang-cs">#if UNITY_EDITOR
+protected override UniTask OnEditorFirstPreInitialize (ISceneDataWriter writer, CancellationToken cancellationToken)
+{
+  writer.Write(new IngameSceneData
+  {
+    CharacterId = m_CharacterId
+  });
+  return UniTask.CompletedTask;
+}
+#endif
+</code></pre><blockquote><p>The <code>OnEditorFirstPreInitialize</code> must be enclosed in a <code>UNITY_EDITOR</code> directive.</p>
+</blockquote>
+<h2 id="a-idinterrupt-scene-operation-hrefinterrupt-scene-operation-interrupt-scene-operation-a"><a id="interrupt-scene-operation" href="#interrupt-scene-operation"> Interrupt scene operation </a></h2>
+<p>Occasionally, during the processing of a scene transition, you may want to override it with a transition process to another scene.</p>
+<p>For example, there are cases such as &quot;I want to transition to an event scene, but when I check <code>OnInitialize</code>, the event period has ended, so I want to call <code>Pop</code> in <code>OnInitialize</code> to return the scene. In this case, the current transition process is interrupted and the scene transition operation is interrupted, but if this is implemented correctly, the internal state management is not easy.</p>
+<p>Navigathena is implemented to handle such interruptions.
+The following is a simple example of actual operation.</p>
+<pre><code class="lang-cs:EventSceneEntryPoint.cs">protected override async UniTask OnInitialize (ISceneDataReader reader, IProgress&lt;IProgressDataStore&gt; progress, CancellationToken cancellationToken)
+{
+  // Assume the event has expired.
+  bool isExpired = true;
+
+  if (isExpired) {
+    // NOTE: The cancellationToken is not passed to the transition operation because the cancellation state is canceled when the transition operation is performed.
+    await GlobalSceneNavigator.Instance.Pop(CancellationToken.None);
+
+    // true
+    Debug.Log(cancellationToken.IsCancellationRequested);
+  }
+}
+
+protected override UniTask OnEnter (ISceneDataReader reader, CancellationToken cancellationToken)
+{
+  Debug.Log(&quot;EventSceneEntryPoint.OnEnter&quot;);
+  return UniTask.CompletedTask;
+}
+</code></pre><p>When a new transition process is interrupted, the <code>CancellationTokenSource</code> managed in the SceneNavigator side is canceled, and the <code>CancellationToken</code> passed in each event is also canceled. In the above example, after calling <code>Pop</code>, the <code>cancellationToken</code> will be in the cancel request state, and the subsequent <code>OnEnter</code> will not be called.</p>
+<h2 id="a-idscene-history-editing-hrefscene-history-editing-scene-history-editing-a"><a id="scene-history-editing" href="#scene-history-editing"> Scene history editing </a></h2>
+<p>Occasionally, there are situations where you want to build a history that ignores the current history.</p>
+<p>Navigathena provides an <code>ISceneHistoryBuilder</code> to directly manipulate the history of the <code>ISceneNavigator</code> by using the <code>IUnsafeSceneNavigator.GetHistoryBuilderUnsafe</code> method.</p>
+<pre><code class="lang-cs">using MackySoft.Navigathena.SceneManagement;
+using MackySoft.Navigathena.SceneManagement.Unsafe; // Required for IUnsafeSceneNavigator features
+
+//...
+
+// Remove all except the current scene from the current history, add the Home scene as one previous scene, and reconstruct the history.
+GlobalSceneNavigator.Instance.GetHistoryBuilderUnsafe()
+  .RemoveAllExceptCurrent()
+  .Add(new SceneHistoryEntry(SceneDefinitions.Home, TransitionDefinitions.Loading, new SceneDataStore())))
+  .Build();
+
+// Pop to return to the Home scene.
+await GlobalSceneNavigator.Instance.Pop();
+</code></pre><p>The <code>ISceneHistoryBuilder</code> you have retrieved will be unavailable after the <code>ISceneNavigator</code> transition operation is performed, because it is a different version. So it is necessary to complete the history manipulation process in <code>ISceneHistoryBuilder</code> before the transition operation is performed.</p>
+<p>This functionality is not included in <code>ISceneNavigator</code>, but is defined in <code>IUnsafeSceneNavigator</code>. If you implement a custom <code>ISceneNavigator</code> and need scene history manipulation functionality, please implement an additional <code>IUnsafeSceneNavigator</code>. (<code>GlobalSceneNavigator</code> and <code>StandardSceneNavigator</code> explicitly implement <code>IUnsafeSceneNavigator</code>)</p>
+<blockquote><p>As the name implies, <code>IUnsafeScenNavigator</code> is an Unsafe feature and i do not recommend its heavy use.</p>
+</blockquote>
+<h1 id="a-idintegrations-hrefintegrations--integrations-a"><a id="integrations" href="#integrations"> 📚 Integrations </a></h1>
+<h2 id="a-idaddressables-hrefaddressables-addressables-system-a"><a id="addressables" href="#addressables"> Addressables System </a></h2>
+<p>In Navigathena, the low-level handling of loading and unloading of each scene is handled by the <code>ISceneIdentifier</code> interface.</p>
+<p>By default, only the <code>BuiltInSceneIdentifier</code> is implemented, but if your project contains the <a href="https://docs.unity3d.com/Packages/com.unity.addressables@2.0/manual/index.html">Addressables&quot;</a> package is included in the project, the <code>AddressalbeSceneIdentifier</code> will be available, allowing seamless incorporation of loading and unloading of scenes handled as Addressables.</p>
+<p>Below is an example of its use in an actual game I am working on.</p>
+<pre><code class="lang-cs">using MackySoft.Navigathena.SceneManagement;
+using MackySoft.Navigathena.SceneManagement.AddressableAssets;
+
+// Definition of scenes used in the project
+public static class SceneDefinitions
+{
+
+  // Use BuiltInSceneIdentifier for splash
+  public static ISceneIdentifier Splash { get; } = new BuiltInSceneIdentifier(&quot;Splash&quot;);
+
+  // For post-splash scenes, use AddressableSceneIdentifier because Addressables dependencies need to be resolved
+  // Pass `object key` as argument
+  public static ISceneIdentifier Title { get; } = new AddressableSceneIdentifier(&quot;Title&quot;);
+  public static ISceneIdentifier Introduction { get; } = new AddressableSceneIdentifier(&quot;Introduction&quot;);
+  public static ISceneIdentifier Home { get; } = new AddressableSceneIdentifier(&quot;Home&quot;);
+  public static ISceneIdentifier Game { get; } = new AddressableSceneIdentifier(&quot;Game&quot;);
+}
+</code></pre><p>Since it is encapsulated in the <code>ISceneIdentifier</code> interface, you do not need to worry about whether the scene you are using is built-in or addressable.
+The contents of <code>ISceneIdentifier</code> are simple: <code>CreateHandle</code> returns an <code>ISceneHandle</code>, and the returned <code>ISceneHandle</code> is responsible for the actual loading and unloading process.</p>
+<pre><code class="lang-cs">public interface ISceneIdentifier
+{
+  ISceneHandle CreateHandle ();
+}
+
+public interface ISceneHandle
+{
+  UniTask&lt;Scene&gt; Load (IProgress&lt;float&gt; progress = null, CancellationToken cancellationToken = default);
+  UniTask Unload (IProgress&lt;float&gt; progress = null, CancellationToken cancellationToken = default);
+}
+</code></pre><p>In the case of <code>AddressableSceneIdentifier</code>, it wraps the <code>LoadSceneAsync</code>/<code>UnloadSceneAsync</code> of Addressables, which of course resolves asset dependencies. However, since downloading assets is beyond the scope of the scene transition framework responsibilities, it is recommended to incorporate pre-download logic at appropriate times depending on the convenience of the project.</p>
+<h2 id="a-iddependency-injection-hrefdependency-injection-dependency-injection-di-a"><a id="dependency-injection" href="#dependency-injection"> Dependency injection (DI) </a></h2>
+<p>The scene management framework can easily become a central hub that influences the very foundation of the architecture in game development, such as &quot;who will oversee the logic of the scene?&quot;.</p>
+<p>Navigathena can support dependency injection by incorporating functional integration with a DI container built upon SceneEntryPoint. <a href="https://github.com/hadashiA/VContainer">&quot;VContainer&quot;</a> is supported by default.</p>
+<p>In this integration, instead of inheriting from SceneEntryPoint, you can register a type that implements the ISceneLifecycle interface with the DI container. By placing the pre-defined <code>ScopedSceneEntryPoint</code> by Navigathena in the scene, it is possible to decouple the scene&#39;s lifecycle from the component (<code>MonoBehaviour</code>). </p>
+<p>Due to the specification of the timing at which VContainer container determines its parent, it&#39;s a bit hacky, but it&#39;s necessary to set the LifetimeScope GameObject to inactive. You can easily create this from the <code>Create LifetimeScope</code> button displayed in the <code>ScopedSceneEntryPoint</code> inspector.</p>
+<pre><code class="lang-cs">public override void Configure (IContainerBuilder builder)
+{
+  builder.Register&lt;ISceneLifecycle, TitleSceneLifecycle&gt;(Lifetime.Singleton);
+}
+</code></pre><h1 id="a-idfaq-hreffaq--faq-a"><a id="faq" href="#faq"> ❓ FAQ </a></h1>
+<h2 id="a-idsubscene-management-hrefsubscene-management-how-to-load-multiple-scenes-sub-scenes-a"><a id="subscene-management" href="#subscene-management"> How to load multiple scenes (sub-scenes)? </a></h2>
+<p>Consider a scenario where, upon loading an in-game scene, you might want to additionally load a sub-scenes that includes a stage or UI.</p>
+<pre><code>- Ingame
+  - HUD
+  - Stage_01
+</code></pre><p>Occasionally, sub-scenes are managed by a scene management wrapper, but Navigathena does not explicitly support such sub-scene features.</p>
+<p>The logic for scene transitions inherently needs to be aware of the destination scene. Yet, it is preferable not to know &quot;what kind of logic will be executed in the destination&quot;. When the logic in the originating scene becomes complex, the responsibility of &quot;who manages the scene&quot; becomes ambiguous. This increases the risk of producing code that is difficult to maintain.</p>
+<p>In Navigathena, it is recommended to clarify this responsibility by &quot;transferring data such as stage IDs between scenes and managing sub-scenes using the SceneEntryPoint (and SceneLifecycle) in the destination scene with UnityEngine.SceneManagement (or similar functionality)&quot;. By assigning the responsibility of managing sub-scenes to the destination scene, each scene can independently determine which sub-scenes it has and the logic for loading and unloading them.</p>
+<h2 id="a-idroot-scene-hrefroot-scene-how-to-have-a-scene-that-is-always-present-throughout-the-life-of-the-application-a"><a id="root-scene" href="#root-scene"> How to have a scene that is always present throughout the life of the application? </a></h2>
+<p>While there&#39;s a personal preference involved, having a scene that always persists throughout the application lifespan (which we call the Root scene) is convenient for development. While one can use <code>DontDestroyOnLoad</code>, its challenging aspect is its lack of flexibility in handling.</p>
+<p>In projects under development, I have adopted an approach where I am extend <code>ScopedSceneEntryPoint</code> and load the Root scene during the <code>EnsureParentScope</code> phase.</p>
+<pre><code class="lang-cs">public sealed class MyProjectScopedSceneEntryPoint : ScopedSceneEntryPoint
+{
+
+  const string kRootSceneName = &quot;Root&quot;;
+
+  protected override async UniTask&lt;LifetimeScope&gt; EnsureParentScope (CancellationToken cancellationToken)
+  {
+    // Load root scene.
+    if (!SceneManager.GetSceneByName(kRootSceneName).isLoaded)
+    {
+      await SceneManager.LoadSceneAsync(kRootSceneName, LoadSceneMode.Additive)
+        .ToUniTask(cancellationToken: cancellationToken);
+    }
+
+    Scene rootScene = SceneManager.GetSceneByName(kRootSceneName);
+
+#if UNITY_EDITOR
+    // Reorder root scene.
+    EditorSceneManager.MoveSceneBefore(rootScene, gameObject.scene);
+#endif
+
+    // Build root LifetimeScope container.
+    if (rootScene.TryGetComponentInScene(out LifetimeScope rootLifetimeScope, true) &amp;&amp; rootLifetimeScope.Container == null)
+    {
+      await UniTask.RunOnThreadPool(() =&gt; rootLifetimeScope.Build(), cancellationToken: cancellationToken);
+    }
+    return rootLifetimeScope;
+  }
+}
+</code></pre><h1 id="a-idhelp-and-contribute-hrefhelp-and-contribute--help--contribute-a"><a id="help-and-contribute" href="#help-and-contribute"> ✉ Help &amp; Contribute </a></h1>
+<p>I welcome feature requests and bug reports in <a href="https://github.com/mackysoft/Navigathena/issues">issues</a> and <a href="https://github.com/mackysoft/Navigathena/pulls">pull requests</a>.</p>
+<p>If you feel that my works are worthwhile, I would greatly appreciate it if you could sponsor me. Private sponsor and one-time donate are also welcome.</p>
+<p>GitHub Sponsors: <a href="https://github.com/sponsors/mackysoft">https://github.com/sponsors/mackysoft</a></p>
+<h1 id="a-idauthor-info-hrefauthor-info--author-info-a"><a id="author-info" href="#author-info"> 📔 Author Info </a></h1>
+<p>Hiroya Aramaki is a indie game developer in Japan.</p>
+<ul>
+<li>Twitter: <a href="https://twitter.com/makihiro_dev">https://twitter.com/makihiro_dev</a></li>
+</ul>
+<h1 id="a-idlicense-hreflicense--license-a"><a id="license" href="#license"> 📜 License </a></h1>
+<p>This library is under the <a href="https://github.com/mackysoft/Navigathena/blob/main/LICENSE">MIT License</a>.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Navigathena - Scene management framework
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>
