@@ -8,7 +8,8 @@
                         "Assets/**/*.cs"
                     ],
                     "exclude": [
-                        "Assets/Plugins/**"
+                        "Assets/Plugins/**",
+                        "Assets/**/Editor/**"
                     ]
                 }
             ],
