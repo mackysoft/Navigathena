@@ -105,6 +105,15 @@ namespace MackySoft.Navigathena.SceneManagement
 			return navigator.Push(new LoadSceneRequest(scene, transitionDirector, data, interruptOperation), cancellationToken);
 		}
 
+		public static UniTask Push<T> (this ISceneNavigator navigator, ISceneIdentifier<T> scene, ITransitionDirector transitionDirector = null, T data = default, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default) where T : ISceneData
+		{
+			if (navigator == null)
+			{
+				throw new ArgumentNullException(nameof(navigator));
+			}
+			return navigator.Push(new LoadSceneRequest(scene, transitionDirector, data, interruptOperation), cancellationToken);
+		}
+
 		public static UniTask Pop (this ISceneNavigator navigator, ITransitionDirector transitionDirector = null, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default)
 		{
 			if (navigator == null)
@@ -123,7 +132,25 @@ namespace MackySoft.Navigathena.SceneManagement
 			return navigator.Change(new LoadSceneRequest(scene, transitionDirector, data, interruptOperation), cancellationToken);
 		}
 
+		public static UniTask Change<T> (this ISceneNavigator navigator, ISceneIdentifier<T> scene, ITransitionDirector transitionDirector = null, T data = default, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default) where T : ISceneData
+		{
+			if (navigator == null)
+			{
+				throw new ArgumentNullException(nameof(navigator));
+			}
+			return navigator.Change(new LoadSceneRequest(scene, transitionDirector, data, interruptOperation), cancellationToken);
+		}
+
 		public static UniTask Replace (this ISceneNavigator navigator, ISceneIdentifier scene, ITransitionDirector transitionDirector = null, ISceneData data = null, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default)
+		{
+			if (navigator == null)
+			{
+				throw new ArgumentNullException(nameof(navigator));
+			}
+			return navigator.Replace(new LoadSceneRequest(scene, transitionDirector, data, interruptOperation), cancellationToken);
+		}
+
+		public static UniTask Replace<T> (this ISceneNavigator navigator, ISceneIdentifier<T> scene, ITransitionDirector transitionDirector = null, T data = default, IAsyncOperation interruptOperation = null, CancellationToken cancellationToken = default) where T : ISceneData
 		{
 			if (navigator == null)
 			{
