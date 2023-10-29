@@ -10,6 +10,10 @@ namespace MackySoft.Navigathena.SceneManagement
 		ISceneHandle CreateHandle ();
 	}
 
+	public interface ISceneIdentifier<TSceneData> : ISceneIdentifier where TSceneData : ISceneData
+	{
+	}
+
 	public interface ISceneHandle
 	{
 		UniTask<Scene> Load (IProgress<float> progress = null, CancellationToken cancellationToken = default);
