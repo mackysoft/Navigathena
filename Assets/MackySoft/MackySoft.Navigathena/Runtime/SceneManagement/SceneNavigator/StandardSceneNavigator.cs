@@ -24,7 +24,7 @@ namespace MackySoft.Navigathena.SceneManagement
 		/// History of all scenes, including the current scene.
 		/// Since interrupt processing may occur on ISceneEntryPoint events, the history must be updated prior to calling the event.
 		/// </summary>
-		readonly SceneHistory m_History = new();
+		readonly History<SceneHistoryEntry> m_History = new();
 
 		/// <summary>
 		/// A counter to prevent <see cref="OnSceneLoaded(Scene, LoadSceneMode)"/> from causing a double initialization process.
