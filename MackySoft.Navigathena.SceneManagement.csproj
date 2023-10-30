@@ -69,9 +69,9 @@
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\ISceneNavigator.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneNavigatorHelper.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneIdentifier\BlankSceneIdentifier.cs" />
-    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneHistory.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneDataStore.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneNavigationException.cs" />
+    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneHistoryEntry.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\ISceneHistoryBuilder.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneNavigator\GlobalSceneNavigator.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneNavigator\StandardSceneNavigator.cs" />

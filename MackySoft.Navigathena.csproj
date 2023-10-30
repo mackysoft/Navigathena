@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\AsyncOperation.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\ProcessCounter.cs" />
+    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\History.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\Diagnostics\NavigathenaDebug.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\Diagnostics\LogHandler.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\IProgressDataStore.cs" />

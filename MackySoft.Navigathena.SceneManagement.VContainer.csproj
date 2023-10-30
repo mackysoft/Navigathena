@@ -58,6 +58,7 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\Integration\VContainer\ContainerBuilderExtensions.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\Integration\VContainer\ScopedSceneEntryPoint.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\Integration\VContainer\ISceneLifecycle.cs" />
   </ItemGroup>
