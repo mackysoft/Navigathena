@@ -2,7 +2,7 @@
 	"name": "com.mackysoft.navigathena",
 	"displayName": "Navigathena",
 	"author": { "name": "MackySoft", "url": "https://github.com/mackysoft" },
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"unity": "2021.3",
 	"description": "Scene management framework for Unity.",
 	"keywords": [ "Navigathena", "Frameworks", "SceneManagement" ],
