@@ -642,7 +642,7 @@ Due to the specification of the timing at which VContainer container determines 
 ```cs
 public override void Configure (IContainerBuilder builder)
 {
-  builder.Register<ISceneLifecycle, TitleSceneLifecycle>(Lifetime.Singleton);
+  builder.RegisterSceneLifecycle<TitleSceneLifecycle>();
 }
 ```
 
