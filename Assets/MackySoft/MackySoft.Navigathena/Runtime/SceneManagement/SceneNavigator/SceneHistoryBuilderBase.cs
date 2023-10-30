@@ -11,6 +11,22 @@ namespace MackySoft.Navigathena.SceneManagement
 
 		public int Count => m_History.Count;
 
+		public SceneHistoryEntry this[int index]
+		{
+			get => m_History[index];
+			set {
+				if (value == null)
+				{
+					throw new ArgumentNullException(nameof(value));
+				}
+				if ((index == 0) || (index < 0) || (index >= m_History.Count))
+				{
+					throw new ArgumentOutOfRangeException(nameof(index));
+				}
+				m_History[index] = value;
+			}
+		}
+
 		protected SceneHistoryBuilderBase ()
 		{
 			m_History = new List<SceneHistoryEntry>();
@@ -28,6 +44,20 @@ namespace MackySoft.Navigathena.SceneManagement
 				throw new ArgumentNullException(nameof(entry));
 			}
 			m_History.Add(entry);
+			return this;
+		}
+
+		public ISceneHistoryBuilder Insert(int index, SceneHistoryEntry entry)
+		{
+			if (entry == null)
+			{
+				throw new ArgumentNullException(nameof(entry));
+			}
+			if ((index == 0) || (index < 0) || (index > m_History.Count))
+			{
+				throw new ArgumentOutOfRangeException(nameof(index));
+			}
+			m_History.Insert(index, entry);
 			return this;
 		}
 
