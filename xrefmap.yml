@@ -207,6 +207,179 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.Diagnostics.NavigathenaDebug.LogLevel
   nameWithType: NavigathenaDebug.LogLevel
+- uid: MackySoft.Navigathena.History`1
+  name: History<T>
+  href: api/MackySoft.Navigathena.History-1.html
+  commentId: T:MackySoft.Navigathena.History`1
+  name.vb: History(Of T)
+  fullName: MackySoft.Navigathena.History<T>
+  fullName.vb: MackySoft.Navigathena.History(Of T)
+  nameWithType: History<T>
+  nameWithType.vb: History(Of T)
+- uid: MackySoft.Navigathena.History`1.#ctor
+  name: History()
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1__ctor
+  commentId: M:MackySoft.Navigathena.History`1.#ctor
+  fullName: MackySoft.Navigathena.History<T>.History()
+  fullName.vb: MackySoft.Navigathena.History(Of T).History()
+  nameWithType: History<T>.History()
+  nameWithType.vb: History(Of T).History()
+- uid: MackySoft.Navigathena.History`1.#ctor(System.Collections.Generic.IEnumerable{`0})
+  name: History(IEnumerable<T>)
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1__ctor_System_Collections_Generic_IEnumerable__0__
+  commentId: M:MackySoft.Navigathena.History`1.#ctor(System.Collections.Generic.IEnumerable{`0})
+  name.vb: History(IEnumerable(Of T))
+  fullName: MackySoft.Navigathena.History<T>.History(System.Collections.Generic.IEnumerable<T>)
+  fullName.vb: MackySoft.Navigathena.History(Of T).History(System.Collections.Generic.IEnumerable(Of T))
+  nameWithType: History<T>.History(IEnumerable<T>)
+  nameWithType.vb: History(Of T).History(IEnumerable(Of T))
+- uid: MackySoft.Navigathena.History`1.#ctor*
+  name: History
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1__ctor_
+  commentId: Overload:MackySoft.Navigathena.History`1.#ctor
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.History<T>.History
+  fullName.vb: MackySoft.Navigathena.History(Of T).History
+  nameWithType: History<T>.History
+  nameWithType.vb: History(Of T).History
+- uid: MackySoft.Navigathena.History`1.Clear
+  name: Clear()
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Clear
+  commentId: M:MackySoft.Navigathena.History`1.Clear
+  fullName: MackySoft.Navigathena.History<T>.Clear()
+  fullName.vb: MackySoft.Navigathena.History(Of T).Clear()
+  nameWithType: History<T>.Clear()
+  nameWithType.vb: History(Of T).Clear()
+- uid: MackySoft.Navigathena.History`1.Clear*
+  name: Clear
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Clear_
+  commentId: Overload:MackySoft.Navigathena.History`1.Clear
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.History<T>.Clear
+  fullName.vb: MackySoft.Navigathena.History(Of T).Clear
+  nameWithType: History<T>.Clear
+  nameWithType.vb: History(Of T).Clear
+- uid: MackySoft.Navigathena.History`1.Count
+  name: Count
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Count
+  commentId: P:MackySoft.Navigathena.History`1.Count
+  fullName: MackySoft.Navigathena.History<T>.Count
+  fullName.vb: MackySoft.Navigathena.History(Of T).Count
+  nameWithType: History<T>.Count
+  nameWithType.vb: History(Of T).Count
+- uid: MackySoft.Navigathena.History`1.Count*
+  name: Count
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Count_
+  commentId: Overload:MackySoft.Navigathena.History`1.Count
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.History<T>.Count
+  fullName.vb: MackySoft.Navigathena.History(Of T).Count
+  nameWithType: History<T>.Count
+  nameWithType.vb: History(Of T).Count
+- uid: MackySoft.Navigathena.History`1.GetEnumerator
+  name: GetEnumerator()
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_GetEnumerator
+  commentId: M:MackySoft.Navigathena.History`1.GetEnumerator
+  fullName: MackySoft.Navigathena.History<T>.GetEnumerator()
+  fullName.vb: MackySoft.Navigathena.History(Of T).GetEnumerator()
+  nameWithType: History<T>.GetEnumerator()
+  nameWithType.vb: History(Of T).GetEnumerator()
+- uid: MackySoft.Navigathena.History`1.GetEnumerator*
+  name: GetEnumerator
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_GetEnumerator_
+  commentId: Overload:MackySoft.Navigathena.History`1.GetEnumerator
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.History<T>.GetEnumerator
+  fullName.vb: MackySoft.Navigathena.History(Of T).GetEnumerator
+  nameWithType: History<T>.GetEnumerator
+  nameWithType.vb: History(Of T).GetEnumerator
+- uid: MackySoft.Navigathena.History`1.Peek
+  name: Peek()
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Peek
+  commentId: M:MackySoft.Navigathena.History`1.Peek
+  fullName: MackySoft.Navigathena.History<T>.Peek()
+  fullName.vb: MackySoft.Navigathena.History(Of T).Peek()
+  nameWithType: History<T>.Peek()
+  nameWithType.vb: History(Of T).Peek()
+- uid: MackySoft.Navigathena.History`1.Peek*
+  name: Peek
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Peek_
+  commentId: Overload:MackySoft.Navigathena.History`1.Peek
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.History<T>.Peek
+  fullName.vb: MackySoft.Navigathena.History(Of T).Peek
+  nameWithType: History<T>.Peek
+  nameWithType.vb: History(Of T).Peek
+- uid: MackySoft.Navigathena.History`1.Pop
+  name: Pop()
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Pop
+  commentId: M:MackySoft.Navigathena.History`1.Pop
+  fullName: MackySoft.Navigathena.History<T>.Pop()
+  fullName.vb: MackySoft.Navigathena.History(Of T).Pop()
+  nameWithType: History<T>.Pop()
+  nameWithType.vb: History(Of T).Pop()
+- uid: MackySoft.Navigathena.History`1.Pop*
+  name: Pop
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Pop_
+  commentId: Overload:MackySoft.Navigathena.History`1.Pop
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.History<T>.Pop
+  fullName.vb: MackySoft.Navigathena.History(Of T).Pop
+  nameWithType: History<T>.Pop
+  nameWithType.vb: History(Of T).Pop
+- uid: MackySoft.Navigathena.History`1.Push(`0)
+  name: Push(T)
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Push__0_
+  commentId: M:MackySoft.Navigathena.History`1.Push(`0)
+  fullName: MackySoft.Navigathena.History<T>.Push(T)
+  fullName.vb: MackySoft.Navigathena.History(Of T).Push(T)
+  nameWithType: History<T>.Push(T)
+  nameWithType.vb: History(Of T).Push(T)
+- uid: MackySoft.Navigathena.History`1.Push*
+  name: Push
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_Push_
+  commentId: Overload:MackySoft.Navigathena.History`1.Push
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.History<T>.Push
+  fullName.vb: MackySoft.Navigathena.History(Of T).Push
+  nameWithType: History<T>.Push
+  nameWithType.vb: History(Of T).Push
+- uid: MackySoft.Navigathena.History`1.TryPeek(`0@)
+  name: TryPeek(out T)
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_TryPeek__0__
+  commentId: M:MackySoft.Navigathena.History`1.TryPeek(`0@)
+  name.vb: TryPeek(ByRef T)
+  fullName: MackySoft.Navigathena.History<T>.TryPeek(out T)
+  fullName.vb: MackySoft.Navigathena.History(Of T).TryPeek(ByRef T)
+  nameWithType: History<T>.TryPeek(out T)
+  nameWithType.vb: History(Of T).TryPeek(ByRef T)
+- uid: MackySoft.Navigathena.History`1.TryPeek*
+  name: TryPeek
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_TryPeek_
+  commentId: Overload:MackySoft.Navigathena.History`1.TryPeek
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.History<T>.TryPeek
+  fullName.vb: MackySoft.Navigathena.History(Of T).TryPeek
+  nameWithType: History<T>.TryPeek
+  nameWithType.vb: History(Of T).TryPeek
+- uid: MackySoft.Navigathena.History`1.TryPop(`0@)
+  name: TryPop(out T)
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_TryPop__0__
+  commentId: M:MackySoft.Navigathena.History`1.TryPop(`0@)
+  name.vb: TryPop(ByRef T)
+  fullName: MackySoft.Navigathena.History<T>.TryPop(out T)
+  fullName.vb: MackySoft.Navigathena.History(Of T).TryPop(ByRef T)
+  nameWithType: History<T>.TryPop(out T)
+  nameWithType.vb: History(Of T).TryPop(ByRef T)
+- uid: MackySoft.Navigathena.History`1.TryPop*
+  name: TryPop
+  href: api/MackySoft.Navigathena.History-1.html#MackySoft_Navigathena_History_1_TryPop_
+  commentId: Overload:MackySoft.Navigathena.History`1.TryPop
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.History<T>.TryPop
+  fullName.vb: MackySoft.Navigathena.History(Of T).TryPop
+  nameWithType: History<T>.TryPop
+  nameWithType.vb: History(Of T).TryPop
 - uid: MackySoft.Navigathena.IAsyncOperation
   name: IAsyncOperation
   href: api/MackySoft.Navigathena.IAsyncOperation.html
@@ -1069,6 +1242,35 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Count
   nameWithType: ISceneHistoryBuilder.Count
+- uid: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Insert(System.Int32,MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
+  name: Insert(Int32, SceneHistoryEntry)
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.html#MackySoft_Navigathena_SceneManagement_ISceneHistoryBuilder_Insert_System_Int32_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry_
+  commentId: M:MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Insert(System.Int32,MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Insert(System.Int32, MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
+  nameWithType: ISceneHistoryBuilder.Insert(Int32, SceneHistoryEntry)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Insert*
+  name: Insert
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.html#MackySoft_Navigathena_SceneManagement_ISceneHistoryBuilder_Insert_
+  commentId: Overload:MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Insert
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Insert
+  nameWithType: ISceneHistoryBuilder.Insert
+- uid: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Item(System.Int32)
+  name: Item[Int32]
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.html#MackySoft_Navigathena_SceneManagement_ISceneHistoryBuilder_Item_System_Int32_
+  commentId: P:MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Item[System.Int32]
+  fullName.vb: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Item(System.Int32)
+  nameWithType: ISceneHistoryBuilder.Item[Int32]
+  nameWithType.vb: ISceneHistoryBuilder.Item(Int32)
+- uid: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Item*
+  name: Item
+  href: api/MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.html#MackySoft_Navigathena_SceneManagement_ISceneHistoryBuilder_Item_
+  commentId: Overload:MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Item
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.Item
+  nameWithType: ISceneHistoryBuilder.Item
 - uid: MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.RemoveAllExceptCurrent
   name: RemoveAllExceptCurrent()
   href: api/MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.html#MackySoft_Navigathena_SceneManagement_ISceneHistoryBuilder_RemoveAllExceptCurrent
@@ -1662,144 +1864,6 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.OnInitialize
   nameWithType: SceneEntryPointBase.OnInitialize
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory
-  name: SceneHistory
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html
-  commentId: T:MackySoft.Navigathena.SceneManagement.SceneHistory
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory
-  nameWithType: SceneHistory
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor
-  name: SceneHistory()
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory__ctor
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.SceneHistory()
-  nameWithType: SceneHistory.SceneHistory()
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor(System.Collections.Generic.IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
-  name: SceneHistory(IEnumerable<SceneHistoryEntry>)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory__ctor_System_Collections_Generic_IEnumerable_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry__
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor(System.Collections.Generic.IEnumerable{MackySoft.Navigathena.SceneManagement.SceneHistoryEntry})
-  name.vb: SceneHistory(IEnumerable(Of SceneHistoryEntry))
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.SceneHistory(System.Collections.Generic.IEnumerable<MackySoft.Navigathena.SceneManagement.SceneHistoryEntry>)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneHistory.SceneHistory(System.Collections.Generic.IEnumerable(Of MackySoft.Navigathena.SceneManagement.SceneHistoryEntry))
-  nameWithType: SceneHistory.SceneHistory(IEnumerable<SceneHistoryEntry>)
-  nameWithType.vb: SceneHistory.SceneHistory(IEnumerable(Of SceneHistoryEntry))
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor*
-  name: SceneHistory
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory__ctor_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistory.#ctor
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.SceneHistory
-  nameWithType: SceneHistory.SceneHistory
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Clear
-  name: Clear()
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Clear
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.Clear
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Clear()
-  nameWithType: SceneHistory.Clear()
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Clear*
-  name: Clear
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Clear_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistory.Clear
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Clear
-  nameWithType: SceneHistory.Clear
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Count
-  name: Count
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Count
-  commentId: P:MackySoft.Navigathena.SceneManagement.SceneHistory.Count
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Count
-  nameWithType: SceneHistory.Count
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Count*
-  name: Count
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Count_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistory.Count
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Count
-  nameWithType: SceneHistory.Count
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.GetEnumerator
-  name: GetEnumerator()
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_GetEnumerator
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.GetEnumerator
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.GetEnumerator()
-  nameWithType: SceneHistory.GetEnumerator()
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.GetEnumerator*
-  name: GetEnumerator
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_GetEnumerator_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistory.GetEnumerator
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.GetEnumerator
-  nameWithType: SceneHistory.GetEnumerator
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Peek
-  name: Peek()
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Peek
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.Peek
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Peek()
-  nameWithType: SceneHistory.Peek()
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Peek*
-  name: Peek
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Peek_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistory.Peek
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Peek
-  nameWithType: SceneHistory.Peek
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Pop
-  name: Pop()
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Pop
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.Pop
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Pop()
-  nameWithType: SceneHistory.Pop()
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Pop*
-  name: Pop
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Pop_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistory.Pop
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Pop
-  nameWithType: SceneHistory.Pop
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Push(MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
-  name: Push(SceneHistoryEntry)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Push_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry_
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.Push(MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Push(MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
-  nameWithType: SceneHistory.Push(SceneHistoryEntry)
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.Push*
-  name: Push
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_Push_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistory.Push
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.Push
-  nameWithType: SceneHistory.Push
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPeek(MackySoft.Navigathena.SceneManagement.SceneHistoryEntry@)
-  name: TryPeek(out SceneHistoryEntry)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_TryPeek_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry__
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.TryPeek(MackySoft.Navigathena.SceneManagement.SceneHistoryEntry@)
-  name.vb: TryPeek(ByRef SceneHistoryEntry)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPeek(out MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPeek(ByRef MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
-  nameWithType: SceneHistory.TryPeek(out SceneHistoryEntry)
-  nameWithType.vb: SceneHistory.TryPeek(ByRef SceneHistoryEntry)
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPeek*
-  name: TryPeek
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_TryPeek_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistory.TryPeek
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPeek
-  nameWithType: SceneHistory.TryPeek
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPop(MackySoft.Navigathena.SceneManagement.SceneHistoryEntry@)
-  name: TryPop(out SceneHistoryEntry)
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_TryPop_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry__
-  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistory.TryPop(MackySoft.Navigathena.SceneManagement.SceneHistoryEntry@)
-  name.vb: TryPop(ByRef SceneHistoryEntry)
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPop(out MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPop(ByRef MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
-  nameWithType: SceneHistory.TryPop(out SceneHistoryEntry)
-  nameWithType.vb: SceneHistory.TryPop(ByRef SceneHistoryEntry)
-- uid: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPop*
-  name: TryPop
-  href: api/MackySoft.Navigathena.SceneManagement.SceneHistory.html#MackySoft_Navigathena_SceneManagement_SceneHistory_TryPop_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistory.TryPop
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.SceneHistory.TryPop
-  nameWithType: SceneHistory.TryPop
 - uid: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase
   name: SceneHistoryBuilderBase
   href: api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html
@@ -1867,6 +1931,35 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Count
   nameWithType: SceneHistoryBuilderBase.Count
+- uid: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Insert(System.Int32,MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
+  name: Insert(Int32, SceneHistoryEntry)
+  href: api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html#MackySoft_Navigathena_SceneManagement_SceneHistoryBuilderBase_Insert_System_Int32_MackySoft_Navigathena_SceneManagement_SceneHistoryEntry_
+  commentId: M:MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Insert(System.Int32,MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Insert(System.Int32, MackySoft.Navigathena.SceneManagement.SceneHistoryEntry)
+  nameWithType: SceneHistoryBuilderBase.Insert(Int32, SceneHistoryEntry)
+- uid: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Insert*
+  name: Insert
+  href: api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html#MackySoft_Navigathena_SceneManagement_SceneHistoryBuilderBase_Insert_
+  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Insert
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Insert
+  nameWithType: SceneHistoryBuilderBase.Insert
+- uid: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Item(System.Int32)
+  name: Item[Int32]
+  href: api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html#MackySoft_Navigathena_SceneManagement_SceneHistoryBuilderBase_Item_System_Int32_
+  commentId: P:MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Item[System.Int32]
+  fullName.vb: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Item(System.Int32)
+  nameWithType: SceneHistoryBuilderBase.Item[Int32]
+  nameWithType.vb: SceneHistoryBuilderBase.Item(Int32)
+- uid: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Item*
+  name: Item
+  href: api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html#MackySoft_Navigathena_SceneManagement_SceneHistoryBuilderBase_Item_
+  commentId: Overload:MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Item
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.Item
+  nameWithType: SceneHistoryBuilderBase.Item
 - uid: MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.m_History
   name: m_History
   href: api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html#MackySoft_Navigathena_SceneManagement_SceneHistoryBuilderBase_m_History

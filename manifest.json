@@ -84,6 +84,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MackySoft.Navigathena.History-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MackySoft.Navigathena.History-1.html",
+          "hash": "hTfTOnM9ZLk2hGfjJOtEZwbYn8kY9I4IpoP7XSjUjGs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MackySoft.Navigathena.IAsyncOperation.yml",
       "output": {
         ".html": {
@@ -280,7 +292,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.html",
-          "hash": "5IqD+9CMGb00nQ44nIjZ9iopPzIqFGOiL3EemCrfYXM="
+          "hash": "HW9N603DVxTmbfzhBUmQ9/UR+pgBjqxxKs5v8ldIT6Y="
         }
       },
       "is_incremental": false,
@@ -408,23 +420,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistory.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistory.html",
-          "hash": "3EtpJieL7PZOrDSLlnCWBh3BXR/6KP+deEGPu8m9iLk="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.yml",
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html",
-          "hash": "iGhFLEL+Rx7LQkbKHKzcNhVGU4WCunWY9bJb2sATfQ4="
+          "hash": "CSmIU8+UrunUxE89bVmqupRPFpKRVZy/V38hQEDJ0cE="
         }
       },
       "is_incremental": false,
@@ -580,7 +580,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.html",
-          "hash": "eJRN7yx68dcRUvVmBq479bfc+2Kr2VtHcVw7cvpYg6Y="
+          "hash": "mqPYaI/Af+I1XPpcmCg0YSUmUmNC5YlMYCT2mnlqn0U="
         }
       },
       "is_incremental": false,
@@ -652,7 +652,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.html",
-          "hash": "nt9C3qnGC8Pk2xLFHlvTK09fiySfPfWRUqWsQPC81/M="
+          "hash": "SLzvs2aARkFqjjyOhEfrQtEi0ImfOLSSbcVoDR955eg="
         }
       },
       "is_incremental": false,
@@ -664,7 +664,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "mcI8kfAKK3LQ5DYATQVvxrll4niXdhCoxIjhxmtfa6M="
+          "hash": "LQSIYRflcFYFRE8qeD+zukwicdzAZD1hEnrtUcocyck="
         }
       },
       "is_incremental": false,
