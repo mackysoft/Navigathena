@@ -20,6 +20,13 @@ namespace MackySoft.Navigathena.SceneManagement
 	public sealed class StandardSceneNavigator : ISceneNavigator, IUnsafeSceneNavigator, IDisposable
 	{
 
+		enum TransitionEnterStage
+		{
+			EditorFirstPreInitializing = 0,
+			Initializing = 1,
+			Entering = 2,
+		}
+
 		/// <summary>
 		/// History of all scenes, including the current scene.
 		/// Since interrupt processing may occur on ISceneEntryPoint events, the history must be updated prior to calling the event.
@@ -35,6 +42,8 @@ namespace MackySoft.Navigathena.SceneManagement
 		readonly ISceneProgressFactory m_SceneProgressFactory;
 
 		SceneState? m_CurrentSceneState;
+		TransitionEnterStage? m_CurrentTransitionEnterStage;
+		TransitionEnterStage? m_PreviousTransitionEnterStage;
 		TransitionDirectorState? m_RunningTransitionDirectorState;
 		CancellationTokenSource m_CurrentCancellationTokenSource;
 
@@ -93,8 +102,11 @@ namespace MackySoft.Navigathena.SceneManagement
 			{
 				if (m_History.TryPeek(out SceneHistoryEntry currentSceneEntry))
 				{
-					await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
-					ct.ThrowIfCancellationRequested();
+					if ((m_PreviousTransitionEnterStage != null) && (m_PreviousTransitionEnterStage >= TransitionEnterStage.Entering))
+					{
+						await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
+						ct.ThrowIfCancellationRequested();
+					}
 				}
 
 				await EnsureStartTransitionDirector(request.TransitionDirector, ct);
@@ -131,12 +143,17 @@ namespace MackySoft.Navigathena.SceneManagement
 			using var _ = m_ProcessCounter.Increment();
 			CancellationToken ct = CancelCurrentAndCreateLinkedToken(cancellationToken);
 
-			SceneHistoryEntry currentSceneEntry = m_History.Peek();
+			SceneHistoryEntry currentSceneEntry = m_History.Pop();
+			SceneHistoryEntry previousScene = m_History.Peek();
+
 			NavigathenaDebug.Logger.Log($"Pop {currentSceneEntry.Scene}");
 			try
 			{
-				await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
-				ct.ThrowIfCancellationRequested();
+				if ((m_PreviousTransitionEnterStage != null) && (m_PreviousTransitionEnterStage >= TransitionEnterStage.Entering))
+				{
+					await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
+					ct.ThrowIfCancellationRequested();
+				}
 
 				await EnsureStartTransitionDirector(request.OverrideTransitionDirector ?? currentSceneEntry.TransitionDirector, ct);
 
@@ -144,8 +161,6 @@ namespace MackySoft.Navigathena.SceneManagement
 				await TryFinalizeAndUnloadCurrentScene(currentSceneEntry, progressDataStore, m_RunningTransitionDirectorState.Value.Progress, ct);
 				await SceneNavigatorHelper.TryExecuteInterruptOperation(request.InterruptOperation, m_RunningTransitionDirectorState.Value.Progress, ct);
 
-				m_History.Pop();
-				SceneHistoryEntry previousScene = m_History.Peek();
 				m_CurrentSceneState = await SceneNavigatorHelper.LoadSceneAndGetEntryPoint(previousScene.Scene, m_SceneProgressFactory, progressDataStore, m_RunningTransitionDirectorState.Value.Progress, ct);
 
 				await EnterSceneSequence(previousScene.DataStore.Reader, ct);
@@ -172,8 +187,11 @@ namespace MackySoft.Navigathena.SceneManagement
 			{
 				if (m_History.TryPeek(out SceneHistoryEntry currentSceneEntry))
 				{
-					await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
-					ct.ThrowIfCancellationRequested();
+					if ((m_PreviousTransitionEnterStage != null) && (m_PreviousTransitionEnterStage >= TransitionEnterStage.Entering))
+					{
+						await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
+						ct.ThrowIfCancellationRequested();
+					}
 				}
 
 				await EnsureStartTransitionDirector(request.TransitionDirector, ct);
@@ -216,8 +234,12 @@ namespace MackySoft.Navigathena.SceneManagement
 			try
 			{
 				SceneHistoryEntry currentSceneEntry = m_History.Peek();
-				await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
-				ct.ThrowIfCancellationRequested();
+
+				if ((m_PreviousTransitionEnterStage != null) && (m_PreviousTransitionEnterStage >= TransitionEnterStage.Entering))
+				{
+					await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
+					ct.ThrowIfCancellationRequested();
+				}
 
 				await EnsureStartTransitionDirector(request.TransitionDirector, ct);
 
@@ -259,8 +281,11 @@ namespace MackySoft.Navigathena.SceneManagement
 			NavigathenaDebug.Logger.Log($"Reload {currentSceneEntry.Scene}");
 			try
 			{
-				await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
-				ct.ThrowIfCancellationRequested();
+				if ((m_PreviousTransitionEnterStage != null) && (m_PreviousTransitionEnterStage >= TransitionEnterStage.Entering))
+				{
+					await m_CurrentSceneState.Value.EntryPoint.OnExit(currentSceneEntry.DataStore.Writer, ct);
+					ct.ThrowIfCancellationRequested();
+				}
 
 				await EnsureStartTransitionDirector(request.OverrideTransitionDirector ?? currentSceneEntry.TransitionDirector, ct);
 
@@ -294,7 +319,7 @@ namespace MackySoft.Navigathena.SceneManagement
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			if (currentSceneEntry != null)
+			if (currentSceneEntry != null && m_CurrentSceneState != null)
 			{
 				await m_CurrentSceneState.Value.EntryPoint.OnFinalize(currentSceneEntry.DataStore.Writer, progress, cancellationToken);
 				cancellationToken.ThrowIfCancellationRequested();
@@ -315,6 +340,7 @@ namespace MackySoft.Navigathena.SceneManagement
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
+			m_CurrentTransitionEnterStage = TransitionEnterStage.Initializing;	
 			await m_CurrentSceneState.Value.EntryPoint.OnInitialize(reader, m_RunningTransitionDirectorState.Value.Progress, cancellationToken);
 			cancellationToken.ThrowIfCancellationRequested();
 
@@ -322,6 +348,7 @@ namespace MackySoft.Navigathena.SceneManagement
 			m_RunningTransitionDirectorState = null;
 			cancellationToken.ThrowIfCancellationRequested();
 
+			m_CurrentTransitionEnterStage = TransitionEnterStage.Entering;
 			await m_CurrentSceneState.Value.EntryPoint.OnEnter(reader, cancellationToken);
 			cancellationToken.ThrowIfCancellationRequested();
 		}
@@ -341,7 +368,18 @@ namespace MackySoft.Navigathena.SceneManagement
 
 			try
 			{
-				await SceneNavigatorHelper.FirstEnterSceneSequence(entryPoint, dataStore, ct);
+#if UNITY_EDITOR
+				await entryPoint.OnEditorFirstPreInitialize(dataStore.Writer, cancellationToken);
+				cancellationToken.ThrowIfCancellationRequested();
+#endif
+
+				m_CurrentTransitionEnterStage = TransitionEnterStage.Initializing;
+				await entryPoint.OnInitialize(dataStore.Reader, Progress.Create<IProgressDataStore>(null), cancellationToken);
+				cancellationToken.ThrowIfCancellationRequested();
+
+				m_CurrentTransitionEnterStage = TransitionEnterStage.Entering;
+				await entryPoint.OnEnter(dataStore.Reader, cancellationToken);
+				cancellationToken.ThrowIfCancellationRequested();
 			}
 			catch (OperationCanceledException)
 			{
@@ -372,6 +410,9 @@ namespace MackySoft.Navigathena.SceneManagement
 		/// </summary>
 		CancellationToken CancelCurrentAndCreateLinkedToken (CancellationToken cancellationToken)
 		{
+			m_PreviousTransitionEnterStage = m_CurrentTransitionEnterStage;
+			m_CurrentTransitionEnterStage = null;
+
 			m_CurrentCancellationTokenSource?.Cancel();
 			m_CurrentCancellationTokenSource?.Dispose();
 			m_CurrentCancellationTokenSource = new CancellationTokenSource();
