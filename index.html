@@ -127,6 +127,7 @@
 <p>Or, you can add this package by opening PackageManager and entering</p>
 <pre><code>https://github.com/mackysoft/Navigathena.git?path=Assets/MackySoft/MackySoft.Navigathena
 </code></pre><p>from the <code>Add package from git URL</code> option.</p>
+<p><img src="https://storage.googleapis.com/zenn-user-upload/9797f7f9718c-20231101.png" alt=""></p>
 <h2 id="install-via-open-upm">Install via Open UPM</h2>
 <p>Or, you can install this package from the <a href="https://openupm.com/packages/com.mackysoft.navigathena/">Open UPM</a> registry.</p>
 <p>More details <a href="https://openupm.com/">here</a>.</p>
@@ -214,7 +215,26 @@ static void Initialize ()
 <p>Incidentally, the <code>GlobalSceneNavigator</code> inspector allows you to view the registered <code>ISceneNavigator</code> and its current history.</p>
 <p><img src="https://storage.googleapis.com/zenn-user-upload/af995c2c903c-20231023.png" alt=""></p>
 <h3 id="a-idscene-entry-point-hrefscene-entry-point-sceneentrypoint-a"><a id="scene-entry-point" href="#scene-entry-point"> SceneEntryPoint </a></h3>
-<p>The SceneEntryPoint concept is used to observe the lifecycle of a scene. It is a component that can be placed only once in each scene and plays a role in observing events such as the start and end of a scene, as well as the transfer of data.</p>
+<p>Next, the concept of <code>SceneEntryPoint</code> is introduced to observe the lifecycle of a scene. This is a component that can be placed only one in each scene and is responsible for observing events such as the start of the scene, the end of the scene, the passing of data, etc. While the <code>SceneEntryPoint</code> is singular to a scene, it observe the logic of the scene, thereby preventing the scene logic from becoming too complex.</p>
+<p>Basically, SceneEntryPoint is designed to inherit from <code>SceneEntryPointBase</code> or <code>ISceneEntryPoint</code> and override each event.</p>
+<pre><code class="lang-cs:TitleSceneEntryPoint.cs">using System.Threading;
+using Cysharp.Threading.Tasks;
+using MackySoft.Navigathena.SceneManagement;
+
+// タイトルシーンのSceneEntryPointを実装するコンポーネント
+public sealed class TitleSceneEntryPoint : SceneEntryPointBase
+{
+  protected override async UniTask OnEnter (ISceneDataReader reader, CancellationToken cancellationToken)
+  {
+    await DoSomething(cancellationToken);
+  }
+}
+</code></pre><blockquote><p>For a method of implementation that does not depend on inheriting <code>MonoBehaviour</code>, please refer to the <a href="#dependency-injection">Integration with Dependency Injection (DI)</a> section.</p>
+</blockquote>
+<p>Once you have defined the SceneEntryPoint component, place one in the scene.</p>
+<p><img src="https://storage.googleapis.com/zenn-user-upload/6e9ebbecfc2f-20231031.png" alt=""></p>
+<p>Now all that is left is to run this scene and the <code>TitleSceneEntryPoint</code> startup event will be called.</p>
+<p>Below is a list of <code>SceneEntryPoint</code> events.</p>
 <pre><code class="lang-cs">public interface ISceneEntryPoint
 {
 
@@ -235,10 +255,7 @@ static void Initialize ()
   UniTask OnEditorFirstPreInitialize (ISceneDataWriter writer, CancellationToken cancellationToken);
 #endif
 }
-</code></pre><p>Basically, SceneEntryPoint is designed to inherit from <code>SceneEntryPointBase</code> or <code>ISceneEntryPoint</code> and override each event.</p>
-<blockquote><p>For a method of implementation that does not depend on inheriting <code>MonoBehaviour</code>, please refer to the <a href="#dependency-injection">Integration with Dependency Injection (DI)</a> section.</p>
-</blockquote>
-<p>When a transition operation is called, the following processes are executed in sequence:</p>
+</code></pre><p>When a transition operation is called, the following processes are executed in sequence:</p>
 <ol>
 <li>The <code>OnExit</code> of the origin <code>ISceneEntryPoint</code></li>
 <li>The <code>Start</code> of the <code>ITransitionHandle</code> created from the <code>ITransitionDirector</code> passed during the transition operation</li>
