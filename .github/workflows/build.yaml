@@ -45,9 +45,3 @@ jobs:
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           unityVersion: 2021.3.24f1
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
