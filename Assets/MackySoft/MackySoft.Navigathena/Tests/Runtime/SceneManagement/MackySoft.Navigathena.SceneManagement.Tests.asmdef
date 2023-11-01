@@ -1,0 +1,23 @@
+{
+    "name": "MackySoft.Navigathena.SceneManagement.Tests",
+    "rootNamespace": "MackySoft.Navigathena.SceneManagement.Tests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "MackySoft.Navigathena",
+        "MackySoft.Navigathena.SceneManagement",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
