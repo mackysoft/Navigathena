@@ -9,7 +9,8 @@
                     ],
                     "exclude": [
                         "Assets/Plugins/**",
-                        "Assets/**/Editor/**"
+                        "Assets/**/Editor/**",
+                        "Assets/**/Tests/**"
                     ]
                 }
             ],

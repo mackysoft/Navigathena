@@ -1,6 +1,6 @@
 # Navigathena - Scene management framework for Unity
 
-[![Build](https://github.com/mackysoft/Navigathena/actions/workflows/build.yaml/badge.svg)](https://github.com/mackysoft/Navigathena/actions/workflows/build.yaml) [![Release](https://img.shields.io/github/v/release/mackysoft/Navigathena)](https://github.com/mackysoft/Navigathena/releases) [![openupm](https://img.shields.io/npm/v/com.mackysoft.navigathena?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.mackysoft.navigathena/)
+[![Tests](https://github.com/mackysoft/Navigathena/actions/workflows/tests.yaml/badge.svg)](https://github.com/mackysoft/Navigathena/actions/workflows/tests.yaml) [![Build](https://github.com/mackysoft/Navigathena/actions/workflows/build.yaml/badge.svg)](https://github.com/mackysoft/Navigathena/actions/workflows/build.yaml) [![Release](https://img.shields.io/github/v/release/mackysoft/Navigathena)](https://github.com/mackysoft/Navigathena/releases) [![openupm](https://img.shields.io/npm/v/com.mackysoft.navigathena?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.mackysoft.navigathena/)
 
 **Created by Hiroya Aramaki ([Makihiro](https://twitter.com/makihiro_dev))**
 
@@ -642,7 +642,7 @@ Due to the specification of the timing at which VContainer container determines 
 ```cs
 public override void Configure (IContainerBuilder builder)
 {
-  builder.Register<ISceneLifecycle, TitleSceneLifecycle>(Lifetime.Singleton);
+  builder.RegisterSceneLifecycle<TitleSceneLifecycle>();
 }
 ```
 

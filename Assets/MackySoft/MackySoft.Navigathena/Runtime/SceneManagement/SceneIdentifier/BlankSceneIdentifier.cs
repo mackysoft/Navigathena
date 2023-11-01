@@ -6,55 +6,42 @@ using UnityEngine.SceneManagement;
 
 namespace MackySoft.Navigathena.SceneManagement
 {
-	public sealed class BlankSceneIdentifier : ISceneIdentifier
+	public sealed class BlankSceneIdentifier<T> : ISceneIdentifier where T : Component, ISceneEntryPoint
 	{
 
 		readonly string m_SceneName;
-		readonly Type m_EntryPointType;
+		readonly Action<T> m_OnCreate;
 
-		public BlankSceneIdentifier (string sceneName, Type entryPointType)
+		public BlankSceneIdentifier (string sceneName, Action<T> onCreate = null)
 		{
 			if (string.IsNullOrEmpty(sceneName))
 			{
 				throw new ArgumentException("Scene name cannot be null or empty.", nameof(sceneName));
 			}
-			if (entryPointType == null)
-			{
-				throw new ArgumentNullException(nameof(entryPointType));
-			}
-			if (!typeof(ISceneEntryPoint).IsAssignableFrom(entryPointType))
-			{
-				throw new ArgumentException($"'{entryPointType}' is not assignable from '{nameof(ISceneEntryPoint)}'.", nameof(entryPointType));
-			}
 			m_SceneName = sceneName;
-			m_EntryPointType = entryPointType;
-		}
-
-		public static ISceneIdentifier Create<T> (string sceneName) where T : ISceneEntryPoint
-		{
-			return new BlankSceneIdentifier(sceneName, typeof(T));
+			m_OnCreate = onCreate;
 		}
 
 		public ISceneHandle CreateHandle ()
 		{
-			return new BlankSceneHandle(m_SceneName, m_EntryPointType);
+			return new BlankSceneHandle<T>(m_SceneName, m_OnCreate);
 		}
 
 		public override string ToString ()
 		{
-			return $"{m_SceneName} ({nameof(BlankSceneIdentifier)})";
+			return $"{m_SceneName} ({typeof(BlankSceneIdentifier<T>).Name})";
 		}
 
-		sealed class BlankSceneHandle : ISceneHandle
+		sealed class BlankSceneHandle<T> : ISceneHandle where T : Component, ISceneEntryPoint
 		{
 
 			readonly string m_SceneName;
-			readonly Type m_EntryPointType;
+			readonly Action<T> m_OnCreate;
 
-			public BlankSceneHandle (string sceneName, Type entryPointType)
+			public BlankSceneHandle (string sceneName, Action<T> onCreate)
 			{
 				m_SceneName = sceneName;
-				m_EntryPointType = entryPointType;
+				m_OnCreate = onCreate;
 			}
 
 			public UniTask<Scene> Load (IProgress<float> progress = null, CancellationToken cancellationToken = default)
@@ -69,7 +56,9 @@ namespace MackySoft.Navigathena.SceneManagement
 
 				// Create entry point
 				GameObject entryPointGameObject = new GameObject("SceneEntryPoint");
-				entryPointGameObject.AddComponent(m_EntryPointType);
+				var entryPoint = entryPointGameObject.AddComponent<T>();
+				m_OnCreate?.Invoke(entryPoint);
+
 				SceneManager.MoveGameObjectToScene(entryPointGameObject, newScene);
 
 				progress?.Report(1f);
