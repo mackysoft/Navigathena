@@ -42,22 +42,6 @@ namespace MackySoft.Navigathena.SceneManagement.Utilities
 			return (sceneThatContainsEntryPoint, firstEntryPoint);
 		}
 
-		public static async UniTask FirstEnterSceneSequence (ISceneEntryPoint entryPoint, SceneDataStore dataStore, CancellationToken cancellationToken)
-		{
-			cancellationToken.ThrowIfCancellationRequested();
-
-#if UNITY_EDITOR
-			await entryPoint.OnEditorFirstPreInitialize(dataStore.Writer, cancellationToken);
-			cancellationToken.ThrowIfCancellationRequested();
-#endif
-
-			await entryPoint.OnInitialize(dataStore.Reader, Progress.Create<IProgressDataStore>(null), cancellationToken);
-			cancellationToken.ThrowIfCancellationRequested();
-
-			await entryPoint.OnEnter(dataStore.Reader, cancellationToken);
-			cancellationToken.ThrowIfCancellationRequested();
-		}
-
 		public static TransitionDirectorState CreateTransitionHandle (ITransitionDirector transitionDirector)
 		{
 			if (transitionDirector == null)
