@@ -731,67 +731,67 @@ references:
   commentId: N:MackySoft.Navigathena.SceneManagement
   fullName: MackySoft.Navigathena.SceneManagement
   nameWithType: MackySoft.Navigathena.SceneManagement
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier
+- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1
+  name: BlankSceneIdentifier<T>
+  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.html
+  commentId: T:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1
+  name.vb: BlankSceneIdentifier(Of T)
+  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier<T>
+  fullName.vb: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier(Of T)
+  nameWithType: BlankSceneIdentifier<T>
+  nameWithType.vb: BlankSceneIdentifier(Of T)
+- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.#ctor(System.String,System.Action{`0})
+  name: BlankSceneIdentifier(String, Action<T>)
+  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_1__ctor_System_String_System_Action__0__
+  commentId: M:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.#ctor(System.String,System.Action{`0})
+  name.vb: BlankSceneIdentifier(String, Action(Of T))
+  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier<T>.BlankSceneIdentifier(System.String, System.Action<T>)
+  fullName.vb: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier(Of T).BlankSceneIdentifier(System.String, System.Action(Of T))
+  nameWithType: BlankSceneIdentifier<T>.BlankSceneIdentifier(String, Action<T>)
+  nameWithType.vb: BlankSceneIdentifier(Of T).BlankSceneIdentifier(String, Action(Of T))
+- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.#ctor*
   name: BlankSceneIdentifier
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html
-  commentId: T:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier
-  nameWithType: BlankSceneIdentifier
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.#ctor(System.String,System.Type)
-  name: BlankSceneIdentifier(String, Type)
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier__ctor_System_String_System_Type_
-  commentId: M:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.#ctor(System.String,System.Type)
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.BlankSceneIdentifier(System.String, System.Type)
-  nameWithType: BlankSceneIdentifier.BlankSceneIdentifier(String, Type)
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.#ctor*
-  name: BlankSceneIdentifier
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier__ctor_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.#ctor
+  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_1__ctor_
+  commentId: Overload:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.#ctor
   isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.BlankSceneIdentifier
-  nameWithType: BlankSceneIdentifier.BlankSceneIdentifier
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.Create*
-  name: Create
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_Create_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.Create
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.Create
-  nameWithType: BlankSceneIdentifier.Create
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.Create``1(System.String)
-  name: Create<T>(String)
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_Create__1_System_String_
-  commentId: M:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.Create``1(System.String)
-  name.vb: Create(Of T)(String)
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.Create<T>(System.String)
-  fullName.vb: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.Create(Of T)(System.String)
-  nameWithType: BlankSceneIdentifier.Create<T>(String)
-  nameWithType.vb: BlankSceneIdentifier.Create(Of T)(String)
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.CreateHandle
+  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier<T>.BlankSceneIdentifier
+  fullName.vb: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier(Of T).BlankSceneIdentifier
+  nameWithType: BlankSceneIdentifier<T>.BlankSceneIdentifier
+  nameWithType.vb: BlankSceneIdentifier(Of T).BlankSceneIdentifier
+- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.CreateHandle
   name: CreateHandle()
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_CreateHandle
-  commentId: M:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.CreateHandle
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.CreateHandle()
-  nameWithType: BlankSceneIdentifier.CreateHandle()
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.CreateHandle*
+  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_1_CreateHandle
+  commentId: M:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.CreateHandle
+  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier<T>.CreateHandle()
+  fullName.vb: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier(Of T).CreateHandle()
+  nameWithType: BlankSceneIdentifier<T>.CreateHandle()
+  nameWithType.vb: BlankSceneIdentifier(Of T).CreateHandle()
+- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.CreateHandle*
   name: CreateHandle
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_CreateHandle_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.CreateHandle
+  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_1_CreateHandle_
+  commentId: Overload:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.CreateHandle
   isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.CreateHandle
-  nameWithType: BlankSceneIdentifier.CreateHandle
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.ToString
+  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier<T>.CreateHandle
+  fullName.vb: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier(Of T).CreateHandle
+  nameWithType: BlankSceneIdentifier<T>.CreateHandle
+  nameWithType.vb: BlankSceneIdentifier(Of T).CreateHandle
+- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.ToString
   name: ToString()
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_ToString
-  commentId: M:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.ToString
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.ToString()
-  nameWithType: BlankSceneIdentifier.ToString()
-- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.ToString*
+  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_1_ToString
+  commentId: M:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.ToString
+  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier<T>.ToString()
+  fullName.vb: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier(Of T).ToString()
+  nameWithType: BlankSceneIdentifier<T>.ToString()
+  nameWithType.vb: BlankSceneIdentifier(Of T).ToString()
+- uid: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.ToString*
   name: ToString
-  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_ToString_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.ToString
+  href: api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.html#MackySoft_Navigathena_SceneManagement_BlankSceneIdentifier_1_ToString_
+  commentId: Overload:MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier`1.ToString
   isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.ToString
-  nameWithType: BlankSceneIdentifier.ToString
+  fullName: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier<T>.ToString
+  fullName.vb: MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier(Of T).ToString
+  nameWithType: BlankSceneIdentifier<T>.ToString
+  nameWithType.vb: BlankSceneIdentifier(Of T).ToString
 - uid: MackySoft.Navigathena.SceneManagement.BuiltInSceneIdentifier
   name: BuiltInSceneIdentifier
   href: api/MackySoft.Navigathena.SceneManagement.BuiltInSceneIdentifier.html
@@ -2486,19 +2486,6 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FindFirstEntryPointInAllScenes
   nameWithType: SceneNavigatorHelper.FindFirstEntryPointInAllScenes
-- uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence(MackySoft.Navigathena.SceneManagement.ISceneEntryPoint,MackySoft.Navigathena.SceneManagement.SceneDataStore,System.Threading.CancellationToken)
-  name: FirstEnterSceneSequence(ISceneEntryPoint, SceneDataStore, CancellationToken)
-  href: api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html#MackySoft_Navigathena_SceneManagement_Utilities_SceneNavigatorHelper_FirstEnterSceneSequence_MackySoft_Navigathena_SceneManagement_ISceneEntryPoint_MackySoft_Navigathena_SceneManagement_SceneDataStore_System_Threading_CancellationToken_
-  commentId: M:MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence(MackySoft.Navigathena.SceneManagement.ISceneEntryPoint,MackySoft.Navigathena.SceneManagement.SceneDataStore,System.Threading.CancellationToken)
-  fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence(MackySoft.Navigathena.SceneManagement.ISceneEntryPoint, MackySoft.Navigathena.SceneManagement.SceneDataStore, System.Threading.CancellationToken)
-  nameWithType: SceneNavigatorHelper.FirstEnterSceneSequence(ISceneEntryPoint, SceneDataStore, CancellationToken)
-- uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence*
-  name: FirstEnterSceneSequence
-  href: api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html#MackySoft_Navigathena_SceneManagement_Utilities_SceneNavigatorHelper_FirstEnterSceneSequence_
-  commentId: Overload:MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.FirstEnterSceneSequence
-  nameWithType: SceneNavigatorHelper.FirstEnterSceneSequence
 - uid: MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.LoadSceneAndGetEntryPoint(MackySoft.Navigathena.SceneManagement.ISceneIdentifier,MackySoft.Navigathena.SceneManagement.ISceneProgressFactory,MackySoft.Navigathena.IProgressDataStore,System.IProgress{MackySoft.Navigathena.IProgressDataStore},System.Threading.CancellationToken)
   name: LoadSceneAndGetEntryPoint(ISceneIdentifier, ISceneProgressFactory, IProgressDataStore, IProgress<IProgressDataStore>, CancellationToken)
   href: api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html#MackySoft_Navigathena_SceneManagement_Utilities_SceneNavigatorHelper_LoadSceneAndGetEntryPoint_MackySoft_Navigathena_SceneManagement_ISceneIdentifier_MackySoft_Navigathena_SceneManagement_ISceneProgressFactory_MackySoft_Navigathena_IProgressDataStore_System_IProgress_MackySoft_Navigathena_IProgressDataStore__System_Threading_CancellationToken_

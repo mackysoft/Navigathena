@@ -180,11 +180,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.yml",
+      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier.html",
-          "hash": "fNnIAtZK+1Ne4TP3IElzcsUniycVQKABY4BBzPAFOA8="
+          "relative_path": "api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.html",
+          "hash": "DQfcZV6zY2KHTx92Qgn2L3tTYOrpC4Z8h432WNW3txU="
         }
       },
       "is_incremental": false,
@@ -544,7 +544,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html",
-          "hash": "jmtcTI8ehbfrHYq9zDzYZcv/Fx4lWt508dyiZSE3GP8="
+          "hash": "dz/UKuoJq6Gj5ewuvrKFOTngJe8L+NxPmcZYscyr6UA="
         }
       },
       "is_incremental": false,
@@ -580,7 +580,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.html",
-          "hash": "mqPYaI/Af+I1XPpcmCg0YSUmUmNC5YlMYCT2mnlqn0U="
+          "hash": "xX98BTHHIYyJhgcHzsXzJQeyAUP88epaknmj2/J7c9E="
         }
       },
       "is_incremental": false,
@@ -664,7 +664,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "LQSIYRflcFYFRE8qeD+zukwicdzAZD1hEnrtUcocyck="
+          "hash": "hRtze7G+bCwqW8DWokVGfymaRiIjLFDwxzP9Top0dGE="
         }
       },
       "is_incremental": false,
@@ -676,7 +676,7 @@
       "output": {
         ".html": {
           "relative_path": "changelog/CHANGELOG.html",
-          "hash": "hWMcLjUrx92KqIhm8iqiMR1eYvHU9d3YcH02T6B0Aok="
+          "hash": "LQcqTJglY8paSaKxOMXYcfXhqTcs8Iyc9Y1EcmjVBd0="
         }
       },
       "is_incremental": false,
@@ -700,7 +700,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "vZIh9utRr1pHPtIuq/iTj5RQtloi22R0IJGvF8JJn9s="
+          "hash": "zmj5fliP3zW4BTh5gCUFjgSupHchdR490xjvg16RNJQ="
         }
       },
       "is_incremental": false,
