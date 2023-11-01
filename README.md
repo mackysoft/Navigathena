@@ -61,6 +61,8 @@ https://github.com/mackysoft/Navigathena.git?path=Assets/MackySoft/MackySoft.Nav
 
 from the `Add package from git URL` option.
 
+![](https://storage.googleapis.com/zenn-user-upload/9797f7f9718c-20231101.png)
+
 ## Install via Open UPM
 
 Or, you can install this package from the [Open UPM](https://openupm.com/packages/com.mackysoft.navigathena/) registry.
@@ -181,7 +183,34 @@ Incidentally, the `GlobalSceneNavigator` inspector allows you to view the regist
 
 ### <a id="scene-entry-point" href="#scene-entry-point"> SceneEntryPoint </a>
 
-The SceneEntryPoint concept is used to observe the lifecycle of a scene. It is a component that can be placed only once in each scene and plays a role in observing events such as the start and end of a scene, as well as the transfer of data.
+Next, the concept of `SceneEntryPoint` is introduced to observe the lifecycle of a scene. This is a component that can be placed only one in each scene and is responsible for observing events such as the start of the scene, the end of the scene, the passing of data, etc. While the `SceneEntryPoint` is singular to a scene, it observe the logic of the scene, thereby preventing the scene logic from becoming too complex.
+
+Basically, SceneEntryPoint is designed to inherit from `SceneEntryPointBase` or `ISceneEntryPoint` and override each event.
+
+```cs:TitleSceneEntryPoint.cs
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using MackySoft.Navigathena.SceneManagement;
+
+// タイトルシーンのSceneEntryPointを実装するコンポーネント
+public sealed class TitleSceneEntryPoint : SceneEntryPointBase
+{
+  protected override async UniTask OnEnter (ISceneDataReader reader, CancellationToken cancellationToken)
+  {
+    await DoSomething(cancellationToken);
+  }
+}
+```
+
+> For a method of implementation that does not depend on inheriting `MonoBehaviour`, please refer to the [Integration with Dependency Injection (DI)](#dependency-injection) section.
+
+Once you have defined the SceneEntryPoint component, place one in the scene.
+
+![](https://storage.googleapis.com/zenn-user-upload/6e9ebbecfc2f-20231031.png)
+
+Now all that is left is to run this scene and the `TitleSceneEntryPoint` startup event will be called.
+
+Below is a list of `SceneEntryPoint` events.
 
 ```cs
 public interface ISceneEntryPoint
@@ -205,10 +234,6 @@ public interface ISceneEntryPoint
 #endif
 }
 ```
-
-Basically, SceneEntryPoint is designed to inherit from `SceneEntryPointBase` or `ISceneEntryPoint` and override each event.
-
-> For a method of implementation that does not depend on inheriting `MonoBehaviour`, please refer to the [Integration with Dependency Injection (DI)](#dependency-injection) section.
 
 When a transition operation is called, the following processes are executed in sequence:
 
