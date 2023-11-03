@@ -545,6 +545,10 @@ protected override UniTask OnEditorFirstPreInitialize (ISceneDataWriter writer, 
 
 > The `OnEditorFirstPreInitialize` must be enclosed in a `UNITY_EDITOR` directive.
 
+`OnEditorFirstPreInitialize` is called at `Initialize` of SceneNavigator. If SceneEntryPoint cannot be found on `Initialize`, it will find SceneEntryPoint within scene when `SceneManager.sceneLoaded` and to call `OnEditorFirstPreInitialize`.
+
+However, if the scene is loaded before that by a transition operation such as `Push`, `OnEditorFirstPreInitialize` is skipped. This is because such cases are treated as preparations in the application sequence and are not included in the single scene launch requirement.
+
 ## <a id="interrupt-scene-operation" href="#interrupt-scene-operation"> Interrupt scene operation </a>
 
 Occasionally, during the processing of a scene transition, you may want to override it with a transition process to another scene.
