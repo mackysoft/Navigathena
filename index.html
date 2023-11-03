@@ -497,6 +497,8 @@ protected override UniTask OnEditorFirstPreInitialize (ISceneDataWriter writer, 
 #endif
 </code></pre><blockquote><p>The <code>OnEditorFirstPreInitialize</code> must be enclosed in a <code>UNITY_EDITOR</code> directive.</p>
 </blockquote>
+<p><code>OnEditorFirstPreInitialize</code> is called at <code>Initialize</code> of SceneNavigator. If SceneEntryPoint cannot be found on <code>Initialize</code>, it will find SceneEntryPoint within scene when <code>SceneManager.sceneLoaded</code> and to call <code>OnEditorFirstPreInitialize</code>.</p>
+<p>However, if the scene is loaded before that by a transition operation such as <code>Push</code>, <code>OnEditorFirstPreInitialize</code> is skipped. This is because such cases are treated as preparations in the application sequence and are not included in the single scene launch requirement.</p>
 <h2 id="a-idinterrupt-scene-operation-hrefinterrupt-scene-operation-interrupt-scene-operation-a"><a id="interrupt-scene-operation" href="#interrupt-scene-operation"> Interrupt scene operation </a></h2>
 <p>Occasionally, during the processing of a scene transition, you may want to override it with a transition process to another scene.</p>
 <p>For example, there are cases such as &quot;I want to transition to an event scene, but when I check <code>OnInitialize</code>, the event period has ended, so I want to call <code>Pop</code> in <code>OnInitialize</code> to return the scene. In this case, the current transition process is interrupted and the scene transition operation is interrupted, but if this is implemented correctly, the internal state management is not easy.</p>
