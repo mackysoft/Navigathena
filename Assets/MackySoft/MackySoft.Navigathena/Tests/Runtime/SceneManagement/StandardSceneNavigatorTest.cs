@@ -1,8 +1,8 @@
+using Cysharp.Threading.Tasks;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Linq;
-using Cysharp.Threading.Tasks;
-using NUnit.Framework;
 using UnityEngine.TestTools;
 
 namespace MackySoft.Navigathena.SceneManagement.Tests
@@ -14,11 +14,12 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 		StandardSceneNavigator m_Navigator;
 
-		[SetUp]
-		public void SetUp ()
+		[UnitySetUp]
+		public IEnumerator SetUp () => UniTask.ToCoroutine(async () =>
 		{
 			m_Navigator = new StandardSceneNavigator();
-		}
+			await SceneManagerTestHelper.Cleanup();
+		});
 
 		[TearDown]
 		public void TearDown ()
@@ -38,6 +39,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			catch
 			{
 				Assert.Pass();
+				return;
 			}
 			Assert.Fail();
 		});
@@ -51,6 +53,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 			await m_Navigator.Push(firstSceneIdentifier);
 
+			Assert.AreEqual(1, m_Navigator.History.Count);
 			Assert.AreEqual(firstSceneIdentifier, m_Navigator.History.First().Scene);
 			Assert.AreEqual(SceneEntryPointCallbackFlags.OnInitialize | SceneEntryPointCallbackFlags.OnEnter, flags.Value);
 		});
@@ -73,7 +76,12 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			}
 			catch (OperationCanceledException e)
 			{
-				Assert.Pass(e.ToString());
+				HistoryAssert.SequenceEqual(
+					m_Navigator,
+					interruptSceneIdentifier,
+					firstSceneIdentifier
+				);
+				return;
 			}
 
 			Assert.Fail();
@@ -103,9 +111,15 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			{
 				await m_Navigator.Push(firstSceneIdentifier);
 			}
-			catch (OperationCanceledException e)
+			catch (OperationCanceledException)
 			{
-				Assert.Pass(e.ToString());
+				HistoryAssert.SequenceEqual(
+					m_Navigator,
+					interruptSceneIdentifier2,
+					interruptSceneIdentifier1,
+					firstSceneIdentifier
+				);
+				return;
 			}
 
 			Assert.Fail();
@@ -126,12 +140,36 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			await m_Navigator.Pop();
 
 			Assert.AreEqual(SceneEntryPointCallbackFlags.All, flags.Value);
+			HistoryAssert.SequenceEqual(
+				m_Navigator,
+				firstSceneIdentifier
+			);
 		});
 
 		[UnityTest]
 		public IEnumerator Pop_throw_if_history_is_empty () => UniTask.ToCoroutine(async () =>
 		{
 			await m_Navigator.Initialize();
+
+			try
+			{
+				await m_Navigator.Pop();
+				Assert.Fail();
+			}
+			catch (Exception e)
+			{
+				HistoryAssert.IsEmpty(m_Navigator);
+			}
+		});
+
+		[UnityTest]
+		public IEnumerator Pop_throw_if_history_is_single_entry () => UniTask.ToCoroutine(async () =>
+		{
+			var firstSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("FirstScene");
+
+			await m_Navigator.Initialize();
+
+			await m_Navigator.Push(firstSceneIdentifier);
 
 			try
 			{
@@ -172,7 +210,10 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 			Assert.AreEqual(SceneEntryPointCallbackFlags.All, secondFlags.Value);
 			Assert.AreEqual(SceneEntryPointCallbackFlags.All, thirdFlags.Value);
-			Assert.AreEqual(firstSceneIdentifier, m_Navigator.History.First().Scene);
+			HistoryAssert.SequenceEqual(
+				m_Navigator,
+				firstSceneIdentifier
+			);
 		});
 
 		[UnityTest]
@@ -187,8 +228,10 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			await m_Navigator.Push(firstSceneIdentifier);
 			await m_Navigator.Change(secondSceneIdentifier);
 
-			Assert.AreEqual(1, m_Navigator.History.Count);
-			Assert.AreEqual(secondSceneIdentifier, m_Navigator.History.First().Scene);
+			HistoryAssert.SequenceEqual(
+				m_Navigator,
+				secondSceneIdentifier
+			);
 		});
 
 		[UnityTest]
@@ -215,8 +258,10 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			}
 
 			Assert.AreEqual(SceneEntryPointCallbackFlags.None, secondFlags.Value);
-			Assert.AreEqual(1, m_Navigator.History.Count);
-			Assert.AreEqual(thirdSceneIdentifier, m_Navigator.History.First().Scene);
+			HistoryAssert.SequenceEqual(
+				m_Navigator,
+				thirdSceneIdentifier
+			);
 		});
 
 		[UnityTest]
@@ -232,8 +277,12 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			await m_Navigator.Push(secondSceneIdentifier);
 			await m_Navigator.Replace(thirdSceneIdentifier);
 
-			Assert.IsFalse(m_Navigator.History.Any(x => x.Scene == secondSceneIdentifier));
-			Assert.AreEqual(thirdSceneIdentifier, m_Navigator.History.First().Scene);
+			HistoryAssert.DoesNotContain(m_Navigator, secondSceneIdentifier);
+			HistoryAssert.SequenceEqual(
+				m_Navigator,
+				thirdSceneIdentifier,
+				firstSceneIdentifier
+			);
 		});
 
 		[UnityTest]
@@ -250,7 +299,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			}
 			catch (Exception e)
 			{
-				Assert.Pass(e.ToString());
+				HistoryAssert.IsEmpty(m_Navigator);
 			}
 		});
 
@@ -282,7 +331,10 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 			Assert.AreEqual(2, initializeCount);
 			Assert.AreEqual(1, finalizeCount);
-			Assert.AreEqual(firstSceneIdentifier, m_Navigator.History.First().Scene);
+			HistoryAssert.SequenceEqual(
+				m_Navigator,
+				firstSceneIdentifier
+			);
 		});
 	}
 }
