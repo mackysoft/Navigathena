@@ -1,8 +1,8 @@
+using Cysharp.Threading.Tasks;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Linq;
-using Cysharp.Threading.Tasks;
-using NUnit.Framework;
 using UnityEngine.TestTools;
 
 namespace MackySoft.Navigathena.SceneManagement.Tests
@@ -14,11 +14,12 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 		StandardSceneNavigator m_Navigator;
 
-		[SetUp]
-		public void SetUp ()
+		[UnitySetUp]
+		public IEnumerator SetUp () => UniTask.ToCoroutine(async () =>
 		{
 			m_Navigator = new StandardSceneNavigator();
-		}
+			await SceneManagerTestHelper.Cleanup();
+		});
 
 		[TearDown]
 		public void TearDown ()
