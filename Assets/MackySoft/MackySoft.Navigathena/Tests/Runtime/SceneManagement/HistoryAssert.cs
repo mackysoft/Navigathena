@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Linq;
 
 namespace MackySoft.Navigathena.SceneManagement.Tests
 {
@@ -32,6 +33,38 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			{
 				Assert.AreEqual(expected[i], entry.Scene);
 				i++;
+			}
+		}
+
+		public static void IsEmpty (ISceneNavigator navigator)
+		{
+			if (navigator.History.Count > 0)
+			{
+				Assert.Fail($"History is not empty. Count:{navigator.History.Count}");
+			}
+		}
+
+		public static void Contains (ISceneNavigator navigator, ISceneIdentifier scene)
+		{
+			foreach (var entry in navigator.History)
+			{
+				if (entry.Scene == scene)
+				{
+					return;
+				}
+			}
+			Assert.Fail($"History does not contain the specified scene. Scene:{scene}");
+		}
+
+		public static void DoesNotContain (ISceneNavigator navigator, ISceneIdentifier scene)
+		{
+			foreach (var entry in navigator.History)
+			{
+				if (entry.Scene == scene)
+				{
+					Assert.Fail($"History contains the specified scene. Scene:{scene}");
+					return;
+				}
 			}
 		}
 	}
