@@ -1,0 +1,143 @@
+@startuml
+
+namespace Transitions {
+
+    interface ITransitionHandle {
+        UniTask Start ()
+        UniTask Complete ()
+    }
+
+    interface ITransitionDirector
+    {
+        ITransitionHandle CreateHandle ()
+    }
+
+    ITransitionDirector --> ITransitionHandle
+}
+
+namespace SceneManagement {
+
+    interface ISceneNavigator {
+        UniTask Pop ()
+        UniTask Push ()
+        UniTask Reload ()
+    }
+
+    interface ISceneEntryPoint {
+        UniTask Initialize ()
+        UniTask OnEnter ()
+        UniTask OnExit ()
+        UniTask Finalize ()
+        UniTask OnEditorFirstPreInitialize ()
+    }
+
+    class GlobalSceneNavigator {
+    }
+
+    class StandardSceneNavigator
+
+    abstract SceneEntryPoint
+
+    ISceneNavigator --> Transitions.ITransitionDirector
+
+    StandardSceneNavigator --> ISceneNavigator
+    StandardSceneNavigator --> ISceneEntryPoint
+
+    GlobalSceneNavigator -> StandardSceneNavigator
+    GlobalSceneNavigator --|> ISceneNavigator
+    GlobalSceneNavigator --> ISceneEntryPoint
+    SceneEntryPoint --|> ISceneEntryPoint
+
+}
+
+namespace ScreenManagement {
+
+    interface IScreenEntryPoint {
+
+        UniTask Initialize ()
+        UniTask OnEnter ()
+        UniTask OnExit ()
+        UniTask Finalize ()
+    }
+
+    interface IScreenHandle {
+        UniTask<IScreenEntryPoint> Activate ()
+        UniTask Deactivate ()
+    }
+
+    interface IScreenProvider {
+        IScreenHandle CreateHandle ()
+    }
+
+    IScreenHandle --> IScreenEntryPoint
+    IScreenProvider -> IScreenHandle
+
+    interface IScreenResolver {
+        IScreenHandle Resolve (string identifier)
+    }
+
+    IScreenResolver --> IScreenHandle
+
+    interface IScreenContainer {
+        IScreenResolver Resolver { get; }
+        void Build ()
+    }
+
+    IScreenContainer --> IScreenResolver
+
+    interface IScreenNavigator {
+        IScreenNavigator Parent { get; }
+        History<ScreenHistoryEntry> History { get; }
+        UniTask Push (string, Parameter, ITransitionDirector)
+        UniTask Pop ()
+    }
+
+    class NestedScreenNavigator {
+        IScreenNavigator Parent { get; }
+    }
+
+    NestedScreenNavigator --|> IScreenNavigator
+    
+    abstract ScreenContainerBase {
+        void Configure (IScreenContainerBuilder builder)
+    }
+
+    ScreenContainerBase --|> IScreenContainer
+
+    class StandardScreenNavigator
+    
+    StandardScreenNavigator --|> IScreenNavigator
+    StandardScreenNavigator --> IScreenContainer
+
+    class ParentScreenEntryPoint {
+        IScreenNavigator Navigator { get; }
+    }
+
+    ParentScreenEntryPoint --|> IScreenEntryPoint
+    ParentScreenEntryPoint --> IScreenNavigator
+
+}
+
+namespace VContainer {
+
+    class LifetimeScope
+
+    RootLifetimeScope --|> LifetimeScope
+    RootLifetimeScope --> SceneManagement.ISceneNavigator
+
+    interface ILifecycle {
+        UniTask Initialize (ISceneDataReader reader)
+        UniTask OnEnter (ISceneDataReader reader)
+        UniTask OnExit (ISceneDataWriter writer)
+        UniTask Finalize (ISceneDataWriter writer)
+        UniTask OnEditorFirstPreInitialize (ISceneDataWriter writer)
+    }
+
+    class ScopedSceneEntryPoint
+
+    ScopedSceneEntryPoint --> LifetimeScope
+    ScopedSceneEntryPoint --> ILifecycle
+    ScopedSceneEntryPoint ---|> SceneManagement.SceneEntryPoint
+
+}
+@enduml
