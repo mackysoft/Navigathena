@@ -180,18 +180,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MackySoft.Navigathena.SceneManagement.BlankSceneIdentifier-1.html",
-          "hash": "DQfcZV6zY2KHTx92Qgn2L3tTYOrpC4Z8h432WNW3txU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/MackySoft.Navigathena.SceneManagement.BuiltInSceneIdentifier.yml",
       "output": {
         ".html": {
@@ -580,7 +568,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MackySoft.Navigathena.SceneManagement.html",
-          "hash": "xX98BTHHIYyJhgcHzsXzJQeyAUP88epaknmj2/J7c9E="
+          "hash": "2A8G1pq0XAwXJ0JuUO0osn1rvqfrK+Xq8Zq2qIU3HKU="
         }
       },
       "is_incremental": false,
@@ -664,7 +652,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "hRtze7G+bCwqW8DWokVGfymaRiIjLFDwxzP9Top0dGE="
+          "hash": "ZtPdOPIBatyQLQCW8k1L9YPoBToqRs86Igf5hlVVrOs="
         }
       },
       "is_incremental": false,
@@ -700,7 +688,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "McizpKPFVnPSrXlFqxCZT6DUwhsd/0ESn6I2Hjm19EU="
+          "hash": "2x5x1pS4daGQd6PO36I9rYXmHyhJ0Op6THnT2scXl/U="
         }
       },
       "is_incremental": false,
@@ -739,7 +727,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 53,
+          "total_file_count": 52,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {
