@@ -18,7 +18,7 @@ jobs:
     outputs:
       sha: ${{ steps.commit.outputs.sha }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Output package.json (Before)
         run: cat ${{ env.TARGET_FILE}}
 
@@ -95,7 +95,7 @@ jobs:
         working-directory: .
 
       # Store artifacts.
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: Navigathena.unitypackage
           path: ./Build/Navigathena.unitypackage
@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Create Releases
-      - uses: actions/create-release@v1
+      - uses: actions/create-release@v2
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -117,10 +117,10 @@ jobs:
           prerelease: false
 
       # Download(All) Artifacts to current directory
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
       
       # Upload to Releases(unitypackage)
-      - uses: actions/upload-release-asset@v1
+      - uses: actions/upload-release-asset@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
