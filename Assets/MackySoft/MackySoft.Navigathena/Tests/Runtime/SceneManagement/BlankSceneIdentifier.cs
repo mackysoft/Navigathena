@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace MackySoft.Navigathena.SceneManagement
+namespace MackySoft.Navigathena.SceneManagement.Tests
 {
 	public sealed class BlankSceneIdentifier<T> : ISceneIdentifier where T : Component, ISceneEntryPoint
 	{
