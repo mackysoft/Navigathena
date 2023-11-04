@@ -24,13 +24,13 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			m_OnCreate = onCreate;
 		}
 
-		public BlankSceneIdentifier Subscribe (ISceneEntryPointLifecycleListener listener)
+		public BlankSceneIdentifier Register (ISceneEntryPointLifecycleListener listener)
 		{
 			m_Listeners.Add(listener);
 			return this;
 		}
 
-		public BlankSceneIdentifier Subscribe (Func<BlankSceneIdentifier, ISceneEntryPointLifecycleListener> factory)
+		public BlankSceneIdentifier Register (Func<BlankSceneIdentifier, ISceneEntryPointLifecycleListener> factory)
 		{
 			m_Listeners.Add(factory(this));
 			return this;

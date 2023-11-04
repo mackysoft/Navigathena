@@ -48,20 +48,18 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Push_successfully () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			SceneEntryPointCallbackFlagsStore flags = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene")
-				.Subscribe(flags)
-				.Subscribe(x => recorder.With(x));
+			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
 			await m_Navigator.Push(firstSceneIdentifier);
 
-			Assert.AreEqual(1, m_Navigator.History.Count);
-			Assert.AreEqual(firstSceneIdentifier, m_Navigator.History.First().Scene);
-			Assert.AreEqual(SceneEntryPointCallbackFlags.OnInitialize | SceneEntryPointCallbackFlags.OnEnter, flags.Value);
+			HistoryAssert.SequenceEqual(
+				m_Navigator,
+				firstSceneIdentifier
+			);
 
-			recorder.Create()
+			recorder.CreateSequenceAsserter()
 				.On(firstSceneIdentifier)
 				.Called(SceneEntryPointCallbackFlags.OnInitialize)
 				.Called(SceneEntryPointCallbackFlags.OnEnter)
@@ -71,13 +69,15 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		[UnityTest]
 		public IEnumerator Push_canceled_if_interrupt_transition_OnEnter () => UniTask.ToCoroutine(async () =>
 		{
-			var interruptSceneIdentifier = new BlankSceneIdentifier("InterruptScene");
+			SceneEntryPointLifecycleSequenceRecorder recorder = new();
+			var interruptSceneIdentifier = new BlankSceneIdentifier("InterruptScene").Register(x => recorder.With(x));
 			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene", entryPoint =>
 			{
 				entryPoint.SetCallbacks(
 					onEnter: (reader, ct) => m_Navigator.Push(interruptSceneIdentifier)
 				);
-			});
+			}).Register(x => recorder.With(x));
+
 			await m_Navigator.Initialize();
 
 			try
@@ -91,6 +91,18 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 					interruptSceneIdentifier,
 					firstSceneIdentifier
 				);
+
+				recorder.CreateSequenceAsserter()
+					.On(firstSceneIdentifier)
+					.Called(SceneEntryPointCallbackFlags.OnInitialize)
+					.Called(SceneEntryPointCallbackFlags.OnEnter)
+					.Called(SceneEntryPointCallbackFlags.OnExit)
+					.Called(SceneEntryPointCallbackFlags.OnFinalize)
+					.On(interruptSceneIdentifier)
+					.Called(SceneEntryPointCallbackFlags.OnInitialize)
+					.Called(SceneEntryPointCallbackFlags.OnEnter)
+					.SequenceEqual();
+
 				return;
 			}
 
@@ -100,21 +112,22 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		[UnityTest]
 		public IEnumerator Push_canceled_and_OnExit_is_not_called_if_interrupt_transition_OnInitialize () => UniTask.ToCoroutine(async () =>
 		{
-			var interruptSceneIdentifier2 = new BlankSceneIdentifier("InterruptScene2");
+			SceneEntryPointLifecycleSequenceRecorder recorder = new();
+			var interruptSceneIdentifier2 = new BlankSceneIdentifier("InterruptScene2").Register(x => recorder.With(x));
 			var interruptSceneIdentifier1 = new BlankSceneIdentifier("InterruptScene1", entryPoint =>
 			{
 				entryPoint.SetCallbacks(
 					onInitialize: (reader, progress, ct) => m_Navigator.Push(interruptSceneIdentifier2),
 					onExit: (writer, ct) => UniTask.FromException(new InvalidOperationException("OnExit is called."))
 				);
-			});
+			}).Register(x => recorder.With(x));
 			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene", entryPoint =>
 			{
 				entryPoint.SetCallbacks(
 					onInitialize: (reader, progress, ct) => m_Navigator.Push(interruptSceneIdentifier1),
 					onExit: (writer, ct) => UniTask.FromException(new InvalidOperationException("OnExit is called."))
 				);
-			});
+			}).Register(x => recorder.With(x));
 			await m_Navigator.Initialize();
 
 			try
@@ -129,6 +142,19 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 					interruptSceneIdentifier1,
 					firstSceneIdentifier
 				);
+
+				recorder.CreateSequenceAsserter()
+					.On(firstSceneIdentifier)
+					.Called(SceneEntryPointCallbackFlags.OnInitialize)
+					.Called(SceneEntryPointCallbackFlags.OnFinalize)
+					.On(interruptSceneIdentifier1)
+					.Called(SceneEntryPointCallbackFlags.OnInitialize)
+					.Called(SceneEntryPointCallbackFlags.OnFinalize)
+					.On(interruptSceneIdentifier2)
+					.Called(SceneEntryPointCallbackFlags.OnInitialize)
+					.Called(SceneEntryPointCallbackFlags.OnEnter)
+					.SequenceEqual();
+
 				return;
 			}
 
@@ -138,9 +164,9 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		[UnityTest]
 		public IEnumerator Pop_successfully () => UniTask.ToCoroutine(async () =>
 		{
-			SceneEntryPointCallbackFlagsStore flags = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene");
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene", x => x.Register(flags));
+			SceneEntryPointLifecycleSequenceRecorder recorder = new();
+			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -149,11 +175,26 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 			await m_Navigator.Pop();
 
-			Assert.AreEqual(SceneEntryPointCallbackFlags.All, flags.Value);
 			HistoryAssert.SequenceEqual(
 				m_Navigator,
 				firstSceneIdentifier
 			);
+
+			recorder.CreateSequenceAsserter()
+				.On(firstSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(secondSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(firstSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.SequenceEqual();
 		});
 
 		[UnityTest]
@@ -175,7 +216,8 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		[UnityTest]
 		public IEnumerator Pop_throw_if_history_is_single_entry () => UniTask.ToCoroutine(async () =>
 		{
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene");
+			SceneEntryPointLifecycleSequenceRecorder recorder = new();
+			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -186,20 +228,23 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 				await m_Navigator.Pop();
 				Assert.Fail();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				Assert.Pass(e.ToString());
+				recorder.CreateSequenceAsserter()
+					.On(firstSceneIdentifier)
+					.Called(SceneEntryPointCallbackFlags.OnInitialize)
+					.Called(SceneEntryPointCallbackFlags.OnEnter)
+					.SequenceEqual();
 			}
 		});
 
 		[UnityTest]
 		public IEnumerator Pop_successfully_if_interrupt_pop () => UniTask.ToCoroutine(async () =>
 		{
-			SceneEntryPointCallbackFlagsStore secondFlags = new();
-			SceneEntryPointCallbackFlagsStore thirdFlags = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene");
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene", x => x.Register(secondFlags));
-			var thirdSceneIdentifier = new BlankSceneIdentifier("ThirdScene", x => x.Register(thirdFlags));
+			SceneEntryPointLifecycleSequenceRecorder recorder = new();
+			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
+			var thirdSceneIdentifier = new BlankSceneIdentifier("ThirdScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -218,20 +263,39 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			{
 			}
 
-			Assert.AreEqual(SceneEntryPointCallbackFlags.All, secondFlags.Value);
-			Assert.AreEqual(SceneEntryPointCallbackFlags.All, thirdFlags.Value);
 			HistoryAssert.SequenceEqual(
 				m_Navigator,
 				firstSceneIdentifier
 			);
+
+			recorder.CreateSequenceAsserter()
+				.On(firstSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(secondSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(thirdSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(firstSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.SequenceEqual();
 		});
 
 		[UnityTest]
 		public IEnumerator Change_successfully () => UniTask.ToCoroutine(async () =>
 		{
-			SceneEntryPointCallbackFlagsStore flags = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene");
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene", x => x.Register(flags));
+			SceneEntryPointLifecycleSequenceRecorder recorder = new();
+			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -242,15 +306,26 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 				m_Navigator,
 				secondSceneIdentifier
 			);
+
+			recorder.CreateSequenceAsserter()
+				.On(firstSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(secondSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.SequenceEqual();
 		});
 
 		[UnityTest]
 		public IEnumerator Change_successfully_if_interrupt_change () => UniTask.ToCoroutine(async () =>
 		{
-			SceneEntryPointCallbackFlagsStore secondFlags = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene");
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene", x => x.Register(secondFlags));
-			var thirdSceneIdentifier = new BlankSceneIdentifier("ThirdScene");
+			SceneEntryPointLifecycleSequenceRecorder recorder = new();
+			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
+			var thirdSceneIdentifier = new BlankSceneIdentifier("ThirdScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -267,19 +342,30 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			{
 			}
 
-			Assert.AreEqual(SceneEntryPointCallbackFlags.None, secondFlags.Value);
 			HistoryAssert.SequenceEqual(
 				m_Navigator,
 				thirdSceneIdentifier
 			);
+
+			recorder.CreateSequenceAsserter()
+				.On(firstSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(thirdSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.SequenceEqual();
 		});
 
 		[UnityTest]
 		public IEnumerator Replace_successfully () => UniTask.ToCoroutine(async () =>
 		{
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene");
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene");
-			var thirdSceneIdentifier = new BlankSceneIdentifier("ThirdScene");
+			SceneEntryPointLifecycleSequenceRecorder recorder = new();
+			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
+			var thirdSceneIdentifier = new BlankSceneIdentifier("ThirdScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -293,6 +379,22 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 				thirdSceneIdentifier,
 				firstSceneIdentifier
 			);
+
+			recorder.CreateSequenceAsserter()
+				.On(firstSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(secondSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(thirdSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.SequenceEqual();
 		});
 
 		[UnityTest]
@@ -316,6 +418,8 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		[UnityTest]
 		public IEnumerator Reload_successfully () => UniTask.ToCoroutine(async () =>
 		{
+			SceneEntryPointLifecycleSequenceRecorder recorder = new();
+
 			int initializeCount = 0;
 			int finalizeCount = 0;
 			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene", x =>
@@ -332,7 +436,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 						return UniTask.CompletedTask;
 					}
 				);
-			});
+			}).Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -345,6 +449,17 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 				m_Navigator,
 				firstSceneIdentifier
 			);
+
+			recorder.CreateSequenceAsserter()
+				.On(firstSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.Called(SceneEntryPointCallbackFlags.OnExit)
+				.Called(SceneEntryPointCallbackFlags.OnFinalize)
+				.On(firstSceneIdentifier)
+				.Called(SceneEntryPointCallbackFlags.OnInitialize)
+				.Called(SceneEntryPointCallbackFlags.OnEnter)
+				.SequenceEqual();
 		});
 	}
 }
