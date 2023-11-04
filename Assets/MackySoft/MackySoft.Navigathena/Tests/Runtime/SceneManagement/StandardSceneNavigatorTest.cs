@@ -48,7 +48,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Push_successfully () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -70,8 +70,8 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Push_canceled_if_interrupt_transition_OnEnter () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			var interruptSceneIdentifier = new BlankSceneIdentifier("InterruptScene").Register(x => recorder.With(x));
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene", entryPoint =>
+			var interruptSceneIdentifier = new AnonymousSceneIdentifier("InterruptScene").Register(x => recorder.With(x));
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene", entryPoint =>
 			{
 				entryPoint.SetCallbacks(
 					onEnter: (reader, ct) => m_Navigator.Push(interruptSceneIdentifier)
@@ -113,15 +113,15 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Push_canceled_and_OnExit_is_not_called_if_interrupt_transition_OnInitialize () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			var interruptSceneIdentifier2 = new BlankSceneIdentifier("InterruptScene2").Register(x => recorder.With(x));
-			var interruptSceneIdentifier1 = new BlankSceneIdentifier("InterruptScene1", entryPoint =>
+			var interruptSceneIdentifier2 = new AnonymousSceneIdentifier("InterruptScene2").Register(x => recorder.With(x));
+			var interruptSceneIdentifier1 = new AnonymousSceneIdentifier("InterruptScene1", entryPoint =>
 			{
 				entryPoint.SetCallbacks(
 					onInitialize: (reader, progress, ct) => m_Navigator.Push(interruptSceneIdentifier2),
 					onExit: (writer, ct) => UniTask.FromException(new InvalidOperationException("OnExit is called."))
 				);
 			}).Register(x => recorder.With(x));
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene", entryPoint =>
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene", entryPoint =>
 			{
 				entryPoint.SetCallbacks(
 					onInitialize: (reader, progress, ct) => m_Navigator.Push(interruptSceneIdentifier1),
@@ -165,8 +165,8 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Pop_successfully () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new AnonymousSceneIdentifier("SecondScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -217,7 +217,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Pop_throw_if_history_is_single_entry () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -242,9 +242,9 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Pop_successfully_if_interrupt_pop () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
-			var thirdSceneIdentifier = new BlankSceneIdentifier("ThirdScene").Register(x => recorder.With(x));
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new AnonymousSceneIdentifier("SecondScene").Register(x => recorder.With(x));
+			var thirdSceneIdentifier = new AnonymousSceneIdentifier("ThirdScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -294,8 +294,8 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Change_successfully () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new AnonymousSceneIdentifier("SecondScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -323,9 +323,9 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Change_successfully_if_interrupt_change () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
-			var thirdSceneIdentifier = new BlankSceneIdentifier("ThirdScene").Register(x => recorder.With(x));
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new AnonymousSceneIdentifier("SecondScene").Register(x => recorder.With(x));
+			var thirdSceneIdentifier = new AnonymousSceneIdentifier("ThirdScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -363,9 +363,9 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Replace_successfully () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointLifecycleSequenceRecorder recorder = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene").Register(x => recorder.With(x));
-			var secondSceneIdentifier = new BlankSceneIdentifier("SecondScene").Register(x => recorder.With(x));
-			var thirdSceneIdentifier = new BlankSceneIdentifier("ThirdScene").Register(x => recorder.With(x));
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene").Register(x => recorder.With(x));
+			var secondSceneIdentifier = new AnonymousSceneIdentifier("SecondScene").Register(x => recorder.With(x));
+			var thirdSceneIdentifier = new AnonymousSceneIdentifier("ThirdScene").Register(x => recorder.With(x));
 
 			await m_Navigator.Initialize();
 
@@ -400,7 +400,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		[UnityTest]
 		public IEnumerator Replace_throw_if_history_is_empty () => UniTask.ToCoroutine(async () =>
 		{
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene");
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene");
 
 			await m_Navigator.Initialize();
 
@@ -422,7 +422,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 			int initializeCount = 0;
 			int finalizeCount = 0;
-			var firstSceneIdentifier = new BlankSceneIdentifier("FirstScene", x =>
+			var firstSceneIdentifier = new AnonymousSceneIdentifier("FirstScene", x =>
 			{
 				x.SetCallbacks(
 					onInitialize: (reader, progress, ct) =>

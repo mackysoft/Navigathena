@@ -7,14 +7,14 @@ using UnityEngine.SceneManagement;
 
 namespace MackySoft.Navigathena.SceneManagement.Tests
 {
-	public sealed class BlankSceneIdentifier : ISceneIdentifier
+	public sealed class AnonymousSceneIdentifier : ISceneIdentifier
 	{
 
 		readonly string m_SceneName;
 		readonly Action<AnonymousSceneEntryPoint> m_OnCreate;
 		readonly List<ISceneEntryPointLifecycleListener> m_Listeners = new();
 
-		public BlankSceneIdentifier (string sceneName, Action<AnonymousSceneEntryPoint> onCreate = null)
+		public AnonymousSceneIdentifier (string sceneName, Action<AnonymousSceneEntryPoint> onCreate = null)
 		{
 			if (string.IsNullOrEmpty(sceneName))
 			{
@@ -24,13 +24,13 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			m_OnCreate = onCreate;
 		}
 
-		public BlankSceneIdentifier Register (ISceneEntryPointLifecycleListener listener)
+		public AnonymousSceneIdentifier Register (ISceneEntryPointLifecycleListener listener)
 		{
 			m_Listeners.Add(listener);
 			return this;
 		}
 
-		public BlankSceneIdentifier Register (Func<BlankSceneIdentifier, ISceneEntryPointLifecycleListener> factory)
+		public AnonymousSceneIdentifier Register (Func<AnonymousSceneIdentifier, ISceneEntryPointLifecycleListener> factory)
 		{
 			m_Listeners.Add(factory(this));
 			return this;
@@ -38,22 +38,22 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 		public ISceneHandle CreateHandle ()
 		{
-			return new BlankSceneHandle(m_SceneName, m_OnCreate, m_Listeners);
+			return new AnonymousSceneHandle(m_SceneName, m_OnCreate, m_Listeners);
 		}
 
 		public override string ToString ()
 		{
-			return $"{m_SceneName} {nameof(BlankSceneIdentifier)}";
+			return $"{m_SceneName} {nameof(AnonymousSceneIdentifier)}";
 		}
 
-		sealed class BlankSceneHandle : ISceneHandle
+		sealed class AnonymousSceneHandle : ISceneHandle
 		{
 
 			readonly string m_SceneName;
 			readonly Action<AnonymousSceneEntryPoint> m_OnCreate;
 			readonly List<ISceneEntryPointLifecycleListener> m_Listeners;
 
-			public BlankSceneHandle (string sceneName, Action<AnonymousSceneEntryPoint> onCreate, List<ISceneEntryPointLifecycleListener> listeners)
+			public AnonymousSceneHandle (string sceneName, Action<AnonymousSceneEntryPoint> onCreate, List<ISceneEntryPointLifecycleListener> listeners)
 			{
 				m_SceneName = sceneName;
 				m_OnCreate = onCreate;
