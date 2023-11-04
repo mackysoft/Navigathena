@@ -58,8 +58,13 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Tests\Runtime\SceneManagement\SceneManagerTestHelper.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Tests\Runtime\SceneManagement\AnonymousSceneEntryPoint.cs" />
+    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Tests\Runtime\SceneManagement\SceneEntryPointCallbackFlagsStore.cs" />
+    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Tests\Runtime\SceneManagement\AnonymousSceneIdentifier.cs" />
+    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Tests\Runtime\SceneManagement\SceneEntryPointLifecycleSequenceRecorder.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Tests\Runtime\SceneManagement\StandardSceneNavigatorTest.cs" />
+    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Tests\Runtime\SceneManagement\HistoryAssert.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MackySoft\MackySoft.Navigathena\Tests\Runtime\SceneManagement\MackySoft.Navigathena.SceneManagement.Tests.asmdef" />

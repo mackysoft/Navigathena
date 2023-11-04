@@ -68,7 +68,6 @@
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneState.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\ISceneNavigator.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneNavigatorHelper.cs" />
-    <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneIdentifier\BlankSceneIdentifier.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneDataStore.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneNavigationException.cs" />
     <Compile Include="Assets\MackySoft\MackySoft.Navigathena\Runtime\SceneManagement\SceneHistoryEntry.cs" />
@@ -331,10 +330,6 @@
     </Reference>
     <Reference Include="UnityEditor.Graphs">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.31f1\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.WebGL.Extensions">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.31f1\Editor\Data\PlaybackEngines\WebGLSupport\UnityEditor.WebGL.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
