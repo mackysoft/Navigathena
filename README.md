@@ -12,6 +12,7 @@ Navigathena is a scene management framework designed for Unity.
 - High functionality, capable of supporting use cases that require more advanced control.
 - Highly scalable, most elements can be extended to suit the project.
 - Implemented based on a clean design concept, it provides a robust framework that can withstand large-scale development.
+- Stability. Quality assured by automated tests and builds.
 
 ## <a id="index" href="#index"> Table of Contents </a>
 
