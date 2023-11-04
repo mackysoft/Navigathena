@@ -48,7 +48,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		public IEnumerator Push_successfully () => UniTask.ToCoroutine(async () =>
 		{
 			SceneEntryPointCallbackFlagsStore flags = new();
-			var firstSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("FirstScene", x => x.RegisterFlags(flags));
+			var firstSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("FirstScene", x => x.Register(flags));
 			await m_Navigator.Initialize();
 
 			await m_Navigator.Push(firstSceneIdentifier);
@@ -130,7 +130,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		{
 			SceneEntryPointCallbackFlagsStore flags = new();
 			var firstSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("FirstScene");
-			var secondSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("SecondScene", x => x.RegisterFlags(flags));
+			var secondSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("SecondScene", x => x.Register(flags));
 
 			await m_Navigator.Initialize();
 
@@ -188,8 +188,8 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			SceneEntryPointCallbackFlagsStore secondFlags = new();
 			SceneEntryPointCallbackFlagsStore thirdFlags = new();
 			var firstSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("FirstScene");
-			var secondSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("SecondScene", x => x.RegisterFlags(secondFlags));
-			var thirdSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("ThirdScene", x => x.RegisterFlags(thirdFlags));
+			var secondSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("SecondScene", x => x.Register(secondFlags));
+			var thirdSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("ThirdScene", x => x.Register(thirdFlags));
 
 			await m_Navigator.Initialize();
 
@@ -221,7 +221,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		{
 			SceneEntryPointCallbackFlagsStore flags = new();
 			var firstSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("FirstScene");
-			var secondSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("SecondScene", x => x.RegisterFlags(flags));
+			var secondSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("SecondScene", x => x.Register(flags));
 
 			await m_Navigator.Initialize();
 
@@ -239,7 +239,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		{
 			SceneEntryPointCallbackFlagsStore secondFlags = new();
 			var firstSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("FirstScene");
-			var secondSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("SecondScene", x => x.RegisterFlags(secondFlags));
+			var secondSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("SecondScene", x => x.Register(secondFlags));
 			var thirdSceneIdentifier = new BlankSceneIdentifier<AnonymousSceneEntryPoint>("ThirdScene");
 
 			await m_Navigator.Initialize();
