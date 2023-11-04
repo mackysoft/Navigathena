@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace MackySoft.Navigathena.SceneManagement
+namespace MackySoft.Navigathena.SceneManagement.Tests
 {
-	public sealed class BlankSceneIdentifier<T> : ISceneIdentifier where T : Component, ISceneEntryPoint
+	public sealed class AnonymousSceneIdentifier : ISceneIdentifier
 	{
 
 		readonly string m_SceneName;
-		readonly Action<T> m_OnCreate;
+		readonly Action<AnonymousSceneEntryPoint> m_OnCreate;
+		readonly List<ISceneEntryPointLifecycleListener> m_Listeners = new();
 
-		public BlankSceneIdentifier (string sceneName, Action<T> onCreate = null)
+		public AnonymousSceneIdentifier (string sceneName, Action<AnonymousSceneEntryPoint> onCreate = null)
 		{
 			if (string.IsNullOrEmpty(sceneName))
 			{
@@ -22,26 +24,40 @@ namespace MackySoft.Navigathena.SceneManagement
 			m_OnCreate = onCreate;
 		}
 
+		public AnonymousSceneIdentifier Register (ISceneEntryPointLifecycleListener listener)
+		{
+			m_Listeners.Add(listener);
+			return this;
+		}
+
+		public AnonymousSceneIdentifier Register (Func<AnonymousSceneIdentifier, ISceneEntryPointLifecycleListener> factory)
+		{
+			m_Listeners.Add(factory(this));
+			return this;
+		}
+
 		public ISceneHandle CreateHandle ()
 		{
-			return new BlankSceneHandle<T>(m_SceneName, m_OnCreate);
+			return new AnonymousSceneHandle(m_SceneName, m_OnCreate, m_Listeners);
 		}
 
 		public override string ToString ()
 		{
-			return $"{m_SceneName} ({typeof(BlankSceneIdentifier<T>).Name})";
+			return $"{m_SceneName} {nameof(AnonymousSceneIdentifier)}";
 		}
 
-		sealed class BlankSceneHandle<T> : ISceneHandle where T : Component, ISceneEntryPoint
+		sealed class AnonymousSceneHandle : ISceneHandle
 		{
 
 			readonly string m_SceneName;
-			readonly Action<T> m_OnCreate;
+			readonly Action<AnonymousSceneEntryPoint> m_OnCreate;
+			readonly List<ISceneEntryPointLifecycleListener> m_Listeners;
 
-			public BlankSceneHandle (string sceneName, Action<T> onCreate)
+			public AnonymousSceneHandle (string sceneName, Action<AnonymousSceneEntryPoint> onCreate, List<ISceneEntryPointLifecycleListener> listeners)
 			{
 				m_SceneName = sceneName;
 				m_OnCreate = onCreate;
+				m_Listeners = listeners;
 			}
 
 			public UniTask<Scene> Load (IProgress<float> progress = null, CancellationToken cancellationToken = default)
@@ -56,7 +72,12 @@ namespace MackySoft.Navigathena.SceneManagement
 
 				// Create entry point
 				GameObject entryPointGameObject = new GameObject("SceneEntryPoint");
-				var entryPoint = entryPointGameObject.AddComponent<T>();
+				var entryPoint = entryPointGameObject.AddComponent<AnonymousSceneEntryPoint>();
+				for (int i = 0; i < m_Listeners.Count; i++)
+				{
+					entryPoint.Register(m_Listeners[i]);
+				}
+
 				m_OnCreate?.Invoke(entryPoint);
 
 				SceneManager.MoveGameObjectToScene(entryPointGameObject, newScene);
