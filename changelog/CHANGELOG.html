@@ -82,22 +82,38 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h2 id="102---2023-11-01">[1.0.2] - 2023-11-01</h2>
+<h2 id="103---2023-11-04">[1.0.3] - 2023-11-04</h2>
 <h3 id="added">Added</h3>
 <ul>
-<li>Added <code>StandardSceneNavigatorTest</code>. This improves the stability of the features.</li>
+<li>Added <code>HistoryAssert</code>, an API for testing to ensure the correctness of the history.</li>
+<li>Added <code>ISceneEntryPointLifecycleAsserter</code>, an API for testing to ensure that the <code>ISceneEntryPoint</code> lifecycle history is correct.</li>
 </ul>
 <h3 id="changed">Changed</h3>
 <ul>
-<li><code>BlankSceneIdentifier</code> make to generic.</li>
+<li><code>BlankSceneIdentifier</code> is now a test-only API.</li>
+<li>Rename from <code>BlankSceneIdentifier</code> to <code>AnonymousSceneIdentifier</code>.</li>
 </ul>
 <h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed that scenes were not being cleaned up during test setup and that some tests were not functioning correctly.</li>
+<li>Fixed many compiler warnings.</li>
+</ul>
+<h2 id="102---2023-11-01">[1.0.2] - 2023-11-01</h2>
+<h3 id="added-1">Added</h3>
+<ul>
+<li>Added <code>StandardSceneNavigatorTest</code>. This improves the stability of the features.</li>
+</ul>
+<h3 id="changed-1">Changed</h3>
+<ul>
+<li><code>BlankSceneIdentifier</code> make to generic.</li>
+</ul>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>Fixed incorrect history on interrupt pop during pop.</li>
 <li><code>OnExit</code> is no longer called if <code>OnEnter</code> was not called on a SceneEntryPoint when the transition process was canceled.</li>
 </ul>
 <h2 id="101---2023-10-31">[1.0.1] - 2023-10-31</h2>
-<h3 id="added-1">Added</h3>
+<h3 id="added-2">Added</h3>
 <ul>
 <li>Add members into <code>ISceneHistoryBuilder</code>.</li>
 <li>Add <code>IContainerBuilder.RegisterSceneLifecycle</code> extension method.</li>
