@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using System.Threading;
-using Cysharp.Threading.Tasks;
 
 namespace MackySoft.Navigathena.SceneManagement.Tests
 {
@@ -16,15 +17,15 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 		OnFinalize = 1 << 3,
 	}
 
-	public sealed class SceneEntryPointCallbackFlagsStore
+	public interface ISceneEntryPointLifecycleListener
 	{
-		public SceneEntryPointCallbackFlags Value { get; set; }
+		void OnReceive (SceneEntryPointCallbackFlags flags);
 	}
 
 	public sealed class AnonymousSceneEntryPoint : SceneEntryPointBase
 	{
 
-		SceneEntryPointCallbackFlagsStore m_Flags = new();
+		readonly List<ISceneEntryPointLifecycleListener> m_Listeners = new();
 
 		Func<ISceneDataReader, IProgress<IProgressDataStore>, CancellationToken, UniTask> m_OnInitialize;
 		Func<ISceneDataReader, CancellationToken, UniTask> m_OnEnter;
@@ -44,33 +45,42 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			m_OnFinalize = onFinalize;
 		}
 
-		public void RegisterFlags (SceneEntryPointCallbackFlagsStore store)
+		public void Register (ISceneEntryPointLifecycleListener listener)
 		{
-			m_Flags = store;
+			m_Listeners.Add(listener);
 		}
 
 		protected override UniTask OnInitialize (ISceneDataReader reader, IProgress<IProgressDataStore> progress, CancellationToken cancellationToken)
 		{
-			m_Flags.Value |= SceneEntryPointCallbackFlags.OnInitialize;
+			Send(SceneEntryPointCallbackFlags.OnInitialize);
 			return m_OnInitialize?.Invoke(reader, progress, cancellationToken) ?? UniTask.CompletedTask;
 		}
 
 		protected override UniTask OnEnter (ISceneDataReader reader, CancellationToken cancellationToken)
 		{
-			m_Flags.Value |= SceneEntryPointCallbackFlags.OnEnter;
+			Send(SceneEntryPointCallbackFlags.OnEnter);
 			return m_OnEnter?.Invoke(reader, cancellationToken) ?? UniTask.CompletedTask;
 		}
 
 		protected override UniTask OnExit (ISceneDataWriter writer, CancellationToken cancellationToken)
 		{
-			m_Flags.Value |= SceneEntryPointCallbackFlags.OnExit;
+			Send(SceneEntryPointCallbackFlags.OnExit);
 			return m_OnExit?.Invoke(writer, cancellationToken) ?? UniTask.CompletedTask;
 		}
 
 		protected override UniTask OnFinalize (ISceneDataWriter writer, IProgress<IProgressDataStore> progress, CancellationToken cancellationToken)
 		{
-			m_Flags.Value |= SceneEntryPointCallbackFlags.OnFinalize;
+			Send(SceneEntryPointCallbackFlags.OnFinalize);
 			return m_OnFinalize?.Invoke(writer, progress, cancellationToken) ?? UniTask.CompletedTask;
+		}
+
+		void Send (SceneEntryPointCallbackFlags flags)
+		{
+			for (int i = 0; i < m_Listeners.Count; i++)
+			{
+				ISceneEntryPointLifecycleListener listener = m_Listeners[i];
+				listener.OnReceive(flags);
+			}
 		}
 	}
 }
