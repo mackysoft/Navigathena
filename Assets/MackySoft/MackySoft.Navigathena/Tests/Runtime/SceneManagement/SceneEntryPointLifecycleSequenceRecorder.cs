@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MackySoft.Navigathena.SceneManagement.Tests
 {
-	
+
 	public interface ISceneEntryPointLifecycleAsserter
 	{
 		ISceneEntryPointLifecycleAsserter On (ISceneIdentifier identifier);
@@ -17,7 +17,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 		readonly List<(ISceneIdentifier identifier, SceneEntryPointCallbackFlags flags)> m_Sequence = new();
 
-		public ISceneEntryPointLifecycleAsserter Create ()
+		public ISceneEntryPointLifecycleAsserter CreateSequenceAsserter ()
 		{
 			return new SceneEntryPointLifecycleAsserter(this);
 		}
@@ -29,6 +29,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 		sealed class Listener : ISceneEntryPointLifecycleListener
 		{
+
 			readonly SceneEntryPointLifecycleSequenceRecorder m_Assert;
 			readonly ISceneIdentifier m_Identifier;
 
@@ -95,7 +96,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 			string EnumerateActualSequence ()
 			{
-				return string.Join("\n",m_Recorder.m_Sequence.Select(x => $"{x.identifier}: {x.flags}"));
+				return string.Join("\n", m_Recorder.m_Sequence.Select(x => $"{x.identifier}: {x.flags}"));
 			}
 		}
 	}
