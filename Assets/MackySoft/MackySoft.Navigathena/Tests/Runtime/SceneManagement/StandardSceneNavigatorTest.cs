@@ -74,7 +74,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			{
 				await m_Navigator.Push(firstSceneIdentifier);
 			}
-			catch (OperationCanceledException e)
+			catch (OperationCanceledException)
 			{
 				HistoryAssert.SequenceEqual(
 					m_Navigator,
@@ -156,7 +156,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 				await m_Navigator.Pop();
 				Assert.Fail();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				HistoryAssert.IsEmpty(m_Navigator);
 			}
@@ -297,7 +297,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 				await m_Navigator.Replace(firstSceneIdentifier);
 				Assert.Fail();
 			}
-			catch (Exception e)
+			catch
 			{
 				HistoryAssert.IsEmpty(m_Navigator);
 			}

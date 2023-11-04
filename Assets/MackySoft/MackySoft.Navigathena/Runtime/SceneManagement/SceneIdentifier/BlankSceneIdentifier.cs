@@ -24,7 +24,7 @@ namespace MackySoft.Navigathena.SceneManagement
 
 		public ISceneHandle CreateHandle ()
 		{
-			return new BlankSceneHandle<T>(m_SceneName, m_OnCreate);
+			return new BlankSceneHandle(m_SceneName, m_OnCreate);
 		}
 
 		public override string ToString ()
@@ -32,7 +32,7 @@ namespace MackySoft.Navigathena.SceneManagement
 			return $"{m_SceneName} ({typeof(BlankSceneIdentifier<T>).Name})";
 		}
 
-		sealed class BlankSceneHandle<T> : ISceneHandle where T : Component, ISceneEntryPoint
+		sealed class BlankSceneHandle : ISceneHandle
 		{
 
 			readonly string m_SceneName;
