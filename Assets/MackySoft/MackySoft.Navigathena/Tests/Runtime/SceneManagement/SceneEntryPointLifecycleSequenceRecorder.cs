@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MackySoft.Navigathena.SceneManagement.Tests
 {
@@ -72,7 +73,7 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 			{
 				if (m_Recorder.m_Sequence.Count != m_Sequence.Count)
 				{
-					throw new Exception($"Expected sequence length is {m_Sequence.Count} but actual is {m_Recorder.m_Sequence.Count}.");
+					throw new Exception($"Expected sequence length is {m_Sequence.Count} but actual is {m_Recorder.m_Sequence.Count}.\n{EnumerateActualSequence()}");
 				}
 
 				for (int i = 0; i < m_Sequence.Count; i++)
@@ -82,14 +83,19 @@ namespace MackySoft.Navigathena.SceneManagement.Tests
 
 					if (actual.identifier != expected.identifier)
 					{
-						throw new Exception($"Expected identifier is {expected.identifier} but actual is {actual.identifier}.");
+						throw new Exception($"Expected identifier is {expected.identifier} but actual is {actual.identifier}.\n{EnumerateActualSequence()}");
 					}
 
 					if (actual.flags != expected.flags)
 					{
-						throw new Exception($"Expected flags is {expected.flags} but actual is {actual.flags}.");
+						throw new Exception($"Expected flags is {expected.flags} but actual is {actual.flags}.\n{EnumerateActualSequence()}");
 					}
 				}
+			}
+
+			string EnumerateActualSequence ()
+			{
+				return string.Join("\n",m_Recorder.m_Sequence.Select(x => $"{x.identifier}: {x.flags}"));
 			}
 		}
 	}
