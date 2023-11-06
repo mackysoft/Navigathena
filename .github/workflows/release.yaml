@@ -18,7 +18,7 @@ jobs:
     outputs:
       sha: ${{ steps.commit.outputs.sha }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Output package.json (Before)
         run: cat ${{ env.TARGET_FILE}}
 
@@ -69,7 +69,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - run: echo ${{ needs.update-packagejson.outputs.sha }}
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ needs.update-packagejson.outputs.sha }}
 
@@ -95,7 +95,7 @@ jobs:
         working-directory: .
 
       # Store artifacts.
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: Navigathena.unitypackage
           path: ./Build/Navigathena.unitypackage

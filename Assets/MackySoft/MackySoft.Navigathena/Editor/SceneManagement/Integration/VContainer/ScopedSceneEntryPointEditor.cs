@@ -31,7 +31,7 @@ namespace MackySoft.Navigathena.SceneManagement.VContainer
 			if (m_LifetimeScope == null)
 			{
 				EditorGUILayout.Space();
-				if (GUILayout.Button("Create LifetimeScope", m_ButtonLayoutOptions))
+				if (GUILayout.Button("Create Default LifetimeScope", m_ButtonLayoutOptions))
 				{
 					CreateLifetimeScope();
 				}
