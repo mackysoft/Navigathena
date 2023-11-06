@@ -2,325 +2,325 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.AsyncOperation.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.Diagnostics.LogHandler.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.Diagnostics.LogLevel.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.Diagnostics.NavigathenaDebug.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.Diagnostics.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.History-1.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.IAsyncOperation.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.IProgressDataStore.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.IProgressDataStore-1.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.ProcessCounter.ProcessScope.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.ProcessCounter.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.ProgressDataStore.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.ProgressDataStore-1.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.BuiltInSceneIdentifier.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.GlobalSceneNavigator.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.IReadOnlySceneHistoryEntry.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ISceneData.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ISceneDataReader.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ISceneDataWriter.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ISceneEntryPoint.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ISceneHandle.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ISceneHistoryBuilder.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ISceneIdentifier.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ISceneNavigator.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ISceneProgressFactory.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.LoadSceneProgressData.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.LoadSceneRequest.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.PopSceneRequest.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.ReloadSceneRequest.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.SceneDataStore.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.SceneDataStoreExtensions.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.SceneEntryPointBase.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.SceneHistoryBuilderBase.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.SceneHistoryEntry.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.SceneNavigationException.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.SceneNavigatorExtensions.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.SceneState.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.StandardSceneNavigator.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.StandardSceneProgressFactory.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.Unsafe.IUnsafeSceneNavigator.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.Unsafe.UnsafeSceneNavigatorExtensions.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.Unsafe.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.Utilities.SceneNavigatorHelper.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.Utilities.SceneUtility.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.Utilities.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.SceneManagement.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.Transitions.ITransitionDirector.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.Transitions.ITransitionHandle.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.Transitions.TransitionDirector.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.Transitions.TransitionDirectorState.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.Transitions.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/changelog/CHANGELOG.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mackysoft.github.io/Navigathena/index.html</loc>
-    <lastmod>2023-11-04T11:13:20+00:00</lastmod>
+    <lastmod>2023-11-06T03:23:22+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

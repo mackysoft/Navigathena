@@ -82,13 +82,19 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="104---2023-11-07">[1.0.4] - 2023-11-07</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><code>ScopedSceneEntryPoint</code> now ensures that <code>autoRun</code> set to disabled when <code>LifetimeScope</code> activation.</li>
+<li>Rename the <code>Create LifetimeScope</code> button to <code>Create Default LifetimeScope</code> in the <code>ScopedSceneEntryPoint</code> inspector.</li>
+</ul>
 <h2 id="103---2023-11-04">[1.0.3] - 2023-11-04</h2>
 <h3 id="added">Added</h3>
 <ul>
 <li>Added <code>HistoryAssert</code>, an API for testing to ensure the correctness of the history.</li>
 <li>Added <code>ISceneEntryPointLifecycleAsserter</code>, an API for testing to ensure that the <code>ISceneEntryPoint</code> lifecycle history is correct.</li>
 </ul>
-<h3 id="changed">Changed</h3>
+<h3 id="changed-1">Changed</h3>
 <ul>
 <li><code>BlankSceneIdentifier</code> is now a test-only API.</li>
 <li>Rename from <code>BlankSceneIdentifier</code> to <code>AnonymousSceneIdentifier</code>.</li>
@@ -103,7 +109,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <ul>
 <li>Added <code>StandardSceneNavigatorTest</code>. This improves the stability of the features.</li>
 </ul>
-<h3 id="changed-1">Changed</h3>
+<h3 id="changed-2">Changed</h3>
 <ul>
 <li><code>BlankSceneIdentifier</code> make to generic.</li>
 </ul>
