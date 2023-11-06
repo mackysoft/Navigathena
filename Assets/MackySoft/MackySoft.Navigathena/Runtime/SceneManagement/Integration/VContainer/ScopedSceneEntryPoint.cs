@@ -46,6 +46,8 @@ namespace MackySoft.Navigathena.SceneManagement.VContainer
 			LifetimeScope parentLifetimeScope = await EnsureParentScope(cancellationToken);
 			using (LifetimeScope.EnqueueParent(parentLifetimeScope))
 			{
+				lifetimeScope.autoRun = false;
+
 				// NOTE: The parent of a LifetimeScope is set on Awake.
 				lifetimeScope.gameObject.SetActive(true);
 				lifetimeScope.Build();
