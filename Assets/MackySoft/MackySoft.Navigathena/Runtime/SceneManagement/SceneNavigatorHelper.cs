@@ -67,6 +67,9 @@ namespace MackySoft.Navigathena.SceneManagement.Utilities
 			Scene loadedScene = await sceneHandle.Load(sceneProgressFactory.CreateProgress(progressDataStore, progress), cancellationToken);
 			cancellationToken.ThrowIfCancellationRequested();
 
+			await NavigathenaBlankSceneIdentifier.Instance.CreateHandle().Unload(cancellationToken: cancellationToken);
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var sceneEntryPoint = loadedScene.GetComponentInScene<ISceneEntryPoint>(true);
 			return new SceneState(scene, sceneHandle, sceneEntryPoint); 
 		}

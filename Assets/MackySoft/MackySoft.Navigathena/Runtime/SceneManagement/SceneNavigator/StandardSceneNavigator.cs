@@ -327,7 +327,7 @@ namespace MackySoft.Navigathena.SceneManagement
 				// NOTE: If the current scene is the only scene, create an empty scene to prevent an exception from being thrown when unloading.
 				if (SceneManager.sceneCount < 2)
 				{
-					SceneManager.CreateScene("Navigathena Blank");
+					await NavigathenaBlankSceneIdentifier.Instance.CreateHandle().Load(cancellationToken: cancellationToken);
 				}
 
 				await m_CurrentSceneState.Value.Handle.Unload(m_SceneProgressFactory.CreateProgress(progressDataStore, progress), cancellationToken);
