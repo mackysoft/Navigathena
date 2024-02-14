@@ -16,7 +16,7 @@ namespace MackySoft.Navigathena.SceneManagement.Utilities
 	public static class SceneNavigatorHelper
 	{
 
-		public static (Scene sceneThatContainsEntryPoint, ISceneEntryPoint firstEntryPoint) FindFirstEntryPointInAllScenes ()
+		public static (Scene sceneThatContainsEntryPoint, ISceneEntryPoint firstEntryPoint) FindFirstEntryPointInAllScenes()
 		{
 			Scene sceneThatContainsEntryPoint = default;
 			ISceneEntryPoint firstEntryPoint = null;
@@ -42,7 +42,7 @@ namespace MackySoft.Navigathena.SceneManagement.Utilities
 			return (sceneThatContainsEntryPoint, firstEntryPoint);
 		}
 
-		public static TransitionDirectorState CreateTransitionHandle (ITransitionDirector transitionDirector)
+		public static TransitionDirectorState CreateTransitionHandle(ITransitionDirector transitionDirector)
 		{
 			if (transitionDirector == null)
 			{
@@ -54,7 +54,7 @@ namespace MackySoft.Navigathena.SceneManagement.Utilities
 			return new TransitionDirectorState(handle, progress);
 		}
 
-		public static async UniTask<SceneState> LoadSceneAndGetEntryPoint (ISceneIdentifier scene, ISceneProgressFactory sceneProgressFactory, IProgressDataStore progressDataStore, IProgress<IProgressDataStore> progress, CancellationToken cancellationToken)
+		public static async UniTask<SceneState> LoadSceneAndGetEntryPoint(ISceneIdentifier scene, ISceneProgressFactory sceneProgressFactory, IProgressDataStore progressDataStore, IProgress<IProgressDataStore> progress, CancellationToken cancellationToken)
 		{
 			if (scene == null)
 			{
@@ -65,13 +65,15 @@ namespace MackySoft.Navigathena.SceneManagement.Utilities
 
 			ISceneHandle sceneHandle = scene.CreateHandle();
 			Scene loadedScene = await sceneHandle.Load(sceneProgressFactory.CreateProgress(progressDataStore, progress), cancellationToken);
+			// await UniTask.NextFrame();
+			SceneManager.SetActiveScene(loadedScene);
 			cancellationToken.ThrowIfCancellationRequested();
 
 			var sceneEntryPoint = loadedScene.GetComponentInScene<ISceneEntryPoint>(true);
-			return new SceneState(scene, sceneHandle, sceneEntryPoint); 
+			return new SceneState(scene, sceneHandle, sceneEntryPoint);
 		}
 
-		public static async UniTask TryExecuteInterruptOperation (IAsyncOperation interruptOperation, IProgress<IProgressDataStore> progress, CancellationToken cancellationToken)
+		public static async UniTask TryExecuteInterruptOperation(IAsyncOperation interruptOperation, IProgress<IProgressDataStore> progress, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
