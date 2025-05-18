@@ -18,7 +18,7 @@ jobs:
     outputs:
       sha: ${{ steps.commit.outputs.sha }}
     steps:
-      - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
       - name: Output package.json (Before)
         run: cat ${{ env.TARGET_FILE}}
 
@@ -69,7 +69,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - run: echo ${{ needs.update-packagejson.outputs.sha }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ needs.update-packagejson.outputs.sha }}
 
@@ -117,7 +117,7 @@ jobs:
           prerelease: false
 
       # Download(All) Artifacts to current directory
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
       
       # Upload to Releases(unitypackage)
       - uses: actions/upload-release-asset@v1
@@ -128,3 +128,4 @@ jobs:
           asset_path: ./Navigathena.unitypackage/Navigathena.unitypackage
           asset_name: Navigathena.unitypackage
           asset_content_type: application/octet-stream
+
