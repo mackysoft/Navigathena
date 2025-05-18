@@ -15,14 +15,14 @@ jobs:
       matrix:
         projectPath:
           - .
-        unityVersion:
-          - 2021.3.24f1
+          unityVersion:
+            - 2021.3.31f1
         testMode:
           - playmode
     steps:
       # Checkout
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: true
 
