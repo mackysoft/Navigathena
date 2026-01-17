@@ -10,6 +10,9 @@ on:
 env:
   GIT_TAG: ${{ github.event.inputs.tag }}
 
+permissions:
+  contents: write
+
 jobs:
   update-packagejson:
     runs-on: ubuntu-latest
@@ -18,7 +21,7 @@ jobs:
     outputs:
       sha: ${{ steps.commit.outputs.sha }}
     steps:
-        - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Output package.json (Before)
         run: cat ${{ env.TARGET_FILE}}
 
@@ -29,7 +32,9 @@ jobs:
         id: check_update
         run: |
           cat ${{ env.TARGET_FILE}}
-          git diff --exit-code || echo "::set-output name=changed::1"
+          if ! git diff --exit-code; then
+            echo "changed=1" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit files
         id: commit
@@ -38,7 +43,7 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -m "feat: Update package.json to ${{ env.GIT_TAG }}" -a
-          echo "::set-output name=sha::$(git rev-parse HEAD)"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Check sha
         run: echo "SHA ${SHA}"
@@ -51,7 +56,7 @@ jobs:
 
       - name: Push changes
         if: steps.check_update.outputs.changed == '1'
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
@@ -61,9 +66,9 @@ jobs:
     needs: [update-packagejson]
     strategy:
       matrix:
-        unity: ["2021.3.24f1"]
+        unity: ["2021.3.45f2"]
         include:
-          - unityVersion: 2021.3.24f1
+          - unityVersion: 2021.3.45f2
             license: UNITY_LICENSE_2021
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -74,7 +79,7 @@ jobs:
           ref: ${{ needs.update-packagejson.outputs.sha }}
 
       - name: Export unitypackage
-        uses: game-ci/unity-builder@v2
+        uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets[matrix.license] }}
         with:
@@ -95,7 +100,7 @@ jobs:
         working-directory: .
 
       # Store artifacts.
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Navigathena.unitypackage
           path: ./Build/Navigathena.unitypackage
@@ -104,28 +109,16 @@ jobs:
     needs: [update-packagejson, build]
     runs-on: ubuntu-latest
     steps:
-      # Create Releases
-      - uses: actions/create-release@v1
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Download(All) Artifacts to current directory
+      - uses: actions/download-artifact@v4
+      
+      # Create release and upload asset
+      - uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ env.GIT_TAG }}
-          release_name: ${{ env.GIT_TAG }}
-          commitish: ${{ needs.update-packagejson.outputs.sha }}
+          name: ${{ env.GIT_TAG }}
+          target_commitish: ${{ needs.update-packagejson.outputs.sha }}
           draft: true
           prerelease: false
-
-      # Download(All) Artifacts to current directory
-      - uses: actions/download-artifact@v3
-      
-      # Upload to Releases(unitypackage)
-      - uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Navigathena.unitypackage/Navigathena.unitypackage
-          asset_name: Navigathena.unitypackage
-          asset_content_type: application/octet-stream
-
+          files: ./Navigathena.unitypackage/Navigathena.unitypackage

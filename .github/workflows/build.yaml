@@ -31,7 +31,7 @@ jobs:
           
       # Cache
       - name: Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
@@ -39,9 +39,9 @@ jobs:
       
       # Build
       - name: Build
-        uses: game-ci/unity-builder@v2
+        uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2021 }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
-          unityVersion: 2021.3.24f1
+          unityVersion: 2021.3.45f2
