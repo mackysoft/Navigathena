@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MackySoft.Navigathena/MackySoft.Navigathena.csproj" />
+    <Project Path="src/MackySoft.Navigathena.MicrosoftDI/MackySoft.Navigathena.MicrosoftDI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MackySoft.Navigathena.Tests/MackySoft.Navigathena.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,17 @@
+{
+  "name": "com.mackysoft.navigathena.unity.addressables",
+  "version": "2.0.0-preview.1",
+  "displayName": "Navigathena Addressables",
+  "description": "Addressables acquisition and release of scenes and prefab assets.",
+  "unity": "6000.5",
+  "author": {
+    "name": "MackySoft",
+    "url": "https://github.com/mackysoft"
+  },
+  "license": "MIT",
+  "documentationUrl": "https://github.com/mackysoft/Navigathena#readme",
+  "dependencies": {
+    "com.mackysoft.navigathena.unity": "2.0.0-preview.1",
+    "com.unity.addressables": "2.9.1"
+  }
+}

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>MackySoft.Navigathena.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+    <PackageReference Include="xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/MackySoft.Navigathena/MackySoft.Navigathena.csproj" />
+    <ProjectReference Include="../../src/MackySoft.Navigathena.MicrosoftDI/MackySoft.Navigathena.MicrosoftDI.csproj" />
+  </ItemGroup>
+</Project>

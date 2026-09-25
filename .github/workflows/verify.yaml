@@ -1,0 +1,44 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches: [main, '2.0']
+  workflow_dispatch:
+
+concurrency:
+  group: verify-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Verify and package
+        run: bash scripts/verify.sh --package-output artifacts/packages
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-packages
+          path: |
+            artifacts/packages/*.nupkg
+            artifacts/packages/*.tgz
+          if-no-files-found: error
+
+  unity:
+    needs: dotnet
+    # Never expose the Unity license to code submitted from another repository.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    uses: ./.github/workflows/unity-tests.yaml
+    with:
+      source-ref: ${{ github.sha }}
+    secrets:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}

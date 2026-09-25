@@ -1,0 +1,57 @@
+name: Unity package verification
+
+on:
+  workflow_call:
+    inputs:
+      source-ref:
+        type: string
+        required: true
+    secrets:
+      UNITY_LICENSE:
+        required: true
+      UNITY_EMAIL:
+        required: true
+      UNITY_PASSWORD:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.source-ref }}
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/download-artifact@v7
+        with:
+          name: release-packages
+          path: artifacts/packages
+      - name: Restore the packaged Unity consumer
+        run: bash scripts/prepare-unity.sh artifacts/packages
+      - name: Run Unity PlayMode tests
+        uses: game-ci/unity-test-runner@32e57712352b500e17974b245a6dce9e11a73213
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          cliVersion: v0.1.69
+          projectPath: artifacts/unity-project
+          testMode: PlayMode
+          coverageEnabled: false
+          artifactsPath: artifacts/unity-results
+          githubToken: ''
+      - name: Require successful adapter test results
+        run: python3 scripts/verify-unity-results.py artifacts/unity-results
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: unity-test-results
+          path: artifacts/unity-results
+          if-no-files-found: warn

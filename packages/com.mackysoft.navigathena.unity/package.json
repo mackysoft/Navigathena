@@ -1,0 +1,16 @@
+{
+  "name": "com.mackysoft.navigathena.unity",
+  "version": "2.0.0-preview.1",
+  "displayName": "Navigathena Unity",
+  "description": "Scene/Prefab acquisition, ScreenPresentation, and Animator integration.",
+  "unity": "6000.5",
+  "author": {
+    "name": "MackySoft",
+    "url": "https://github.com/mackysoft"
+  },
+  "license": "MIT",
+  "documentationUrl": "https://github.com/mackysoft/Navigathena#readme",
+  "dependencies": {
+    "com.unity.modules.animation": "1.0.0"
+  }
+}

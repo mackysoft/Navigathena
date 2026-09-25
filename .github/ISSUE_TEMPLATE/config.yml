@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-    - name: Scripting API
-      url: https://mackysoft.github.io/XPool/api/MackySoft.XPool.html
-      about: You may find the feature you are looking for.
+    - name: Usage and API
+      url: https://github.com/mackysoft/Navigathena/blob/main/docs/30_technical/features/navigathena_usage.md
+      about: Setup, screen lifecycle, navigation, and DI examples.
