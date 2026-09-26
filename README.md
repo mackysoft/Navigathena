@@ -30,16 +30,10 @@ Unity の検証環境は 6000.5.5f1 です。外部ライブラリの検証バ�
 
 1.x を導入済みのプロジェクトでは、旧 `com.mackysoft.navigathena` と手動配置した旧 DLL・ソースを削除してから 2.0 を導入してください。2.0 の開発版 UPM アダプターを導入していた場合も、重複コンパイルと GUID の衝突を避けるため、NuGet 版を追加する前に取り除いてください。
 
-## 使い方と設計
+## 使い方
 
-- [Unity・DI あり／なしの利用例](docs/30_technical/features/navigathena_usage.md)
-- [公開 API と責務](docs/30_technical/features/navigathena_class_design.md)
-- [画面の表示構成と演出](docs/30_technical/features/navigathena_screen_presentation.md)
-- [設計契約](docs/30_technical/features/navigathena.md)
+- [基本的な利用方法](src/MackySoft.Navigathena/README.md)
 - [コンパイル・テスト対象の Unity サンプル](tests/Unity/Assets/Samples)
-- [公開手順と Trusted Publishing の設定](docs/releasing.md)
-
-`docs/50_tickets` は再設計時の検討記録です。採用済みの使い方は `docs/30_technical/features` と実装を参照してください。
 
 ## 開発・検証
 
@@ -50,13 +44,15 @@ bash scripts/code-quality.sh format
 bash scripts/verify.sh
 ```
 
+共通 Runtime と Microsoft DI は、同じ振る舞いテストをプロジェクト参照と配布用 NuGet 参照の両方で実行します。履歴・ライフサイクル・画面呼び出し・資源の終了・失敗時の契約を検証し、別のスモークテストは用意しません。
+
 Unity Editor のインストール・ライセンス有効化と Unity CLI の導入後、配布物を使用する Unity テストも実行できます。
 
 ```bash
 bash scripts/verify.sh --unity
 ```
 
-七つの NuGet パッケージを生成し、`artifacts/unity-project` に独立した利用プロジェクトを作ります。NuGetForUnity での復元、配布物との内容一致、パッケージ更新前後の Scene・Prefab の参照、PlayMode でのアダプター動作を検証します。更新検証の基準版は同じソースから作るテスト専用パッケージであり、公開しません。生成先は編集せず、テスト・サンプルは `tests/Unity` で管理します。
+七つの NuGet パッケージを生成し、`artifacts/unity-project` に独立した利用プロジェクトを作ります。NuGetForUnity で復元したアダプターに対して、表示・入力・演出・寿命管理の振る舞いを PlayMode で検証します。配布物の構成と復元内容の一致は、テストではなく配布用スクリプトで確認します。生成先は編集せず、テスト・サンプルは `tests/Unity` で管理します。
 
 ## ライセンス
 

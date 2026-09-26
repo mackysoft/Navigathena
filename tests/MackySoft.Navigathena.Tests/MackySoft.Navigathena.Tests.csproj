@@ -12,8 +12,12 @@
     <PackageReference Include="xunit" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TestPackageVersion)' == ''">
     <ProjectReference Include="../../src/MackySoft.Navigathena/MackySoft.Navigathena.csproj" />
     <ProjectReference Include="../../src/MackySoft.Navigathena.MicrosoftDI/MackySoft.Navigathena.MicrosoftDI.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TestPackageVersion)' != ''">
+    <PackageReference Include="MackySoft.Navigathena" VersionOverride="$(TestPackageVersion)" />
+    <PackageReference Include="MackySoft.Navigathena.MicrosoftDI" VersionOverride="$(TestPackageVersion)" />
   </ItemGroup>
 </Project>

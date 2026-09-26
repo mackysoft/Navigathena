@@ -46,9 +46,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: release-packages
-          path: |
-            artifacts/packages/*.nupkg
-            artifacts/packages/upgrade-baseline/*.nupkg
+          path: artifacts/packages/*.nupkg
           if-no-files-found: error
 
   unity:

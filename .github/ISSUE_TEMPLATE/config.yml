@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-    - name: Usage and API
-      url: https://github.com/mackysoft/Navigathena/blob/main/docs/30_technical/features/navigathena_usage.md
-      about: Setup, screen lifecycle, navigation, and DI examples.
+    - name: Usage examples
+      url: https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples
+      about: Unity setup and examples with and without dependency injection.

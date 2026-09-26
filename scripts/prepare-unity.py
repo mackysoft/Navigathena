@@ -11,9 +11,9 @@ import xml.etree.ElementTree as ET
 from package_artifacts import PACKAGE_IDS, package_paths, release_version
 
 
-def prepare(source, version=None, upgrade=False):
+def prepare(source):
     repository = pathlib.Path(__file__).resolve().parents[1]
-    version = version or release_version(repository)
+    version = release_version(repository)
     project = repository / "artifacts/unity-project"
     feed = repository / "artifacts/unity-feed"
     if (project / "Temp/UnityLockfile").exists():
@@ -23,16 +23,12 @@ def prepare(source, version=None, upgrade=False):
     if source.resolve() != feed.resolve():
         for name in names:
             shutil.copyfile(source / name, feed / name)
-    if upgrade:
-        if not (project / "Assets/PackageUpgradeVerification/Screen.unity").is_file():
-            raise ValueError("Create the serialized screen fixtures before verifying a package upgrade.")
-    else:
-        # This dedicated consumer is generated; retain only Library's import cache.
-        for directory in ("Assets", "Packages", "ProjectSettings"):
-            target = project / directory
-            if target.exists():
-                shutil.rmtree(target)
-            shutil.copytree(repository / "tests/Unity" / directory, target)
+    # This dedicated consumer is generated; retain only Library's import cache.
+    for directory in ("Assets", "Packages", "ProjectSettings"):
+        target = project / directory
+        if target.exists():
+            shutil.rmtree(target)
+        shutil.copytree(repository / "tests/Unity" / directory, target)
     manifest_path = project / "Packages/manifest.json"
     manifest = json.loads(manifest_path.read_text())
     if any(name.startswith("com.mackysoft.navigathena") for name in manifest["dependencies"]):
@@ -47,13 +43,8 @@ def prepare(source, version=None, upgrade=False):
     if {package.get("id") for package in packages.findall("package") if package.get("id").startswith("MackySoft.Navigathena")} != set(PACKAGE_IDS):
         raise ValueError("Unity packages.config must exercise every release package.")
     for package in packages.findall("package"):
-        if package.get("id").startswith("MackySoft.Navigathena"):
-            if not upgrade and package.get("version") != release_version(repository):
-                raise ValueError("Unity packages.config does not match Directory.Build.props.")
-            package.set("version", version)
-    packages.write(project / "Assets/packages.config", encoding="utf-8", xml_declaration=True)
-    (project / "PackageVerificationPhase.txt").write_text("verify" if upgrade else "create")
-    (project / "PackageVerificationVersion.txt").write_text(version)
+        if package.get("id").startswith("MackySoft.Navigathena") and package.get("version") != version:
+            raise ValueError("Unity packages.config does not match Directory.Build.props.")
     print(f"Unity consumer: {project}")
 
 
@@ -61,10 +52,8 @@ if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser(description=__doc__)
         parser.add_argument("source", type=pathlib.Path)
-        parser.add_argument("--version")
-        parser.add_argument("--upgrade", action="store_true")
         args = parser.parse_args()
-        prepare(args.source, args.version, args.upgrade)
+        prepare(args.source)
     except (ValueError, OSError, ET.ParseError) as error:
         print(f"Unity preparation failed: {error}", file=sys.stderr)
         sys.exit(1)

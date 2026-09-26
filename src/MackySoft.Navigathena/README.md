@@ -29,6 +29,4 @@ LowerPresentationPolicy は同じ Region の下位画面とその子構成へ作
 
 .NET Standard 2.1 / C# 9 を対象とする。Microsoft DI と VContainer は任意の連携アダプター。Unity、uGUI、UI Toolkit、Addressables は具体的な取得と表示操作だけを担当する。
 
-- [関心と設計契約](https://github.com/mackysoft/Navigathena/blob/main/docs/30_technical/features/navigathena.md)
-- [公開 API とクラス設計](https://github.com/mackysoft/Navigathena/blob/main/docs/30_technical/features/navigathena_class_design.md)
-- [Unity・DI あり／なしの利用例](https://github.com/mackysoft/Navigathena/blob/main/docs/30_technical/features/navigathena_usage.md)
+- [Unity・DI あり／なしの利用例](https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples)

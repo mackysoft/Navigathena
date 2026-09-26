@@ -1,6 +1,7 @@
 **/bin/
 **/obj/
 artifacts/
+docs/
 TestResults/
 .vs/
 .vscode/

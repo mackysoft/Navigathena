@@ -12,4 +12,4 @@ if [[ "$1" == verify ]]; then
 fi
 cd "$repository_root"
 dotnet format MackySoft.Navigathena.slnx "${arguments[@]}"
-dotnet format whitespace --folder --include src tests/Unity/Assets scripts/package-smoke "${arguments[@]}"
+dotnet format whitespace --folder --include src tests/Unity/Assets "${arguments[@]}"

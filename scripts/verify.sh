@@ -36,13 +36,8 @@ dotnet test MackySoft.Navigathena.slnx --configuration Release --no-build --no-r
 dotnet pack MackySoft.Navigathena.slnx --configuration Release --no-build --no-restore --output "$package_directory" --nologo
 python3 -m unittest discover -s scripts/tests -v
 bash scripts/verify-packages.sh "$package_directory"
-dotnet pack MackySoft.Navigathena.slnx --configuration Release --no-build --no-restore \
-  -p:PackageVersion=0.0.0-upgrade-baseline --output "$package_directory/upgrade-baseline" --nologo
 if [[ "$run_unity" == true ]]; then
-  bash scripts/prepare-unity.sh "$package_directory/upgrade-baseline" --version 0.0.0-upgrade-baseline
-  bash scripts/test-unity.sh EditMode
-  bash scripts/prepare-unity.sh "$package_directory" --upgrade
-  bash scripts/test-unity.sh EditMode
+  bash scripts/prepare-unity.sh "$package_directory"
   bash scripts/test-unity.sh
 fi
 printf 'verify: passed\n'

@@ -6,6 +6,7 @@
 - テストは公開 API の振る舞いと配布物の利用を検証し、内部構成を固定しない。
 - C# の整形は `.editorconfig` と `scripts/code-quality.sh` を正とする。
 - GitHub 操作には `gh` を使う。ユーザーの依頼なしに公開・タグ作成・マージを実行しない。
+- リポジトリと Pull Request には公開可能な実装・利用方法・検証結果だけを記載する。内部の設計資料、検討記録、会話、個別のアカウント・運用情報を含めない。
 
 ## 構成
 
@@ -13,7 +14,6 @@
 - `eng/`：Unity ソースパッケージに共通の MSBuild 定義。
 - `tests/MackySoft.Navigathena.Tests/`：共通 Runtime の振る舞いのテスト。
 - `tests/Unity/`：七つの NuGet 配布物を NuGetForUnity で復元する Unity 検証プロジェクトと利用例。外部依存は各配布元の UPM を使用する。
-- `docs/`：設計、利用方法、開発・公開手順。
 
 ## 検証
 
