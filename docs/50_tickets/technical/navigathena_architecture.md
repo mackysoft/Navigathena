@@ -1564,7 +1564,7 @@ Unity が生成する csproj の編集だけを、プロジェクト境界の修
 公開 API の採用前に、同期・非同期の生成登録から InitializeAsync までの利用例を、対応する C# 9／.NET Standard 2.1 の共通契約と Unity アダプターでコンパイルする。
 取得契約や型推論だけを抜き出したコンパイル確認では、シーン取得を含む利用例全体や、所有・停止・復旧の動作検証を代替しない。
 
-現在のシーン取得と表示構成の接続は、[UnityScreenCreationExtensions](../../../packages/com.mackysoft.navigathena.unity/Runtime/Resources/UnityScreenCreationExtensions.cs) と[利用例](../../30_technical/features/navigathena_usage.md)を参照する。
+現在のシーン取得と表示構成の接続は、[UnityScreenCreationExtensions](../../../src/MackySoft.Navigathena.Unity/Runtime/Resources/UnityScreenCreationExtensions.cs) と[利用例](../../30_technical/features/navigathena_usage.md)を参照する。
 複数の View がある Scene から対象を明示的に選び、取得した Scene とともに終了する動作は、[ScreenPresentationUnityTests](../../../tests/Unity/Assets/Tests/Editor/ScreenPresentationUnityTests.cs)で検証する。
 
 | 利用場面 | 利用側の記述と管理側の保証 | 設計への影響がある実現確認 |

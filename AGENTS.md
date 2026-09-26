@@ -9,10 +9,10 @@
 
 ## 構成
 
-- `src/`：NuGet 配布する共通本体と Microsoft DI 連携。
-- `packages/`：Unity と VContainer の UPM パッケージ。
+- `src/`：NuGet 配布する共通本体、DI 連携、Unity アダプター。
+- `eng/`：Unity ソースパッケージに共通の MSBuild 定義。
 - `tests/MackySoft.Navigathena.Tests/`：共通 Runtime の振る舞いのテスト。
-- `tests/Unity/`：NuGetForUnity と UPM を使う Unity 検証プロジェクトと利用例。
+- `tests/Unity/`：七つの NuGet 配布物を NuGetForUnity で復元する Unity 検証プロジェクトと利用例。外部依存は各配布元の UPM を使用する。
 - `docs/`：設計、利用方法、開発・公開手順。
 
 ## 検証

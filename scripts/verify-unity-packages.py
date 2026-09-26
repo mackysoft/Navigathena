@@ -1,26 +1,37 @@
 #!/usr/bin/env python3
-"""Reject stale, missing, or duplicate Navigathena DLLs after NuGetForUnity restore."""
+"""Require Unity to consume the exact packaged binaries, sources and assets."""
 
 import pathlib
 import sys
 import xml.etree.ElementTree as ET
 import zipfile
 
+from package_artifacts import BINARY_PACKAGES, CONTENT_PREFIX, PACKAGE_IDS
+
 
 def verify(feed, project):
     packages = ET.parse(project / "Assets/packages.config")
-    for package in packages.findall("package"):
-        name = package.get("id")
-        if not name.startswith("MackySoft.Navigathena"):
-            continue
-        version = package.get("version")
-        binaries = list((project / "Assets/Packages").rglob(name + ".dll"))
-        if len(binaries) != 1:
-            raise ValueError(f"Expected one restored {name}.dll; found {len(binaries)}")
+    versions = {item.get("id"): item.get("version") for item in packages.findall("package") if item.get("id") in PACKAGE_IDS}
+    if set(versions) != set(PACKAGE_IDS):
+        raise ValueError("The Unity consumer must restore all seven Navigathena packages.")
+    assets = project / "Assets"
+    for name, version in versions.items():
+        root = assets / "Packages" / f"{name}.{version}"
         with zipfile.ZipFile(feed / f"{name}.{version}.nupkg") as archive:
-            expected = archive.read(f"lib/netstandard2.1/{name}.dll")
-        if binaries[0].read_bytes() != expected:
-            raise ValueError(f"Restored {name}.dll differs from the verified release artifact")
+            if name in BINARY_PACKAGES:
+                binaries = list(assets.rglob(name + ".dll"))
+                expected = root / "lib/netstandard2.1" / f"{name}.dll"
+                if binaries != [expected] or expected.read_bytes() != archive.read(f"lib/netstandard2.1/{name}.dll"):
+                    raise ValueError(f"Missing, duplicate or stale restored assembly: {name}")
+            else:
+                restored = root / "Sources"
+                expected = {entry.removeprefix(CONTENT_PREFIX): archive.read(entry) for entry in archive.namelist() if entry.startswith(CONTENT_PREFIX)}
+                actual = {path.relative_to(restored).as_posix(): path.read_bytes() for path in restored.rglob("*") if path.is_file()}
+                if not expected or actual != expected:
+                    raise ValueError(f"Restored sources, assets or metadata differ from the package: {name}")
+                definitions = list(assets.rglob(name + ".asmdef"))
+                if definitions != [restored / "Runtime" / f"{name}.asmdef"] or list(assets.rglob(name + ".dll")):
+                    raise ValueError(f"Missing or duplicate source assembly: {name}")
         print(f"NuGetForUnity: {name} {version} verified")
 
 

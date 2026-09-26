@@ -291,7 +291,7 @@ dotnet_naming_style.camel_case.required_suffix =
 dotnet_naming_style.camel_case.word_separator =
 dotnet_naming_style.camel_case.capitalization = camel_case
 
-[{src,packages,tests/Unity}/**/*.cs]
+[{src,tests/Unity}/**/*.cs]
 csharp_style_namespace_declarations = block_scoped
 csharp_style_prefer_primary_constructors = false
 csharp_style_prefer_top_level_statements = false

@@ -48,7 +48,7 @@ jobs:
           name: release-packages
           path: |
             artifacts/packages/*.nupkg
-            artifacts/packages/*.tgz
+            artifacts/packages/upgrade-baseline/*.nupkg
           if-no-files-found: error
 
   unity:
@@ -92,13 +92,9 @@ jobs:
         run: python3 scripts/verify-package-contents.py artifacts/packages "$PACKAGE_VERSION" "$RELEASE_SHA"
       - name: Inspect publication state
         id: packages
-        uses: mackysoft/actions/nuget/package-state@5bd02b67aaf373c23e871c8a6cf79e19652bbc9b
-        with:
-          mode: inspect
-          package-version: ${{ needs.package.outputs.version }}
-          package-ids: |
-            MackySoft.Navigathena
-            MackySoft.Navigathena.MicrosoftDI
+        env:
+          PACKAGE_VERSION: ${{ needs.package.outputs.version }}
+        run: python3 scripts/publication.py prepare artifacts/packages "$PACKAGE_VERSION" artifacts/pending
       - name: Require NuGet account configuration
         if: steps.packages.outputs['publish-required'] == 'true'
         env:
@@ -113,7 +109,7 @@ jobs:
         if: steps.packages.outputs['publish-required'] == 'true'
         uses: mackysoft/actions/nuget/trusted-publish@5bd02b67aaf373c23e871c8a6cf79e19652bbc9b
         with:
-          package-glob: artifacts/packages/*.nupkg
+          package-glob: artifacts/pending/*.nupkg
           nuget-user: ${{ vars.NUGET_USER }}
       - name: Wait for package availability
         uses: mackysoft/actions/nuget/package-state@5bd02b67aaf373c23e871c8a6cf79e19652bbc9b
@@ -123,6 +119,11 @@ jobs:
           package-ids: |
             MackySoft.Navigathena
             MackySoft.Navigathena.MicrosoftDI
+            MackySoft.Navigathena.Unity
+            MackySoft.Navigathena.Unity.UGUI
+            MackySoft.Navigathena.Unity.UIToolkit
+            MackySoft.Navigathena.Unity.Addressables
+            MackySoft.Navigathena.VContainer
           max-attempts: 90
           interval-seconds: 10
       - name: Download and verify published packages
@@ -131,16 +132,7 @@ jobs:
           RELEASE_SHA: ${{ needs.package.outputs.sha }}
         run: |
           set -euo pipefail
-          mkdir -p artifacts/published
-          for package_id in MackySoft.Navigathena MackySoft.Navigathena.MicrosoftDI; do
-            lower_id="${package_id,,}"
-            lower_version="${PACKAGE_VERSION,,}"
-            package_path="artifacts/published/$package_id.$PACKAGE_VERSION.nupkg"
-            curl --fail --silent --show-error --location --retry 5 --retry-all-errors \
-              "https://api.nuget.org/v3-flatcontainer/$lower_id/$lower_version/$lower_id.$lower_version.nupkg" \
-              --output "$package_path"
-            dotnet nuget verify "$package_path" --all
-          done
+          python3 scripts/publication.py verify artifacts/packages "$PACKAGE_VERSION" artifacts/published
           python3 scripts/verify-package-contents.py artifacts/published "$PACKAGE_VERSION" "$RELEASE_SHA"
       - name: Create GitHub Release
         env:
@@ -149,11 +141,11 @@ jobs:
         run: |
           set -euo pipefail
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            gh release upload "$RELEASE_TAG" artifacts/published/*.nupkg artifacts/packages/*.tgz --clobber
+            gh release upload "$RELEASE_TAG" artifacts/published/*.nupkg --clobber
           else
             release_options=(--verify-tag --title "$RELEASE_TAG" --generate-notes)
             if [[ "$RELEASE_TAG" == *-* ]]; then
               release_options+=(--prerelease --latest=false)
             fi
-            gh release create "$RELEASE_TAG" artifacts/published/*.nupkg artifacts/packages/*.tgz "${release_options[@]}"
+            gh release create "$RELEASE_TAG" artifacts/published/*.nupkg "${release_options[@]}"
           fi

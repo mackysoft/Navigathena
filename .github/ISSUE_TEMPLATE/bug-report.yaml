@@ -22,7 +22,7 @@ body:
     id: version
     attributes:
       label: Navigathena version and adapters
-      description: Include the NuGet and UPM versions and the adapters in use.
+      description: Include the Navigathena NuGet package versions, the adapters in use, and any external Unity dependencies.
       placeholder: e.g. 2.0.0-preview.1, Unity + uGUI + VContainer
     validations:
       required: true

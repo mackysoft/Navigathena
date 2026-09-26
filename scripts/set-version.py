@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Update the release version before review, never during publication."""
 
-import json
 import pathlib
 import re
 import sys
@@ -17,13 +16,6 @@ def update(version):
     root = pathlib.Path(__file__).resolve().parents[1]
     props = root / "Directory.Build.props"
     props.write_text(re.sub(r"<Version>[^<]+</Version>", f"<Version>{version}</Version>", props.read_text(), count=1))
-    for path in sorted((root / "packages").glob("*/package.json")):
-        manifest = json.loads(path.read_text())
-        manifest["version"] = version
-        for dependency in manifest.get("dependencies", {}):
-            if dependency.startswith("com.mackysoft.navigathena."):
-                manifest["dependencies"][dependency] = version
-        path.write_text(json.dumps(manifest, indent=2) + "\n")
     config_path = root / "tests/Unity/Assets/packages.config"
     config = ET.parse(config_path)
     for package in config.findall("package"):

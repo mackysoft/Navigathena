@@ -268,7 +268,7 @@ Host 全体を演出の期間中つねに直列化せず、独立した Region �
 ## 接続箇所と検証
 
 共通の接続箇所は [ScreenPresentationBinding](../../../src/MackySoft.Navigathena/Views/ScreenPresentationBinding.cs) と [ManagedScreenCreationContext](../../../src/MackySoft.Navigathena/Runtime/Screens/ManagedScreenCreationContext.cs) にある。
-演出判定は [PreparedScreenPublication](../../../src/MackySoft.Navigathena/Runtime/Execution/PreparedScreenPublication.cs)、Unity の物理操作は [CanvasViewAdapter](../../../packages/com.mackysoft.navigathena.unity.ugui/Runtime/CanvasViewAdapter.cs) にある。
+演出判定は [PreparedScreenPublication](../../../src/MackySoft.Navigathena/Runtime/Execution/PreparedScreenPublication.cs)、Unity の物理操作は [CanvasViewAdapter](../../../src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs) にある。
 DI は表示接続を再実装せず、通常のサービス登録と単一ライフサイクル入口の解決を担当する。
 
 次の外部挙動を .NET と実際の Unity テストで確認する。

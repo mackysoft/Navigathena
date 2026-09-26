@@ -2,9 +2,11 @@
 
 ## 配布単位
 
-NuGet は `MackySoft.Navigathena` と `MackySoft.Navigathena.MicrosoftDI` の二つを公開する。
-Unity・UI・Addressables・VContainer の五つのアダプターは `packages/` から UPM の `.tgz` を作成し、GitHub Release に添付する。
-UPM には NuGet DLL を含めず、同じバージョンの Runtime を NuGetForUnity で取得する。NuGetForUnity CLI と Editor プラグインは 4.5.0 に固定して検証する。
+共通本体、Microsoft DI、Unity、uGUI、UI Toolkit、Addressables、VContainer の七つを同じバージョンの NuGet パッケージとして公開する。パッケージ ID は [README](../README.md#配布構成)を参照する。
+
+本体と Microsoft DI は .NET Standard 2.1 の DLL を配布する。Unity に依存する五つは `src/` のソース・アセンブリ定義・`.meta`・表示アセットを `contentFiles/any/any` に格納する。NuGetForUnity が `Sources` へ復元し、Unity がコンパイルする。NuGetForUnity CLI と Editor プラグインは 4.5.0 に固定して検証する。
+
+全パッケージを SDK 標準の `dotnet pack` で生成する。Unity 用の共通定義は `eng/UnitySourcePackage.props` に置く。Unity・Addressables・uGUI・VContainer の実装を再配布せず、外部依存はそれぞれの公式配布元から導入する。Navigathena 自体の UPM パッケージ、Git URL インストール、`.tgz` の生成・公開は行わない。
 
 リリース手順は Yggdrasil・Moira・ucli と同じ `mackysoft/actions` の source-guard、package-state、trusted-publish を使用する。共通 Actions の参照はコミットに固定する。
 
@@ -38,7 +40,7 @@ GitHub の Settings → Secrets and variables → Actions → Variables に、�
 
 ## バージョン更新と公開
 
-1. `python3 scripts/set-version.py 2.0.0-preview.1` のようにバージョンを設定する。NuGet、UPM、Unity 検証用のバージョンを同時に更新する。
+1. `python3 scripts/set-version.py 2.0.0-preview.1` のようにバージョンを設定する。七つの NuGet と Unity 検証用のバージョンを同時に更新する。
 2. `bash scripts/code-quality.sh format` と `bash scripts/verify.sh --unity` を実行する。
 3. 変更をレビューし、`main` へマージする。
 4. マージ済みコミットに、設定値と同じタグを作成して push する。例：`2.0.0-preview.1`。タグに `v` は付けない。
@@ -49,16 +51,30 @@ GitHub の Settings → Secrets and variables → Actions → Variables に、�
 
 1. タグが `main` に含まれ、ソースのバージョンと一致することを検証する。
 2. ビルド・テスト・パッケージ内容・NuGet 利用側の動作を検証する。
-3. 同じ NuGet・UPM 成果物を Unity の独立プロジェクトへ導入してテストする。
+3. 七つの NuGet を Unity の独立プロジェクトへ導入し、更新前後の Scene・Prefab の参照と PlayMode の動作をテストする。
 4. Trusted Publishing で一時キーを取得し、検証済みの NuGet 成果物を公開する。
-5. 公開パッケージの取得・署名・バージョン・リポジトリコミットを確認する。
-6. 公開済み NuGet と UPM 成果物を GitHub Release に添付する。プレリリースタグは GitHub でもプレリリースにする。
+5. 公開した七つすべてを再取得し、署名・バージョン・リポジトリコミット・検証済み成果物との内容一致を確認する。
+6. 公開済み NuGet を GitHub Release に添付する。プレリリースタグは GitHub でもプレリリースにする。
 
-部分的な公開失敗では同じ実行を再実行できる。公開済みパッケージを上書きせず、公開状態を再確認する。NuGet.org に同じ ID・バージョンの異なる実装を再公開することはできないため、成果物を変更する場合は新しいバージョンにする。
+部分的な公開失敗では同じ実行を再実行できる。`scripts/publication.py` が公開済みの署名と内容を照合してから、未公開分だけを公開用ディレクトリへ用意する。署名・ZIP 管理情報以外に相違がある場合や取得に失敗した場合は停止する。公開済みパッケージを上書きせず、成果物を変更する場合は新しいバージョンにする。
+
+## Unity の復元・更新検証
+
+`scripts/verify.sh` は公開用の七つに加え、同じソースから `0.0.0-upgrade-baseline` のテスト専用パッケージを `upgrade-baseline/` に生成する。これは旧 API との動作比較ではなく、パッケージの格納先がバージョン更新で変わってもアセット参照が維持されることを確かめるためのもの。公開対象には含めない。
+
+`--unity` と CI は次の手順を共有する。
+
+1. 基準版を NuGetForUnity で復元し、DLL・ソース・`.meta`・スタイルシートが配布物と一致することを確認する。
+2. EditMode テストで画面の Prefab と Scene を保存する。
+3. 保存したアセットを残したまま、公開候補のバージョンへ NuGetForUnity で更新する。
+4. 保存済みアセットを再読込し、コンポーネント・Inspector 参照・Resources の読込を検証する。
+5. 公開候補から復元したアダプターの表示・入力・演出・寿命管理を PlayMode テストで検証する。
+
+CLI の終了コードだけで成功とせず、各段階で対象のテストアセンブリが実行され、失敗・スキップなしで通っていることを確認する。
 
 ## 1.x の扱い
 
 1.x のタグ・GitHub Release は削除しない。1.x を利用し続けるプロジェクトは `1.1.0` などの既存タグに固定する。
 2.0 ブランチでは旧 `Assets/MackySoft/MackySoft.Navigathena`、旧 Unity プロジェクト、旧ビルド・テスト・DocFX・unitypackage 公開ワークフローを置き換える。
 
-旧 OpenUPM 登録 `com.mackysoft.navigathena` は、新しい五つの UPM パッケージとは別のパッケージである。2.0 公開前に旧登録が 2.x タグを収集しないよう OpenUPM 側のタグ除外設定を更新し、必要なら説明文の参照先を 1.1.0 に固定する。新しい五つのパッケージの OpenUPM 登録は、このリリース経路の前提にしない。
+リポジトリの `package.json` を削除しても、OpenUPM 側にある旧登録 `com.mackysoft.navigathena` は削除されない。2.0 公開前に旧登録が 2.x タグを収集しないよう OpenUPM 側のタグ除外設定を更新し、必要なら説明文の参照先を 1.1.0 に固定する。既存の 1.x タグ・公開済みパッケージは維持する。2.0 の OpenUPM 登録は行わない。

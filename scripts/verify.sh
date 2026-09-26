@@ -21,7 +21,7 @@ if [[ -z "$package_directory" ]]; then
 fi
 mkdir -p "$package_directory"
 package_directory="$(cd -- "$package_directory" && pwd -P)"
-if compgen -G "$package_directory/*.nupkg" >/dev/null || compgen -G "$package_directory/*.tgz" >/dev/null; then
+if compgen -G "$package_directory/*.nupkg" >/dev/null; then
   printf 'Package output must not contain previous packages: %s\n' "$package_directory" >&2
   exit 1
 fi
@@ -34,10 +34,15 @@ bash scripts/code-quality.sh verify
 dotnet build MackySoft.Navigathena.slnx --configuration Release --no-restore --nologo
 dotnet test MackySoft.Navigathena.slnx --configuration Release --no-build --no-restore --nologo
 dotnet pack MackySoft.Navigathena.slnx --configuration Release --no-build --no-restore --output "$package_directory" --nologo
-python3 scripts/pack-upm.py "$package_directory"
+python3 -m unittest discover -s scripts/tests -v
 bash scripts/verify-packages.sh "$package_directory"
+dotnet pack MackySoft.Navigathena.slnx --configuration Release --no-build --no-restore \
+  -p:PackageVersion=0.0.0-upgrade-baseline --output "$package_directory/upgrade-baseline" --nologo
 if [[ "$run_unity" == true ]]; then
-  bash scripts/prepare-unity.sh "$package_directory"
+  bash scripts/prepare-unity.sh "$package_directory/upgrade-baseline" --version 0.0.0-upgrade-baseline
+  bash scripts/test-unity.sh EditMode
+  bash scripts/prepare-unity.sh "$package_directory" --upgrade
+  bash scripts/test-unity.sh EditMode
   bash scripts/test-unity.sh
 fi
 printf 'verify: passed\n'

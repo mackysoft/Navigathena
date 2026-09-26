@@ -2,6 +2,11 @@
   <Folder Name="/src/">
     <Project Path="src/MackySoft.Navigathena/MackySoft.Navigathena.csproj" />
     <Project Path="src/MackySoft.Navigathena.MicrosoftDI/MackySoft.Navigathena.MicrosoftDI.csproj" />
+    <Project Path="src/MackySoft.Navigathena.Unity/MackySoft.Navigathena.Unity.csproj" />
+    <Project Path="src/MackySoft.Navigathena.Unity.UGUI/MackySoft.Navigathena.Unity.UGUI.csproj" />
+    <Project Path="src/MackySoft.Navigathena.Unity.UIToolkit/MackySoft.Navigathena.Unity.UIToolkit.csproj" />
+    <Project Path="src/MackySoft.Navigathena.Unity.Addressables/MackySoft.Navigathena.Unity.Addressables.csproj" />
+    <Project Path="src/MackySoft.Navigathena.VContainer/MackySoft.Navigathena.VContainer.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/MackySoft.Navigathena.Tests/MackySoft.Navigathena.Tests.csproj" />

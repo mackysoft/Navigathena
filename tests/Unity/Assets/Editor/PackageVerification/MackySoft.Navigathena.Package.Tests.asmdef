@@ -1,0 +1,14 @@
+{
+  "name": "MackySoft.Navigathena.Package.Tests",
+  "rootNamespace": "MackySoft.Navigathena.Unity.Tests",
+  "references": [
+    "MackySoft.Navigathena.Unity",
+    "MackySoft.Navigathena.Unity.UGUI",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": ["Editor"],
+  "overrideReferences": true,
+  "precompiledReferences": ["MackySoft.Navigathena.dll"],
+  "autoReferenced": false,
+  "optionalUnityReferences": ["TestAssemblies"]
+}

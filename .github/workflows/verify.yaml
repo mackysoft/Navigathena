@@ -28,7 +28,7 @@ jobs:
           name: release-packages
           path: |
             artifacts/packages/*.nupkg
-            artifacts/packages/*.tgz
+            artifacts/packages/upgrade-baseline/*.nupkg
           if-no-files-found: error
 
   unity:

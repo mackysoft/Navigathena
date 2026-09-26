@@ -1,10 +1,5 @@
 {
   "dependencies": {
-    "com.mackysoft.navigathena.unity": "file:../../../packages/com.mackysoft.navigathena.unity",
-    "com.mackysoft.navigathena.unity.ugui": "file:../../../packages/com.mackysoft.navigathena.unity.ugui",
-    "com.mackysoft.navigathena.unity.uitoolkit": "file:../../../packages/com.mackysoft.navigathena.unity.uitoolkit",
-    "com.mackysoft.navigathena.unity.addressables": "file:../../../packages/com.mackysoft.navigathena.unity.addressables",
-    "com.mackysoft.navigathena.vcontainer": "file:../../../packages/com.mackysoft.navigathena.vcontainer",
     "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity#v4.5.0",
     "jp.hadashikick.vcontainer": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.19.0",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.11",
