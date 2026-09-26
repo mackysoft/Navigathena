@@ -21,7 +21,7 @@ namespace MackySoft.Navigathena.MicrosoftDI
             {
                 throw new ArgumentNullException(nameof(creation));
             }
-            MicrosoftDIScope scope = BuildScope(creation.Resources, configure);
+            MicrosoftDIScope scope = BuildScope(creation.Lifetime, configure);
             ScreenServiceRegistration[] handlers = scope.Roles.Where(role => role.Role == ScreenServiceRole.Lifecycle).ToArray();
             if (handlers.Length != 1 || !typeof(THandler).IsAssignableFrom(handlers[0].Type))
             {
@@ -32,23 +32,23 @@ namespace MackySoft.Navigathena.MicrosoftDI
 
         /// <summary>Builds a DI scope owned by the blocker, not by its current navigation input.</summary>
         public static IServiceProvider CreateScope (this BlockerPreparationContext preparation, Action<IServiceCollection> configure)
-            => BuildScope((preparation ?? throw new ArgumentNullException(nameof(preparation))).Resources, configure).Services;
+            => BuildScope((preparation ?? throw new ArgumentNullException(nameof(preparation))).Lifetime, configure).Services;
 
         /// <summary>Builds a DI scope owned by one transition effect.</summary>
         public static IServiceProvider CreateScope (this NavigationTransitionPreparationContext preparation, Action<IServiceCollection> configure)
-            => BuildScope((preparation ?? throw new ArgumentNullException(nameof(preparation))).Resources, configure).Services;
+            => BuildScope((preparation ?? throw new ArgumentNullException(nameof(preparation))).Lifetime, configure).Services;
 
-        private static MicrosoftDIScope BuildScope (ResourcePreparationContext resources, Action<IServiceCollection> configure)
+        private static MicrosoftDIScope BuildScope (LifetimeContext lifetime, Action<IServiceCollection> configure)
         {
-            if (resources is null)
+            if (lifetime is null)
             {
-                throw new ArgumentNullException(nameof(resources));
+                throw new ArgumentNullException(nameof(lifetime));
             }
             if (configure is null)
             {
                 throw new ArgumentNullException(nameof(configure));
             }
-            MicrosoftDIScope scope = resources.CreateOwned(() => new MicrosoftDIScope());
+            MicrosoftDIScope scope = lifetime.CreateOwned(() => new MicrosoftDIScope());
             scope.Build(configure);
             return scope;
         }

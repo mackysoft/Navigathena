@@ -39,7 +39,7 @@ namespace MackySoft.Navigathena.VContainer
                 throw new ArgumentNullException(nameof(creation));
             }
             THandler? handler = null;
-            BuildScope(creation.Resources, parent, configure, (container, roles) =>
+            BuildScope(creation.Lifetime, parent, configure, (container, roles) =>
             {
                 var handlers = roles.Items.Where(role => role.Role == ScreenServiceRole.Lifecycle).ToArray();
                 if (handlers.Length != 1 || !typeof(THandler).IsAssignableFrom(handlers[0].Type))
@@ -60,28 +60,28 @@ namespace MackySoft.Navigathena.VContainer
 
         /// <summary>Creates a managed child scope for a blocker.</summary>
         public static IObjectResolver CreateScope (this BlockerPreparationContext preparation, IObjectResolver parent, IInstaller installer)
-            => BuildScope((preparation ?? throw new ArgumentNullException(nameof(preparation))).Resources, parent, installer);
+            => BuildScope((preparation ?? throw new ArgumentNullException(nameof(preparation))).Lifetime, parent, installer);
 
         /// <summary>Creates a managed child scope for a transition effect.</summary>
         public static IObjectResolver CreateScope (this NavigationTransitionPreparationContext preparation, IObjectResolver parent, IInstaller installer)
-            => BuildScope((preparation ?? throw new ArgumentNullException(nameof(preparation))).Resources, parent, installer);
+            => BuildScope((preparation ?? throw new ArgumentNullException(nameof(preparation))).Lifetime, parent, installer);
 
-        private static IObjectResolver BuildScope (ResourcePreparationContext resources, IObjectResolver parent, IInstaller installer)
+        private static IObjectResolver BuildScope (LifetimeContext lifetime, IObjectResolver parent, IInstaller installer)
         {
             if (installer is null)
             {
                 throw new ArgumentNullException(nameof(installer));
             }
-            return BuildScope(resources, parent, installer.Install, (_, _) =>
+            return BuildScope(lifetime, parent, installer.Install, (_, _) =>
 {
 });
         }
 
-        private static IObjectResolver BuildScope (ResourcePreparationContext resources, IObjectResolver parent, Action<IContainerBuilder> configure, Action<IObjectResolver, ScreenServiceRoles> connect)
+        private static IObjectResolver BuildScope (LifetimeContext lifetime, IObjectResolver parent, Action<IContainerBuilder> configure, Action<IObjectResolver, ScreenServiceRoles> connect)
         {
-            if (resources is null)
+            if (lifetime is null)
             {
-                throw new ArgumentNullException(nameof(resources));
+                throw new ArgumentNullException(nameof(lifetime));
             }
             if (parent is null)
             {
@@ -91,7 +91,7 @@ namespace MackySoft.Navigathena.VContainer
             {
                 throw new ArgumentNullException(nameof(configure));
             }
-            VContainerScope owner = resources.CreateOwned(() => new VContainerScope());
+            VContainerScope owner = lifetime.CreateOwned(() => new VContainerScope());
             parent.CreateScope(builder =>
             {
                 ScreenServiceRoles roles = ScreenContainerBuilderExtensions.GetRoles(builder);

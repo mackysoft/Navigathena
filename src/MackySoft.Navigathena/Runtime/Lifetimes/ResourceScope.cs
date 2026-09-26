@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MackySoft.Navigathena.Runtime.Resources
+namespace MackySoft.Navigathena.Runtime.Lifetimes
 {
     internal sealed class ResourceScope : IAsyncDisposable, IResourceUser
     {
@@ -25,10 +25,10 @@ namespace MackySoft.Navigathena.Runtime.Resources
         {
             this.endUser = endUser;
             this.reportLoss = reportLoss;
-            Context = new ManagedResourcePreparationContext(this);
+            Context = new ManagedLifetimeContext(this);
         }
 
-        public ResourcePreparationContext Context
+        public LifetimeContext Context
         {
             get;
         }

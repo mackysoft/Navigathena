@@ -939,7 +939,7 @@ public sealed class ScreenCallContractTests
                         Home = new();
                     }
                     creation.ConnectPresentation(new ScreenPresentationBinding(new[] { Home.View }, Home.Animator));
-                    return new ValueTask<IScreenLifecycleHandler<HomeRoute>>(creation.Resources.CreateOwned(() => Home));
+                    return new ValueTask<IScreenLifecycleHandler<HomeRoute>>(creation.Lifetime.CreateOwned(() => Home));
                 })
                 {
                     HistoryReturn = historyReturn ?? new()
@@ -961,7 +961,7 @@ public sealed class ScreenCallContractTests
                     }
                     else
                     {
-                        handler = creation.Resources.CreateOwned(() => Question);
+                        handler = creation.Lifetime.CreateOwned(() => Question);
                     }
                     if (PrepareQuestion is not null)
                     {
@@ -973,7 +973,7 @@ public sealed class ScreenCallContractTests
                 {
                     Name = new();
                     creation.ConnectPresentation(new ScreenPresentationBinding(new[] { Name.View }));
-                    return new ValueTask<IScreenLifecycleHandler<NameRoute, string?>>(creation.Resources.CreateOwned(() => Name));
+                    return new ValueTask<IScreenLifecycleHandler<NameRoute, string?>>(creation.Lifetime.CreateOwned(() => Name));
                 }));
             }));
             Host = NavigationHost.Create(catalog, new NavigationHostOptions
@@ -1004,7 +1004,7 @@ public sealed class ScreenCallContractTests
             => new((creation, _) =>
             {
                 creation.ConnectPresentation(new ScreenPresentationBinding(new[] { screen.View }));
-                return new ValueTask<IScreenLifecycleHandler<T>>(creation.Resources.CreateOwned(() => screen));
+                return new ValueTask<IScreenLifecycleHandler<T>>(creation.Lifetime.CreateOwned(() => screen));
             });
 
         public async Task WaitForTopAsync<T> () where T : NavigationRoute
@@ -1081,7 +1081,7 @@ public sealed class ScreenCallContractTests
         public async ValueTask PrepareAsync (T route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
         {
             Preparations.Add(preparation);
-            PreparationResource = preparation.Resources.CreateOwned(() => new OwnedResource());
+            PreparationResource = preparation.Lifetime.CreateOwned(() => new OwnedResource());
             Selection = preparation.SavedState is int saved ? saved : 0;
             if (OnPrepare is not null)
             {

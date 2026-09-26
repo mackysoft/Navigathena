@@ -58,7 +58,7 @@ namespace MackySoft.Navigathena.Samples.Startup
                 switch (dependencies)
                 {
                     case DependencyMode.Manual:
-                        return creation.Resources.CreateOwned(() => new CampaignMapPresenter(installer.View, campaign));
+                        return creation.Lifetime.CreateOwned(() => new CampaignMapPresenter(installer.View, campaign));
                     case DependencyMode.MicrosoftDI:
                         return creation.CreateScope(services =>
                         {
@@ -80,9 +80,9 @@ namespace MackySoft.Navigathena.Samples.Startup
             ResourceReference<StartupOverlay> overlay = externalLifetime.Reference(startupOverlay);
             NavigationTransition reveal = new(NavigationTransitionScope.Host, async (preparation, token) =>
             {
-                StartupOverlay view = await preparation.Resources.BorrowAsync(overlay, token);
+                StartupOverlay view = await preparation.Lifetime.BorrowAsync(overlay, token);
                 preparation.RegisterExistingViewAdapter(view.NavigationView);
-                return preparation.Resources.CreateOwned(() => new StartupRevealEffect(view));
+                return preparation.Lifetime.CreateOwned(() => new StartupRevealEffect(view));
             });
             await host.StartAsync(new CampaignMapRoute(1), new NavigationOptions { Transition = reveal });
         }

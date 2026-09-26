@@ -9,7 +9,8 @@ namespace MackySoft.Navigathena
         internal ScreenCreationContext (ScreenCreationServices creation) => this.creation = creation;
 
         public RegionInstanceId RegionId => creation.RegionId;
-        public ResourcePreparationContext Resources => creation.Resources;
+        /// <summary>Ownership and borrowing for this screen instance. Registration is available during construction.</summary>
+        public LifetimeContext Lifetime => creation.Lifetime;
         internal void ConnectPresentation (ScreenPresentationBinding binding) => creation.ConnectPresentation(binding);
         public void SetTransitionEffect (INavigationTransitionEffect effect, IViewAdapter adapter) => creation.SetTransitionEffect(effect, adapter);
         public void RegisterScreens (RegionDefinitionId region, Action<RegionScreenCatalogBuilder> configure) => creation.RegisterScreens(region, configure);

@@ -31,7 +31,7 @@ public sealed class ScreenPresentationContractTests
         }));
         ScreenDefinition<Popup> screenDefinition = new((creation, _) =>
         {
-            Screen screen = creation.Resources.CreateOwned(() => new Screen());
+            Screen screen = creation.Lifetime.CreateOwned(() => new Screen());
             screens.Add(screen);
             creation.ConnectPresentation(new ScreenPresentationBinding(new[] { screen.View }, screen));
             return new ValueTask<IScreenLifecycleHandler<Popup>>(screen);
@@ -137,7 +137,7 @@ public sealed class ScreenPresentationContractTests
         Screen screen = new();
         NavigationHost host = CreateHost(new List<Screen>(), creation =>
         {
-            creation.Resources.CreateOwned(() => screen);
+            creation.Lifetime.CreateOwned(() => screen);
             creation.ConnectPresentation(new ScreenPresentationBinding(new[] { screen.View }));
             creation.ConnectPresentation(new ScreenPresentationBinding(new[] { new View() }));
         });
@@ -218,7 +218,7 @@ public sealed class ScreenPresentationContractTests
             registrations.RegisterScreen(new ScreenDefinition<Popup>((creation, _) =>
             {
                 configure?.Invoke(creation);
-                Screen screen = creation.Resources.CreateOwned(() => new Screen());
+                Screen screen = creation.Lifetime.CreateOwned(() => new Screen());
                 screens.Add(screen);
                 onCreated?.Invoke(screen);
                 creation.ConnectPresentation(new ScreenPresentationBinding(new[] { screen.View }, screen));

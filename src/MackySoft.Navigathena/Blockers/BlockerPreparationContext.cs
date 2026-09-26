@@ -6,7 +6,8 @@ namespace MackySoft.Navigathena
         internal BlockerPreparationContext ()
         {
         }
-        public abstract ResourcePreparationContext Resources
+        /// <summary>Ownership and borrowing for this blocker instance.</summary>
+        public abstract LifetimeContext Lifetime
         {
             get;
         }

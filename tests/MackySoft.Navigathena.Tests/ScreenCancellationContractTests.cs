@@ -48,12 +48,12 @@ public sealed class ScreenCancellationContractTests
         Blocker blocker = new(Visit);
         await using NavigationHost host = Create(source, async (creation, _) =>
         {
-            creation.Resources.CreateOwned(() => screen);
+            creation.Lifetime.CreateOwned(() => screen);
             await Visit("screen.factory");
             return screen;
         }, async (preparation, _) =>
         {
-            preparation.Resources.CreateOwned(() => blocker);
+            preparation.Lifetime.CreateOwned(() => blocker);
             await Visit("blocker.factory");
             return blocker;
         });
@@ -61,7 +61,7 @@ public sealed class ScreenCancellationContractTests
         events.Clear();
         NavigationTransition transition = new(NavigationTransitionScope.Region, async (preparation, _) =>
         {
-            preparation.Resources.CreateOwned(() => effect);
+            preparation.Lifetime.CreateOwned(() => effect);
             await Visit("effect.factory");
             return effect;
         });
@@ -117,9 +117,9 @@ public sealed class ScreenCancellationContractTests
             {
                 cancellation.Cancel();
             }
-            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => creation.Resources.AcquireAsync(acquisition, cancellation.Token).AsTask());
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => creation.Lifetime.AcquireAsync(acquisition, cancellation.Token).AsTask());
             Assert.Equal(0, acquisition.Disposals);
-            return creation.Resources.CreateOwned(() => new Handler("screen", _ => default));
+            return creation.Lifetime.CreateOwned(() => new Handler("screen", _ => default));
         });
         await host.StartAsync(new HomeRoute());
         await host.Client.PushAsync(host.Root, Destination.For(new DialogRoute()));
@@ -145,9 +145,9 @@ public sealed class ScreenCancellationContractTests
         }
 
         Handler source = new("source", Visit);
-        NavigationHost host = Create(source, (creation, _) => new(creation.Resources.CreateOwned(() => new Handler("screen", Visit))));
+        NavigationHost host = Create(source, (creation, _) => new(creation.Lifetime.CreateOwned(() => new Handler("screen", Visit))));
         await host.StartAsync(new HomeRoute());
-        NavigationTransition transition = new(NavigationTransitionScope.Region, (preparation, _) => new(preparation.Resources.CreateOwned(() => new Effect(Visit))));
+        NavigationTransition transition = new(NavigationTransitionScope.Region, (preparation, _) => new(preparation.Lifetime.CreateOwned(() => new Effect(Visit))));
         NavigationOperation operation = host.Client.Push(host.Root, Destination.For(new DialogRoute()), new NavigationOptions
         {
             Transition = transition
@@ -196,7 +196,7 @@ public sealed class ScreenCancellationContractTests
         });
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens =>
         {
-            screens.RegisterScreen(new ScreenDefinition<HomeRoute>((creation, _) => new(creation.Resources.CreateOwned(() => source))));
+            screens.RegisterScreen(new ScreenDefinition<HomeRoute>((creation, _) => new(creation.Lifetime.CreateOwned(() => source))));
             screens.RegisterScreen(new ScreenDefinition<DialogRoute>(create));
         }));
         return NavigationHost.Create(catalog, new NavigationHostOptions

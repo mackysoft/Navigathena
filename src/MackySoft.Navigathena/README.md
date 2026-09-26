@@ -6,7 +6,7 @@
 var screen = new ScreenDefinition<TitleRoute>((creation, token) =>
 {
     return new ValueTask<IScreenLifecycleHandler<TitleRoute>>(
-        creation.Resources.CreateOwned(() => new TitlePresenter(titleService)));
+        creation.Lifetime.CreateOwned(() => new TitlePresenter(titleService)));
 });
 
 var catalog = ScreenCatalog.Build(definition, builder =>
@@ -18,6 +18,8 @@ await host.StartAsync(new TitleRoute());
 
 TitleRoute、TitlePresenter、titleService は利用者の型・依存。
 構築処理が返す一つの Presenter が画面の入口になる。IScreenLifecycleHandler<TitleRoute> を実装し、Route を PrepareAsync と ActivateAsync の引数で受け取る。構築時のコンストラクターへ Route を渡さない。
+
+`creation.Lifetime` は画面実体、`preparation.Lifetime` は今回の表示準備に対応する所有・借用の登録窓口。共通の `LifetimeContext` が `CreateOwned`、`AcquireAsync`、`BorrowAsync` を提供し、Runtime が必要な停止を待って解放する。DI が所有するオブジェクトを重ねて `CreateOwned` に登録しない。Unity の `Resources.Load` とは別の API である。
 
 ScreenDefinition の標準は Single。同じ定義の新しい履歴項目には通常は実体を再利用し、履歴と View・DI スコープを分離する。独立した取得・解放を保証する定義には Multiple を指定する。
 

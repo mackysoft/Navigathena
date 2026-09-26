@@ -594,7 +594,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             await loss!.ReportAsync(new PresentationLoss(CurrentReferences(users), reason));
             try
             {
-                await screen.Resources.RequestEndAsync();
+                await screen.Lifetime.RequestEndAsync();
             }
             catch
             {

@@ -507,7 +507,7 @@ public sealed class RegionPresentationContractTests
 
         private BlockerDefinition DefineBlocker () => new((preparation, _) =>
         {
-            Blocker blocker = preparation.Resources.CreateOwned(() => new Blocker(Endings));
+            Blocker blocker = preparation.Lifetime.CreateOwned(() => new Blocker(Endings));
             Blockers.Add(blocker);
             return new ValueTask<IBlockerPresenter>(blocker);
         });
@@ -539,7 +539,7 @@ public sealed class RegionPresentationContractTests
         {
             return new ScreenDefinition<T>((creation, _) =>
             {
-                Screen screen = creation.Resources.CreateOwned(() => new Screen(this));
+                Screen screen = creation.Lifetime.CreateOwned(() => new Screen(this));
                 Screens.Add(screen);
                 creation.ConnectPresentation(new ScreenPresentationBinding(new[] { screen.FrontView, screen.View }, screen));
                 if (parentOwnedBlocker && typeof(T) == typeof(Shell))

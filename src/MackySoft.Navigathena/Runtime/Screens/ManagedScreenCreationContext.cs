@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MackySoft.Navigathena.Runtime.Resources;
+using MackySoft.Navigathena.Runtime.Lifetimes;
 using MackySoft.Navigathena.Runtime.Views;
 
 namespace MackySoft.Navigathena.Runtime.Screens
@@ -9,7 +9,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
     /// <summary>Provides managed acquisition and view registration while a screen factory executes.</summary>
     internal sealed class ManagedScreenCreationContext : ScreenCreationServices
     {
-        private readonly ResourceScope resources;
+        private readonly ResourceScope lifetime;
         private readonly ViewRegistry views;
         private readonly RegionRouteDefinition definition;
         private bool configuringChildren;
@@ -18,10 +18,10 @@ namespace MackySoft.Navigathena.Runtime.Screens
         internal Dictionary<RegionRouteDefinitionKey, Func<NavigationRoute, ScreenDefinition>> ChildFactories { get; } = new();
         internal Dictionary<RegionRouteDefinitionKey, BlockerDefinition> ChildBlockers { get; } = new();
 
-        internal ManagedScreenCreationContext (NavigationEntry entry, ResourceScope resources, ViewRegistry views, RegionRouteDefinition definition)
+        internal ManagedScreenCreationContext (NavigationEntry entry, ResourceScope lifetime, ViewRegistry views, RegionRouteDefinition definition)
         {
             RegionId = entry.RegionId;
-            this.resources = resources;
+            this.lifetime = lifetime;
             this.views = views;
             this.definition = definition;
         }
@@ -30,7 +30,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
         {
             get;
         }
-        public override ResourcePreparationContext Resources => resources.Context;
+        public override LifetimeContext Lifetime => lifetime.Context;
         internal IScreenLifecycleInvocation? Handler
         {
             get; private set;
@@ -38,7 +38,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
 
         public override void SetLifecycleHandler<TRoute> (IScreenLifecycleHandler<TRoute> handler)
         {
-            resources.EnsureOpen();
+            lifetime.EnsureOpen();
             if (Handler is not null)
             {
                 throw new NavigationConfigurationException("Screen construction has already returned its lifecycle handler.");
@@ -48,7 +48,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
 
         public override void SetLifecycleHandler<TRoute, TResult> (IScreenLifecycleHandler<TRoute, TResult> handler)
         {
-            resources.EnsureOpen();
+            lifetime.EnsureOpen();
             if (Handler is not null)
             {
                 throw new NavigationConfigurationException("Screen construction has already returned its lifecycle handler.");
@@ -67,7 +67,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
 
         public override void ConnectPresentation (ScreenPresentationBinding binding)
         {
-            resources.EnsureOpen();
+            lifetime.EnsureOpen();
             if (presentation is not null)
             {
                 throw new NavigationConfigurationException("A screen can connect only one primary presentation.");
@@ -78,7 +78,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
             Registrations.AddRange(connected);
             foreach (ViewRegistration registration in connected)
             {
-                registration.ObserveLoss(resources.ReportLoss);
+                registration.ObserveLoss(lifetime.ReportLoss);
                 registration.Apply(new ViewPresentation(binding.ReturnState.HasValue && registration.Original.OutputEnabled, false, registration.Original.Order));
             }
         }
@@ -97,7 +97,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
 
         public override void SetTransitionEffect (INavigationTransitionEffect effect, IViewAdapter adapter)
         {
-            resources.EnsureOpen();
+            lifetime.EnsureOpen();
             if (TransitionEffect is not null)
             {
                 throw new InvalidOperationException("A transition effect is already registered for this screen.");
@@ -105,13 +105,13 @@ namespace MackySoft.Navigathena.Runtime.Screens
 
             TransitionEffect = effect ?? throw new ArgumentNullException(nameof(effect));
             TransitionView = views.Register(adapter, false);
-            TransitionView.ObserveLoss(resources.ReportLoss);
+            TransitionView.ObserveLoss(lifetime.ReportLoss);
             TransitionView.Apply(new ViewPresentation(false, false, TransitionView.Original.Order));
         }
 
         public override void RegisterScreens (RegionDefinitionId region, Action<RegionScreenCatalogBuilder> configure)
         {
-            resources.EnsureOpen();
+            lifetime.EnsureOpen();
             if (configure is null)
             {
                 throw new ArgumentNullException(nameof(configure));

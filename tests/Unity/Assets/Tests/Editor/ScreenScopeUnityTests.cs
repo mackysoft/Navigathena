@@ -42,8 +42,8 @@ namespace MackySoft.Navigathena.Unity.Tests
             ScreenDefinition<PopupRoute> caller = new((creation, _) =>
             {
                 creation.ConnectPresentation(new ScreenPresentationBinding(new[] { callerView }, returnState: ScreenAnimationState.BeforeEnter));
-                LocalService service = creation.Resources.CreateOwned(() => new LocalService(game));
-                return new(creation.Resources.CreateOwned(() => new PopupPresenter(callerView, game, service)));
+                LocalService service = creation.Lifetime.CreateOwned(() => new LocalService(game));
+                return new(creation.Lifetime.CreateOwned(() => new PopupPresenter(callerView, game, service)));
             })
             {
                 HistoryReturn = new ScreenHistoryReturnOptions { Preparation = ScreenPreparationMode.Always }
@@ -53,7 +53,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 creation.ConnectPresentation(new ScreenPresentationBinding(new[] { answerView }, returnState: ScreenAnimationState.BeforeEnter));
                 if (mode == 0)
                 {
-                    return new(creation.Resources.CreateOwned(() => new QuestionPresenter(game, answerView)));
+                    return new(creation.Lifetime.CreateOwned(() => new QuestionPresenter(game, answerView)));
                 }
                 if (mode == 1)
                 {
@@ -206,12 +206,12 @@ namespace MackySoft.Navigathena.Unity.Tests
             ScreenDefinition<PopupRoute> screen = new(async (creation, token) =>
             {
                 constructions++;
-                CanvasViewAdapter view = await creation.Resources.BorrowAsync(reference, token);
+                CanvasViewAdapter view = await creation.Lifetime.BorrowAsync(reference, token);
                 creation.ConnectPresentation(new ScreenPresentationBinding(new[] { view }, returnState: ScreenAnimationState.BeforeEnter));
                 if (mode == 0)
                 {
-                    LocalService service = creation.Resources.CreateOwned(() => new LocalService(game));
-                    return creation.Resources.CreateOwned(() => new PopupPresenter(view, game, service));
+                    LocalService service = creation.Lifetime.CreateOwned(() => new LocalService(game));
+                    return creation.Lifetime.CreateOwned(() => new PopupPresenter(view, game, service));
                 }
                 else if (mode == 1)
                 {
@@ -332,7 +332,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             Cleanup dependency = new();
             ScreenDefinition<PopupRoute> screen = new((creation, _) =>
             {
-                creation.Resources.CreateOwned(() => dependency);
+                creation.Lifetime.CreateOwned(() => dependency);
                 return new(creation.CreateScope(parent, child =>
                 {
                     child.Register<LocalService>(Lifetime.Scoped);

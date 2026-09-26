@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MackySoft.Navigathena.Presentation;
-using MackySoft.Navigathena.Runtime.Resources;
+using MackySoft.Navigathena.Runtime.Lifetimes;
 using MackySoft.Navigathena.Runtime.Screens;
 using MackySoft.Navigathena.Runtime.Views;
 
@@ -18,7 +18,7 @@ namespace MackySoft.Navigathena.Runtime.Transitions
 
         private readonly IScreenRuntimeServices runtime;
         private readonly PresentationTransition transition;
-        private readonly ResourceScope resources;
+        private readonly ResourceScope lifetime;
         private readonly ManagedTransitionPreparationContext preparation;
         private readonly TaskCompletionSource<object?> ended = new(TaskCreationOptions.RunContinuationsAsynchronously);
         private INavigationTransitionEffect? effect;
@@ -33,8 +33,8 @@ namespace MackySoft.Navigathena.Runtime.Transitions
             this.runtime = runtime;
             this.transition = transition;
             Configuration = configuration;
-            resources = new ResourceScope(() => new ValueTask(ended.Task), _ => resources!.RequestEndAsync());
-            preparation = new ManagedTransitionPreparationContext(resources, views);
+            lifetime = new ResourceScope(() => new ValueTask(ended.Task), _ => lifetime!.RequestEndAsync());
+            preparation = new ManagedTransitionPreparationContext(lifetime, views);
         }
 
         public NavigationTransition Configuration
@@ -71,7 +71,7 @@ namespace MackySoft.Navigathena.Runtime.Transitions
                 return;
             }
 
-            using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, resources.EndingToken);
+            using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, lifetime.EndingToken);
             begun = true;
             if (Configuration.Source == TransitionEffectSource.Factory)
             {
@@ -83,7 +83,7 @@ namespace MackySoft.Navigathena.Runtime.Transitions
                 }
                 finally
                 {
-                    await resources.CloseAsync();
+                    await lifetime.CloseAsync();
                 }
             }
             else
@@ -120,20 +120,20 @@ namespace MackySoft.Navigathena.Runtime.Transitions
         {
             if (effect is not null)
             {
-                using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, resources.EndingToken);
+                using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, lifetime.EndingToken);
                 cancellation.Token.ThrowIfCancellationRequested();
                 await effect.PrepareSwitchAsync(CreateTargets(update), cancellation.Token);
                 cancellation.Token.ThrowIfCancellationRequested();
             }
 
-            resources.EndingToken.ThrowIfCancellationRequested();
+            lifetime.EndingToken.ThrowIfCancellationRequested();
         }
 
         public async ValueTask AfterCommitAsync (PresentationUpdate update, CancellationToken cancellationToken)
         {
             if (effect is not null)
             {
-                using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, resources.EndingToken);
+                using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, lifetime.EndingToken);
                 cancellation.Token.ThrowIfCancellationRequested();
                 await effect.AfterCommitAsync(CreateTargets(update), cancellation.Token);
                 cancellation.Token.ThrowIfCancellationRequested();
@@ -166,14 +166,14 @@ namespace MackySoft.Navigathena.Runtime.Transitions
                 }
                 runtime.RemoveTransitionViews(this);
 
-                await resources.DisposeAsync();
+                await lifetime.DisposeAsync();
                 screenUsage?.Dispose();
                 screenUsage = null;
                 ended.TrySetResult(null);
             }
             catch (Exception exception)
             {
-                // Keep screen usage and borrowed resources when the effect has not stopped safely.
+                // Keep screen usage and borrowed lifetime when the effect has not stopped safely.
                 ended.TrySetException(exception);
                 throw;
             }

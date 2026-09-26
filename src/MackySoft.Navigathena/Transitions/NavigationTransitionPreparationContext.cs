@@ -6,7 +6,8 @@ namespace MackySoft.Navigathena
         internal NavigationTransitionPreparationContext ()
         {
         }
-        public abstract ResourcePreparationContext Resources
+        /// <summary>Ownership and borrowing for this transition effect.</summary>
+        public abstract LifetimeContext Lifetime
         {
             get;
         }

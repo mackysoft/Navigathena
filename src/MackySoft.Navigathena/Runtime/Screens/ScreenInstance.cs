@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MackySoft.Navigathena.Presentation;
+using MackySoft.Navigathena.Runtime.Lifetimes;
 using MackySoft.Navigathena.Runtime.Navigation;
-using MackySoft.Navigathena.Runtime.Resources;
 using MackySoft.Navigathena.Runtime.Views;
 
 namespace MackySoft.Navigathena.Runtime.Screens
@@ -70,8 +70,8 @@ namespace MackySoft.Navigathena.Runtime.Screens
             this.claimHandler = claimHandler;
             this.runtime = runtime;
             work = new ScreenWorkCollection(this, runtime);
-            Resources = new ResourceScope(() => this.endUser(this), reason => this.reportLoss(this, reason));
-            Creation = new ManagedScreenCreationContext(entry, Resources, views, definition);
+            Lifetime = new ResourceScope(() => this.endUser(this), reason => this.reportLoss(this, reason));
+            Creation = new ManagedScreenCreationContext(entry, Lifetime, views, definition);
         }
 
         public NavigationEntry Entry
@@ -96,12 +96,12 @@ namespace MackySoft.Navigathena.Runtime.Screens
             get;
         }
         internal object? LifecycleHandler => handler?.Handler;
-        public ResourceScope Resources
+        public ResourceScope Lifetime
         {
             get;
         }
         public bool IsActive => activityReady && activity is not null && !activity.IsCancellationRequested;
-        public bool IsEnding => Volatile.Read(ref ending) != 0 || Resources.EndingToken.IsCancellationRequested;
+        public bool IsEnding => Volatile.Read(ref ending) != 0 || Lifetime.EndingToken.IsCancellationRequested;
         public bool IsTerminated
         {
             get; private set;
@@ -183,7 +183,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
             await lifecycle.WaitAsync();
             try
             {
-                using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, Resources.EndingToken);
+                using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, Lifetime.EndingToken);
                 try
                 {
                     cancellation.Token.ThrowIfCancellationRequested();
@@ -194,7 +194,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 }
                 finally
                 {
-                    await Resources.CloseAsync();
+                    await Lifetime.CloseAsync();
                 }
                 cancellation.Token.ThrowIfCancellationRequested();
                 await NavigationCallbackScope.RunAsync(() => handler.InitializeAsync(cancellation.Token));
@@ -243,7 +243,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
             ResourceScope input = new(() => endUser(this), reason => reportLoss(this, reason));
             inputResources.Add(input);
             ScreenPreparationContext preparation = new(Entry, input.Context, reason);
-            using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, Resources.EndingToken, input.EndingToken);
+            using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, Lifetime.EndingToken, input.EndingToken);
             try
             {
                 cancellation.Token.ThrowIfCancellationRequested();
@@ -506,13 +506,13 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 Creation.TransitionView?.Release();
                 Creation.ReleasePresentation();
                 // Owned services may reference input resources and scene views during their disposal.
-                await Resources.ReleaseOwnedAsync();
+                await Lifetime.ReleaseOwnedAsync();
                 for (int i = inputResources.Count - 1; i >= 0; i--)
                 {
                     await inputResources[i].DisposeAsync();
                 }
                 inputResources.Clear();
-                await Resources.DisposeAsync();
+                await Lifetime.DisposeAsync();
                 IsTerminated = true;
                 if (inputFailures.Count > 0)
                 {

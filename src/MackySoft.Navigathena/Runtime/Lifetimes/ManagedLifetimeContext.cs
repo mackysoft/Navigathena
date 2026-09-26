@@ -2,13 +2,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MackySoft.Navigathena.Runtime.Resources
+namespace MackySoft.Navigathena.Runtime.Lifetimes
 {
     /// <summary>Acquires and borrows resources during a runtime-owned preparation callback.</summary>
-    internal sealed class ManagedResourcePreparationContext : ResourcePreparationContext
+    internal sealed class ManagedLifetimeContext : LifetimeContext
     {
         private readonly ResourceScope scope;
-        internal ManagedResourcePreparationContext (ResourceScope scope) => this.scope = scope;
+        internal ManagedLifetimeContext (ResourceScope scope) => this.scope = scope;
 
         public override T CreateOwned<T> (Func<T> create) => scope.CreateOwned(create);
 

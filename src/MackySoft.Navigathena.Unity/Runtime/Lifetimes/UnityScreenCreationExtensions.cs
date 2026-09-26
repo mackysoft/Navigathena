@@ -27,7 +27,7 @@ namespace MackySoft.Navigathena.Unity
                 throw new NavigationConfigurationException("The screen prefab reference must identify its root component.");
             }
             RequirePresentation(prefab).ValidateConfiguration();
-            TView view = await creation.Resources.InstantiatePrefabAsync<TView>(prefab.gameObject, cancellationToken);
+            TView view = await creation.Lifetime.InstantiatePrefabAsync<TView>(prefab.gameObject, cancellationToken);
             return creation.ConnectScreen(view);
         }
 
@@ -37,7 +37,7 @@ namespace MackySoft.Navigathena.Unity
             {
                 throw new ArgumentNullException(nameof(creation));
             }
-            GameObject asset = await creation.Resources.AcquireAsync(prefab, cancellationToken);
+            GameObject asset = await creation.Lifetime.AcquireAsync(prefab, cancellationToken);
             TView view = asset.GetComponent<TView>();
             if (view == null || asset.GetComponentsInChildren<TView>(true).Length != 1)
             {
@@ -52,7 +52,7 @@ namespace MackySoft.Navigathena.Unity
             {
                 throw new ArgumentNullException(nameof(creation));
             }
-            UnityScene<TView> acquired = await creation.Resources.LoadSceneAsync<TView>(scene, cancellationToken);
+            UnityScene<TView> acquired = await creation.Lifetime.LoadSceneAsync<TView>(scene, cancellationToken);
             return creation.ConnectScreen(acquired.Root);
         }
 
@@ -67,7 +67,7 @@ namespace MackySoft.Navigathena.Unity
             {
                 throw new ArgumentNullException(nameof(select));
             }
-            Scene acquired = await creation.Resources.AcquireAsync(scene, cancellationToken);
+            Scene acquired = await creation.Lifetime.AcquireAsync(scene, cancellationToken);
             UnityThread.AssertCurrent();
             if (!acquired.IsValid() || !acquired.isLoaded)
             {
@@ -78,7 +78,7 @@ namespace MackySoft.Navigathena.Unity
             {
                 throw new NavigationConfigurationException("The selected view must belong to the acquired scene.");
             }
-            await creation.Resources.AcquireAsync(new ComponentObservation<TView>(view), cancellationToken);
+            await creation.Lifetime.AcquireAsync(new ComponentObservation<TView>(view), cancellationToken);
             return creation.ConnectScreen(view);
         }
 
@@ -88,8 +88,8 @@ namespace MackySoft.Navigathena.Unity
             {
                 throw new ArgumentNullException(nameof(creation));
             }
-            TView view = await creation.Resources.BorrowAsync(screen, cancellationToken);
-            await creation.Resources.AcquireAsync(new ComponentObservation<TView>(view), cancellationToken);
+            TView view = await creation.Lifetime.BorrowAsync(screen, cancellationToken);
+            await creation.Lifetime.AcquireAsync(new ComponentObservation<TView>(view), cancellationToken);
             return creation.ConnectScreen(view, returnState);
         }
 

@@ -93,7 +93,7 @@ public sealed class ScreenRuntimeContractTests
         RecordingScreen second = new("second", events);
         ScreenCatalog catalog = CreateCatalog(async (preparation, token) =>
         {
-            await preparation.Resources.AcquireAsync(new RecordingAcquisition("first.view", events), token);
+            await preparation.Lifetime.AcquireAsync(new RecordingAcquisition("first.view", events), token);
             return first;
         }, (_, _) => new ValueTask<RecordingScreen>(second));
         NavigationHost host = NavigationHost.Create(catalog);
@@ -209,10 +209,10 @@ public sealed class ScreenRuntimeContractTests
         });
         NavigationTransition reveal = new(NavigationTransitionScope.Host, async (preparation, token) =>
         {
-            RecordingView existing = await preparation.Resources.BorrowAsync(reference, token);
+            RecordingView existing = await preparation.Lifetime.BorrowAsync(reference, token);
             preparation.RegisterExistingViewAdapter(existing);
             Assert.True(existing.Presentation.OutputEnabled);
-            return preparation.Resources.CreateOwned(() => effect);
+            return preparation.Lifetime.CreateOwned(() => effect);
         });
         await using NavigationHost host = NavigationHost.Create(catalog);
 
@@ -238,7 +238,7 @@ public sealed class ScreenRuntimeContractTests
         {
             events.Enqueue("first.load");
             preparation.ConnectPresentation(new ScreenPresentationBinding(new[] { first.View }));
-            preparation.SetTransitionEffect(preparation.Resources.CreateOwned(() => effect), new RecordingView());
+            preparation.SetTransitionEffect(preparation.Lifetime.CreateOwned(() => effect), new RecordingView());
             return new ValueTask<RecordingScreen>(first);
         }, (preparation, _) =>
         {
@@ -269,8 +269,8 @@ public sealed class ScreenRuntimeContractTests
         RecordingScreen first = new("first", events);
         ScreenCatalog catalog = CreateCatalog((_, _) => new ValueTask<RecordingScreen>(first), (_, _) => new ValueTask<RecordingScreen>(new RecordingScreen("second", events)));
         RegionNavigationOptions region = new();
-        region.Transitions.On(NavigationOperationKind.Push).From<FirstRoute>().Use(new NavigationTransition(NavigationTransitionScope.Region, (preparation, _) => new ValueTask<INavigationTransitionEffect>(preparation.Resources.CreateOwned(() => new RecordingEffect(events)))));
-        region.Transitions.On(NavigationOperationKind.Push).To<SecondRoute>().Use(new NavigationTransition(NavigationTransitionScope.Region, (preparation, _) => new ValueTask<INavigationTransitionEffect>(preparation.Resources.CreateOwned(() => new RecordingEffect(events)))));
+        region.Transitions.On(NavigationOperationKind.Push).From<FirstRoute>().Use(new NavigationTransition(NavigationTransitionScope.Region, (preparation, _) => new ValueTask<INavigationTransitionEffect>(preparation.Lifetime.CreateOwned(() => new RecordingEffect(events)))));
+        region.Transitions.On(NavigationOperationKind.Push).To<SecondRoute>().Use(new NavigationTransition(NavigationTransitionScope.Region, (preparation, _) => new ValueTask<INavigationTransitionEffect>(preparation.Lifetime.CreateOwned(() => new RecordingEffect(events)))));
         await using NavigationHost host = NavigationHost.Create(catalog, new NavigationHostOptions { Regions = new Dictionary<RegionDefinitionId, RegionNavigationOptions> { [Root] = region } });
         await host.StartAsync(new FirstRoute());
 
@@ -294,8 +294,8 @@ public sealed class ScreenRuntimeContractTests
         ScreenCatalog catalog = CreateCatalog((_, _) => new ValueTask<RecordingScreen>(title));
         NavigationTransition transition = new(NavigationTransitionScope.Host, async (preparation, token) =>
         {
-            await preparation.Resources.AcquireAsync(new RecordingAcquisition("effect", events), token);
-            return preparation.Resources.CreateOwned(() => effect);
+            await preparation.Lifetime.AcquireAsync(new RecordingAcquisition("effect", events), token);
+            return preparation.Lifetime.CreateOwned(() => effect);
         });
         NavigationHost host = NavigationHost.Create(catalog);
 
@@ -319,7 +319,7 @@ public sealed class ScreenRuntimeContractTests
         ScreenCatalog catalog = CreateCatalog(async (preparation, token) =>
         {
             captured = preparation;
-            await preparation.Resources.AcquireAsync(new RecordingAcquisition("first", events), token);
+            await preparation.Lifetime.AcquireAsync(new RecordingAcquisition("first", events), token);
             preparation.ConnectPresentation(new ScreenPresentationBinding(new[] { first.View }));
             return first;
         }, (preparation, _) =>
@@ -363,7 +363,7 @@ public sealed class ScreenRuntimeContractTests
             return new ValueTask<RecordingScreen>(first);
         }, async (preparation, token) =>
         {
-            await preparation.Resources.AcquireAsync(new RecordingAcquisition("partial", events, true), token);
+            await preparation.Lifetime.AcquireAsync(new RecordingAcquisition("partial", events, true), token);
             throw new InvalidOperationException("unreachable");
         });
         await using NavigationHost host = NavigationHost.Create(catalog);
@@ -389,7 +389,7 @@ public sealed class ScreenRuntimeContractTests
         };
         ScreenCatalog catalog = CreateCatalog(async (preparation, token) =>
         {
-            await preparation.Resources.AcquireAsync(new RecordingAcquisition("view", events), token);
+            await preparation.Lifetime.AcquireAsync(new RecordingAcquisition("view", events), token);
             preparation.ConnectPresentation(new ScreenPresentationBinding(new[] { first.View }));
             return first;
         });
@@ -416,7 +416,7 @@ public sealed class ScreenRuntimeContractTests
         RecordingScreen first = new("first", events);
         ScreenCatalog catalog = CreateCatalog(async (preparation, token) =>
         {
-            RecordingView view = await preparation.Resources.BorrowAsync(reference, token);
+            RecordingView view = await preparation.Lifetime.BorrowAsync(reference, token);
             Assert.Same(original, view);
             preparation.ConnectPresentation(new ScreenPresentationBinding(new[] { view }));
             return first;
@@ -494,7 +494,7 @@ public sealed class ScreenRuntimeContractTests
             Register<SecondRoute>(screens, (preparation, _) => Make("full", preparation));
             Register<ModalRoute>(screens, (preparation, _) => Make("modal", preparation));
             Register<CustomModalRoute>(screens, (preparation, _) => Make("custom", preparation));
-            screens.RegisterBlocker<CustomModalRoute>(new BlockerDefinition((preparation, _) => new ValueTask<IBlockerPresenter>(preparation.Resources.CreateOwned(() => custom))));
+            screens.RegisterBlocker<CustomModalRoute>(new BlockerDefinition((preparation, _) => new ValueTask<IBlockerPresenter>(preparation.Lifetime.CreateOwned(() => custom))));
         }));
         ValueTask<RecordingScreen> Make<T> (string name, ScreenCreationContext<T> preparation) where T : Route
         {
@@ -507,7 +507,7 @@ public sealed class ScreenRuntimeContractTests
             DefaultBlocker = new BlockerDefinition((preparation, _) =>
             {
                 commonCreated++;
-                return new ValueTask<IBlockerPresenter>(preparation.Resources.CreateOwned(() => common));
+                return new ValueTask<IBlockerPresenter>(preparation.Lifetime.CreateOwned(() => common));
             })
         });
         await host.StartAsync(new FirstRoute());
@@ -555,7 +555,7 @@ public sealed class ScreenRuntimeContractTests
         {
             created++;
 
-            await preparation.Resources.AcquireAsync(new RecordingAcquisition("first.resource." + created, events), token);
+            await preparation.Lifetime.AcquireAsync(new RecordingAcquisition("first.resource." + created, events), token);
             RecordingScreen first = new("first." + created, events)
             {
                 SavedState = "selected-item",
@@ -616,7 +616,7 @@ public sealed class ScreenRuntimeContractTests
         NavigationHost host = NavigationHost.Create(CreateCatalog(async (preparation, token) =>
         {
             generation++;
-            await preparation.Resources.AcquireAsync(new RecordingAcquisition("resource." + generation, events), token);
+            await preparation.Lifetime.AcquireAsync(new RecordingAcquisition("resource." + generation, events), token);
             if (generation > 1)
             {
                 throw new InvalidOperationException("Fresh screen preparation failed.");
@@ -663,7 +663,7 @@ public sealed class ScreenRuntimeContractTests
         NavigationHost host = NavigationHost.Create(CreateCatalog(async (preparation, token) =>
         {
             generation++;
-            await preparation.Resources.AcquireAsync(new RecordingAcquisition("resource." + generation, events), token);
+            await preparation.Lifetime.AcquireAsync(new RecordingAcquisition("resource." + generation, events), token);
             RecordingScreen screen = generation == 1 ? old : new RecordingScreen("fresh", events) { FailInitialize = true, FailDispose = true };
             preparation.ConnectPresentation(new ScreenPresentationBinding(new[] { screen.View }));
             return screen;

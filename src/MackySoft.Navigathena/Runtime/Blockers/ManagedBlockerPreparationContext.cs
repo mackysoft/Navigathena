@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using MackySoft.Navigathena.Runtime.Resources;
+using MackySoft.Navigathena.Runtime.Lifetimes;
 using MackySoft.Navigathena.Runtime.Views;
 
 namespace MackySoft.Navigathena.Runtime.Blockers
@@ -7,21 +7,21 @@ namespace MackySoft.Navigathena.Runtime.Blockers
     /// <summary>Owns resource acquisition and physical view registration during blocker preparation.</summary>
     internal sealed class ManagedBlockerPreparationContext : BlockerPreparationContext
     {
-        private readonly ResourceScope resources;
+        private readonly ResourceScope lifetime;
         private readonly ViewRegistry views;
         internal List<ViewRegistration> Registrations { get; } = new();
-        internal ManagedBlockerPreparationContext (ResourceScope resources, ViewRegistry views)
+        internal ManagedBlockerPreparationContext (ResourceScope lifetime, ViewRegistry views)
         {
-            this.resources = resources;
+            this.lifetime = lifetime;
             this.views = views;
         }
-        public override ResourcePreparationContext Resources => resources.Context;
+        public override LifetimeContext Lifetime => lifetime.Context;
         public override void RegisterViewAdapter (IViewAdapter adapter)
         {
-            resources.EnsureOpen();
+            lifetime.EnsureOpen();
             ViewRegistration registration = views.Register(adapter, false);
             Registrations.Add(registration);
-            registration.ObserveLoss(resources.ReportLoss);
+            registration.ObserveLoss(lifetime.ReportLoss);
             registration.Apply(new ViewPresentation(false, false, registration.Original.Order));
         }
     }

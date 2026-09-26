@@ -1,14 +1,14 @@
 namespace MackySoft.Navigathena
 {
-    /// <summary>Input-specific preparation and resources for one displayed history entry; never a DI registration context.</summary>
+    /// <summary>Input-specific preparation and lifetime for one displayed history entry; never a DI registration context.</summary>
     public sealed class ScreenPreparationContext
     {
-        internal ScreenPreparationContext (NavigationEntry entry, ResourcePreparationContext resources, ScreenPreparationReason reason)
+        internal ScreenPreparationContext (NavigationEntry entry, LifetimeContext lifetime, ScreenPreparationReason reason)
         {
             EntryId = entry.Id;
             RegionId = entry.RegionId;
             SavedState = entry.SavedState;
-            Resources = resources;
+            Lifetime = lifetime;
             Reason = reason;
         }
 
@@ -29,7 +29,8 @@ namespace MackySoft.Navigathena
         {
             get;
         }
-        public ResourcePreparationContext Resources
+        /// <summary>Ownership and borrowing for this preparation. Previous preparations are released once they are no longer in use.</summary>
+        public LifetimeContext Lifetime
         {
             get;
         }

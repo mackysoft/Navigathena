@@ -42,7 +42,7 @@ public sealed class ScreenHistoryContractTests
         List<ChapterPresenter> instances = new();
         ScreenDefinition<ChapterRoute> screen = new((creation, _) =>
         {
-            ChapterPresenter handler = creation.Resources.CreateOwned(() => new ChapterPresenter { DisposalCompletion = instances.Count == 0 ? released.Task : Task.CompletedTask });
+            ChapterPresenter handler = creation.Lifetime.CreateOwned(() => new ChapterPresenter { DisposalCompletion = instances.Count == 0 ? released.Task : Task.CompletedTask });
             instances.Add(handler);
             return new(handler);
         });
@@ -208,7 +208,7 @@ public sealed class ScreenHistoryContractTests
         List<ChapterPresenter> instances = new();
         ScreenDefinition<ChapterRoute> screen = new((creation, _) =>
         {
-            ChapterPresenter presenter = creation.Resources.CreateOwned(() => new ChapterPresenter());
+            ChapterPresenter presenter = creation.Lifetime.CreateOwned(() => new ChapterPresenter());
             instances.Add(presenter);
             return new(presenter);
         }, policy);
@@ -249,7 +249,7 @@ public sealed class ScreenHistoryContractTests
         ChapterPresenter presenter = new();
         ScreenDefinition<ChapterRoute> screen = new((creation, _) =>
 {
-    return new(creation.Resources.CreateOwned(() => presenter));
+    return new(creation.Lifetime.CreateOwned(() => presenter));
 });
         await using NavigationHost host = CreateHost(screen);
         await host.StartAsync(new ChapterRoute(1));
@@ -327,7 +327,7 @@ public sealed class ScreenHistoryContractTests
             {
                 Assert.Equal(1, instances[^1].DisposeCount);
             }
-            ChapterPresenter presenter = creation.Resources.CreateOwned(() => new ChapterPresenter());
+            ChapterPresenter presenter = creation.Lifetime.CreateOwned(() => new ChapterPresenter());
             instances.Add(presenter);
             return new(presenter);
         }, policy);
@@ -368,7 +368,7 @@ public sealed class ScreenHistoryContractTests
             {
                 throw new InvalidOperationException("Loading failed.");
             }
-            ChapterPresenter presenter = creation.Resources.CreateOwned(() => new ChapterPresenter());
+            ChapterPresenter presenter = creation.Lifetime.CreateOwned(() => new ChapterPresenter());
             instances.Add(presenter);
             return new(presenter);
         }, policy);
@@ -395,7 +395,7 @@ public sealed class ScreenHistoryContractTests
         List<ChapterPresenter> childOwners = new();
         ScreenCatalog catalog = ScreenCatalog.Build(screens => screens.Register<ChapterRoute>((creation, _) =>
         {
-            ChapterPresenter parent = creation.Resources.CreateOwned(() => new ChapterPresenter());
+            ChapterPresenter parent = creation.Lifetime.CreateOwned(() => new ChapterPresenter());
             parents.Add(parent);
             creation.RegisterScreens(childRegion, childScreens => childScreens.RegisterScreen(new ScreenDefinition<ChildRoute>((_, _) =>
             {

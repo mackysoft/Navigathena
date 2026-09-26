@@ -52,7 +52,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             TestLifecycleHandler? handler = null;
             NavigationHost host = Create(async (preparation, token) =>
             {
-                UnityScene<RuntimeTestView> loaded = await preparation.Resources.LoadSceneAsync<RuntimeTestView>(scene, token);
+                UnityScene<RuntimeTestView> loaded = await preparation.Lifetime.LoadSceneAsync<RuntimeTestView>(scene, token);
                 Assert.That(loaded.Scene, Is.EqualTo(scene.Scene));
                 handler = new TestLifecycleHandler(loaded.Root);
                 return handler;
@@ -74,7 +74,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             RuntimeTestView? instance = null;
             NavigationHost host = Create(async (preparation, token) =>
             {
-                instance = await preparation.Resources.InstantiatePrefabAsync<RuntimeTestView>(asset, token);
+                instance = await preparation.Lifetime.InstantiatePrefabAsync<RuntimeTestView>(asset, token);
                 asset.BeforeRelease = () => Assert.That(instance == null, Is.True);
                 Assert.That(instance.gameObject, Is.Not.SameAs(prefab));
                 return new TestLifecycleHandler(instance);
@@ -94,7 +94,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             };
             NavigationHost host = Create(async (preparation, token) =>
             {
-                UnityScene<RuntimeTestView> loaded = await preparation.Resources.LoadSceneAsync<RuntimeTestView>(scene, token);
+                UnityScene<RuntimeTestView> loaded = await preparation.Lifetime.LoadSceneAsync<RuntimeTestView>(scene, token);
                 return new TestLifecycleHandler(loaded.Root);
             });
             try
@@ -118,7 +118,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             TestLifecycleHandler? handler = null;
             NavigationHost host = Create(async (preparation, token) =>
             {
-                UnityScene<RuntimeTestView> loaded = await preparation.Resources.LoadSceneAsync<RuntimeTestView>(scene, token);
+                UnityScene<RuntimeTestView> loaded = await preparation.Lifetime.LoadSceneAsync<RuntimeTestView>(scene, token);
                 return handler = new TestLifecycleHandler(loaded.Root) { AllowDestroyedViewOnDispose = true };
             });
             await host.StartAsync(new TestRoute());
@@ -224,7 +224,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 }
                 TestSceneAcquisition acquisition = new();
                 scenes.Add(acquisition);
-                UnityScene<RuntimeTestView> scene = await creation.Resources.LoadSceneAsync<RuntimeTestView>(acquisition, token);
+                UnityScene<RuntimeTestView> scene = await creation.Lifetime.LoadSceneAsync<RuntimeTestView>(acquisition, token);
                 TestLifecycleHandler handler = new(scene.Root);
                 handlers.Add(handler);
                 return handler;
@@ -253,7 +253,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens => screens.RegisterScreen(new ScreenDefinition<TestRoute>(async (creation, token) =>
             {
                 IScreenLifecycleHandler<TestRoute> handler = await factory(creation, token);
-                return creation.Resources.CreateOwned(() => handler);
+                return creation.Lifetime.CreateOwned(() => handler);
             }))));
             NavigationHost host = NavigationHost.Create(catalog);
             hosts.Add(host);

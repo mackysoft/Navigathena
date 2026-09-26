@@ -76,7 +76,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                     Assert.That(acquired.GetComponent<CanvasViewAdapter>().Presentation.InputEnabled, Is.False);
                     if (mode == 0)
                     {
-                        return presenter = creation.Resources.CreateOwned(() => new Presenter(acquired));
+                        return presenter = creation.Lifetime.CreateOwned(() => new Presenter(acquired));
                     }
                     if (mode == 1)
                     {
@@ -145,7 +145,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 RuntimeTestView borrowed = await creation.BorrowScreenAsync(lifetime.Reference(view), ScreenAnimationState.Foreground, token);
                 Assert.That(adapter.Presentation.OutputEnabled, Is.True);
                 Assert.That(adapter.Presentation.InputEnabled, Is.False);
-                return creation.Resources.CreateOwned(() => new Presenter(borrowed));
+                return creation.Lifetime.CreateOwned(() => new Presenter(borrowed));
             });
             await host.StartAsync(new Popup());
             await host.ShutdownAsync();
@@ -161,7 +161,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             NavigationHost host = CreateHost(async (creation, token) =>
             {
                 RuntimeTestView view = await creation.LoadScreenAsync(scene, _ => scene.Selected!, token);
-                return creation.Resources.CreateOwned(() => new Presenter(view));
+                return creation.Lifetime.CreateOwned(() => new Presenter(view));
             });
             await host.StartAsync(new Popup());
             Assert.That(scene.Selected!.GetComponent<Canvas>().enabled, Is.True);
@@ -182,7 +182,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 SceneAcquisition acquisition = new(this);
                 acquisitions.Add(acquisition);
                 RuntimeTestView view = await creation.LoadScreenAsync(acquisition, _ => acquisition.Selected!, token);
-                Presenter presenter = creation.Resources.CreateOwned(() => new Presenter(view));
+                Presenter presenter = creation.Lifetime.CreateOwned(() => new Presenter(view));
                 presenters.Add(presenter);
                 return presenter;
             });
@@ -301,7 +301,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 return new ScreenDefinition<T>(async (creation, token) =>
                 {
                     RuntimeTestView view = await creation.InstantiateScreenAsync(prefab, token);
-                    RegionPresenter handler = creation.Resources.CreateOwned(() => new RegionPresenter(creation.RegionId, view));
+                    RegionPresenter handler = creation.Lifetime.CreateOwned(() => new RegionPresenter(creation.RegionId, view));
                     instances.Add(handler);
                     return handler;
                 }, ScreenInstancePolicy.Multiple);

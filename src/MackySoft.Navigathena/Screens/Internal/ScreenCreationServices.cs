@@ -9,7 +9,7 @@ namespace MackySoft.Navigathena
         {
             get;
         }
-        public abstract ResourcePreparationContext Resources
+        public abstract LifetimeContext Lifetime
         {
             get;
         }

@@ -28,12 +28,12 @@ public sealed class ScreenRestartContractTests
         List<Handler<BootRoute>> boots = new();
         ScreenDefinition<BootRoute> boot = new(async (creation, token) =>
         {
-            Assert.Same(view, await creation.Resources.BorrowAsync(reference, token));
+            Assert.Same(view, await creation.Lifetime.BorrowAsync(reference, token));
             if (policy == ScreenInstancePolicy.Single && boots.Count > 0)
             {
                 Assert.Equal(1, boots[^1].Disposals);
             }
-            Handler<BootRoute> handler = creation.Resources.CreateOwned(() => new Handler<BootRoute>());
+            Handler<BootRoute> handler = creation.Lifetime.CreateOwned(() => new Handler<BootRoute>());
             boots.Add(handler);
             return handler;
         }, policy);
@@ -76,7 +76,7 @@ public sealed class ScreenRestartContractTests
                 Assert.All(huds, handler => Assert.Equal(1, handler.Disposals));
             }
             creation.RegisterScreens(Hud, screens => screens.RegisterScreen(Define(huds)));
-            Handler<GameRoute> handler = creation.Resources.CreateOwned(() => new Handler<GameRoute>());
+            Handler<GameRoute> handler = creation.Lifetime.CreateOwned(() => new Handler<GameRoute>());
             games.Add(handler);
             return new(handler);
         });
@@ -269,7 +269,7 @@ public sealed class ScreenRestartContractTests
         List<Handler<GameRoute>> games = new();
         ScreenDefinition<GameRoute> definition = new((creation, _) =>
         {
-            Handler<GameRoute> handler = creation.Resources.CreateOwned(() => new Handler<GameRoute>());
+            Handler<GameRoute> handler = creation.Lifetime.CreateOwned(() => new Handler<GameRoute>());
             if (games.Count == 1)
             {
                 handler.OnPrepare = () => throw new InvalidOperationException("Preparation failed.");
@@ -301,8 +301,8 @@ public sealed class ScreenRestartContractTests
         List<Handler<BootRoute>> boots = new();
         ScreenDefinition<BootRoute> screen = new(async (creation, token) =>
         {
-            await creation.Resources.BorrowAsync(reference, token);
-            Handler<BootRoute> handler = creation.Resources.CreateOwned(() => new Handler<BootRoute>());
+            await creation.Lifetime.BorrowAsync(reference, token);
+            Handler<BootRoute> handler = creation.Lifetime.CreateOwned(() => new Handler<BootRoute>());
             boots.Add(handler);
             return handler;
         });
@@ -328,7 +328,7 @@ public sealed class ScreenRestartContractTests
     {
         return new ScreenDefinition<TRoute>((creation, _) =>
         {
-            Handler<TRoute> handler = creation.Resources.CreateOwned(() => new Handler<TRoute>());
+            Handler<TRoute> handler = creation.Lifetime.CreateOwned(() => new Handler<TRoute>());
             handlers.Add(handler);
             return new(handler);
         }, policy);

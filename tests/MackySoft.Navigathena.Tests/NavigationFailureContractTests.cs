@@ -43,7 +43,7 @@ public sealed class NavigationFailureContractTests
             }
             else
             {
-                Handler owned = creation.Resources.CreateOwned(() => phase == "construction" ? throw original : handler);
+                Handler owned = creation.Lifetime.CreateOwned(() => phase == "construction" ? throw original : handler);
                 return new(owned);
             }
         });
@@ -84,7 +84,7 @@ public sealed class NavigationFailureContractTests
         Dependency dependency = new();
         NavigationHost host = Create((creation, _) =>
         {
-            creation.Resources.CreateOwned(() => dependency);
+            creation.Lifetime.CreateOwned(() => dependency);
             if (useDI)
             {
                 return new(creation.CreateScope(services =>
@@ -95,7 +95,7 @@ public sealed class NavigationFailureContractTests
             }
             else
             {
-                return new(creation.Resources.CreateOwned(() => handler));
+                return new(creation.Lifetime.CreateOwned(() => handler));
             }
         });
         await host.StartAsync(new TestRoute());
@@ -142,7 +142,7 @@ public sealed class NavigationFailureContractTests
         int count = 0;
         NavigationHost host = Create((creation, _) =>
         {
-            return new(creation.Resources.CreateOwned(() => count++ == 0 ? first : second));
+            return new(creation.Lifetime.CreateOwned(() => count++ == 0 ? first : second));
         }, ScreenInstancePolicy.Multiple);
         await host.StartAsync(new TestRoute());
         await host.Client.PushAsync(host.Root, Destination.For(new TestRoute()));

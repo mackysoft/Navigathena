@@ -23,7 +23,7 @@ public sealed class ScreenLifecycleFailureContractTests
         List<ThrowingView> views = new();
         await using NavigationHost host = Create(new ScreenDefinition<InputRoute>((creation, _) =>
         {
-            Handler handler = creation.Resources.CreateOwned(() => new Handler("screen" + handlers.Count, events)
+            Handler handler = creation.Lifetime.CreateOwned(() => new Handler("screen" + handlers.Count, events)
             {
                 Prepare = route => !failDuringActivation && route.Value == 2 ? throw new InvalidOperationException("Preparation failed.") : default,
                 Activate = route => failDuringActivation && route.Value == 2 ? throw new InvalidOperationException("Activation failed.") : default
@@ -67,8 +67,8 @@ public sealed class ScreenLifecycleFailureContractTests
         Handler second = new("second", events);
         await using NavigationHost host = Create(new ScreenDefinition<InputRoute>((creation, _) =>
         {
-            creation.Resources.CreateOwned(() => first);
-            return new(creation.Resources.CreateOwned(() => second));
+            creation.Lifetime.CreateOwned(() => first);
+            return new(creation.Lifetime.CreateOwned(() => second));
         }));
         await host.StartAsync(new InputRoute(1));
         await host.ShutdownAsync();
@@ -84,7 +84,7 @@ public sealed class ScreenLifecycleFailureContractTests
         NavigationHost host = Create(new ScreenDefinition<InputRoute>((creation, _) =>
         {
             creation.ConnectPresentation(new ScreenPresentationBinding(new[] { view }));
-            return new(creation.Resources.CreateOwned(() => handler));
+            return new(creation.Lifetime.CreateOwned(() => handler));
         }));
         await host.StartAsync(new InputRoute(1));
         view.FailNextClose = true;
@@ -102,7 +102,7 @@ public sealed class ScreenLifecycleFailureContractTests
         Handler handler = new("screen", events);
         await using NavigationHost host = Create(new ScreenDefinition<InputRoute>(async (creation, token) =>
         {
-            Handler acquired = await creation.Resources.AcquireAsync(new HandlerAcquisition(handler), token);
+            Handler acquired = await creation.Lifetime.AcquireAsync(new HandlerAcquisition(handler), token);
             return acquired;
         }));
         await host.StartAsync(new InputRoute(1));
@@ -147,7 +147,7 @@ public sealed class ScreenLifecycleFailureContractTests
         List<string> events = new();
         await using NavigationHost host = Create(new ScreenDefinition<InputRoute>((creation, _) =>
         {
-            creation.Resources.CreateOwned(() => new Handler("dependency", events));
+            creation.Lifetime.CreateOwned(() => new Handler("dependency", events));
             return default;
         }));
 

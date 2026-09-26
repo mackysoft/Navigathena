@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MackySoft.Navigathena.Runtime.Resources;
+using MackySoft.Navigathena.Runtime.Lifetimes;
 using MackySoft.Navigathena.Runtime.Screens;
 using MackySoft.Navigathena.Runtime.Views;
 
@@ -29,14 +29,14 @@ namespace MackySoft.Navigathena.Runtime.Blockers
             parentUsage = parent?.Use();
             this.factory = factory;
             this.reportFailure = reportFailure;
-            Resources = new ResourceScope(() => endUser(this), reason =>
+            Lifetime = new ResourceScope(() => endUser(this), reason =>
 {
     ending = true;
     reportFailure(this, reason);
 });
-            Preparation = new ManagedBlockerPreparationContext(Resources, views);
+            Preparation = new ManagedBlockerPreparationContext(Lifetime, views);
         }
-        public ResourceScope Resources
+        public ResourceScope Lifetime
         {
             get;
         }
@@ -44,7 +44,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
         {
             get;
         }
-        public bool IsEnding => ending || Resources.EndingToken.IsCancellationRequested;
+        public bool IsEnding => ending || Lifetime.EndingToken.IsCancellationRequested;
         public bool IsTerminated
         {
             get; private set;
@@ -68,7 +68,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
         {
             try
             {
-                using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, Resources.EndingToken);
+                using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, Lifetime.EndingToken);
                 try
                 {
                     cancellation.Token.ThrowIfCancellationRequested();
@@ -79,7 +79,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
                 }
                 finally
                 {
-                    await Resources.CloseAsync();
+                    await Lifetime.CloseAsync();
                 }
                 cancellation.Token.ThrowIfCancellationRequested();
             }
@@ -304,7 +304,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
                     view.Release();
                 }
 
-                await Resources.DisposeAsync();
+                await Lifetime.DisposeAsync();
                 parentUsage?.Dispose();
                 IsTerminated = true;
                 if (disconnectFailure is not null)

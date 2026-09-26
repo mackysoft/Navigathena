@@ -23,7 +23,7 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
             screens.RegisterScreen(new ScreenDefinition<ConfirmationRoute, bool>(async (creation, token) =>
             {
                 ConfirmationPopupView view = await creation.InstantiateScreenAsync(configuredPrefab, token);
-                return creation.Resources.CreateOwned(() => new ConfirmationPresenter(view));
+                return creation.Lifetime.CreateOwned(() => new ConfirmationPresenter(view));
             }, ScreenInstancePolicy.Multiple));
         }
     }

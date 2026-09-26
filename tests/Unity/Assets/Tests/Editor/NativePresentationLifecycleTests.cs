@@ -52,7 +52,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 {
                     popupConstructions++;
                 }
-                creation.ConnectPresentation(new ScreenPresentationBinding(new[] { await creation.Resources.BorrowAsync(lifetime.Reference(view), token) }, returnState: ScreenAnimationState.BeforeEnter));
+                creation.ConnectPresentation(new ScreenPresentationBinding(new[] { await creation.Lifetime.BorrowAsync(lifetime.Reference(view), token) }, returnState: ScreenAnimationState.BeforeEnter));
                 return handler;
             });
             RegionDefinitionId rootId = new("root");
@@ -84,7 +84,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             {
                 DefaultBlocker = new BlockerDefinition(async (preparation, token) =>
                 {
-                    await preparation.Resources.BorrowAsync(lifetime.Reference(blockerView), token);
+                    await preparation.Lifetime.BorrowAsync(lifetime.Reference(blockerView), token);
                     IObjectResolver scope = preparation.CreateScope(parent, new BlockerInstaller(blocker));
                     return scope.Resolve<NativeBlocker>();
                 })
@@ -93,7 +93,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             {
                 NavigationTransition startup = new(NavigationTransitionScope.Host, async (preparation, token) =>
                 {
-                    preparation.RegisterExistingViewAdapter(await preparation.Resources.BorrowAsync(lifetime.Reference(overlayView), token));
+                    preparation.RegisterExistingViewAdapter(await preparation.Lifetime.BorrowAsync(lifetime.Reference(overlayView), token));
                     IServiceProvider scope = preparation.CreateScope(services => services.AddScoped(_ => reveal));
                     return scope.GetRequiredService<NativeReveal>();
                 });
@@ -178,7 +178,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             }));
             ScreenDefinition<T> Screen<T> (CanvasViewAdapter view) where T : Route => new(async (creation, token) =>
             {
-                creation.ConnectPresentation(new ScreenPresentationBinding(new[] { await creation.Resources.BorrowAsync(lifetime.Reference(view), token) }));
+                creation.ConnectPresentation(new ScreenPresentationBinding(new[] { await creation.Lifetime.BorrowAsync(lifetime.Reference(view), token) }));
                 return new NativeScreen<T>();
             });
             ScreenCatalog catalog = ScreenCatalog.Build(definition, builder =>
@@ -193,7 +193,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 DefaultBlocker = new BlockerDefinition(async (preparation, token) =>
                 {
                     constructions++;
-                    await preparation.Resources.BorrowAsync(lifetime.Reference(blockerView), token);
+                    await preparation.Lifetime.BorrowAsync(lifetime.Reference(blockerView), token);
                     return preparation.CreateScope(parent, new BlockerInstaller(blocker)).Resolve<NativeBlocker>();
                 })
             });

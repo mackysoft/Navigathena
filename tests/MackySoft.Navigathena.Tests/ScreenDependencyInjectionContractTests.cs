@@ -32,8 +32,8 @@ public sealed class ScreenDependencyInjectionContractTests
                     services.AddScreenLifecycleHandler<ItemPresenter>();
                 }));
             }
-            ScreenService service = creation.Resources.CreateOwned(() => new ScreenService(shared));
-            return new(creation.Resources.CreateOwned(() => new ItemPresenter(shared, service)));
+            ScreenService service = creation.Lifetime.CreateOwned(() => new ScreenService(shared));
+            return new(creation.Lifetime.CreateOwned(() => new ItemPresenter(shared, service)));
         });
         await using NavigationHost host = CreateHost(definition);
         await host.StartAsync(new ItemRoute(1));
@@ -75,8 +75,8 @@ public sealed class ScreenDependencyInjectionContractTests
             }
             else
             {
-                ScreenService service = creation.Resources.CreateOwned(() => new ScreenService(shared));
-                return new(creation.Resources.CreateOwned(() => new ItemPresenter(shared, service)));
+                ScreenService service = creation.Lifetime.CreateOwned(() => new ScreenService(shared));
+                return new(creation.Lifetime.CreateOwned(() => new ItemPresenter(shared, service)));
             }
         });
         await using NavigationHost host = CreateHost(screen);
@@ -123,7 +123,7 @@ public sealed class ScreenDependencyInjectionContractTests
         bool released = false;
         ScreenDefinition<ItemRoute> screen = new(async (creation, token) =>
         {
-            await creation.Resources.AcquireAsync(new Acquisition(() => released = true), token);
+            await creation.Lifetime.AcquireAsync(new Acquisition(() => released = true), token);
             return creation.CreateScope(services =>
             {
                 services.AddScoped(_ => new AsyncHandler(disposing, finish.Task));
@@ -175,7 +175,7 @@ public sealed class ScreenDependencyInjectionContractTests
         SharedService shared = new();
         ScreenDefinition<ItemRoute> screen = new(async (creation, token) =>
         {
-            await creation.Resources.AcquireAsync(new Acquisition(() => released = true), token);
+            await creation.Lifetime.AcquireAsync(new Acquisition(() => released = true), token);
             return creation.CreateScope(services =>
             {
                 services.AddSingleton(shared);
