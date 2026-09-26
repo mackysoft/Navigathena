@@ -1,124 +1,149 @@
 name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: "tag: git tag you want create. (sample 1.0.0)"
-        required: true
+  push:
+    tags: ["[0-9]*.[0-9]*.[0-9]*"]
 
-env:
-  GIT_TAG: ${{ github.event.inputs.tag }}
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  update-packagejson:
+  package:
     runs-on: ubuntu-latest
-    env:
-      TARGET_FILE: ./Assets/MackySoft/MackySoft.Navigathena/package.json
     outputs:
-      sha: ${{ steps.commit.outputs.sha }}
+      version: ${{ steps.source.outputs['package-version'] }}
+      sha: ${{ steps.source.outputs['release-sha'] }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Output package.json (Before)
-        run: cat ${{ env.TARGET_FILE}}
-
-      - name: Update package.json to version ${{ env.GIT_TAG }}
-        run: sed -i -e "s/\(\"version\":\) \"\(.*\)\",/\1 \"${{ env.GIT_TAG }}\",/" ${{ env.TARGET_FILE }}
-
-      - name: Check update
-        id: check_update
-        run: |
-          cat ${{ env.TARGET_FILE}}
-          if ! git diff --exit-code; then
-            echo "changed=1" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Commit files
-        id: commit
-        if: steps.check_update.outputs.changed == '1'
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "feat: Update package.json to ${{ env.GIT_TAG }}" -a
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
-      - name: Check sha
-        run: echo "SHA ${SHA}"
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            10.0.x
+      - name: Guard release source
+        id: source
+        uses: mackysoft/actions/release/source-guard@5bd02b67aaf373c23e871c8a6cf79e19652bbc9b
+        with:
+          tag-name: ${{ github.ref_name }}
+          default-branch: ${{ github.event.repository.default_branch }}
+      - name: Validate configured version
         env:
-          SHA: ${{ steps.commit.outputs.sha }}
-
-      - name: Create Tag
-        if: steps.check_update.outputs.changed == '1'
-        run: git tag ${{ env.GIT_TAG }}
-
-      - name: Push changes
-        if: steps.check_update.outputs.changed == '1'
-        uses: ad-m/github-push-action@v0.8.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          tags: true
-
-  build:
-    needs: [update-packagejson]
-    strategy:
-      matrix:
-        unityVersion:
-          - 2021.3.45f2
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - run: echo ${{ needs.update-packagejson.outputs.sha }}
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.update-packagejson.outputs.sha }}
-
-      - name: Export unitypackage
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          projectPath: .
-          unityVersion: ${{ matrix.unityVersion }}
-          targetPlatform: StandaloneLinux64
-          buildMethod: MackySoft.PackageTools.Editor.UnityPackageExporter.Export
-          versioning: None
-
-      - name: check all .meta is commited
+          RELEASE_VERSION: ${{ steps.source.outputs['package-version'] }}
         run: |
-          if git ls-files --others --exclude-standard -t | grep --regexp='[.]meta$'; then
-            echo "Detected .meta file generated. Do you forgot commit a .meta file?"
+          set -euo pipefail
+          configured_version="$(dotnet msbuild src/MackySoft.Navigathena/MackySoft.Navigathena.csproj -nologo -getProperty:PackageVersion)"
+          if [[ "$configured_version" != "$RELEASE_VERSION" ]]; then
+            printf 'Release tag must match Directory.Build.props: configured %s, tag %s\n' "$configured_version" "$RELEASE_VERSION" >&2
             exit 1
-          else
-            echo "Great, all .meta files are commited."
           fi
-        working-directory: .
-
-      # Store artifacts.
-      - uses: actions/upload-artifact@v4
+      - name: Verify and package
+        run: bash scripts/verify.sh --package-output artifacts/packages
+      - uses: actions/upload-artifact@v7
         with:
-          name: Navigathena.unitypackage
-          path: ./Build/Navigathena.unitypackage
+          name: release-packages
+          path: artifacts/packages/*.nupkg
+          if-no-files-found: error
 
-  create-release:
-    needs: [update-packagejson, build]
+  unity:
+    needs: package
+    uses: ./.github/workflows/unity-tests.yaml
+    with:
+      source-ref: ${{ needs.package.outputs.sha }}
+    secrets:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+  publish:
+    needs: [package, unity]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
-      # Download(All) Artifacts to current directory
-      - uses: actions/download-artifact@v4
-      
-      # Create release and upload asset
-      - uses: softprops/action-gh-release@v2
+      - uses: actions/checkout@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ env.GIT_TAG }}
-          name: ${{ env.GIT_TAG }}
-          target_commitish: ${{ needs.update-packagejson.outputs.sha }}
-          draft: true
-          prerelease: false
-          files: ./Navigathena.unitypackage/Navigathena.unitypackage
+          fetch-depth: 0
+          ref: ${{ needs.package.outputs.sha }}
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/download-artifact@v7
+        with:
+          name: release-packages
+          path: artifacts/packages
+      - name: Guard published source
+        uses: mackysoft/actions/release/source-guard@5bd02b67aaf373c23e871c8a6cf79e19652bbc9b
+        with:
+          tag-name: ${{ github.ref_name }}
+          default-branch: ${{ github.event.repository.default_branch }}
+          expected-release-sha: ${{ needs.package.outputs.sha }}
+      - name: Validate package artifacts
+        env:
+          PACKAGE_VERSION: ${{ needs.package.outputs.version }}
+          RELEASE_SHA: ${{ needs.package.outputs.sha }}
+        run: python3 scripts/verify-package-contents.py artifacts/packages "$PACKAGE_VERSION" "$RELEASE_SHA"
+      - name: Inspect publication state
+        id: packages
+        env:
+          PACKAGE_VERSION: ${{ needs.package.outputs.version }}
+        run: python3 scripts/publication.py prepare artifacts/packages "$PACKAGE_VERSION" artifacts/pending
+      - name: Require NuGet account configuration
+        if: steps.packages.outputs['publish-required'] == 'true'
+        env:
+          NUGET_USER: ${{ vars.NUGET_USER }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$NUGET_USER" ]]; then
+            printf 'Set the repository variable NUGET_USER to the NuGet.org account with a Trusted Publisher policy for mackysoft/Navigathena and release.yaml.\n' >&2
+            exit 1
+          fi
+      - name: Publish NuGet packages
+        if: steps.packages.outputs['publish-required'] == 'true'
+        uses: mackysoft/actions/nuget/trusted-publish@5bd02b67aaf373c23e871c8a6cf79e19652bbc9b
+        with:
+          package-glob: artifacts/pending/*.nupkg
+          nuget-user: ${{ vars.NUGET_USER }}
+      - name: Wait for package availability
+        uses: mackysoft/actions/nuget/package-state@5bd02b67aaf373c23e871c8a6cf79e19652bbc9b
+        with:
+          mode: wait
+          package-version: ${{ needs.package.outputs.version }}
+          package-ids: |
+            MackySoft.Navigathena
+            MackySoft.Navigathena.MicrosoftDI
+            MackySoft.Navigathena.Unity
+            MackySoft.Navigathena.Unity.UGUI
+            MackySoft.Navigathena.Unity.UIToolkit
+            MackySoft.Navigathena.Unity.Addressables
+            MackySoft.Navigathena.VContainer
+          max-attempts: 90
+          interval-seconds: 10
+      - name: Download and verify published packages
+        env:
+          PACKAGE_VERSION: ${{ needs.package.outputs.version }}
+          RELEASE_SHA: ${{ needs.package.outputs.sha }}
+        run: |
+          set -euo pipefail
+          python3 scripts/publication.py verify artifacts/packages "$PACKAGE_VERSION" artifacts/published
+          python3 scripts/verify-package-contents.py artifacts/published "$PACKAGE_VERSION" "$RELEASE_SHA"
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" artifacts/published/*.nupkg --clobber
+          else
+            release_options=(--verify-tag --title "$RELEASE_TAG" --generate-notes)
+            if [[ "$RELEASE_TAG" == *-* ]]; then
+              release_options+=(--prerelease --latest=false)
+            fi
+            gh release create "$RELEASE_TAG" artifacts/published/*.nupkg "${release_options[@]}"
+          fi

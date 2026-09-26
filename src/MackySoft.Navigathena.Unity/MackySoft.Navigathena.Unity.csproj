@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../eng/UnitySourcePackage.props" />
+  <PropertyGroup>
+    <Description>Unity Scene, Prefab, presentation and animation adapters for Navigathena. Source and assets for NuGetForUnity.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../MackySoft.Navigathena/MackySoft.Navigathena.csproj" />
+  </ItemGroup>
+</Project>

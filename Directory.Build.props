@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <Version>2.0.0-preview.1</Version>
+    <Authors>Hiroya Aramaki</Authors>
+    <Company>MackySoft</Company>
+    <RepositoryUrl>https://github.com/mackysoft/Navigathena</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/mackysoft/Navigathena</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+</Project>

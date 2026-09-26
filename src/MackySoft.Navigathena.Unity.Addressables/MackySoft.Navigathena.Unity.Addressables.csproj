@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../eng/UnitySourcePackage.props" />
+  <PropertyGroup>
+    <Description>Unity Addressables resource adapters for Navigathena. Requires Unity Addressables; install with NuGetForUnity.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../MackySoft.Navigathena.Unity/MackySoft.Navigathena.Unity.csproj" />
+  </ItemGroup>
+</Project>

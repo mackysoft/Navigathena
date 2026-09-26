@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../eng/UnitySourcePackage.props" />
+  <PropertyGroup>
+    <Description>VContainer screen scope adapters for Navigathena. Requires VContainer's Unity integration; install with NuGetForUnity.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../MackySoft.Navigathena/MackySoft.Navigathena.csproj" />
+  </ItemGroup>
+</Project>
