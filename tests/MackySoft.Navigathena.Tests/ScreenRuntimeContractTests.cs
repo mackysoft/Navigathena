@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -18,7 +19,7 @@ public sealed class ScreenRuntimeContractTests
     {
         RegionDefinitionId left = new("left");
         RegionDefinitionId right = new("right");
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen parent = new("parent", events);
         RecordingScreen leftScreen = new("left", events);
         RecordingScreen rightScreen = new("right", events);
@@ -82,7 +83,7 @@ public sealed class ScreenRuntimeContractTests
     [InlineData(true)]
     public async Task Detached_screen_cleanup_is_observable_without_delaying_navigation_and_shutdown_joins_it (bool fail)
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         TaskCompletionSource<bool> release = new(TaskCreationOptions.RunContinuationsAsynchronously);
         RecordingScreen first = new("first", events)
         {
@@ -137,7 +138,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Cancelling_a_wait_does_not_cancel_an_accepted_operation_and_conflicts_are_returned_immediately ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         TaskCompletionSource<bool> entered = new(TaskCreationOptions.RunContinuationsAsynchronously);
         TaskCompletionSource<bool> proceed = new(TaskCreationOptions.RunContinuationsAsynchronously);
         RecordingScreen first = new("first", events);
@@ -165,7 +166,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Failed_activity_stop_closes_input_and_requires_recovery_instead_of_reopening_the_source ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen first = new("first", events)
         {
             FailDeactivate = true
@@ -191,7 +192,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Startup_borrows_the_existing_overlay_keeps_it_present_during_loading_and_reveals_before_activity ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingView overlay = new();
         overlay.Apply(new ViewPresentation(true, false, 100));
         ResourceLifetime overlayLifetime = new();
@@ -202,7 +203,7 @@ public sealed class ScreenRuntimeContractTests
         {
             Assert.True(overlay.Presentation.OutputEnabled);
             Assert.Contains("effect.begin", events);
-            events.Add("title.load");
+            events.Enqueue("title.load");
             preparation.ConnectPresentation(new ScreenPresentationBinding(new[] { title.View }));
             return new ValueTask<RecordingScreen>(title);
         });
@@ -229,13 +230,13 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Destination_screen_effect_is_resolved_after_initialization_and_reused_until_screen_termination ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen first = new("first", events);
         RecordingScreen second = new("second", events);
         RecordingEffect effect = new(events);
         ScreenCatalog catalog = CreateCatalog((preparation, _) =>
         {
-            events.Add("first.load");
+            events.Enqueue("first.load");
             preparation.ConnectPresentation(new ScreenPresentationBinding(new[] { first.View }));
             preparation.SetTransitionEffect(preparation.Resources.CreateOwned(() => effect), new RecordingView());
             return new ValueTask<RecordingScreen>(first);
@@ -253,7 +254,7 @@ public sealed class ScreenRuntimeContractTests
         await first.Activities[0].Navigation.PushAsync(new SecondRoute());
         Assert.Equal(NavigationResultKind.Committed, (await second.Activities[0].Navigation.Back().WaitAsync()).Kind);
 
-        Assert.True(events.IndexOf("first.initialize") < events.IndexOf("effect.begin"));
+        Assert.True(Array.IndexOf(events.ToArray(), "first.initialize") < Array.IndexOf(events.ToArray(), "effect.begin"));
         Assert.Equal(1, events.Count(item => item == "first.load"));
         Assert.Equal(2, events.Count(item => item == "effect.begin"));
         Assert.DoesNotContain("effect.dispose", events);
@@ -264,7 +265,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Ambiguous_transition_rules_fail_before_activity_changes_and_explicit_none_overrides_policy ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen first = new("first", events);
         ScreenCatalog catalog = CreateCatalog((_, _) => new ValueTask<RecordingScreen>(first), (_, _) => new ValueTask<RecordingScreen>(new RecordingScreen("second", events)));
         RegionNavigationOptions region = new();
@@ -284,7 +285,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Effect_disposal_failure_does_not_undo_commit_or_release_its_borrowed_resources ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen title = new("title", events);
         RecordingEffect effect = new(events)
         {
@@ -311,7 +312,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task A_retained_screen_stops_logic_without_disposing_its_view_and_returns_with_a_new_activity ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen first = new("first", events);
         RecordingScreen second = new("second", events);
         ScreenCreationContext<FirstRoute>? captured = null;
@@ -340,7 +341,7 @@ public sealed class ScreenRuntimeContractTests
         Assert.False(first.View.Presentation.OutputEnabled);
         Assert.DoesNotContain("first.dispose", events);
         Assert.DoesNotContain("first.release", events);
-        Assert.True(events.IndexOf("first.deactivate") < events.IndexOf("second.initialize"));
+        Assert.True(Array.IndexOf(events.ToArray(), "first.deactivate") < Array.IndexOf(events.ToArray(), "second.initialize"));
 
         NavigationResult back = await second.Activities.Single().Navigation.Back().WaitAsync();
         Assert.Equal(NavigationResultKind.Committed, back.Kind);
@@ -354,7 +355,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Failed_factory_releases_partial_acquisition_before_restoring_source_activity ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen first = new("first", events);
         ScreenCatalog catalog = CreateCatalog((preparation, _) =>
         {
@@ -381,7 +382,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Shutdown_joins_and_keeps_view_ownership_when_lifecycle_handler_disposal_fails ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen first = new("first", events)
         {
             FailDispose = true
@@ -408,7 +409,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task External_owner_can_end_usage_before_host_and_keeps_ownership_of_its_value ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         ResourceLifetime lifetime = new();
         RecordingView original = new();
         ResourceReference<RecordingView> reference = lifetime.Reference(original);
@@ -436,7 +437,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Different_adapters_cannot_acquire_the_same_physical_view ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         object identity = new();
         RecordingScreen first = new("first", events);
         ScreenCatalog catalog = CreateCatalog((preparation, _) =>
@@ -460,7 +461,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Blockers_reuse_common_content_switch_custom_content_immediately_and_do_not_become_history ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingBlocker common = new();
         RecordingBlocker custom = new();
         int commonCreated = 0;
@@ -548,7 +549,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Outgoing_first_releases_before_loading_and_restores_the_source_on_destination_failure ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         int created = 0;
         ScreenCatalog catalog = CreateCatalog(async (preparation, token) =>
         {
@@ -586,7 +587,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Outgoing_first_rejects_a_simultaneous_screen_effect_before_stopping_activity ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen first = new("first", events);
         await using NavigationHost host = NavigationHost.Create(CreateCatalog((_, _) => new ValueTask<RecordingScreen>(first)), new NavigationHostOptions
         {
@@ -604,7 +605,7 @@ public sealed class ScreenRuntimeContractTests
     [InlineData(true)]
     public async Task Failed_recovery_releases_independent_fresh_resources_while_old_termination_is_failed_or_pending (bool pending)
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         TaskCompletionSource<object?> releaseOld = new(TaskCreationOptions.RunContinuationsAsynchronously);
         RecordingScreen old = new("old", events)
         {
@@ -653,7 +654,7 @@ public sealed class ScreenRuntimeContractTests
     [Fact]
     public async Task Failed_recovery_keeps_resources_still_used_by_its_own_failed_lifecycle_handler ()
     {
-        List<string> events = new();
+        ConcurrentQueue<string> events = new();
         RecordingScreen old = new("old", events)
         {
             FailDispose = true
@@ -788,8 +789,8 @@ public sealed class ScreenRuntimeContractTests
     private sealed class RecordingScreen : IScreenLifecycleHandler<Route>, IScreenStateCapture, INavigationChangeHandler
     {
         private readonly string name;
-        private readonly List<string> events;
-        public RecordingScreen (string name, List<string> events)
+        private readonly ConcurrentQueue<string> events;
+        public RecordingScreen (string name, ConcurrentQueue<string> events)
         {
             this.name = name;
             this.events = events;
@@ -826,7 +827,7 @@ public sealed class ScreenRuntimeContractTests
         }
         public ValueTask InitializeAsync (CancellationToken cancellationToken)
         {
-            events.Add(name + ".initialize");
+            events.Enqueue(name + ".initialize");
             if (FailInitialize)
             {
                 throw new InvalidOperationException("Initialization failed.");
@@ -848,14 +849,14 @@ public sealed class ScreenRuntimeContractTests
         {
             Assert.False(View.Presentation.InputEnabled);
             Activities.Add(activity);
-            events.Add(name + ".activate");
+            events.Enqueue(name + ".activate");
             return default;
         }
 
         public ValueTask DeactivateAsync ()
         {
             Assert.True(Activities.Last().CancellationToken.IsCancellationRequested);
-            events.Add(name + ".deactivate");
+            events.Enqueue(name + ".deactivate");
             if (FailDeactivate)
             {
                 throw new InvalidOperationException("Activity could not be stopped.");
@@ -866,7 +867,7 @@ public sealed class ScreenRuntimeContractTests
 
         public async ValueTask TerminateAsync ()
         {
-            events.Add(name + ".dispose");
+            events.Enqueue(name + ".dispose");
             if (DisposeBarrier is not null)
             {
                 await DisposeBarrier;
@@ -883,9 +884,9 @@ public sealed class ScreenRuntimeContractTests
     private sealed class RecordingAcquisition : IResourceAcquisition<object>
     {
         private readonly string name;
-        private readonly List<string> events;
+        private readonly ConcurrentQueue<string> events;
         private readonly bool fail;
-        public RecordingAcquisition (string name, List<string> events, bool fail = false)
+        public RecordingAcquisition (string name, ConcurrentQueue<string> events, bool fail = false)
         {
             this.name = name;
             this.events = events;
@@ -894,7 +895,7 @@ public sealed class ScreenRuntimeContractTests
 
         public ValueTask<object> AcquireAsync (ResourceAcquisitionContext context, CancellationToken cancellationToken)
         {
-            events.Add(name + ".acquire");
+            events.Enqueue(name + ".acquire");
             if (fail)
             {
                 throw new InvalidOperationException("Acquisition failed after creating a native resource.");
@@ -905,15 +906,15 @@ public sealed class ScreenRuntimeContractTests
 
         public ValueTask DisposeAsync ()
         {
-            events.Add(name + ".release");
+            events.Enqueue(name + ".release");
             return default;
         }
     }
 
     private sealed class RecordingEffect : INavigationTransitionEffect, IAsyncDisposable
     {
-        private readonly List<string> events;
-        public RecordingEffect (List<string> events) => this.events = events;
+        private readonly ConcurrentQueue<string> events;
+        public RecordingEffect (ConcurrentQueue<string> events) => this.events = events;
         public bool Revealed
         {
             get; private set;
@@ -924,33 +925,33 @@ public sealed class ScreenRuntimeContractTests
         }
         public ValueTask BeginAsync (TransitionBeginContext context, CancellationToken cancellationToken)
         {
-            events.Add("effect.begin");
+            events.Enqueue("effect.begin");
             return default;
         }
 
         public ValueTask PrepareSwitchAsync (TransitionTargetsContext context, CancellationToken cancellationToken)
         {
-            events.Add("effect.prepare");
+            events.Enqueue("effect.prepare");
             return default;
         }
 
         public ValueTask AfterCommitAsync (TransitionTargetsContext context, CancellationToken cancellationToken)
         {
-            events.Add("effect.after");
+            events.Enqueue("effect.after");
             Revealed = true;
             return default;
         }
 
         public ValueTask SettleAsync (TransitionSettlementContext context, CancellationToken cancellationToken)
         {
-            events.Add("effect.settle." + context.Target);
+            events.Enqueue("effect.settle." + context.Target);
             Revealed = context.Target == TransitionSettlementTarget.Destination;
             return default;
         }
 
         public ValueTask DisposeAsync ()
         {
-            events.Add("effect.dispose");
+            events.Enqueue("effect.dispose");
             if (FailDispose)
             {
                 throw new InvalidOperationException("Effect still uses its acquired view.");
