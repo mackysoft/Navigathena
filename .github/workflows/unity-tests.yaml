@@ -50,6 +50,7 @@ jobs:
           cliVersion: v0.1.69
           projectPath: artifacts/unity-project
           testMode: PlayMode
+          runAsHostUser: true
           customParameters: ${{ inputs.build-documentation && '-exportDocfxProjects' || '' }}
           artifactsPath: artifacts/unity-results/playmode
           githubToken: ''
