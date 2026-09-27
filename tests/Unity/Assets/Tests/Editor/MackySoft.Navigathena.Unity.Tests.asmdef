@@ -16,7 +16,7 @@
   "overrideReferences": true,
   "precompiledReferences": [
     "MackySoft.Navigathena.dll",
-    "MackySoft.Navigathena.MicrosoftDI.dll",
+    "MackySoft.Navigathena.Extensions.DependencyInjection.dll",
     "Microsoft.Extensions.DependencyInjection.dll",
     "Microsoft.Extensions.DependencyInjection.Abstractions.dll"
   ],

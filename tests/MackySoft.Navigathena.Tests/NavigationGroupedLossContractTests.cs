@@ -143,7 +143,7 @@ public sealed class NavigationGroupedLossContractTests
         NavigationIncidentId incident = lost.GetPresentation(fixture.Main.Id).IncidentId!.Value;
         realizer.RejectRestorationCommit = true;
 
-        NavigationResult recovery = await host.Recovery.RecoverAsync(incident);
+        NavigationException recovery = await Assert.ThrowsAsync<NavigationException>(async () => await host.Recovery.RecoverAsync(incident));
 
         Assert.False(recovery.DestinationCommitted);
         AssertAllMembersRemainLostForIncident(fixture.Loss, incident, recovery.FinalSnapshot);

@@ -1,4 +1,4 @@
-namespace MackySoft.Navigathena
+namespace MackySoft.Navigathena.Runtime.Transitions
 {
     internal enum TransitionEffectSource
     {

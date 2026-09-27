@@ -20,7 +20,7 @@ namespace MackySoft.Navigathena
         public void Register<TRoute> (Func<ScreenCreationContext<TRoute>, CancellationToken, ValueTask<IScreenLifecycleHandler<TRoute>>> create, Action<RouteDefinitionBuilder<TRoute>> configure) where TRoute : Route
             => Register(new ScreenDefinition<TRoute>(create), configure);
 
-        public void Register<TRoute, TResult> (Func<ScreenCreationContext<TRoute>, CancellationToken, ValueTask<IScreenLifecycleHandler<TRoute, TResult>>> create, Action<RouteDefinitionBuilder<TRoute>> configure) where TRoute : Route<TResult>
+        public void Register<TRoute, TResult> (Func<ScreenCreationContext<TRoute, TResult>, CancellationToken, ValueTask<IScreenLifecycleHandler<TRoute, TResult>>> create, Action<RouteDefinitionBuilder<TRoute>> configure) where TRoute : Route<TResult>
             => Register(new ScreenDefinition<TRoute, TResult>(create), configure);
 
         public void Register<TRoute> (ScreenDefinition<TRoute> screen, Action<RouteDefinitionBuilder<TRoute>> configure) where TRoute : Route

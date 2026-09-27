@@ -19,16 +19,16 @@ namespace MackySoft.Navigathena.Runtime.Navigation
             this.isCurrent = isCurrent ?? isActive;
         }
 
-        public Task InvokeAsync (Route route, CancellationToken cancellationToken = default, NavigationOptions? options = null)
+        public Task InvokeAsync (Route route, NavigationOptions? options = null, CancellationToken cancellationToken = default)
         {
             ValidateCall();
-            return navigation.InvokeAsync(route, cancellationToken, options);
+            return navigation.InvokeAsync(route, options, cancellationToken);
         }
 
-        public Task<TResult> InvokeAsync<TResult> (Route<TResult> route, CancellationToken cancellationToken = default, NavigationOptions? options = null)
+        public Task<TResult> InvokeAsync<TResult> (Route<TResult> route, NavigationOptions? options = null, CancellationToken cancellationToken = default)
         {
             ValidateCall();
-            return navigation.InvokeAsync(route, cancellationToken, options);
+            return navigation.InvokeAsync(route, options, cancellationToken);
         }
 
         private void ValidateCall ()

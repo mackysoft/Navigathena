@@ -36,9 +36,8 @@ public sealed class NavigationDepartureContractTests
         Assert.IsType<HomeRoute>(initial.FinalSnapshot.GetEntry(initial.FinalSnapshot.GetRegion(host.Root).Entries.Single()).Route);
         Assert.NotEqual(originalPresentation, result.FinalSnapshot.GetPresentation(home.Id).Id);
 
-        NavigationResult stale = await staleAction.Reset(Destination.For(new HomeRoute())).WaitAsync();
+        NavigationException stale = await Assert.ThrowsAsync<NavigationException>(async () => await staleAction.Reset(Destination.For(new HomeRoute())).WaitAsync());
 
-        Assert.Equal(NavigationResultKind.Rejected, stale.Kind);
         Assert.False(stale.DestinationCommitted);
     }
 

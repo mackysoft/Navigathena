@@ -1,6 +1,6 @@
 using System;
 
-namespace MackySoft.Navigathena
+namespace MackySoft.Navigathena.Runtime.Execution
 {
     internal sealed class NavigationConflictException : InvalidOperationException
     {

@@ -7,9 +7,9 @@ namespace MackySoft.Navigathena
     public interface INavigationClient
     {
         /// <summary>Waits for the ordinary screen call to close and release its resources. Cancellation ends the call.</summary>
-        Task InvokeAsync (RegionInstanceId target, Route route, CancellationToken cancellationToken = default, NavigationOptions? options = null);
+        Task InvokeAsync (RegionInstanceId target, Route route, NavigationOptions? options = null, CancellationToken cancellationToken = default);
         /// <summary>Returns the answer after callee cleanup. Closing without an answer cancels the task; failures throw.</summary>
-        Task<TResult> InvokeAsync<TResult> (RegionInstanceId target, Route<TResult> route, CancellationToken cancellationToken = default, NavigationOptions? options = null);
+        Task<TResult> InvokeAsync<TResult> (RegionInstanceId target, Route<TResult> route, NavigationOptions? options = null, CancellationToken cancellationToken = default);
         NavigationOperation Push<TRoute> (RegionInstanceId target, NavigationDestinationTree<TRoute> destination, NavigationOptions? options = null) where TRoute : Route;
         /// <summary>Replaces the selected entry and every entry above it, including their child regions, with one destination.</summary>
         /// <remarks>The target is resolved once within the specified region. Missing or ambiguous targets are rejected before changing screens.</remarks>

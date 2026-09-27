@@ -31,11 +31,11 @@ namespace MackySoft.Navigathena.Runtime.Navigation
             this.explicitTarget = explicitTarget;
         }
 
-        public Task InvokeAsync (Route route, CancellationToken cancellationToken = default, NavigationOptions? options = null)
-            => requests.InvokeAsync(entryId, presentationId, target, route, cancellationToken, options);
+        public Task InvokeAsync (Route route, NavigationOptions? options = null, CancellationToken cancellationToken = default)
+            => requests.InvokeAsync(entryId, presentationId, target, route, options, cancellationToken);
 
-        public Task<TResult> InvokeAsync<TResult> (Route<TResult> route, CancellationToken cancellationToken = default, NavigationOptions? options = null)
-            => requests.InvokeAsync(entryId, presentationId, target, route, cancellationToken, options);
+        public Task<TResult> InvokeAsync<TResult> (Route<TResult> route, NavigationOptions? options = null, CancellationToken cancellationToken = default)
+            => requests.InvokeAsync(entryId, presentationId, target, route, options, cancellationToken);
 
         public NavigationOperation Push<TRoute> (NavigationDestinationTree<TRoute> destination, NavigationOptions? options = null) where TRoute : Route => Execute(NavigationOperationKind.Push, destination ?? throw new ArgumentNullException(nameof(destination)), options);
         public NavigationOperation ReplaceFrom<TRoute> (HistoryTarget target, NavigationDestinationTree<TRoute> destination, NavigationOptions? options = null) where TRoute : Route => Execute(NavigationOperationKind.Replace, destination ?? throw new ArgumentNullException(nameof(destination)), options, target ?? throw new ArgumentNullException(nameof(target)));

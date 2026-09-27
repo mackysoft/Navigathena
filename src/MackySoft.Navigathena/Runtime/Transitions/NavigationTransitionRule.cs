@@ -1,6 +1,6 @@
 using System;
 
-namespace MackySoft.Navigathena
+namespace MackySoft.Navigathena.Runtime.Transitions
 {
     internal sealed record NavigationTransitionRule (NavigationOperationKind Operation, Type? Source, Type? Destination, NavigationTransition Transition)
     {

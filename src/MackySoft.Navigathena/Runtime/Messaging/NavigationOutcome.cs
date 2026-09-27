@@ -6,7 +6,8 @@ using System.Threading;
 namespace MackySoft.Navigathena.Runtime.Messaging
 {
     // Execution keeps partial outcomes until restoration and cleanup have settled.
-    // Only expected outcomes may cross the public completion boundary as values.
+    // Expected outcomes remain values for runtime coordination and completion observers.
+    // Public waits require a committed result; execution failures throw before observation.
     internal sealed record NavigationOutcome (NavigationOperationId OperationId, NavigationOperationKind Operation, NavigationOutcomeKind Kind, bool DestinationCommitted, NavigationState FinalSnapshot, NavigationDelta Changes, RestorationOutcome Restoration, IReadOnlyList<NavigationDiagnostic> Diagnostics)
     {
         public NavigationPresentationStatus PresentationStatus

@@ -3,6 +3,6 @@
   "rootNamespace": "MackySoft.Navigathena.Samples",
   "references": ["MackySoft.Navigathena.Unity", "MackySoft.Navigathena.Unity.UGUI", "MackySoft.Navigathena.Unity.Addressables", "MackySoft.Navigathena.VContainer", "VContainer", "UniTask", "Unity.Addressables", "Unity.ResourceManager", "UnityEngine.UI"],
   "overrideReferences": true,
-  "precompiledReferences": ["MackySoft.Navigathena.dll", "MackySoft.Navigathena.MicrosoftDI.dll", "Microsoft.Extensions.DependencyInjection.dll", "Microsoft.Extensions.DependencyInjection.Abstractions.dll"],
+  "precompiledReferences": ["MackySoft.Navigathena.dll", "MackySoft.Navigathena.Extensions.DependencyInjection.dll", "Microsoft.Extensions.DependencyInjection.dll", "Microsoft.Extensions.DependencyInjection.Abstractions.dll"],
   "autoReferenced": false
 }

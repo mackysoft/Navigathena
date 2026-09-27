@@ -158,7 +158,7 @@ public sealed class ScreenRuntimeContractTests
         wait.Cancel();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => waiter);
         NavigationOperation conflict = host.Client.Push(host.Root, Destination.For(new SecondRoute()));
-        Assert.Equal(NavigationResultKind.Conflict, (await conflict.WaitAsync().WaitAsync(TimeSpan.FromSeconds(5))).Kind);
+        await Assert.ThrowsAsync<NavigationException>(async () => await conflict.WaitAsync().WaitAsync(TimeSpan.FromSeconds(5)));
         proceed.SetResult(true);
         Assert.Equal(NavigationResultKind.Committed, (await operation.WaitAsync().WaitAsync(TimeSpan.FromSeconds(5))).Kind);
     }
@@ -349,7 +349,7 @@ public sealed class ScreenRuntimeContractTests
         Assert.False(first.Activities[1].CancellationToken.IsCancellationRequested);
         Assert.True(first.View.Presentation.InputEnabled);
         Assert.Equal(1, events.Count(item => item == "first.initialize"));
-        Assert.Equal(NavigationResultKind.Rejected, (await oldActivity.Navigation.Push(new SecondRoute()).WaitAsync()).Kind);
+        await Assert.ThrowsAsync<NavigationException>(async () => await oldActivity.Navigation.Push(new SecondRoute()).WaitAsync());
     }
 
     [Fact]
@@ -518,7 +518,7 @@ public sealed class ScreenRuntimeContractTests
         Assert.Equal(1, commonCreated);
         Assert.Equal(1, common.EnterCount);
         Assert.NotEqual(oldConnection.EntryId, common.Context!.EntryId);
-        Assert.Equal(NavigationResultKind.Rejected, (await oldConnection.Navigation.Back().WaitAsync()).Kind);
+        await Assert.ThrowsAsync<NavigationException>(async () => await oldConnection.Navigation.Back().WaitAsync());
         await host.Client.PushAsync(host.Root, Destination.For(new CustomModalRoute()));
         Assert.False(common.View.Presentation.OutputEnabled);
         Assert.True(custom.View.Presentation.OutputEnabled);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MackySoft.Navigathena.Runtime.Transitions;
 
 namespace MackySoft.Navigathena
 {

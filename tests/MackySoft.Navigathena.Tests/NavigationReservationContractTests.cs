@@ -24,9 +24,8 @@ public sealed class NavigationReservationContractTests
         await blockedPreparation;
         int preparationsBeforeConflict = realizer.UpdateKinds.Count;
 
-        NavigationResult childResult = await host.Client.Push(child, Destination.For(new ChildRoute())).WaitAsync();
+        NavigationException childResult = await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.Push(child, Destination.For(new ChildRoute())).WaitAsync());
 
-        Assert.Equal(NavigationResultKind.Conflict, childResult.Kind);
         Assert.False(childResult.DestinationCommitted);
         Assert.Equal(preparationsBeforeConflict, realizer.UpdateKinds.Count);
 

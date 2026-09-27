@@ -1,4 +1,4 @@
-namespace MackySoft.Navigathena
+namespace MackySoft.Navigathena.Hosting
 {
     /// <summary>Configures presentation choices independently of screen construction.</summary>
     public sealed class RegionNavigationOptions

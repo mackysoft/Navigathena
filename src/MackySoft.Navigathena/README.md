@@ -29,6 +29,43 @@ Host の寿命はゲーム側の所有者が決める。Root Region の Reset �
 
 LowerPresentationPolicy は同じ Region の下位画面とその子構成へ作用する。HUD・メニュー・編集画面を同じ履歴に積み、編集画面を HideAndRetain にすると、下位 UI を保持したまま退避し、Back で元のメニューへ戻れる。親や別の Region を暗黙に隠さず、共有ブロッカーは同じ定義の実体を Region 間で使い回す。
 
+## 遷移要求と待機
+
+画面内では `ScreenActivityContext.Navigation` を使う。画面外から操作する場合は `host.Client` に対象の `RegionInstanceId` を渡す。
+
+| API | 戻り値と完了条件 |
+| --- | --- |
+| `Push`、`Replace`、`Reset`、`Back`、`Reload` | 要求を出して `NavigationOperation` を返す。呼び出し時に遷移が完了するわけではない |
+| `PushAsync`、`ReplaceAsync`、`ResetAsync`、`BackAsync`、`ReloadAsync` | 遷移完了を待つ `Task` を返す拡張メソッド |
+| `InvokeAsync(Route, …)` | 呼び出した画面の終了・資源解放を待つ。画面内からの呼び出しは呼び出し元の活動再開も待つ |
+| `InvokeAsync<TResult>(Route<TResult>, …)` | 同じ終了処理を待ってから `TResult` を返す。回答なしで閉じた場合は取消になる |
+
+非同期の遷移要求は、対象、オプション、`CancellationToken` の順に指定する。オプションが不要なら名前付き引数でトークンだけを渡せる。
+
+```csharp
+await navigation.PushAsync(route, cancellationToken: cancellationToken);
+
+// answerRoute は Route<TResult> を継承したゲーム側の Route。
+var answer = await navigation.InvokeAsync(
+    answerRoute,
+    cancellationToken: cancellationToken);
+```
+
+操作を個別に観測・取消したい場合は `NavigationOperation` を使う。
+
+```csharp
+NavigationOperation operation = navigation.Push(route);
+NavigationResult completed = await operation.WaitAsync(waitCancellationToken);
+```
+
+`WaitAsync` のトークンは待機だけを取り消す。遷移自体への取消要求は `operation.TryRequestCancellation()` で行う。`PushAsync` などのトークンは遷移の取消を要求し、終了処理が落ち着くまで待つ。
+
+どちらの待機方法でも、要求の拒否・競合・実行失敗は `NavigationException`、取消は `OperationCanceledException` になる。`RecoverAsync` も拒否・競合・復旧失敗を例外で通知する。成功判定のために `NavigationResult.Kind` や `DestinationCommitted` を分岐させる必要はない。確定状態や復旧状況は例外から確認できる。
+
+引数や構成の誤りは、要求の受理前に引数例外や `NavigationConfigurationException` になる。
+
+`NavigationHostOptions.OperationCompleted` は観測用であり、Runtime が処理した要求の拒否・競合も通知される。画面を制御するコードは操作の完了を待ち、観測通知を成功判定の代わりに使わない。
+
 .NET Standard 2.1 / C# 9 を対象とする。Microsoft DI と VContainer は任意の連携アダプター。Unity、uGUI、UI Toolkit、Addressables は具体的な取得と表示操作だけを担当する。
 
 - [Unity・DI あり／なしの利用例](https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples)

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MackySoft.Navigathena.Extensions.DependencyInjection;
 using MackySoft.Navigathena.Hosting;
-using MackySoft.Navigathena.MicrosoftDI;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -14,6 +14,128 @@ public sealed class ScreenDependencyInjectionContractTests
 {
     private static readonly RegionDefinitionId Root = new("root");
     public sealed record ItemRoute (int Id) : Route;
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Result_screen_registration_connects_manual_or_DI_construction_and_releases_dependencies_before_returning (bool useDI)
+    {
+        SharedService shared = new();
+        TaskCompletionSource<SelectionPresenter> activated = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource<bool> opened = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        ScreenCatalog catalog = ScreenCatalog.Build(screens =>
+        {
+            screens.Register<OtherRoute>((_, _) => new(new OtherPresenter()), route =>
+            {
+                route.AllowedEntryOperations = RouteEntryOperations.Reset;
+                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
+            });
+            screens.Register<SelectionRoute, int>(async (creation, token) =>
+            {
+                await creation.Lifetime.AcquireAsync(new Acquisition(() => shared.Ending.Add("resource.dispose")), token);
+                if (useDI)
+                {
+                    return creation.CreateScope(services =>
+                    {
+                        services.AddSingleton(shared);
+                        services.AddSingleton(activated);
+                        services.AddScoped<ScreenService>();
+                        services.AddScreenLifecycleHandler<SelectionPresenter>();
+                    });
+                }
+                ScreenService service = creation.Lifetime.CreateOwned(() => new ScreenService(shared));
+                return creation.Lifetime.CreateOwned(() => new SelectionPresenter(shared, service, activated));
+            }, route =>
+            {
+                route.AllowedEntryOperations = RouteEntryOperations.Push;
+                route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
+            });
+        });
+        await using NavigationHost host = NavigationHost.Create(catalog, new NavigationHostOptions
+        {
+            OperationCompleted = result =>
+            {
+                if (result.Operation == NavigationOperationKind.Push)
+                {
+                    opened.TrySetResult(true);
+                }
+            }
+        });
+        await host.StartAsync(new OtherRoute());
+        using CancellationTokenSource cancellation = new();
+
+        Task<int> call = host.Client.InvokeAsync(host.Root, new SelectionRoute(7),
+            new NavigationOptions { Transition = NavigationTransition.None }, cancellation.Token);
+        SelectionPresenter presenter = await activated.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        await opened.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        Assert.Equal(7, presenter.Input);
+        Assert.NotNull(presenter.Service);
+        presenter.Activity!.Call.Complete(42);
+
+        Assert.Equal(42, await call.WaitAsync(TimeSpan.FromSeconds(5)));
+        Assert.Equal(new[] { "selection.terminate", "selection.dispose", "service.dispose", "resource.dispose" }, shared.Ending);
+        Assert.IsType<OtherRoute>(host.State.Current.GetEntry(Assert.Single(host.State.Current.GetRegion(host.Root).Entries)).Route);
+        await host.ShutdownAsync();
+        Assert.Equal(4, shared.Ending.Count);
+        Assert.Equal(0, shared.Disposals);
+    }
+
+    public sealed record SelectionRoute (int Id) : Route<int>;
+
+    public sealed class SelectionPresenter : IScreenLifecycleHandler<SelectionRoute, int>, IAsyncDisposable
+    {
+        private readonly SharedService shared;
+        private readonly TaskCompletionSource<SelectionPresenter> activated;
+
+        public SelectionPresenter (SharedService shared, ScreenService service, TaskCompletionSource<SelectionPresenter> activated)
+        {
+            this.shared = shared;
+            this.activated = activated;
+            Service = service;
+        }
+
+        public ScreenService Service
+        {
+            get;
+        }
+        public int Input
+        {
+            get; private set;
+        }
+        public ScreenActivityContext<int>? Activity
+        {
+            get; private set;
+        }
+
+        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+
+        public ValueTask PrepareAsync (SelectionRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
+        {
+            Input = route.Id;
+            return default;
+        }
+
+        public ValueTask ActivateAsync (SelectionRoute route, ScreenActivityContext<int> activity)
+        {
+            Activity = activity;
+            activated.SetResult(this);
+            return default;
+        }
+
+        public ValueTask DeactivateAsync () => default;
+
+        public ValueTask TerminateAsync ()
+        {
+            shared.Ending.Add("selection.terminate");
+            return default;
+        }
+
+        public ValueTask DisposeAsync ()
+        {
+            shared.Ending.Add("selection.dispose");
+            return default;
+        }
+    }
 
     [Theory]
     [InlineData(false)]

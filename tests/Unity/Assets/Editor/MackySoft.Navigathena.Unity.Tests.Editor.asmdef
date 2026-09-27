@@ -1,6 +1,6 @@
 {
-  "name": "MackySoft.Navigathena.Unity.Editor",
-  "rootNamespace": "MackySoft.Navigathena.Unity.Editor",
+  "name": "MackySoft.Navigathena.Unity.Tests.Editor",
+  "rootNamespace": "MackySoft.Navigathena.Unity.Tests.Editor",
   "references": [
     "Unity.VisualStudio.Editor"
   ],

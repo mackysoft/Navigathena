@@ -11,7 +11,7 @@
 | パッケージ | 用途 | 内容 |
 | --- | --- | --- |
 | `MackySoft.Navigathena` | 共通 Runtime。必須 | .NET Standard 2.1 DLL |
-| `MackySoft.Navigathena.MicrosoftDI` | Microsoft DI | .NET Standard 2.1 DLL |
+| `MackySoft.Navigathena.Extensions.DependencyInjection` | Microsoft.Extensions.DependencyInjection | .NET Standard 2.1 DLL |
 | `MackySoft.Navigathena.Unity` | Scene・Prefab・表示構成・Animator | Unity ソース・アセット |
 | `MackySoft.Navigathena.Unity.UGUI` | uGUI | Unity ソース・アセット |
 | `MackySoft.Navigathena.Unity.UIToolkit` | UI Toolkit | Unity ソース・アセット |

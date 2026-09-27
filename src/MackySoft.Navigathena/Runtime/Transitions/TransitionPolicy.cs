@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MackySoft.Navigathena.Hosting;
 using MackySoft.Navigathena.Presentation;
 
 namespace MackySoft.Navigathena.Runtime.Transitions

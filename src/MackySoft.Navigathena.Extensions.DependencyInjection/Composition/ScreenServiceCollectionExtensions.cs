@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using MackySoft.Navigathena.MicrosoftDI.Registration;
+using MackySoft.Navigathena.Extensions.DependencyInjection.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MackySoft.Navigathena.MicrosoftDI
+namespace MackySoft.Navigathena.Extensions.DependencyInjection
 {
     /// <summary>Registers concrete services once and connects their roles without disposable DI aliases.</summary>
     public static class ScreenServiceCollectionExtensions

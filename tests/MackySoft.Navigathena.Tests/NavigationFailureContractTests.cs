@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MackySoft.Navigathena.Extensions.DependencyInjection;
 using MackySoft.Navigathena.Hosting;
-using MackySoft.Navigathena.MicrosoftDI;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -13,6 +14,42 @@ public sealed class NavigationFailureContractTests
 {
     private static readonly RegionDefinitionId Root = new("root");
     private sealed record TestRoute : Route;
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Rejected_requests_stop_both_await_styles_and_remain_observable (bool useOperationHandle)
+    {
+        List<NavigationResult> observed = new();
+        await using NavigationHost host = Create((_, _) => new(new Handler()),
+            options: new NavigationHostOptions { OperationCompleted = observed.Add });
+        await host.StartAsync(new TestRoute());
+        observed.Clear();
+        NavigationState before = host.State.Current;
+        bool nextStepRan = false;
+
+        NavigationException failure = await Assert.ThrowsAsync<NavigationException>(async () =>
+        {
+            if (useOperationHandle)
+            {
+                await host.Client.Back(host.Root).WaitAsync();
+            }
+            else
+            {
+                await host.Client.BackAsync(host.Root);
+            }
+            nextStepRan = true;
+        });
+
+        Assert.False(nextStepRan);
+        Assert.False(failure.DestinationCommitted);
+        Assert.Same(before, host.State.Current);
+        Assert.Same(before, failure.FinalSnapshot);
+        NavigationResult notification = Assert.Single(observed);
+        Assert.Equal(NavigationResultKind.Rejected, notification.Kind);
+        Assert.Equal(failure.OperationId, notification.OperationId);
+        Assert.Equal(failure.Diagnostics, notification.Diagnostics);
+    }
 
     [Theory]
     [InlineData("construction", false)]

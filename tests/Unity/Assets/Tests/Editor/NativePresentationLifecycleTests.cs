@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using MackySoft.Navigathena.Hosting;
 using MackySoft.Navigathena.Integration;
-using MackySoft.Navigathena.MicrosoftDI;
+using MackySoft.Navigathena.Extensions.DependencyInjection;
 using MackySoft.Navigathena.Unity.UGUI;
 using MackySoft.Navigathena.VContainer;
 using Microsoft.Extensions.DependencyInjection;
@@ -210,7 +210,15 @@ namespace MackySoft.Navigathena.Unity.Tests
                 Assert.That(constructions, Is.EqualTo(1));
                 Assert.That(blocker.Disposals, Is.Zero);
                 Assert.That(blocker.Context!.RegionId, Is.EqualTo(right));
-                Assert.That((await previous.Navigation.Back().WaitAsync()).Kind, Is.EqualTo(NavigationResultKind.Rejected));
+                try
+                {
+                    await previous.Navigation.Back().WaitAsync();
+                    Assert.Fail("Navigation from a detached blocker must fail.");
+                }
+                catch (NavigationException exception)
+                {
+                    Assert.That(exception.DestinationCommitted, Is.False);
+                }
                 Assert.That(blockerView.GetComponent<Canvas>().sortingOrder, Is.GreaterThan(titleView.GetComponent<Canvas>().sortingOrder));
                 Assert.That(blockerView.GetComponent<Canvas>().sortingOrder, Is.LessThan(rightView.GetComponent<Canvas>().sortingOrder));
                 Assert.That(blockerView.GetComponent<CanvasGroup>().blocksRaycasts, Is.True);

@@ -9,8 +9,8 @@ namespace MackySoft.Navigathena
     {
         NavigationOperation Request (NavigationRequest request);
         void Post (NavigationEntryId entry, PresentationId presentation, Func<NavigationOperation> request);
-        Task InvokeAsync (NavigationEntryId owner, PresentationId presentation, RegionInstanceId target, Route route, CancellationToken cancellationToken, NavigationOptions? options);
-        Task<TResult> InvokeAsync<TResult> (NavigationEntryId owner, PresentationId presentation, RegionInstanceId target, Route<TResult> route, CancellationToken cancellationToken, NavigationOptions? options);
+        Task InvokeAsync (NavigationEntryId owner, PresentationId presentation, RegionInstanceId target, Route route, NavigationOptions? options, CancellationToken cancellationToken);
+        Task<TResult> InvokeAsync<TResult> (NavigationEntryId owner, PresentationId presentation, RegionInstanceId target, Route<TResult> route, NavigationOptions? options, CancellationToken cancellationToken);
     }
 
 }

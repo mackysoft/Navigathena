@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MackySoft.Navigathena
+namespace MackySoft.Navigathena.Hosting
 {
 
     /// <summary>Supplies observers for a host without exposing its runtime or mailbox.</summary>

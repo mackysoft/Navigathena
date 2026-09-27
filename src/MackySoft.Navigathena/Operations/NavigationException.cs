@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MackySoft.Navigathena
 {
-    /// <summary>An execution failure after restoration and cleanup have settled. A committed destination is not rolled back by this exception.</summary>
+    /// <summary>A rejected, conflicting or failed navigation request with its settled state. A committed destination is not rolled back by this exception.</summary>
     public sealed class NavigationException : Exception
     {
         internal NavigationException (
@@ -16,7 +16,7 @@ namespace MackySoft.Navigathena
             NavigationPresentationStatus presentationStatus,
             IReadOnlyList<NavigationDiagnostic> diagnostics,
             Exception cause)
-            : base("Navigation execution failed: " + cause.Message, cause)
+            : base("Navigation failed: " + cause.Message, cause)
         {
             OperationId = operationId;
             Operation = operation;

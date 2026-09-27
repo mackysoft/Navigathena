@@ -3,7 +3,7 @@ using System;
 using Microsoft.Unity.VisualStudio.Editor;
 using Unity.CodeEditor;
 
-namespace MackySoft.Navigathena.Unity.Editor.WorkspaceSynchronization
+namespace MackySoft.Navigathena.Unity.Tests.Editor.WorkspaceSynchronization
 {
 
     /// <summary>Synchronizes the C# workspace through the currently selected Visual Studio editor installation.</summary>

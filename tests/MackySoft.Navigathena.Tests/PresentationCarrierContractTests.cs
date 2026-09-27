@@ -78,9 +78,9 @@ public sealed class PresentationCarrierContractTests
 
         int committedChanges = realizer.CommittedPublications.Count;
         realizer.RejectDestinationCommit = true;
-        NavigationResult conflict = await host.Client.Push(notices, Destination.For(new NoticeRoute())).WaitAsync();
+        NavigationException conflict = await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.Push(notices, Destination.For(new NoticeRoute())).WaitAsync());
 
-        Assert.Equal(NavigationResultKind.Conflict, conflict.Kind);
+        Assert.False(conflict.DestinationCommitted);
         Assert.Equal(committedChanges, realizer.CommittedPublications.Count);
 
         Task blockedPreparation = realizer.BlockNextPreparationAsync();
@@ -125,7 +125,7 @@ public sealed class PresentationCarrierContractTests
         HostIncidentReportResult first = await host.HostIncidents.ReportAsync(incident);
         long revisionAfterFirstReport = host.State.Current.Revision;
         HostIncidentReportResult duplicate = await host.HostIncidents.ReportAsync(incident);
-        NavigationResult rejected = await host.Client.Push(host.Root, Destination.For(new OverlayRoute())).WaitAsync();
+        NavigationException rejected = await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.Push(host.Root, Destination.For(new OverlayRoute())).WaitAsync());
         Task<NavigationState> candidateObserved = host.State.WaitForChangeAsync(revisionAfterFirstReport).AsTask();
         Task<NavigationResult> recovery = host.Recovery.RecoverAsync(incident.Id).AsTask();
         NavigationState candidate = await candidateObserved;
@@ -134,7 +134,7 @@ public sealed class PresentationCarrierContractTests
         Assert.Equal(HostIncidentReportResult.Applied, first);
         Assert.Equal(HostIncidentReportResult.AlreadyCurrent, duplicate);
         Assert.Equal(reset.FinalSnapshot.Revision + 1, revisionAfterFirstReport);
-        Assert.Equal(NavigationResultKind.Rejected, rejected.Kind);
+        Assert.False(rejected.DestinationCommitted);
         Assert.Equal(revisionAfterFirstReport, rejected.FinalSnapshot.Revision);
         Assert.Empty(rejected.Changes.CreatedEntries);
         Assert.Empty(rejected.Changes.RemovedEntries);
@@ -187,9 +187,8 @@ public sealed class PresentationCarrierContractTests
         NavigationHostIncident incident = await ReportRootHostIncidentAsync(host);
         NavigationState before = host.State.Current;
 
-        NavigationResult recovery = await host.Recovery.RecoverAsync(new NavigationIncidentId(Guid.NewGuid()));
+        NavigationException recovery = await Assert.ThrowsAsync<NavigationException>(async () => await host.Recovery.RecoverAsync(new NavigationIncidentId(Guid.NewGuid())));
 
-        Assert.Equal(NavigationResultKind.Rejected, recovery.Kind);
         Assert.False(recovery.DestinationCommitted);
         Assert.Equal(before.Revision, recovery.FinalSnapshot.Revision);
         Assert.Equal(incident.Id, recovery.FinalSnapshot.HostIncident?.Id);
@@ -224,11 +223,10 @@ public sealed class PresentationCarrierContractTests
 
         Task<NavigationResult> firstRecovery = host.Recovery.RecoverAsync(incident.Id).AsTask();
         await preparationBlocked;
-        NavigationResult concurrentRecovery = await host.Recovery.RecoverAsync(incident.Id);
+        NavigationException concurrentRecovery = await Assert.ThrowsAsync<NavigationException>(async () => await host.Recovery.RecoverAsync(incident.Id));
         realizer.ReleaseBlockedPreparation();
         await firstRecovery;
 
-        Assert.Equal(NavigationResultKind.Conflict, concurrentRecovery.Kind);
         Assert.False(concurrentRecovery.DestinationCommitted);
         Assert.Equal(before.Revision, concurrentRecovery.FinalSnapshot.Revision);
         Assert.Equal(incident.Id, concurrentRecovery.FinalSnapshot.HostIncident?.Id);

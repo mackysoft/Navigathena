@@ -33,14 +33,21 @@ namespace MackySoft.Navigathena
                 }
             }
         }
-        /// <summary>Waits for the outcome. Execution failures throw; canceling this wait does not cancel the operation.</summary>
+        /// <summary>Waits for committed completion. Rejected requests, conflicts and execution failures throw; canceling this wait does not cancel the operation.</summary>
         public Task<NavigationResult> WaitAsync (CancellationToken waitCancellationToken = default)
         {
             if (ScreenWorkExecution.EntryId is NavigationEntryId owner && RemovedEntries.Contains(owner))
             {
                 throw new InvalidOperationException("Owned work cannot await an operation that ends its own owner. Submit the operation and return from the work.");
             }
-            return AsyncWait.WaitAsync(completion.Task, waitCancellationToken).AsTask();
+            return WaitForCommittedResultAsync(waitCancellationToken);
+        }
+
+        private async Task<NavigationResult> WaitForCommittedResultAsync (CancellationToken waitCancellationToken)
+        {
+            NavigationResult result = await AsyncWait.WaitAsync(completion.Task, waitCancellationToken);
+            result.EnsureCommitted();
+            return result;
         }
 
         internal Task<NavigationResult> WaitForRuntimeAsync () => completion.Task;
@@ -50,13 +57,7 @@ namespace MackySoft.Navigathena
             cancellationToken.ThrowIfCancellationRequested();
             NavigationOperation operation = request();
             using CancellationTokenRegistration registration = cancellationToken.Register(() => operation.TryRequestCancellation());
-            NavigationResult result = await operation.WaitAsync();
-            if (!result.DestinationCommitted)
-            {
-                throw new NavigationException(result.OperationId, result.Operation, false, result.FinalSnapshot,
-                    result.Changes, result.Restoration, result.PresentationStatus, result.Diagnostics,
-                    new InvalidOperationException(result.Diagnostics.FirstOrDefault()?.Reason ?? "The navigation request was not committed."));
-            }
+            await operation.WaitAsync();
         }
 
         /// <summary>Requests cancellation before the irreversible boundary. Callback exceptions propagate after the request is accepted.</summary>

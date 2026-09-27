@@ -1,4 +1,4 @@
-using MackySoft.Navigathena.MicrosoftDI;
+using MackySoft.Navigathena.Extensions.DependencyInjection;
 using MackySoft.Navigathena.VContainer;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;

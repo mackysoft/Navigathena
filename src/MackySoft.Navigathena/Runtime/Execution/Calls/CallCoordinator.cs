@@ -33,18 +33,18 @@ namespace MackySoft.Navigathena.Runtime.Execution
             this.captureReservationRelease = captureReservationRelease;
         }
 
-        public Task InvokeAsync (NavigationEntryId? owner, PresentationId? presentation, RegionInstanceId target, Route route, CancellationToken cancellationToken, NavigationOptions? options)
+        public Task InvokeAsync (NavigationEntryId? owner, PresentationId? presentation, RegionInstanceId target, Route route, NavigationOptions? options, CancellationToken cancellationToken)
         {
-            return BeginCall<object?>(owner, presentation, target, route, cancellationToken, options, requiresAnswer: false).Completion;
+            return BeginCall<object?>(owner, presentation, target, route, options, cancellationToken, requiresAnswer: false).Completion;
         }
 
-        public Task<TResult> InvokeAsync<TResult> (NavigationEntryId? owner, PresentationId? presentation, RegionInstanceId target, Route<TResult> route, CancellationToken cancellationToken, NavigationOptions? options)
+        public Task<TResult> InvokeAsync<TResult> (NavigationEntryId? owner, PresentationId? presentation, RegionInstanceId target, Route<TResult> route, NavigationOptions? options, CancellationToken cancellationToken)
         {
-            CallRecord<TResult> call = BeginCall<TResult>(owner, presentation, target, route, cancellationToken, options, requiresAnswer: true);
+            CallRecord<TResult> call = BeginCall<TResult>(owner, presentation, target, route, options, cancellationToken, requiresAnswer: true);
             return call.Answer;
         }
 
-        private CallRecord<TResult> BeginCall<TResult> (NavigationEntryId? owner, PresentationId? presentation, RegionInstanceId target, NavigationRoute route, CancellationToken token, NavigationOptions? options, bool requiresAnswer)
+        private CallRecord<TResult> BeginCall<TResult> (NavigationEntryId? owner, PresentationId? presentation, RegionInstanceId target, NavigationRoute route, NavigationOptions? options, CancellationToken token, bool requiresAnswer)
         {
             if (route is null)
             {
@@ -95,7 +95,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             try
             {
                 NavigationResult result = await call.Opening!.WaitForRuntimeAsync();
-                RequireCommitted(result);
+                result.EnsureCommitted();
                 call.Opened.TrySetResult(result);
             }
             catch (Exception exception)
@@ -228,7 +228,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                         await release;
                         continue;
                     }
-                    RequireCommitted(result);
+                    result.EnsureCommitted();
                     return;
                 }
             }
@@ -379,14 +379,6 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 calls.Remove(call.Id);
             }
             call.Cancellation.Dispose();
-        }
-
-        private static void RequireCommitted (NavigationResult result)
-        {
-            if (!result.DestinationCommitted)
-            {
-                throw new InvalidOperationException("The screen call navigation was " + result.Kind + ".");
-            }
         }
 
         private sealed class CallScope : IScreenCallScope

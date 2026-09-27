@@ -1,6 +1,6 @@
 # MackySoft.Navigathena.Unity.UIToolkit
 
-UIDocument visibility, sorting, input adapters, and the required permission stylesheet.
+UIDocument visibility, sorting, input adapters, and the required visibility stylesheet.
 
 Install this NuGet package through [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity). Keep all Navigathena packages at the same version. NuGet dependencies provide the common Runtime and, where required, the base Unity adapter.
 

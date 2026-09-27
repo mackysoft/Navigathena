@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using MackySoft.Navigathena.Hosting;
-using MackySoft.Navigathena.MicrosoftDI;
+using MackySoft.Navigathena.Extensions.DependencyInjection;
 using MackySoft.Navigathena.Samples.Campaign;
 using MackySoft.Navigathena.Unity;
 using MackySoft.Navigathena.Unity.Addressables;

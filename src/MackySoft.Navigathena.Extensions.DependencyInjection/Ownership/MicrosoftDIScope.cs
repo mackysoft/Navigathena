@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using MackySoft.Navigathena.MicrosoftDI.Registration;
+using MackySoft.Navigathena.Extensions.DependencyInjection.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MackySoft.Navigathena.MicrosoftDI.Ownership
+namespace MackySoft.Navigathena.Extensions.DependencyInjection.Ownership
 {
     internal sealed class MicrosoftDIScope : IAsyncDisposable
     {

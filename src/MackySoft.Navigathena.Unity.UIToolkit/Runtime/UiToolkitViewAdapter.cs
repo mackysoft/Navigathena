@@ -10,7 +10,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
     [DefaultExecutionOrder(100)]
     public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter
     {
-        private const string HiddenClass = "navigathena-view-output-closed";
+        private const string HiddenClass = "navigathena-view-hidden";
         [SerializeField] private bool presentBeforeNavigation;
         [SerializeField] private int baseSortingOrder;
         private UIDocument? document;
@@ -45,9 +45,9 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
             }
 
             root = Document.rootVisualElement ?? throw new NavigationConfigurationException("The UIDocument has no initialized root.");
-            StyleSheet permissions = Resources.Load<StyleSheet>("NavigathenaViewPermissions")
-                ?? throw new NavigationConfigurationException("The UI Toolkit adapter's permission stylesheet is missing.");
-            root.styleSheets.Add(permissions);
+            StyleSheet visibilityStyleSheet = Resources.Load<StyleSheet>("NavigathenaViewVisibility")
+                ?? throw new NavigationConfigurationException("The UI Toolkit adapter's visibility stylesheet is missing.");
+            root.styleSheets.Add(visibilityStyleSheet);
             input = new ViewInputBoundary();
             root.AddManipulator(input);
         }

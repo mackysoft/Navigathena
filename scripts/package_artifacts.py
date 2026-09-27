@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 
-BINARY_PACKAGES = ("MackySoft.Navigathena", "MackySoft.Navigathena.MicrosoftDI")
+BINARY_PACKAGES = ("MackySoft.Navigathena", "MackySoft.Navigathena.Extensions.DependencyInjection")
 SOURCE_PACKAGES = {
     "MackySoft.Navigathena.Unity": "MackySoft.Navigathena",
     "MackySoft.Navigathena.Unity.UGUI": "MackySoft.Navigathena.Unity",
@@ -67,7 +67,7 @@ def verify_package(path, repository, version, commit):
         expected_dependencies = {}
         if name in SOURCE_PACKAGES:
             expected_dependencies[SOURCE_PACKAGES[name]] = version
-        elif name == "MackySoft.Navigathena.MicrosoftDI":
+        elif name == "MackySoft.Navigathena.Extensions.DependencyInjection":
             versions = ET.parse(repository / "Directory.Packages.props")
             dependency = versions.find(".//PackageVersion[@Include='Microsoft.Extensions.DependencyInjection']")
             expected_dependencies = {

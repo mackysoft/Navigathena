@@ -71,8 +71,10 @@ public sealed class NavigationConvenienceContractTests
         Assert.Single(host.State.Current.GetRegion(host.Root).Entries);
     }
 
-    [Fact]
-    public async Task Convenience_operations_do_not_bypass_expired_activity_validation ()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Both_await_styles_reject_expired_activity_without_running_the_next_step (bool useOperationHandle)
     {
         Handler handler = new();
         await using NavigationHost host = CreateHost(handler);
@@ -81,8 +83,21 @@ public sealed class NavigationConvenienceContractTests
         await oldActivity.PushAsync(new TestRoute(2));
         long revision = host.State.Current.Revision;
 
-        await Assert.ThrowsAsync<NavigationException>(() => oldActivity.ResetAsync(new TestRoute(3)));
+        bool nextStepRan = false;
+        await Assert.ThrowsAsync<NavigationException>(async () =>
+        {
+            if (useOperationHandle)
+            {
+                await oldActivity.Reset(new TestRoute(3)).WaitAsync();
+            }
+            else
+            {
+                await oldActivity.ResetAsync(new TestRoute(3));
+            }
+            nextStepRan = true;
+        });
 
+        Assert.False(nextStepRan);
         Assert.Equal(revision, host.State.Current.Revision);
         Assert.Equal(new TestRoute(2), handler.Route);
     }
@@ -142,8 +157,8 @@ public sealed class NavigationConvenienceContractTests
             => Record(() => navigation.Reset(destination, options), options);
         public NavigationOperation Back (BackOptions? options = null) => navigation.Back(options);
         public NavigationOperation Reload (ReloadOptions? options = null) => navigation.Reload(options);
-        public Task InvokeAsync (Route route, CancellationToken cancellationToken = default, NavigationOptions? options = null) => navigation.InvokeAsync(route, cancellationToken, options);
-        public Task<TResult> InvokeAsync<TResult> (Route<TResult> route, CancellationToken cancellationToken = default, NavigationOptions? options = null) => navigation.InvokeAsync(route, cancellationToken, options);
+        public Task InvokeAsync (Route route, NavigationOptions? options = null, CancellationToken cancellationToken = default) => navigation.InvokeAsync(route, options, cancellationToken);
+        public Task<TResult> InvokeAsync<TResult> (Route<TResult> route, NavigationOptions? options = null, CancellationToken cancellationToken = default) => navigation.InvokeAsync(route, options, cancellationToken);
         public void PostPush<TRoute> (TRoute route, NavigationOptions? options = null) where TRoute : Route => navigation.PostPush(route, options);
         public void PostReplace<TRoute> (TRoute route, NavigationOptions? options = null) where TRoute : Route => navigation.PostReplace(route, options);
         public void PostReset<TRoute> (TRoute route, NavigationOptions? options = null) where TRoute : Route => navigation.PostReset(route, options);

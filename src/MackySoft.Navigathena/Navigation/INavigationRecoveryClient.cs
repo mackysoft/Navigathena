@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace MackySoft.Navigathena
 {
 
-    /// <summary>Requests recovery for a current presentation-loss or host incident.</summary>
+    /// <summary>Requests recovery for a current presentation-loss or host incident. Rejection, conflicts and recovery failures throw; successful completion returns the committed state.</summary>
     public interface INavigationRecoveryClient
     {
         ValueTask<NavigationResult> RecoverAsync (NavigationIncidentId incidentId, CancellationToken cancellationToken = default);

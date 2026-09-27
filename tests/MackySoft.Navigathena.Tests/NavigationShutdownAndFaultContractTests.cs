@@ -46,7 +46,7 @@ public sealed class NavigationShutdownAndFaultContractTests
         NavigationResult committed = await committedOperation;
         Assert.True(committed.DestinationCommitted);
         Assert.Contains(committed.FinalSnapshot.GetRegion(host.Root).Entries, entryId => committed.FinalSnapshot.GetEntry(entryId).Route is OverlayRoute);
-        Assert.Equal(NavigationResultKind.Conflict, (await queuedNavigation).Kind);
+        await Assert.ThrowsAsync<NavigationException>(async () => await queuedNavigation);
         NavigationException closed = await Assert.ThrowsAsync<NavigationException>(() => queuedRecovery);
         Assert.IsType<NavigationRuntimeClosedException>(closed.InnerException);
         Assert.Same(lastSnapshot, closed.FinalSnapshot);

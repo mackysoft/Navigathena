@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
-using MackySoft.Navigathena.MicrosoftDI.Ownership;
-using MackySoft.Navigathena.MicrosoftDI.Registration;
+using MackySoft.Navigathena.Extensions.DependencyInjection.Ownership;
+using MackySoft.Navigathena.Extensions.DependencyInjection.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MackySoft.Navigathena.MicrosoftDI
+namespace MackySoft.Navigathena.Extensions.DependencyInjection
 {
     public static class ConstructionContextExtensions
     {

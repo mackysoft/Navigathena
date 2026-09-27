@@ -52,10 +52,10 @@ public sealed class NavigationCallbackFaultContractTests
 
         RegionInstanceId notices = reset.FinalSnapshot.Regions.Values.Single(region => region.OwnerEntryId == main.Id && region.DefinitionId == Notices).Id;
         NavigationResult triggering = await host.Client.Push(notices, Destination.For(new NoticeRoute())).WaitAsync();
-        NavigationResult reentrant = await observer.ReentrantOperation!;
+        NavigationException reentrant = await Assert.ThrowsAsync<NavigationException>(async () => await observer.ReentrantOperation!);
 
         Assert.Equal(NavigationResultKind.Committed, triggering.Kind);
-        Assert.Equal(NavigationResultKind.Conflict, reentrant.Kind);
+        Assert.False(reentrant.DestinationCommitted);
         Assert.Equal(observer.PreparationsBeforeReentry, observer.PreparationsWhenReentryWasQueued);
         Assert.Equal(realizer.PrepareCount, observer.PreparationsWhenReentryWasQueued);
     }

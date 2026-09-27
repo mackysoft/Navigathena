@@ -82,9 +82,8 @@ public sealed class NavigationHostContractTests
         NavigationEntry parent = reset.FinalSnapshot.GetEntry(reset.FinalSnapshot.GetRegion(host.Root).Entries.Single());
         RegionInstanceId tabs = reset.FinalSnapshot.Regions.Values.Single(region => region.OwnerEntryId == parent.Id && region.DefinitionId == Tabs).Id;
 
-        NavigationResult result = await host.Client.Back(tabs).WaitAsync();
+        NavigationException result = await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.Back(tabs).WaitAsync());
 
-        Assert.Equal(NavigationResultKind.Rejected, result.Kind);
         Assert.False(result.DestinationCommitted);
         Assert.IsType<LobbyRoute>(result.FinalSnapshot.GetEntry(result.FinalSnapshot.GetRegion(tabs).Entries.Single()).Route);
     }
@@ -98,11 +97,11 @@ public sealed class NavigationHostContractTests
         RegionInstanceId tabs = reset.FinalSnapshot.Regions.Values.Single(region => region.OwnerEntryId == parent.Id && region.DefinitionId == Tabs).Id;
 
         NavigationResult replaced = await host.Client.Replace(tabs, Destination.For(new InventoryRoute())).WaitAsync();
-        NavigationResult back = await host.Client.Back(tabs).WaitAsync();
+        NavigationException back = await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.Back(tabs).WaitAsync());
 
         Assert.Equal(NavigationResultKind.Committed, replaced.Kind);
         Assert.IsType<InventoryRoute>(replaced.FinalSnapshot.GetEntry(replaced.FinalSnapshot.GetRegion(tabs).Entries.Single()).Route);
-        Assert.Equal(NavigationResultKind.Rejected, back.Kind);
+        Assert.False(back.DestinationCommitted);
         Assert.IsType<InventoryRoute>(back.FinalSnapshot.GetEntry(back.FinalSnapshot.GetRegion(tabs).Entries.Single()).Route);
     }
 
@@ -132,9 +131,8 @@ public sealed class NavigationHostContractTests
         };
         await using NavigationHost host = NavigationHost.Create(CreateDefinition(), realizer);
 
-        NavigationResult result = await host.Client.Reset(host.Root, Destination.For(new MainRoute()).Child(Tabs, Destination.For(new LobbyRoute()))).WaitAsync();
+        NavigationException result = await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.Reset(host.Root, Destination.For(new MainRoute()).Child(Tabs, Destination.For(new LobbyRoute()))).WaitAsync());
 
-        Assert.Equal(NavigationResultKind.Conflict, result.Kind);
         Assert.False(result.DestinationCommitted);
         Assert.Equal(0, host.State.Current.Revision);
         Assert.Empty(host.State.Current.GetRegion(host.Root).Entries);
@@ -169,11 +167,10 @@ public sealed class NavigationHostContractTests
 
         NavigationResult opened = await openNotice.Push(Destination.For(new NoticeRoute())).WaitAsync();
         NavigationResult replacedRoot = await host.Client.Reset(host.Root, Destination.For(new TitleRoute())).WaitAsync();
-        NavigationResult stale = await openNotice.Push(Destination.For(new NoticeRoute())).WaitAsync();
+        NavigationException stale = await Assert.ThrowsAsync<NavigationException>(async () => await openNotice.Push(Destination.For(new NoticeRoute())).WaitAsync());
 
         Assert.Equal(NavigationResultKind.Committed, opened.Kind);
         Assert.Equal(NavigationResultKind.Committed, replacedRoot.Kind);
-        Assert.Equal(NavigationResultKind.Rejected, stale.Kind);
         Assert.False(stale.DestinationCommitted);
     }
 
@@ -205,9 +202,8 @@ public sealed class NavigationHostContractTests
     {
         await using NavigationHost host = NavigationHost.Create(CreateDefinition(), new TestPresentationRealizer());
 
-        NavigationResult result = await host.Recovery.RecoverAsync(new NavigationIncidentId(Guid.NewGuid()));
+        NavigationException result = await Assert.ThrowsAsync<NavigationException>(async () => await host.Recovery.RecoverAsync(new NavigationIncidentId(Guid.NewGuid())));
 
-        Assert.Equal(NavigationResultKind.Rejected, result.Kind);
         Assert.False(result.DestinationCommitted);
         Assert.Equal(0, host.State.Current.Revision);
     }

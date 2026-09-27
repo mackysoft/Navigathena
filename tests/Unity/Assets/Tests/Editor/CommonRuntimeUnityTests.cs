@@ -129,6 +129,35 @@ namespace MackySoft.Navigathena.Unity.Tests
         });
 
         [UnityTest]
+        public IEnumerator Ui_toolkit_visibility_changes_preserve_the_document_and_its_content () => UniTask.ToCoroutine(async () =>
+        {
+            UiToolkitViewAdapter adapter = CreateDocument();
+            UIDocument document = adapter.GetComponent<UIDocument>();
+            VisualElement root = document.rootVisualElement;
+            Label label = new("Retained content");
+            root.Add(label);
+            await UniTask.NextFrame();
+            Assert.That(root.resolvedStyle.display, Is.EqualTo(DisplayStyle.None));
+
+            adapter.Apply(new ViewPresentation(true, false, 0));
+            await UniTask.NextFrame();
+            Assert.That(root.resolvedStyle.display, Is.EqualTo(DisplayStyle.Flex));
+
+            adapter.Apply(new ViewPresentation(false, false, 0));
+            await UniTask.NextFrame();
+            Assert.That(root.resolvedStyle.display, Is.EqualTo(DisplayStyle.None));
+            Assert.That(document.enabled, Is.True);
+            Assert.That(adapter.IsAlive, Is.True);
+
+            adapter.Apply(new ViewPresentation(true, false, 0));
+            await UniTask.NextFrame();
+            Assert.That(root.resolvedStyle.display, Is.EqualTo(DisplayStyle.Flex));
+            Assert.That(document.rootVisualElement, Is.SameAs(root));
+            Assert.That(root.Contains(label), Is.True);
+            Assert.That(label.text, Is.EqualTo("Retained content"));
+        });
+
+        [UnityTest]
         public IEnumerator Ui_toolkit_permissions_intercept_events_without_disabled_control_styling () => UniTask.ToCoroutine(async () =>
         {
             UiToolkitViewAdapter adapter = CreateDocument();

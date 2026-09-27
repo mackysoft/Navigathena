@@ -250,7 +250,7 @@ public sealed class RegionPresentationContractTests
         Assert.True(blocker.View.Presentation.InputEnabled);
         Assert.True(game.Current(right).View.Presentation.Order > blocker.View.Presentation.Order);
         Assert.True(blocker.View.Presentation.Order > game.Current(left).View.Presentation.Order);
-        Assert.Equal(NavigationResultKind.Rejected, (await old.Navigation.Back().WaitAsync()).Kind);
+        await Assert.ThrowsAsync<NavigationException>(async () => await old.Navigation.Back().WaitAsync());
         await host.Client.ResetAsync(host.Root, Destination.For(new Hud("standalone")));
         Assert.Null(blocker.Context);
         Assert.Equal(0, blocker.Disposals);
@@ -309,8 +309,8 @@ public sealed class RegionPresentationContractTests
         try
         {
             await entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
-            NavigationResult rejected = await host.Client.Push(right, Destination.For(new Popup())).WaitAsync();
-            Assert.Equal(NavigationResultKind.Conflict, rejected.Kind);
+            NavigationException rejected = await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.Push(right, Destination.For(new Popup())).WaitAsync());
+            Assert.False(rejected.DestinationCommitted);
             Assert.IsType<Hud>(game.Current(right).Route);
             Assert.False(game.Current(right).Activity.CancellationToken.IsCancellationRequested);
         }

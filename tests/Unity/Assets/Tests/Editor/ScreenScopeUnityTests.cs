@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using MackySoft.Navigathena.Hosting;
 using MackySoft.Navigathena.Integration;
-using MackySoft.Navigathena.MicrosoftDI;
+using MackySoft.Navigathena.Extensions.DependencyInjection;
 using MackySoft.Navigathena.Unity.UGUI;
 using MackySoft.Navigathena.VContainer;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,42 +48,36 @@ namespace MackySoft.Navigathena.Unity.Tests
             {
                 HistoryReturn = new ScreenHistoryReturnOptions { Preparation = ScreenPreparationMode.Always }
             };
-            ScreenDefinition<QuestionRoute, bool> question = new((creation, _) =>
+            ScreenCatalog catalog = ScreenCatalog.Build(Root, RegionCompositionMode.Layered, screens =>
             {
-                creation.ConnectPresentation(new ScreenPresentationBinding(new[] { answerView }, returnState: ScreenAnimationState.BeforeEnter));
-                if (mode == 0)
-                {
-                    return new(creation.Lifetime.CreateOwned(() => new QuestionPresenter(game, answerView)));
-                }
-                if (mode == 1)
-                {
-                    return new(creation.CreateScope(services =>
-                    {
-                        services.AddSingleton(game);
-                        services.AddSingleton(answerView);
-                        services.AddScreenLifecycleHandler<QuestionPresenter>();
-                    }));
-                }
-                return new(creation.CreateScope(parent, new QuestionInstaller(answerView)));
-            });
-            NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, region =>
-            {
-                region.AddRoute<PopupRoute>(route =>
+                screens.Register(caller, route =>
                 {
                     route.AllowedEntryOperations = RouteEntryOperations.Reset;
                     route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
                 });
-                region.AddRoute<QuestionRoute>(route =>
+                screens.Register<QuestionRoute, bool>((creation, _) =>
+                {
+                    creation.ConnectPresentation(new ScreenPresentationBinding(new[] { answerView }, returnState: ScreenAnimationState.BeforeEnter));
+                    if (mode == 0)
+                    {
+                        return new(creation.Lifetime.CreateOwned(() => new QuestionPresenter(game, answerView)));
+                    }
+                    if (mode == 1)
+                    {
+                        return new(creation.CreateScope(services =>
+                        {
+                            services.AddSingleton(game);
+                            services.AddSingleton(answerView);
+                            services.AddScreenLifecycleHandler<QuestionPresenter>();
+                        }));
+                    }
+                    return new(creation.CreateScope(parent, new QuestionInstaller(answerView)));
+                }, route =>
                 {
                     route.AllowedEntryOperations = RouteEntryOperations.Push;
                     route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
                 });
             });
-            ScreenCatalog catalog = ScreenCatalog.Build(definition, catalog => catalog.RegisterScreens(Root, screens =>
-            {
-                screens.RegisterScreen(caller);
-                screens.RegisterScreen(question);
-            }));
             NavigationHost host = NavigationHost.Create(catalog);
             int mainThread = Thread.CurrentThread.ManagedThreadId;
             try
@@ -91,7 +85,8 @@ namespace MackySoft.Navigathena.Unity.Tests
                 await host.StartAsync(new PopupRoute(3));
                 ScreenActivityContext first = game.Presenter.Activity;
                 game.Presenter.Selection = 42;
-                Task<bool> answer = first.Navigation.InvokeAsync(new QuestionRoute(10));
+                Task<bool> answer = first.Navigation.InvokeAsync(new QuestionRoute(10),
+                    new NavigationOptions { Transition = NavigationTransition.None }, CancellationToken.None);
                 await UniTask.WaitUntil(() => game.Question?.Activity != null && answerView.Presentation.InputEnabled).Timeout(TimeSpan.FromSeconds(10));
                 Assert.That(first.CancellationToken.IsCancellationRequested, Is.True);
                 Assert.That(game.Question.Cost, Is.EqualTo(10));
@@ -122,6 +117,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 Object.Destroy(answerObject);
                 await UniTask.NextFrame();
             }
+            Assert.That(game.Question.Disposals, Is.EqualTo(1));
         });
 
         public sealed record QuestionRoute : Route<bool>
@@ -236,7 +232,15 @@ namespace MackySoft.Navigathena.Unity.Tests
                 ScreenActivityContext old = presenter.Activity;
                 presenter.Selection = 10;
                 Assert.That((await old.Navigation.Push(new PopupRoute(2)).WaitAsync()).Kind, Is.EqualTo(NavigationResultKind.Committed));
-                Assert.That((await old.Navigation.Back().WaitAsync()).Kind, Is.EqualTo(NavigationResultKind.Rejected));
+                try
+                {
+                    await old.Navigation.Back().WaitAsync();
+                    Assert.Fail("Navigation from an expired activity must fail.");
+                }
+                catch (NavigationException exception)
+                {
+                    Assert.That(exception.DestinationCommitted, Is.False);
+                }
                 Assert.That((await presenter.Activity.Navigation.Back().WaitAsync()).Kind, Is.EqualTo(NavigationResultKind.Committed));
                 Assert.That(presenter.Current, Is.EqualTo(1));
                 Assert.That(presenter.Selection, Is.EqualTo(10));

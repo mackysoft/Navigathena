@@ -1,6 +1,6 @@
 using System;
 
-namespace MackySoft.Navigathena.MicrosoftDI.Registration
+namespace MackySoft.Navigathena.Extensions.DependencyInjection.Registration
 {
     internal enum ScreenServiceRole
     {

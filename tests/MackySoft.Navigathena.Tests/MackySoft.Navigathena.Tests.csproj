@@ -14,10 +14,10 @@
 
   <ItemGroup Condition="'$(TestPackageVersion)' == ''">
     <ProjectReference Include="../../src/MackySoft.Navigathena/MackySoft.Navigathena.csproj" />
-    <ProjectReference Include="../../src/MackySoft.Navigathena.MicrosoftDI/MackySoft.Navigathena.MicrosoftDI.csproj" />
+    <ProjectReference Include="../../src/MackySoft.Navigathena.Extensions.DependencyInjection/MackySoft.Navigathena.Extensions.DependencyInjection.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TestPackageVersion)' != ''">
     <PackageReference Include="MackySoft.Navigathena" VersionOverride="$(TestPackageVersion)" />
-    <PackageReference Include="MackySoft.Navigathena.MicrosoftDI" VersionOverride="$(TestPackageVersion)" />
+    <PackageReference Include="MackySoft.Navigathena.Extensions.DependencyInjection" VersionOverride="$(TestPackageVersion)" />
   </ItemGroup>
 </Project>

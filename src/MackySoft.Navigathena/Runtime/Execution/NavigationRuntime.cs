@@ -45,10 +45,10 @@ namespace MackySoft.Navigathena.Runtime.Execution
         private long hostRecoveryStartAdmissionOrder;
         private int closed;
         private CallCoordinator? calls;
-        Task ISourceNavigationRequestPort.InvokeAsync (NavigationEntryId owner, PresentationId presentation, RegionInstanceId target, Route route, CancellationToken cancellationToken, NavigationOptions? options)
-            => (calls ?? throw new InvalidOperationException("The protocol-only host cannot invoke screens.")).InvokeAsync(owner, presentation, target, route, cancellationToken, options);
-        Task<TResult> ISourceNavigationRequestPort.InvokeAsync<TResult> (NavigationEntryId owner, PresentationId presentation, RegionInstanceId target, Route<TResult> route, CancellationToken cancellationToken, NavigationOptions? options)
-            => (calls ?? throw new InvalidOperationException("The protocol-only host cannot invoke screens.")).InvokeAsync(owner, presentation, target, route, cancellationToken, options);
+        Task ISourceNavigationRequestPort.InvokeAsync (NavigationEntryId owner, PresentationId presentation, RegionInstanceId target, Route route, NavigationOptions? options, CancellationToken cancellationToken)
+            => (calls ?? throw new InvalidOperationException("The protocol-only host cannot invoke screens.")).InvokeAsync(owner, presentation, target, route, options, cancellationToken);
+        Task<TResult> ISourceNavigationRequestPort.InvokeAsync<TResult> (NavigationEntryId owner, PresentationId presentation, RegionInstanceId target, Route<TResult> route, NavigationOptions? options, CancellationToken cancellationToken)
+            => (calls ?? throw new InvalidOperationException("The protocol-only host cannot invoke screens.")).InvokeAsync(owner, presentation, target, route, options, cancellationToken);
 
         public NavigationRuntime (NavigationDefinition definition, IPresentationRealizer realizer, IReadOnlyList<INavigationCommitObserver> observers, Func<NavigationResult, ValueTask>? operationCompleted = null)
         {
@@ -69,10 +69,10 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
         public RegionInstanceId Root => state.Current.RootRegionInstanceId;
         public NavigationState Current => state.Current;
-        public Task InvokeAsync (RegionInstanceId target, Route route, CancellationToken cancellationToken = default, NavigationOptions? options = null)
-            => (calls ?? throw new InvalidOperationException("The host does not own screens.")).InvokeAsync(null, null, target, route, cancellationToken, options);
-        public Task<TResult> InvokeAsync<TResult> (RegionInstanceId target, Route<TResult> route, CancellationToken cancellationToken = default, NavigationOptions? options = null)
-            => (calls ?? throw new InvalidOperationException("The host does not own screens.")).InvokeAsync(null, null, target, route, cancellationToken, options);
+        public Task InvokeAsync (RegionInstanceId target, Route route, NavigationOptions? options = null, CancellationToken cancellationToken = default)
+            => (calls ?? throw new InvalidOperationException("The host does not own screens.")).InvokeAsync(null, null, target, route, options, cancellationToken);
+        public Task<TResult> InvokeAsync<TResult> (RegionInstanceId target, Route<TResult> route, NavigationOptions? options = null, CancellationToken cancellationToken = default)
+            => (calls ?? throw new InvalidOperationException("The host does not own screens.")).InvokeAsync(null, null, target, route, options, cancellationToken);
         public ValueTask<NavigationState> WaitForChangeAsync (long observedRevision, CancellationToken cancellationToken = default) => state.WaitForChangeAsync(observedRevision, cancellationToken);
 
         public NavigationOperation Push<TRoute> (RegionInstanceId target, NavigationDestinationTree<TRoute> destination, NavigationOptions? options = null) where TRoute : Route => Submit(new NavigationRequest(NavigationOperationKind.Push, target, destination, options, CancellationToken.None, null));
@@ -85,9 +85,11 @@ namespace MackySoft.Navigathena.Runtime.Execution
         public NavigationOperation Reload (RegionInstanceId target, ReloadOptions? options = null) => Submit(new NavigationRequest(NavigationOperationKind.Reload, target, null, (options ?? new ReloadOptions()).ToNavigationOptions(), CancellationToken.None, null));
         public NavigationOperation Clear (RegionInstanceId target) => Submit(new NavigationRequest(NavigationOperationKind.Clear, target, null, null, CancellationToken.None, null));
 
-        public ValueTask<NavigationResult> RecoverAsync (NavigationIncidentId incidentId, CancellationToken cancellationToken = default)
+        public async ValueTask<NavigationResult> RecoverAsync (NavigationIncidentId incidentId, CancellationToken cancellationToken = default)
         {
-            return ObserveCompletionAsync(mailbox.Write(new NavigationRecoveryMailboxRequest(incidentId, cancellationToken), Current), cancellationToken);
+            NavigationResult result = await ObserveCompletionAsync(mailbox.Write(new NavigationRecoveryMailboxRequest(incidentId, cancellationToken), Current), cancellationToken);
+            result.EnsureCommitted();
+            return result;
         }
 
         public ValueTask<PresentationLossResult> ReportAsync (PresentationLoss loss, CancellationToken cancellationToken = default)
@@ -161,10 +163,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             try
             {
                 NavigationResult result = await operation.WaitForRuntimeAsync();
-                if (!result.DestinationCommitted)
-                {
-                    throw new InvalidOperationException("Posted navigation was " + result.Kind + ".");
-                }
+                result.EnsureCommitted();
             }
             catch (Exception exception)
             {

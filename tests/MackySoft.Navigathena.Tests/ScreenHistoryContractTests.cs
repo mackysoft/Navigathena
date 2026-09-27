@@ -71,7 +71,7 @@ public sealed class ScreenHistoryContractTests
             instances[0].Selection = 42;
             Assert.True((await instances[0].Activities.Last().Navigation.Push(new CoverRoute()).WaitAsync()).DestinationCommitted);
             long coveredRevision = host.State.Current.Revision;
-            Assert.Equal(NavigationResultKind.Conflict, (await host.Client.Back(host.Root).WaitAsync()).Kind);
+            await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.Back(host.Root).WaitAsync());
             Assert.Equal(coveredRevision, host.State.Current.Revision);
             Assert.Single(instances);
             released.TrySetResult(null);
@@ -222,7 +222,7 @@ public sealed class ScreenHistoryContractTests
         Assert.Equal(NavigationResultKind.Committed, (await original.Navigation.Push(new ChapterRoute(2)).WaitAsync()).Kind);
         Assert.Equal(2, host.State.Current.GetRegion(host.Root).Entries.Count);
         Assert.Equal(expectedInstances, instances.Count);
-        Assert.Equal(NavigationResultKind.Rejected, (await original.Navigation.Back().WaitAsync()).Kind);
+        await Assert.ThrowsAsync<NavigationException>(async () => await original.Navigation.Back().WaitAsync());
         ChapterPresenter current = instances.Last();
         Assert.True(current.Activities.Last().IsFirstActivation);
         Assert.Equal(2, current.Route!.Chapter);

@@ -116,7 +116,7 @@ jobs:
           package-version: ${{ needs.package.outputs.version }}
           package-ids: |
             MackySoft.Navigathena
-            MackySoft.Navigathena.MicrosoftDI
+            MackySoft.Navigathena.Extensions.DependencyInjection
             MackySoft.Navigathena.Unity
             MackySoft.Navigathena.Unity.UGUI
             MackySoft.Navigathena.Unity.UIToolkit

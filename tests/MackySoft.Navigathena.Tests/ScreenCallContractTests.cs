@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MackySoft.Navigathena.Extensions.DependencyInjection;
 using MackySoft.Navigathena.Hosting;
-using MackySoft.Navigathena.MicrosoftDI;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -122,13 +122,21 @@ public sealed class ScreenCallContractTests
         Assert.Equal(1, game.Details.Disposed);
     }
 
-    [Fact]
-    public async Task Ordinary_call_cancellation_closes_the_screen_without_continuing_the_flow ()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Ordinary_call_cancellation_closes_the_screen_without_continuing_the_flow (bool fromScreen)
     {
         await using Harness game = new();
         await game.Host.StartAsync(new HomeRoute("home"));
         using CancellationTokenSource cancellation = new();
-        Task call = game.Host.Client.InvokeAsync(game.Host.Root, new DetailsRoute(), cancellation.Token);
+        NavigationOptions options = new()
+        {
+            Transition = NavigationTransition.None
+        };
+        Task call = fromScreen
+            ? game.Home.Activity!.Navigation.InvokeAsync(new DetailsRoute(), options, cancellation.Token)
+            : game.Host.Client.InvokeAsync(game.Host.Root, new DetailsRoute(), options, cancellation.Token);
         await game.WaitForTopAsync<DetailsRoute>();
         cancellation.Cancel();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => call.WaitAsync(TestTimeout));
@@ -314,7 +322,7 @@ public sealed class ScreenCallContractTests
         await using Harness game = new();
         await game.Host.StartAsync(new HomeRoute("home"));
         using CancellationTokenSource cancellation = new();
-        Task<bool> answer = game.Host.Client.InvokeAsync(game.Host.Root, new QuestionRoute(1), cancellation.Token);
+        Task<bool> answer = game.Host.Client.InvokeAsync(game.Host.Root, new QuestionRoute(1), cancellationToken: cancellation.Token);
         await game.WaitForTopAsync<QuestionRoute>();
         TaskCompletionSource<bool> preparing = Signal<bool>();
         TaskCompletionSource<bool> release = Signal<bool>();
@@ -561,13 +569,21 @@ public sealed class ScreenCallContractTests
         Assert.True(game.Home.View.Presentation.InputEnabled);
     }
 
-    [Fact]
-    public async Task Cancellation_closes_the_entire_call_including_details ()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Cancellation_closes_the_entire_call_including_details (bool fromScreen)
     {
         await using Harness game = new();
         await game.Host.StartAsync(new HomeRoute("home"));
         using CancellationTokenSource cancellation = new();
-        Task<bool> answer = game.Host.Client.InvokeAsync(game.Host.Root, new QuestionRoute(1), cancellation.Token);
+        NavigationOptions options = new()
+        {
+            Transition = NavigationTransition.None
+        };
+        Task<bool> answer = fromScreen
+            ? game.Home.Activity!.Navigation.InvokeAsync(new QuestionRoute(1), options, cancellation.Token)
+            : game.Host.Client.InvokeAsync(game.Host.Root, new QuestionRoute(1), options, cancellation.Token);
         await game.WaitForTopAsync<QuestionRoute>();
         await game.Question.Activity!.Navigation.PushAsync(new DetailsRoute());
 
@@ -722,7 +738,7 @@ public sealed class ScreenCallContractTests
             await Task.Delay(Timeout.InfiniteTimeSpan, token);
         };
         using CancellationTokenSource cancellation = new();
-        Task<bool> answer = game.Host.Client.InvokeAsync(game.Host.Root, new QuestionRoute(1), cancellation.Token);
+        Task<bool> answer = game.Host.Client.InvokeAsync(game.Host.Root, new QuestionRoute(1), cancellationToken: cancellation.Token);
         await preparing.Task.WaitAsync(TestTimeout);
         cancellation.Cancel();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => answer.WaitAsync(TestTimeout));

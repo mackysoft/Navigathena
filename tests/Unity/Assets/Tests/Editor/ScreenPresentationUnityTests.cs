@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using MackySoft.Navigathena.Hosting;
-using MackySoft.Navigathena.MicrosoftDI;
+using MackySoft.Navigathena.Extensions.DependencyInjection;
 using MackySoft.Navigathena.Unity.UGUI;
 using MackySoft.Navigathena.VContainer;
 using Microsoft.Extensions.DependencyInjection;
