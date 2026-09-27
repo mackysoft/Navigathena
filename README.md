@@ -2,7 +2,7 @@
 
 エンジンに依存しない画面管理ライブラリです。履歴、画面のライフサイクル、表示・入力、画面呼び出しと資源の寿命を共通 Runtime が管理し、Unity や DI コンテナーの操作はアダプターへ分離します。
 
-このブランチは 2.0 の公開準備中です。以下は 2.0 用の配布構成です。1.x のコードと資料は [1.1.0 タグ](https://github.com/mackysoft/Navigathena/tree/1.1.0)に残っています。
+以下は 2.0 用の配布構成です。1.x のコードと資料は [1.1.0 タグ](https://github.com/mackysoft/Navigathena/tree/1.1.0)に残っています。
 
 ## 配布構成
 
@@ -33,7 +33,8 @@ Unity の検証環境は 6000.5.5f1 です。外部ライブラリの検証バ�
 ## 使い方
 
 - [基本的な利用方法](src/MackySoft.Navigathena/README.md)
-- [コンパイル・テスト対象の Unity サンプル](tests/Unity/Assets/Samples)
+- [公開 API リファレンス](https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.html)
+- [コンパイル・テスト対象の Unity サンプル](https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples)
 
 ## 開発・検証
 
@@ -53,6 +54,16 @@ bash scripts/verify.sh --unity
 ```
 
 七つの NuGet パッケージを生成し、`artifacts/unity-project` に独立した利用プロジェクトを作ります。NuGetForUnity で復元したアダプターに対して、表示・入力・演出・寿命管理の振る舞いを PlayMode で検証します。配布物の構成と復元内容の一致は、テストではなく配布用スクリプトで確認します。生成先は編集せず、テスト・サンプルは `tests/Unity` で管理します。
+
+## 公開ドキュメントの生成
+
+```bash
+bash scripts/verify.sh --documentation
+```
+
+Unity の検証に続けて、ソースコードの公開 API と XML コメント、各パッケージの README、変更履歴から DocFX でサイトを生成します。共通本体と DI 連携には通常の `.csproj` を使い、Unity アダプターには Unity のソース一覧・参照・コンパイル条件から一時 `.csproj` を生成します。Unity の IDE 用プロジェクトや `Library` を Git に登録する必要はありません。
+
+生成物は `artifacts/documentation` 以下に置きます。入力の生成後は `bash scripts/build-documentation.sh` でサイトだけ再生成できます。CI は PR で生成を検証し、`main` では既存の `gh-pages` へ公開します。
 
 ## ライセンス
 

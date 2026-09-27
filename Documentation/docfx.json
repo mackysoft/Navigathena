@@ -1,0 +1,49 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "..",
+          "files": [
+            "src/MackySoft.Navigathena/MackySoft.Navigathena.csproj",
+            "src/MackySoft.Navigathena.Extensions.DependencyInjection/MackySoft.Navigathena.Extensions.DependencyInjection.csproj",
+            "artifacts/documentation/unity/*/*.csproj"
+          ]
+        }
+      ],
+      "dest": "../artifacts/documentation/api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": ["index.md", "toc.yml", "changelog/**"]
+      },
+      {
+        "src": "..",
+        "files": ["README.md", "src/*/README.md"]
+      },
+      {
+        "src": "../artifacts/documentation/api",
+        "files": ["*.yml"],
+        "dest": "api"
+      }
+    ],
+    "resource": [
+      {
+        "src": "..",
+        "files": ["LICENSE", "tests/Unity/Packages/manifest.json"]
+      }
+    ],
+    "globalMetadata": {
+      "_appTitle": "Navigathena",
+      "_enableSearch": true,
+      "_disableContribution": true
+    },
+    "sitemap": {
+      "baseUrl": "https://mackysoft.github.io/Navigathena/"
+    },
+    "template": ["default", "modern"],
+    "output": "../artifacts/documentation/site"
+  }
+}

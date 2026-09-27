@@ -3,14 +3,16 @@ set -euo pipefail
 
 repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 run_unity=false
+run_documentation=false
 package_directory=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --unity) run_unity=true; shift ;;
+    --documentation) run_unity=true; run_documentation=true; shift ;;
     --package-output)
       [[ $# -ge 2 ]] || { printf 'Missing --package-output value.\n' >&2; exit 2; }
       package_directory="$2"; shift 2 ;;
-    *) printf 'Usage: %s [--unity] [--package-output <directory>]\n' "$0" >&2; exit 2 ;;
+    *) printf 'Usage: %s [--unity] [--documentation] [--package-output <directory>]\n' "$0" >&2; exit 2 ;;
   esac
 done
 
@@ -38,6 +40,11 @@ python3 -m unittest discover -s scripts/tests -v
 bash scripts/verify-packages.sh "$package_directory"
 if [[ "$run_unity" == true ]]; then
   bash scripts/prepare-unity.sh "$package_directory"
-  bash scripts/test-unity.sh
+  if [[ "$run_documentation" == true ]]; then
+    bash scripts/test-unity.sh --documentation
+    bash scripts/build-documentation.sh
+  else
+    bash scripts/test-unity.sh
+  fi
 fi
 printf 'verify: passed\n'

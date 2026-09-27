@@ -1,0 +1,24 @@
+- name: Navigathena
+  href: index.md
+- name: 使い方
+  items:
+  - name: 共通 Runtime
+    href: ../src/MackySoft.Navigathena/README.md
+  - name: Microsoft.Extensions.DependencyInjection
+    href: ../src/MackySoft.Navigathena.Extensions.DependencyInjection/README.md
+  - name: Unity
+    href: ../src/MackySoft.Navigathena.Unity/README.md
+  - name: uGUI
+    href: ../src/MackySoft.Navigathena.Unity.UGUI/README.md
+  - name: UI Toolkit
+    href: ../src/MackySoft.Navigathena.Unity.UIToolkit/README.md
+  - name: Addressables
+    href: ../src/MackySoft.Navigathena.Unity.Addressables/README.md
+  - name: VContainer
+    href: ../src/MackySoft.Navigathena.VContainer/README.md
+- name: API リファレンス
+  href: ../artifacts/documentation/api/
+- name: 変更履歴
+  href: changelog/
+- name: リリース
+  href: https://github.com/mackysoft/Navigathena/releases
