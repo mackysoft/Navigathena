@@ -8,4 +8,4 @@ Install VContainer from its official distribution first. The common Navigathena 
 
 This package contains Unity source files, assembly definitions, and asset metadata. NuGetForUnity restores them under the package's `Sources` directory for Unity to compile. It does not embed Unity, third-party assemblies, or another copy of the Navigathena Runtime. Do not install a Navigathena UPM package alongside it.
 
-See the [repository setup instructions](https://github.com/mackysoft/Navigathena#unity-への導入) and [Unity examples](https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples).
+See the [Unity installation instructions](https://github.com/mackysoft/Navigathena#unity-installation) and [Unity examples](https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples).

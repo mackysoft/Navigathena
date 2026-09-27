@@ -1,6 +1,8 @@
 # MackySoft.Navigathena
 
-エンジン非依存の画面管理ライブラリ。Region ごとの履歴、画面実体、型付きライフサイクル、資源所有、表示・入力、遷移演出、ブロッカー、復旧を共通 Runtime が管理する。
+An engine-independent screen navigation library. The runtime manages per-region history, screen instances, typed lifecycles, resource ownership, presentation, input, transitions, blockers, and recovery.
+
+## Create a host
 
 ```csharp
 var screen = new ScreenDefinition<TitleRoute>((creation, token) =>
@@ -16,56 +18,63 @@ await using var host = NavigationHost.Create(catalog);
 await host.StartAsync(new TitleRoute());
 ```
 
-TitleRoute、TitlePresenter、titleService は利用者の型・依存。
-構築処理が返す一つの Presenter が画面の入口になる。IScreenLifecycleHandler<TitleRoute> を実装し、Route を PrepareAsync と ActivateAsync の引数で受け取る。構築時のコンストラクターへ Route を渡さない。
+`TitleRoute`, `TitlePresenter`, and `titleService` are application-defined types and dependencies. The factory returns a single presenter as the screen's lifecycle entry point. Implement `IScreenLifecycleHandler<TitleRoute>` and receive the route through the arguments to `PrepareAsync` and `ActivateAsync`, not through the presenter's constructor.
 
-`creation.Lifetime` は画面実体、`preparation.Lifetime` は今回の表示準備に対応する所有・借用の登録窓口。共通の `LifetimeContext` が `CreateOwned`、`AcquireAsync`、`BorrowAsync` を提供し、Runtime が必要な停止を待って解放する。DI が所有するオブジェクトを重ねて `CreateOwned` に登録しない。Unity の `Resources.Load` とは別の API である。
+## Lifecycle and ownership
 
-ScreenDefinition の標準は Single。同じ定義の新しい履歴項目には通常は実体を再利用し、履歴と View・DI スコープを分離する。独立した取得・解放を保証する定義には Multiple を指定する。
+Use `creation.Lifetime` to register resources owned or borrowed by the screen instance, and `preparation.Lifetime` for resources used by the current preparation. Both expose `LifetimeContext`, which provides `CreateOwned`, `AcquireAsync`, and `BorrowAsync`. The runtime waits for dependent activity to stop before releasing resources. Do not register an object with `CreateOwned` if a DI container already owns it. This API is unrelated to Unity's `Resources.Load`.
 
-開始地点へ戻る場合は Reset、履歴内の特定画面から上側を置き換える場合は ReplaceFromAsync を使う。NavigationOptions.RecreateInstance を指定すれば、目的地と初期子画面の実体・画面スコープも作り直す。Reload は新しい訪問を作らず、現在の Route と子履歴を保って実体を再構築する。
+`ScreenDefinition` defaults to `Single`. New history entries for the same definition normally reuse the existing instance; history entries do not each require a separate view or DI scope. Choose `Multiple` when the factory can acquire and release independent instances.
 
-Host の寿命はゲーム側の所有者が決める。Root Region の Reset では Host や外部の共通サービスを終了しない。Host 自体を作り直す場合は ShutdownAsync の正常完了を待つ。借用する外部 View や Scene の寿命は、画面や Host の寿命とは別に扱う。
+Your application owns the host's lifetime. Resetting the root region does not shut down the host or external shared services. Before replacing the host itself, await successful completion of `ShutdownAsync`. External views and scenes borrowed by a screen have their own lifetimes, separate from the screen and host.
 
-LowerPresentationPolicy は同じ Region の下位画面とその子構成へ作用する。HUD・メニュー・編集画面を同じ履歴に積み、編集画面を HideAndRetain にすると、下位 UI を保持したまま退避し、Back で元のメニューへ戻れる。親や別の Region を暗黙に隠さず、共有ブロッカーは同じ定義の実体を Region 間で使い回す。
+## History and presentation
 
-## 遷移要求と待機
+Use `Reset` to return to a starting point, or `ReplaceFromAsync` to replace a specific history entry and the entries above it. Set `NavigationOptions.RecreateInstance` to recreate the destination and its initial child screens, including their screen scopes. `Reload` rebuilds screen instances while preserving the current route and child history; it does not create a new visit.
 
-画面内では `ScreenActivityContext.Navigation` を使う。画面外から操作する場合は `host.Client` に対象の `RegionInstanceId` を渡す。
+`LowerPresentationPolicy` applies to lower screens in the same region and their children. For example, place a HUD, menu, and editor screen in the same history, and give the editor `HideAndRetain` to hide the lower UI without destroying it. `Back` then returns to the menu. Parent and unrelated regions are not implicitly hidden. Shared blockers reuse one instance per definition across regions.
 
-| API | 戻り値と完了条件 |
+## Navigation and waiting
+
+Within a screen, use `ScreenActivityContext.Navigation`. From outside a screen, use `host.Client` with the target `RegionInstanceId`.
+
+| API | Return value and completion |
 | --- | --- |
-| `Push`、`Replace`、`Reset`、`Back`、`Reload` | 要求を出して `NavigationOperation` を返す。呼び出し時に遷移が完了するわけではない |
-| `PushAsync`、`ReplaceAsync`、`ResetAsync`、`BackAsync`、`ReloadAsync` | 遷移完了を待つ `Task` を返す拡張メソッド |
-| `InvokeAsync(Route, …)` | 呼び出した画面の終了・資源解放を待つ。画面内からの呼び出しは呼び出し元の活動再開も待つ |
-| `InvokeAsync<TResult>(Route<TResult>, …)` | 同じ終了処理を待ってから `TResult` を返す。回答なしで閉じた場合は取消になる |
+| `Push`, `Replace`, `Reset`, `Back`, `Reload` | Submit a request and return a `NavigationOperation`. Returning from the call does not mean the transition has completed. |
+| `PushAsync`, `ReplaceAsync`, `ResetAsync`, `BackAsync`, `ReloadAsync` | Extension methods that return a `Task` completing when the transition finishes. |
+| `InvokeAsync(Route, …)` | Wait for the called screen to close and release its resources. Calls made from a screen also wait for the caller to resume activity. |
+| `InvokeAsync<TResult>(Route<TResult>, …)` | Wait for the same cleanup, then return `TResult`. Closing without an answer cancels the call. |
 
-非同期の遷移要求は、対象、オプション、`CancellationToken` の順に指定する。オプションが不要なら名前付き引数でトークンだけを渡せる。
+Asynchronous navigation methods take the target, options, and `CancellationToken` in that order. Use a named argument to pass a token without specifying options.
 
 ```csharp
 await navigation.PushAsync(route, cancellationToken: cancellationToken);
 
-// answerRoute は Route<TResult> を継承したゲーム側の Route。
+// answerRoute is an application-defined route derived from Route<TResult>.
 var answer = await navigation.InvokeAsync(
     answerRoute,
     cancellationToken: cancellationToken);
 ```
 
-操作を個別に観測・取消したい場合は `NavigationOperation` を使う。
+Use `NavigationOperation` to observe or cancel an individual operation.
 
 ```csharp
 NavigationOperation operation = navigation.Push(route);
 NavigationResult completed = await operation.WaitAsync(waitCancellationToken);
 ```
 
-`WaitAsync` のトークンは待機だけを取り消す。遷移自体への取消要求は `operation.TryRequestCancellation()` で行う。`PushAsync` などのトークンは遷移の取消を要求し、終了処理が落ち着くまで待つ。
+The token passed to `WaitAsync` cancels only the wait. To request cancellation of the transition itself, call `operation.TryRequestCancellation()`. Tokens passed to methods such as `PushAsync` request transition cancellation and wait for cleanup to finish.
 
-どちらの待機方法でも、要求の拒否・競合・実行失敗は `NavigationException`、取消は `OperationCanceledException` になる。`RecoverAsync` も拒否・競合・復旧失敗を例外で通知する。成功判定のために `NavigationResult.Kind` や `DestinationCommitted` を分岐させる必要はない。確定状態や復旧状況は例外から確認できる。
+## Error handling
 
-引数や構成の誤りは、要求の受理前に引数例外や `NavigationConfigurationException` になる。
+Both forms of waiting throw `NavigationException` for rejected, conflicting, or failed requests, and `OperationCanceledException` for cancellation. `RecoverAsync` also reports rejected, conflicting, or failed recovery requests through exceptions. You do not need to branch on `NavigationResult.Kind` or `DestinationCommitted` to determine success. Exceptions expose the commit and recovery state.
 
-`NavigationHostOptions.OperationCompleted` は観測用であり、Runtime が処理した要求の拒否・競合も通知される。画面を制御するコードは操作の完了を待ち、観測通知を成功判定の代わりに使わない。
+Invalid arguments or configuration cause argument exceptions or `NavigationConfigurationException` before a request is accepted.
 
-.NET Standard 2.1 / C# 9 を対象とする。Microsoft DI と VContainer は任意の連携アダプター。Unity、uGUI、UI Toolkit、Addressables は具体的な取得と表示操作だけを担当する。
+`NavigationHostOptions.OperationCompleted` is an observation callback. It also reports rejected and conflicting requests processed by the runtime. Code that controls screens should await operation completion, not use this callback as a success signal.
 
-- [Unity・DI あり／なしの利用例](https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples)
+## Platform support
+
+Targets .NET Standard 2.1 and C# 9. Microsoft.Extensions.DependencyInjection and VContainer are optional adapters. Unity, uGUI, UI Toolkit, and Addressables adapters provide platform-specific resource acquisition and presentation.
+
+- [Unity examples with and without dependency injection](https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples)

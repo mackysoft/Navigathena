@@ -1,8 +1,8 @@
 - name: Navigathena
   href: index.md
-- name: 使い方
+- name: Guides
   items:
-  - name: 共通 Runtime
+  - name: Core runtime
     href: ../src/MackySoft.Navigathena/README.md
   - name: Microsoft.Extensions.DependencyInjection
     href: ../src/MackySoft.Navigathena.Extensions.DependencyInjection/README.md
@@ -16,9 +16,9 @@
     href: ../src/MackySoft.Navigathena.Unity.Addressables/README.md
   - name: VContainer
     href: ../src/MackySoft.Navigathena.VContainer/README.md
-- name: API リファレンス
+- name: API reference
   href: ../artifacts/documentation/api/
-- name: 変更履歴
+- name: Changelog
   href: changelog/
-- name: リリース
+- name: Releases
   href: https://github.com/mackysoft/Navigathena/releases

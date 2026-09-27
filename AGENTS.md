@@ -1,6 +1,7 @@
 # 作業規則
 
 - ユーザーには日本語で、略語を重ねず具体的に説明する。
+- 公開ドキュメント、README、公開 API の XML コメントは英語で記述する。利用者向けページに開発・CI・検証手順や内部の設計資料を載せない。
 - KISS・YAGNIを守る。画面管理に関係しないゲーム処理をライブラリへ取り込まない。
 - 共通 Runtime に Unity、UI フレームワーク、DI コンテナの具体型を持ち込まない。
 - テストは公開 API の振る舞いと配布物の利用を検証し、内部構成を固定しない。
@@ -21,6 +22,11 @@
 bash scripts/code-quality.sh format
 bash scripts/verify.sh
 bash scripts/verify.sh --unity
+bash scripts/verify.sh --documentation
 ```
 
 Unity Editor と有効なライセンスは実行環境の前提とする。ライセンスの設定をスクリプトで隠蔽しない。パッケージの復元には `scripts/prepare-unity.sh` を使う。
+
+.NET の検証には .NET SDK 10 と Python 3.9 以降を使用する。Unity のローカル検証には Unity CLI も必要。
+
+`--documentation` は Unity の検証と解析用プロジェクトの生成後、DocFX で公開サイトを生成する。生成物は `artifacts/documentation` 以下に限定し、Git に登録しない。入力の生成後は `bash scripts/build-documentation.sh` でサイトを再生成できる。
