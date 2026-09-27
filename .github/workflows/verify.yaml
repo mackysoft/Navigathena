@@ -3,7 +3,7 @@ name: Verify
 on:
   pull_request:
   push:
-    branches: [main, 'release/2.0']
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
