@@ -50,7 +50,6 @@ jobs:
           cliVersion: v0.1.69
           projectPath: artifacts/unity-project
           testMode: PlayMode
-          runAsHostUser: true
           customParameters: ${{ inputs.build-documentation && '-exportDocfxProjects' || '' }}
           artifactsPath: artifacts/unity-results/playmode
           githubToken: ''
@@ -58,7 +57,10 @@ jobs:
         run: python3 scripts/verify-unity-results.py artifacts/unity-results/playmode
       - name: Build public documentation
         if: inputs.build-documentation
-        run: bash scripts/build-documentation.sh
+        run: |
+          # Unity runs in a root-owned container; DocFX runs as the host runner.
+          sudo chown -R "$(id -u):$(id -g)" artifacts/documentation
+          bash scripts/build-documentation.sh
       - name: Upload public documentation
         if: inputs.build-documentation
         uses: actions/upload-artifact@v7
