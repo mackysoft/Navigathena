@@ -11,7 +11,10 @@
           ]
         }
       ],
-      "dest": "../artifacts/documentation/api"
+      "dest": "../artifacts/documentation/api",
+      "properties": {
+        "ProduceReferenceAssembly": "true"
+      }
     }
   ],
   "build": {
