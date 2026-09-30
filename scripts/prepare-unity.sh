@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+if [[ $# -ne 1 ]]; then
+  printf 'Usage: %s <verified-package-directory>\n' "$0" >&2
+  exit 2
+fi
+package_directory="$(cd -- "$1" && pwd -P)"
+cd "$repository_root"
+project_directory="$repository_root/artifacts/unity-project"
+feed_directory="$repository_root/artifacts/unity-feed"
+if [[ -f "$project_directory/Temp/UnityLockfile" ]]; then
+  printf 'Close the generated Unity consumer before preparing it again.\n' >&2
+  exit 1
+fi
+version="$(dotnet msbuild src/MackySoft.Navigathena/MackySoft.Navigathena.csproj -nologo -getProperty:PackageVersion)"
+package_paths="$(dotnet run --project eng/RepositoryTools --configuration Release -- package-paths "$package_directory" "$version")"
+mkdir -p "$feed_directory" "$project_directory"
+while IFS= read -r package; do
+  if [[ "$package_directory" != "$feed_directory" ]]; then
+    cp "$package" "$feed_directory/"
+  fi
+done <<< "$package_paths"
+# Recreate this isolated consumer while retaining Unity's import cache.
+for directory in Assets Packages ProjectSettings; do
+  rm -rf -- "$project_directory/$directory"
+  cp -R "tests/Unity/$directory" "$project_directory/$directory"
+done
+dotnet run --project eng/RepositoryTools --configuration Release -- configure-unity "$project_directory" "$version"
+printf 'Unity consumer: %s\n' "$project_directory"
+dotnet tool restore
+dotnet tool run nugetforunity restore artifacts/unity-project
+dotnet run --project eng/RepositoryTools --configuration Release -- verify-unity-packages "$feed_directory" "$project_directory"

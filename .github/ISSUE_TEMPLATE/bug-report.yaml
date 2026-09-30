@@ -21,14 +21,14 @@ body:
   - type: input
     id: version
     attributes:
-      label: XPool Version
-      description: What version of XPool were you running?
-      placeholder: ex. 0.1.0
+      label: Navigathena version and adapters
+      description: Include the Navigathena NuGet package versions, the adapters in use, and any external Unity dependencies.
+      placeholder: e.g. 2.0.0-preview.1, Unity + uGUI + VContainer
     validations:
       required: true
   - type: input
     id: unity-version
     attributes:
       label: Unity Version
-      description: What version of Unity were you running?
-      placeholder: ex. 2020.3.24f1
+      description: For Unity projects, include the Editor version and scripting backend. For .NET-only projects, include the .NET runtime version instead.
+      placeholder: e.g. Unity 6000.5.5f1, Mono / IL2CPP

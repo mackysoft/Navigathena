@@ -1,0 +1,19 @@
+{
+  "name": "MackySoft.Navigathena.Unity.UGUI",
+  "rootNamespace": "MackySoft.Navigathena.Unity.UGUI",
+  "references": [
+    "MackySoft.Navigathena.Unity",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "MackySoft.Navigathena.dll"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

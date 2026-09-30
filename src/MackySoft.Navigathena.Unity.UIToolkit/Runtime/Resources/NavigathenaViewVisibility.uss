@@ -1,0 +1,3 @@
+.navigathena-view-hidden {
+    display: none;
+}

@@ -1,4 +1,24 @@
-- name: Scripting API
-  href: api/
+- name: Navigathena
+  href: index.md
+- name: Guides
+  items:
+  - name: Core runtime
+    href: ../src/MackySoft.Navigathena/README.md
+  - name: Microsoft.Extensions.DependencyInjection
+    href: ../src/MackySoft.Navigathena.Extensions.DependencyInjection/README.md
+  - name: Unity
+    href: ../src/MackySoft.Navigathena.Unity/README.md
+  - name: uGUI
+    href: ../src/MackySoft.Navigathena.Unity.UGUI/README.md
+  - name: UI Toolkit
+    href: ../src/MackySoft.Navigathena.Unity.UIToolkit/README.md
+  - name: Addressables
+    href: ../src/MackySoft.Navigathena.Unity.Addressables/README.md
+  - name: VContainer
+    href: ../src/MackySoft.Navigathena.VContainer/README.md
+- name: API reference
+  href: ../artifacts/documentation/api/
 - name: Changelog
   href: changelog/
+- name: Releases
+  href: https://github.com/mackysoft/Navigathena/releases

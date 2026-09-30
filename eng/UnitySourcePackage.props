@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>navigation;unity;NuGetForUnity</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Runtime/**/*;Runtime.meta" Pack="true" PackagePath="contentFiles/any/any/%(Identity)" BuildAction="None" PackageCopyToOutput="false" />
+    <None Include="$(MSBuildThisFileDirectory)_._" Pack="true" PackagePath="lib/netstandard2.1/_._" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>

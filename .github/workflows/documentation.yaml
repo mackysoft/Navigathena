@@ -1,57 +1,28 @@
 name: Documentation
 
 on:
-  push:
-    branches:
-      - documentation
+  workflow_call:
+
+permissions:
+  contents: read
 
 jobs:
-  # Build the documentation
-  build:
-    runs-on: windows-latest # Required by DocFX
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        # with:
-        #   submodules: true
-
-      - name: Install DocFX
-        run: choco install -y docfx
-
-      - name: Use README.md as index.md
-        run: cp README.md Documentation/index.md
-
-      - name: Build
-        run: docfx Documentation/docfx.json
-
-      # Upload the generated documentation
-      - name: Upload site artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: _site
-          path: _site # Must equals the 'build.dest' value on your docfx.json
-
-  # Deploy the generated documentation to the gh-pages branch
   deploy:
-    needs: build
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency:
+      group: documentation-pages
+      cancel-in-progress: false
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        # with:
-        #   submodules: true
-
-      # Download the generated documentation
-      - name: Download site artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
-          name: _site
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+          name: documentation-site
+          path: artifacts/documentation/site
+      - name: Publish GitHub Pages
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: _site
+          publish_dir: artifacts/documentation/site

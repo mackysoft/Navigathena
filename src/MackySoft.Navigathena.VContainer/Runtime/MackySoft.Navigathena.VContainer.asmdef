@@ -1,0 +1,9 @@
+{
+  "name": "MackySoft.Navigathena.VContainer",
+  "rootNamespace": "MackySoft.Navigathena.VContainer",
+  "references": ["VContainer"],
+  "overrideReferences": true,
+  "precompiledReferences": ["MackySoft.Navigathena.dll"],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}
