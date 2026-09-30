@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Interface IScreenNavigation | Navigathena </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface IScreenNavigation | Navigathena ">
+      
+      <meta name="description" content="Defines fundamental navigation operations from a live screen. Route conveniences and transition waiting are supplied by extension methods.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/new/main/apiSpec/new?filename=MackySoft_Navigathena_IScreenNavigation.md&amp;value=---%0Auid%3A%20MackySoft.Navigathena.IScreenNavigation%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="MackySoft.Navigathena.IScreenNavigation">
+
+
+
+  <h1 id="MackySoft_Navigathena_IScreenNavigation" data-uid="MackySoft.Navigathena.IScreenNavigation" class="text-break">
+Interface IScreenNavigation  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L7"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">MackySoft</span>.<a class="xref" href="MackySoft.Navigathena.html">Navigathena</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MackySoft.Navigathena.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Defines fundamental navigation operations from a live screen. Route conveniences and transition waiting are supplied by extension methods.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IScreenNavigation</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+  <dl class="typelist extensionMethods">
+    <dt>Extension Methods</dt>
+    <dd>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_BackAsync_MackySoft_Navigathena_IScreenNavigation_MackySoft_Navigathena_BackOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.BackAsync(IScreenNavigation, BackOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_PushAsync__1_MackySoft_Navigathena_IScreenNavigation_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.PushAsync&lt;TRoute&gt;(IScreenNavigation, NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_PushAsync__1_MackySoft_Navigathena_IScreenNavigation___0_MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.PushAsync&lt;TRoute&gt;(IScreenNavigation, TRoute, NavigationOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_Push__1_MackySoft_Navigathena_IScreenNavigation___0_MackySoft_Navigathena_NavigationOptions_">ScreenNavigationExtensions.Push&lt;TRoute&gt;(IScreenNavigation, TRoute, NavigationOptions?)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_ReloadAsync_MackySoft_Navigathena_IScreenNavigation_MackySoft_Navigathena_ReloadOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.ReloadAsync(IScreenNavigation, ReloadOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_ReplaceAsync__1_MackySoft_Navigathena_IScreenNavigation_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.ReplaceAsync&lt;TRoute&gt;(IScreenNavigation, NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_ReplaceAsync__1_MackySoft_Navigathena_IScreenNavigation___0_MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.ReplaceAsync&lt;TRoute&gt;(IScreenNavigation, TRoute, NavigationOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_ReplaceFromAsync__1_MackySoft_Navigathena_IScreenNavigation_MackySoft_Navigathena_HistoryTarget_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.ReplaceFromAsync&lt;TRoute&gt;(IScreenNavigation, HistoryTarget, NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_ReplaceFromAsync__1_MackySoft_Navigathena_IScreenNavigation_MackySoft_Navigathena_Route_MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.ReplaceFromAsync&lt;TTarget&gt;(IScreenNavigation, Route, NavigationOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_Replace__1_MackySoft_Navigathena_IScreenNavigation_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_">ScreenNavigationExtensions.Replace&lt;TRoute&gt;(IScreenNavigation, NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_Replace__1_MackySoft_Navigathena_IScreenNavigation___0_MackySoft_Navigathena_NavigationOptions_">ScreenNavigationExtensions.Replace&lt;TRoute&gt;(IScreenNavigation, TRoute, NavigationOptions?)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_ResetAsync__1_MackySoft_Navigathena_IScreenNavigation_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.ResetAsync&lt;TRoute&gt;(IScreenNavigation, NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_ResetAsync__1_MackySoft_Navigathena_IScreenNavigation___0_MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_">ScreenNavigationExtensions.ResetAsync&lt;TRoute&gt;(IScreenNavigation, TRoute, NavigationOptions?, CancellationToken)</a>
+  </div>
+  <div>
+      <a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html#MackySoft_Navigathena_ScreenNavigationExtensions_Reset__1_MackySoft_Navigathena_IScreenNavigation___0_MackySoft_Navigathena_NavigationOptions_">ScreenNavigationExtensions.Reset&lt;TRoute&gt;(IScreenNavigation, TRoute, NavigationOptions?)</a>
+  </div>
+  </dd></dl>
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_Back_" data-uid="MackySoft.Navigathena.IScreenNavigation.Back*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_Back_MackySoft_Navigathena_BackOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.Back(MackySoft.Navigathena.BackOptions)">
+  Back(BackOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">NavigationOperation Back(BackOptions? options = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.BackOptions.html">BackOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationOperation.html">NavigationOperation</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_GetRegionNavigation_" data-uid="MackySoft.Navigathena.IScreenNavigation.GetRegionNavigation*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_GetRegionNavigation_MackySoft_Navigathena_RegionTarget_" data-uid="MackySoft.Navigathena.IScreenNavigation.GetRegionNavigation(MackySoft.Navigathena.RegionTarget)">
+  GetRegionNavigation(RegionTarget)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L25"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IScreenNavigation GetRegionNavigation(RegionTarget target)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>target</code> <a class="xref" href="MackySoft.Navigathena.RegionTarget.html">RegionTarget</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.IScreenNavigation.html">IScreenNavigation</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_InvokeAsync_" data-uid="MackySoft.Navigathena.IScreenNavigation.InvokeAsync*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_InvokeAsync_MackySoft_Navigathena_Route_MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_" data-uid="MackySoft.Navigathena.IScreenNavigation.InvokeAsync(MackySoft.Navigathena.Route,MackySoft.Navigathena.NavigationOptions,System.Threading.CancellationToken)">
+  InvokeAsync(Route, NavigationOptions?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Waits for a screen to close, its resources to finish and the caller to resume. Activity suspension does not cancel an accepted call.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task InvokeAsync(Route route, NavigationOptions? options = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>route</code> <a class="xref" href="MackySoft.Navigathena.Route.html">Route</a></dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.NavigationOptions.html">NavigationOptions</a></dt>
+    <dd></dd>
+    <dt><code>cancellationToken</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken">CancellationToken</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_InvokeAsync_" data-uid="MackySoft.Navigathena.IScreenNavigation.InvokeAsync*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_InvokeAsync__1_MackySoft_Navigathena_Route___0__MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_" data-uid="MackySoft.Navigathena.IScreenNavigation.InvokeAsync``1(MackySoft.Navigathena.Route{``0},MackySoft.Navigathena.NavigationOptions,System.Threading.CancellationToken)">
+  InvokeAsync&lt;TResult&gt;(Route&lt;TResult&gt;, NavigationOptions?, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L12"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the answer after cleanup and caller resumption. Closing without an answer cancels the task.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TResult&gt; InvokeAsync&lt;TResult&gt;(Route&lt;TResult&gt; route, NavigationOptions? options = null, CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>route</code> <a class="xref" href="MackySoft.Navigathena.Route-1.html">Route</a>&lt;TResult&gt;</dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.NavigationOptions.html">NavigationOptions</a></dt>
+    <dd></dd>
+    <dt><code>cancellationToken</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken">CancellationToken</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;TResult&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TResult</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_PostBack_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostBack*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_PostBack_MackySoft_Navigathena_BackOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostBack(MackySoft.Navigathena.BackOptions)">
+  PostBack(BackOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void PostBack(BackOptions? options = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.BackOptions.html">BackOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_PostPush_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostPush*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_PostPush__1___0_MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostPush``1(``0,MackySoft.Navigathena.NavigationOptions)">
+  PostPush&lt;TRoute&gt;(TRoute, NavigationOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Runs a request after successful activation; the runtime observes completion and failure.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void PostPush&lt;TRoute&gt;(TRoute route, NavigationOptions? options = null) where TRoute : Route</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>route</code> <span class="xref">TRoute</span></dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.NavigationOptions.html">NavigationOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TRoute</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_PostReplace_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostReplace*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_PostReplace__1___0_MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostReplace``1(``0,MackySoft.Navigathena.NavigationOptions)">
+  PostReplace&lt;TRoute&gt;(TRoute, NavigationOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void PostReplace&lt;TRoute&gt;(TRoute route, NavigationOptions? options = null) where TRoute : Route</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>route</code> <span class="xref">TRoute</span></dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.NavigationOptions.html">NavigationOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TRoute</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_PostReset_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostReset*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_PostReset__1___0_MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostReset``1(``0,MackySoft.Navigathena.NavigationOptions)">
+  PostReset&lt;TRoute&gt;(TRoute, NavigationOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void PostReset&lt;TRoute&gt;(TRoute route, NavigationOptions? options = null) where TRoute : Route</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>route</code> <span class="xref">TRoute</span></dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.NavigationOptions.html">NavigationOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TRoute</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_Push_" data-uid="MackySoft.Navigathena.IScreenNavigation.Push*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_Push__1_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.Push``1(MackySoft.Navigathena.NavigationDestinationTree{``0},MackySoft.Navigathena.NavigationOptions)">
+  Push&lt;TRoute&gt;(NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">NavigationOperation Push&lt;TRoute&gt;(NavigationDestinationTree&lt;TRoute&gt; destination, NavigationOptions? options = null) where TRoute : Route</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>destination</code> <a class="xref" href="MackySoft.Navigathena.NavigationDestinationTree-1.html">NavigationDestinationTree</a>&lt;TRoute&gt;</dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.NavigationOptions.html">NavigationOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationOperation.html">NavigationOperation</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TRoute</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_Reload_" data-uid="MackySoft.Navigathena.IScreenNavigation.Reload*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_Reload_MackySoft_Navigathena_ReloadOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.Reload(MackySoft.Navigathena.ReloadOptions)">
+  Reload(ReloadOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">NavigationOperation Reload(ReloadOptions? options = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.ReloadOptions.html">ReloadOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationOperation.html">NavigationOperation</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_ReplaceFrom_" data-uid="MackySoft.Navigathena.IScreenNavigation.ReplaceFrom*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_ReplaceFrom__1_MackySoft_Navigathena_HistoryTarget_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.ReplaceFrom``1(MackySoft.Navigathena.HistoryTarget,MackySoft.Navigathena.NavigationDestinationTree{``0},MackySoft.Navigathena.NavigationOptions)">
+  ReplaceFrom&lt;TRoute&gt;(HistoryTarget, NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Replaces the selected entry and every entry above it, including their child regions, with one destination.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">NavigationOperation ReplaceFrom&lt;TRoute&gt;(HistoryTarget target, NavigationDestinationTree&lt;TRoute&gt; destination, NavigationOptions? options = null) where TRoute : Route</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>target</code> <a class="xref" href="MackySoft.Navigathena.HistoryTarget.html">HistoryTarget</a></dt>
+    <dd></dd>
+    <dt><code>destination</code> <a class="xref" href="MackySoft.Navigathena.NavigationDestinationTree-1.html">NavigationDestinationTree</a>&lt;TRoute&gt;</dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.NavigationOptions.html">NavigationOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationOperation.html">NavigationOperation</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TRoute</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="MackySoft_Navigathena_IScreenNavigation_ReplaceFrom__1_MackySoft_Navigathena_HistoryTarget_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The target is resolved once within this navigator's region. Missing or ambiguous targets are rejected before changing screens.</p>
+</div>
+
+
+
+
+  <a id="MackySoft_Navigathena_IScreenNavigation_Reset_" data-uid="MackySoft.Navigathena.IScreenNavigation.Reset*"></a>
+
+  <h3 id="MackySoft_Navigathena_IScreenNavigation_Reset__1_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.Reset``1(MackySoft.Navigathena.NavigationDestinationTree{``0},MackySoft.Navigathena.NavigationOptions)">
+  Reset&lt;TRoute&gt;(NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">NavigationOperation Reset&lt;TRoute&gt;(NavigationDestinationTree&lt;TRoute&gt; destination, NavigationOptions? options = null) where TRoute : Route</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>destination</code> <a class="xref" href="MackySoft.Navigathena.NavigationDestinationTree-1.html">NavigationDestinationTree</a>&lt;TRoute&gt;</dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="MackySoft.Navigathena.NavigationOptions.html">NavigationOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationOperation.html">NavigationOperation</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TRoute</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

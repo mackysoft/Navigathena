@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>MackySoft.Navigathena.Unity.UGUI | Navigathena </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MackySoft.Navigathena.Unity.UGUI | Navigathena ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="mackysoftnavigathenaunityugui">MackySoft.Navigathena.Unity.UGUI</h1>
+
+<p>Canvas visibility, sorting, and input adapters.</p>
+<p>Install this NuGet package through <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>. Keep all Navigathena packages at the same version. NuGet dependencies provide the common Runtime and, where required, the base Unity adapter.</p>
+<p>Install uGUI from Unity Package Manager before importing this package.</p>
+<p>This package contains Unity source files, assembly definitions, and asset metadata. NuGetForUnity restores them under the package's <code>Sources</code> directory for Unity to compile. It does not embed Unity, third-party assemblies, or another copy of the Navigathena Runtime. Do not install a Navigathena UPM package alongside it.</p>
+<h2 id="configure-a-canvas-screen">Configure a Canvas screen</h2>
+<ol>
+<li>Use an independent screen-space root <code>Canvas</code> with <code>GraphicRaycaster</code>. World-space and nested Canvases are not supported by this adapter.</li>
+<li>Add <code>CanvasViewAdapter</code> from <code>MackySoft.Navigathena.Unity.UGUI</code>.</li>
+<li>Add the adapter to the <code>Views</code> list of the screen's <code>ScreenPresentation</code> component.</li>
+<li>Leave <code>Present Before Navigation</code> off for a newly acquired screen. It starts with output and input closed until navigation is ready to present it.</li>
+<li>Acquire the configured screen with <code>creation.AcquireScreenAsync</code> as shown in the <a href="https://mackysoft.github.io/Navigathena/src/MackySoft.Navigathena.Unity/README.html">Unity guide</a>.</li>
+</ol>
+<p>The adapter controls <code>Canvas.enabled</code>, <code>GraphicRaycaster.enabled</code>, and sorting. It does not set <code>Selectable.interactable</code> or disable the screen GameObject. Buttons therefore do not need to change to a disabled visual style merely because another popup covers the screen.</p>
+<h2 id="input-and-activity">Input and activity</h2>
+<p>The raycaster gate and EventSystem selection cleanup are a physical input boundary. They do not dispose of application subscriptions or stop arbitrary game input processing. Subscribe in <code>ActivateAsync</code> and remove/stop those subscriptions in <code>DeactivateAsync</code>.</p>
+<p>Keep custom input modules from selecting objects in a closed screen. Keep the adapter and its GameObject enabled while they are registered; disabling or destroying them is reported as a lost view, not an ordinary hide operation.</p>
+<h2 id="sorting-and-animation">Sorting and animation</h2>
+<p>Navigathena adds the view's managed order to <code>Base Sorting Order</code>. Views that must participate in one managed ordering domain need matching render mode, target display, sorting layer, world camera, and base sorting order. Unrelated Canvases remain the application's responsibility; do not write to a managed Canvas's sorting order concurrently.</p>
+<p>Use a separate visual child for scale, position, or opacity animation. Configure an <code>AnimatorScreenAnimationDriver</code> or another <code>IScreenAnimator</code> on <code>ScreenPresentation</code>; do not toggle the Canvas adapter from animation clips. See <a href="https://mackysoft.github.io/Navigathena/src/MackySoft.Navigathena.Unity/README.html#configure-push-in-push-out-pop-in-and-pop-out">screen animation setup</a>.</p>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

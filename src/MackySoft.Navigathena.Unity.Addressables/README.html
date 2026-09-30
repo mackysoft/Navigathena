@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>MackySoft.Navigathena.Unity.Addressables | Navigathena </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MackySoft.Navigathena.Unity.Addressables | Navigathena ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.Addressables/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="mackysoftnavigathenaunityaddressables">MackySoft.Navigathena.Unity.Addressables</h1>
+
+<p>Addressables acquisition and release of scenes and prefab assets.</p>
+<p>Install this NuGet package through <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>. Keep all Navigathena packages at the same version. NuGet dependencies provide the common Runtime and, where required, the base Unity adapter.</p>
+<p>Install Addressables from Unity Package Manager before importing this package.</p>
+<p>This package contains Unity source files, assembly definitions, and asset metadata. NuGetForUnity restores them under the package's <code>Sources</code> directory for Unity to compile. It does not embed Unity, third-party assemblies, or another copy of the Navigathena Runtime. Do not install a Navigathena UPM package alongside it.</p>
+<h2 id="load-a-screen-scene">Load a screen scene</h2>
+<p>Keep the <code>AssetReference</code> in application configuration, normally a serialized field on a Unity setup component. The screen's lifecycle handler does not load or unload its own scene.</p>
+<pre><code class="lang-csharp">using MackySoft.Navigathena;
+using MackySoft.Navigathena.Samples.Campaign;
+using MackySoft.Navigathena.Unity;
+using MackySoft.Navigathena.Unity.Addressables;
+
+// campaignScene and campaign are supplied by application setup.
+ScreenDefinition&lt;CampaignMapRoute&gt; screen = new(async (creation, token) =&gt;
+{
+    CampaignMapView view = await creation.AcquireScreenAsync&lt;CampaignMapView&gt;(
+        new AddressablesSceneAcquisition(campaignScene), token);
+    return creation.Lifetime.CreateOwned(() =&gt; new CampaignMapPresenter(view, campaign));
+});
+</code></pre>
+<p>The application types above are available in the <a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples/Campaign">campaign example</a>. Configure <code>ScreenPresentation</code> alongside the requested view as described in the <a href="https://mackysoft.github.io/Navigathena/src/MackySoft.Navigathena.Unity/README.html">Unity guide</a>.</p>
+<p><code>AddressablesSceneAcquisition</code> loads additively and activates the scene. When the screen no longer needs it, the runtime stops dependent users and awaits its managed unload. Do not separately unload or release the same handle.</p>
+<h2 id="instantiate-a-screen-prefab">Instantiate a screen prefab</h2>
+<p><code>AddressablesAssetAcquisition</code> acquires a prefab asset. The Unity helper then instantiates the configured screen and registers both lifetimes:</p>
+<pre><code class="lang-csharp">CampaignMapView view = await creation.AcquireScreenAsync&lt;CampaignMapView&gt;(
+    new AddressablesAssetAcquisition(campaignPrefab), token);
+return creation.Lifetime.CreateOwned(() =&gt; new CampaignMapPresenter(view, campaign));
+</code></pre>
+<p>Here <code>campaignPrefab</code> is the prefab's <code>AssetReference</code>. The prefab must have exactly one requested view component, on its root, with <code>ScreenPresentation</code> on that same object.</p>
+<p>The created instance is destroyed before the acquired asset is released. Create a new acquisition object for each factory invocation; it stores the handles for that acquisition and must not be shared between independent screen instances.</p>
+<h2 id="cancellation-and-custom-loading">Cancellation and custom loading</h2>
+<p>Acquisitions report through <code>AddressablesProgress.Acquisition</code>, a <code>ProgressInput&lt;AddressablesAcquisitionProgress&gt;</code>. Each snapshot retains the asset GUID, the operation fraction, and <code>DownloadStatus</code> from Unity's ResourceManagement API. <code>OperationFraction</code> measures Addressables sub-operations, not bytes downloaded or the entire screen transition. Download completion therefore does not imply screen preparation has completed. <code>AddressablesProgress.Release</code> reports a nullable release fraction through the ending operation's reporter.</p>
+<p>Use these inputs in a <code>ProgressDefinition&lt;TState&gt;</code> and pass the definition to <code>NavigationTransition.Create</code>. The factory receives the current operation's <code>ProgressSource&lt;TState&gt;</code>; connect its state to the loading view with <code>preparation.ObserveProgress(progress, view.Render)</code>. For concurrent loads, retain each <code>ProgressUpdate&lt;T&gt;.WorkId</code> separately in the display state. No progress receiver interfaces or per-navigation display wiring are required. Set <code>endTiming</code> to <code>TransitionEndTiming.AfterResourceRelease</code> to keep an independent overlay active until screen cleanup completes, and fade it out in <code>SettleAsync</code>. See <a href="https://mackysoft.github.io/Navigathena/#loading-progress">loading progress</a> for the full typed connection.</p>
+<p>Cancellation does not forcibly stop an Addressables operation. The acquisition waits for its result, checks cancellation, and lets managed cleanup release anything acquired. Do not release a still-used asset manually when a navigation token is cancelled.</p>
+<p>For supporting objects that are not separate screen presentations, use <code>creation.Lifetime</code>, <code>initialization.Lifetime</code>, or <code>preparation.Lifetime</code> with <code>AcquireAsync</code> or the lower-level <code>InstantiatePrefabAsync</code> / <code>AcquireSceneAsync</code> helpers, according to their required lifetime. To support another asset system, implement <code>IResourceAcquisition&lt;T&gt;</code> and use the same common ownership contract. Do not acquire resources in its constructor; <code>ReleaseAsync(progress)</code> must also handle partial acquisition and report using the supplied release reporter.</p>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

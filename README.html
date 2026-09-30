@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Navigathena 2.0 | Navigathena </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Navigathena 2.0 | Navigathena ">
+      
+      
+      <link rel="icon" href="favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/blob/main/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="navigathena-20">Navigathena 2.0</h1>
+
+<p>Navigathena is an engine-independent screen navigation library. It manages navigation history, screen lifecycles, presentation, input, screen calls, and screen-owned resources. Unity and dependency injection support are provided through adapters.</p>
+<p>Use it to keep a title screen, gameplay HUD, menus, and popups consistent as screens open, close, reload, or return from history. Your application chooses the destinations and implements each screen's behavior. Navigathena coordinates when that behavior starts and stops, when views enter and leave, and when their resources can be released.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#packages">Installation</a></li>
+<li><a href="#getting-started">Getting started</a></li>
+<li><a href="#screen-lifecycle">Screen lifecycle</a></li>
+<li><a href="#history-restoration-and-reload">History, restoration, and reload</a></li>
+<li><a href="#popups-and-results">Popups and results</a></li>
+<li><a href="#regions-and-lower-screens">Regions and lower screens</a></li>
+<li><a href="#unity-scenes-and-prefabs">Unity scenes and prefabs</a></li>
+<li><a href="#transitions-and-progress">Transitions and progress</a></li>
+<li><a href="#blockers">Blockers</a></li>
+<li><a href="#dependency-injection">Dependency injection</a></li>
+<li><a href="#ownership-and-shutdown">Ownership and shutdown</a></li>
+<li><a href="#errors-and-cancellation">Errors and cancellation</a></li>
+<li><a href="#upgrading-from-1x">Upgrading from 1.x</a></li>
+<li><a href="#faq">FAQ</a></li>
+</ul>
+<h2 id="packages">Packages</h2>
+<p>All packages are distributed through NuGet. In Unity, install them with <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Purpose</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MackySoft.Navigathena</code></td>
+<td>Core runtime (required)</td>
+<td>.NET Standard 2.1 DLL</td>
+</tr>
+<tr>
+<td><code>MackySoft.Navigathena.Extensions.DependencyInjection</code></td>
+<td>Microsoft.Extensions.DependencyInjection</td>
+<td>.NET Standard 2.1 DLL</td>
+</tr>
+<tr>
+<td><code>MackySoft.Navigathena.Unity</code></td>
+<td>Scenes, prefabs, screen presentation, and Animator integration</td>
+<td>Unity source and assets</td>
+</tr>
+<tr>
+<td><code>MackySoft.Navigathena.Unity.UGUI</code></td>
+<td>uGUI</td>
+<td>Unity source and assets</td>
+</tr>
+<tr>
+<td><code>MackySoft.Navigathena.Unity.UIToolkit</code></td>
+<td>UI Toolkit</td>
+<td>Unity source and assets</td>
+</tr>
+<tr>
+<td><code>MackySoft.Navigathena.Unity.Addressables</code></td>
+<td>Addressables</td>
+<td>Unity source and assets</td>
+</tr>
+<tr>
+<td><code>MackySoft.Navigathena.VContainer</code></td>
+<td>VContainer</td>
+<td>Unity source and assets</td>
+</tr>
+</tbody>
+</table>
+<p>Unity adapters include source files, assembly definitions, and asset metadata for Unity to compile. Navigathena 2.0 is not distributed as UPM packages.</p>
+<h2 id="unity-installation">Unity installation</h2>
+<ol>
+<li>Install <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>.</li>
+<li>Install the dependencies required by your adapters through Unity Package Manager. Obtain uGUI, Addressables, and VContainer from their official distributions. UI Toolkit uses Unity's built-in module.</li>
+<li>In NuGetForUnity, install <code>MackySoft.Navigathena.Unity</code> and the UI, Addressables, or dependency injection adapters you need. The core runtime is installed as a NuGet dependency. Keep all Navigathena packages at the same version.</li>
+</ol>
+<p>Tested with Unity 6000.5.5f1 and NuGetForUnity 4.5.0. NuGet does not install UPM dependencies for you.</p>
+<h3 id="net-installation">.NET installation</h3>
+<p>Install <code>MackySoft.Navigathena</code> from NuGet. Add <code>MackySoft.Navigathena.Extensions.DependencyInjection</code> only if you use Microsoft.Extensions.DependencyInjection. The common runtime targets .NET Standard 2.1 and uses <code>Task</code> and <code>ValueTask</code>; it does not require Unity or UniTask.</p>
+<h2 id="getting-started">Getting started</h2>
+<p>A <strong>Route</strong> describes what to show and its input. A <strong>screen definition</strong> describes how to construct the screen. The factory returns exactly one <strong>lifecycle handler</strong>: your presenter, view model, or another application class implementing the lifecycle contract.</p>
+<p>The following example displays chapters. <code>IChapterView</code> is an application-owned interface, not a Navigathena API. Its <code>Bind</code> implementation connects the UI to the supplied asynchronous callbacks, observes their completion and errors, and returns a subscription that removes those bindings. In Unity, use your own component or UI binding library for that implementation.</p>
+<pre><code class="lang-csharp">using System;
+using System.Threading;
+using System.Threading.Tasks;
+using MackySoft.Navigathena;
+
+public sealed record ChapterRoute : Route
+{
+    public ChapterRoute (int chapterId)
+    {
+        ChapterId = chapterId;
+    }
+
+    public int ChapterId { get; }
+}
+
+public interface IChapterView
+{
+    float ScrollPosition { get; set; }
+    void ShowChapter (int chapterId);
+    IDisposable Bind (Func&lt;Task&gt; next, Func&lt;Task&gt; back);
+}
+
+public sealed class ChapterPresenter : IScreenLifecycleHandler&lt;ChapterRoute&gt;, IScreenStateCapture
+{
+    private readonly IChapterView view;
+    private IDisposable? bindings;
+
+    public ChapterPresenter (IChapterView view)
+    {
+        this.view = view;
+    }
+
+    public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
+    {
+        return default;
+    }
+
+    public ValueTask PrepareAsync (
+        ChapterRoute route,
+        ScreenPreparationContext preparation,
+        CancellationToken cancellationToken)
+    {
+        view.ShowChapter(route.ChapterId);
+        view.ScrollPosition = preparation.SavedState is float saved ? saved : 0f;
+        return default;
+    }
+
+    public ValueTask ActivateAsync (ChapterRoute route, ScreenActivityContext activity)
+    {
+        bindings = view.Bind(
+            () =&gt; activity.Navigation.PushAsync(new ChapterRoute(route.ChapterId + 1)),
+            () =&gt; activity.Navigation.BackAsync());
+        return default;
+    }
+
+    public ValueTask DeactivateAsync ()
+    {
+        bindings?.Dispose();
+        bindings = null;
+        return default;
+    }
+
+    public ValueTask TerminateAsync (NavigationProgressReporter progress)
+    {
+        return default;
+    }
+
+    public object CaptureState ()
+    {
+        return view.ScrollPosition;
+    }
+}
+</code></pre>
+<p>Construct the catalog and host in application setup, not in each button handler:</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using MackySoft.Navigathena;
+using MackySoft.Navigathena.Hosting;
+
+public static class ChapterNavigation
+{
+    public static NavigationHost CreateHost (IChapterView view)
+    {
+        ScreenCatalog catalog = ScreenCatalog.Build(screens =&gt;
+        {
+            screens.Register&lt;ChapterRoute&gt;(
+                RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace,
+                LowerPresentationPolicy.HideAndRetain,
+                (creation, token) =&gt;
+                {
+                    var presenter = creation.Lifetime.CreateOwned(() =&gt; new ChapterPresenter(view));
+                    return new ValueTask&lt;IScreenLifecycleHandler&lt;ChapterRoute&gt;&gt;(presenter);
+                });
+        });
+
+        return NavigationHost.Create(catalog);
+    }
+}
+</code></pre>
+<p>Call <code>await host.StartAsync(new ChapterRoute(1))</code> after creating the host. Keep the host for as long as this navigation system is needed, then <code>await host.ShutdownAsync()</code> before releasing the view or shared services.</p>
+<p>This example connects screen logic only. To let Navigathena also manage physical visibility, input, sorting, and animation, acquire a configured view in the factory with the <a href="src/MackySoft.Navigathena.Unity/README.html">Unity screen APIs</a>. The lifecycle handler stays the same.</p>
+<h2 id="screen-lifecycle">Screen lifecycle</h2>
+<table>
+<thead>
+<tr>
+<th>Callback</th>
+<th>What your implementation does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>InitializeAsync(initialization, token)</code></td>
+<td>Initialize stable dependencies once per screen instance. Acquire instance-owned resources through <code>initialization.Lifetime</code> and report through <code>initialization.Progress</code>.</td>
+</tr>
+<tr>
+<td><code>PrepareAsync(route, preparation, token)</code></td>
+<td>Load data for this route, populate the view, and restore <code>preparation.SavedState</code> before presentation.</td>
+</tr>
+<tr>
+<td><code>ActivateAsync(route, activity)</code></td>
+<td>Subscribe to input and start activity for the current visit.</td>
+</tr>
+<tr>
+<td><code>DeactivateAsync()</code></td>
+<td>Remove subscriptions and await the end of activity. Do not destroy the view or its dependencies here.</td>
+</tr>
+<tr>
+<td><code>TerminateAsync(progress)</code></td>
+<td>Finish remaining screen-specific work and report its progress before the owner releases resources.</td>
+</tr>
+</tbody>
+</table>
+<p>Route input belongs in <code>PrepareAsync</code> and <code>ActivateAsync</code>, not in the constructor or a DI registration. The same screen instance can display a different route value later.</p>
+<p>A modal can stop a lower screen's activity while leaving its view visible. <code>DeactivateAsync</code> therefore does not mean <code>GameObject.SetActive(false)</code>, hiding the screen, or disposing its scope. When activity resumes, Navigathena passes a new activity context and the route belonging to that history entry. A retained screen resuming behind a closed modal normally does not need preparation again.</p>
+<p>Use <code>activity.Reason</code>, <code>activity.PreparationReason</code>, and <code>activity.IsFirstActivation</code> when behavior depends on the reason for entry. Do not keep using an activity context after its activity has ended.</p>
+<p>Navigathena checks cancellation before and after cancellable lifecycle callbacks. Forward the token to your asynchronous operations and cooperate with cancellation during their execution; you do not need to repeat an entry check solely for Navigathena. Stopping and termination are awaited even after cancellation.</p>
+<p>For a new screen, initialization and route preparation finish before its entry animation and the transition effect finish. <code>ActivateAsync</code> runs after those visual steps, and native input opens only after activation completes. Progress reports, including a fraction of <code>1</code>, never advance this sequence; completion of the awaited callbacks does.</p>
+<h3 id="navigation-from-a-lifecycle-callback">Navigation from a lifecycle callback</h3>
+<p>Do not await a navigation operation inside the lifecycle callback that the current transition is waiting for. To redirect after successful activation, use the deferred methods:</p>
+<pre><code class="lang-csharp">activity.Navigation.PostReplace(new ChapterRoute(2));
+</code></pre>
+<p><code>PostPush</code>, <code>PostReplace</code>, <code>PostReset</code>, and <code>PostBack</code> run after activation succeeds. Normal UI callbacks can use and await the regular asynchronous navigation methods.</p>
+<h2 id="history-restoration-and-reload">History, restoration, and reload</h2>
+<p>From an active screen, use <code>activity.Navigation</code>. Application-level code uses <code>host.Client</code> and specifies the region, for example:</p>
+<pre><code class="lang-csharp">await host.Client.PushAsync(host.Root, Destination.For(new ChapterRoute(2)));
+await host.Client.BackAsync(host.Root);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PushAsync(route)</code></td>
+<td>Add a visit to history and display it.</td>
+</tr>
+<tr>
+<td><code>BackAsync()</code></td>
+<td>Remove the current visit and return to the previous route and saved state.</td>
+</tr>
+<tr>
+<td><code>ReplaceAsync(route)</code></td>
+<td>Replace the current visit.</td>
+</tr>
+<tr>
+<td><code>ResetAsync(route)</code></td>
+<td>Replace the region's history with a new starting point.</td>
+</tr>
+<tr>
+<td><code>ReplaceFromAsync(target, route)</code></td>
+<td>Replace the selected visit and everything above it, including their child regions.</td>
+</tr>
+<tr>
+<td><code>ReloadAsync()</code></td>
+<td>Recreate the current screen and its child instances without adding a visit or changing the route.</td>
+</tr>
+</tbody>
+</table>
+<p>The corresponding methods without <code>Async</code> return a <code>NavigationOperation</code>; await <code>operation.WaitAsync()</code> to observe success or failure. <code>PushAsync</code> waits for opening, not for the screen to close.</p>
+<h3 id="one-instance-is-not-one-history-entry">One instance is not one history entry</h3>
+<p><code>ScreenDefinition</code> defaults to <code>ScreenInstancePolicy.Single</code>: one live instance for that shared definition within a host. Pushing chapter 1, then chapter 2, can use the same view, presenter, and DI scope. Navigathena saves chapter 1's state before preparing chapter 2. Back supplies chapter 1's route and saved state again.</p>
+<p>Use <code>ScreenInstancePolicy.Multiple</code> when the factory can create and release independent instances, such as instantiated popup prefabs. A single scene-placed view cannot display two visits simultaneously. An incompatible simultaneous-use request is rejected; the library does not silently clone the view.</p>
+<p>If one definition is registered in several regions, share the same <code>ScreenDefinition</code> object to preserve that single-instance contract. <code>Single</code> does not mean permanent: a released instance can be constructed again.</p>
+<h3 id="state-restoration-and-re-entry">State restoration and re-entry</h3>
+<p>Implement <code>IScreenStateCapture</code> on the lifecycle handler to capture an immutable value for a visit. Read it from <code>ScreenPreparationContext.SavedState</code> when that visit needs preparation. Navigathena does not automatically snapshot fields of your presenter or DI services.</p>
+<p>Configure a definition's <code>HistoryReturn</code> for its usual return behavior, or override it for one Back operation:</p>
+<pre><code class="lang-csharp">await navigation.BackAsync(new BackOptions
+{
+    Preparation = ScreenPreparationMode.Always,
+    EnterAnimation = ScreenEnterAnimationMode.Always
+});
+</code></pre>
+<p>This controls preparation and re-entry animation. It does not return an answer from another screen or recreate the instance.</p>
+<p>Reload prepares the same route afresh by default. To restore captured display state on the new instance:</p>
+<pre><code class="lang-csharp">await navigation.ReloadAsync(new ReloadOptions { RestoreState = true });
+</code></pre>
+<p>To restart an earlier screen from a deeper popup, select the history entry explicitly. <code>HistoryTarget.Unique&lt;ChapterRoute&gt;()</code> requires exactly one matching visit; missing or ambiguous matches are rejected. Use <code>HistoryTarget.Entry(entryId)</code> when several visits have the same route type.</p>
+<pre><code class="lang-csharp">await navigation.ReplaceFromAsync(
+    HistoryTarget.Unique&lt;ChapterRoute&gt;(),
+    Destination.For(new ChapterRoute(1)),
+    new NavigationOptions { RecreateInstance = true });
+</code></pre>
+<p><code>RecreateInstance</code> also recreates initial child screens and their scopes. It cannot recreate an externally owned object that the screen only borrows.</p>
+<h2 id="popups-and-results">Popups and results</h2>
+<p>Use <code>Route</code> for an ordinary screen and <code>Route&lt;TResult&gt;</code> for a screen that must answer a caller. They are distinct contracts: a result route is opened with <code>InvokeAsync</code>, not ordinary <code>Push</code>.</p>
+<p>The <a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples/Common/Confirmation">confirmation popup example</a> defines <code>ConfirmationRoute : Route&lt;bool&gt;</code>, configurable title/message/button text, a view, a lifecycle handler, and prefab registration.</p>
+<pre><code class="lang-csharp">bool accepted = await navigation.InvokeAsync(
+    new ConfirmationRoute(&quot;Delete save?&quot;, &quot;This cannot be undone.&quot;, &quot;Delete&quot;, &quot;Keep&quot;),
+    cancellationToken: cancellationToken);
+
+if (accepted)
+{
+    // Perform the application's delete operation.
+}
+</code></pre>
+<p><code>ConfirmationRoute</code> in this snippet is the application type from that example, not a built-in popup. Register it once in the region where callers will open it.</p>
+<p>The called presenter implements <code>IScreenLifecycleHandler&lt;ConfirmationRoute, bool&gt;</code>. Its activation receives <code>ScreenActivityContext&lt;bool&gt;</code>. The Accept button submits:</p>
+<pre><code class="lang-csharp">activity.Call.Complete(true);
+</code></pre>
+<p>The Decline button instead submits <code>activity.Call.Complete(false)</code>, which is still a successful answer. A separate Close button can call <code>activity.Call.Dismiss()</code> to close without an answer.</p>
+<p>Do not also call Back after <code>Complete</code>: it already requests the call's closure. Dismissal or closing the result screen through Back cancels the waiting task with <code>OperationCanceledException</code>; it is not the same as answering <code>false</code>.</p>
+<p><code>InvokeAsync&lt;TResult&gt;</code> returns after the call has closed, its resources have finished, and a surviving screen caller has resumed activity. Suspending the caller to display the popup does not itself cancel an accepted call. Use a cancellation token appropriate for the requesting operation, not the activity token merely because it is nearby. The application owns the surrounding business operation and its shutdown.</p>
+<p>For a screen with no answer value, <code>await navigation.InvokeAsync(ordinaryRoute)</code> waits for its closure and caller resumption. Use <code>PushAsync</code> if you only need to wait for it to open. Do not await a user's eventual answer from <code>ActivateAsync</code>; use screen-owned work or start the request from an event or application operation after activation.</p>
+<h3 id="screen-owned-asynchronous-work">Screen-owned asynchronous work</h3>
+<p>Use <code>activity.StartWork(async work =&gt; { ... })</code> for an operation that must keep using screen resources across a popup or activity suspension. The callback receives its own navigation and cancellation token. Its ownership belongs to the screen instance's current history binding, not to one activity period.</p>
+<p>Work registered during <code>ActivateAsync</code> starts after activation succeeds and navigation settles. Failed activation cancels the work it registered without invoking it. Do not wait for owned work from a lifecycle callback or from that work itself.</p>
+<p><code>ScreenWork.WaitAsync()</code> waits for the entire callback, including code after <code>InvokeAsync</code> and asynchronous <code>finally</code> blocks. Its cancellation token cancels only the wait. <code>ScreenWork.Cancel()</code> requests execution cancellation; it does not force the callback to stop. Ending the screen binding cancels and awaits its work before releasing resources, so work that ignores cancellation keeps its dependencies alive.</p>
+<p>Callback failures remain observable through <code>WaitAsync</code> and host diagnostics. A callback that finished with an exception no longer prevents screen termination and cleanup. After completion, the runtime releases the execution callback and cancellation resources; keeping the handle preserves the result for later waits.</p>
+<h2 id="regions-and-lower-screens">Regions and lower screens</h2>
+<p>A region is an independently navigated history, not a Canvas, panel, or scene. A simple HUD → menu → editor sequence can stay in one region. Use child regions when, for example, a persistent parent screen contains independently navigated content.</p>
+<p>Each route specifies how it affects lower screens in its region:</p>
+<table>
+<thead>
+<tr>
+<th><code>LowerPresentationPolicy</code></th>
+<th>Lower screens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Preserve</code></td>
+<td>Keep their output and input policy.</td>
+</tr>
+<tr>
+<td><code>BlockInput</code></td>
+<td>Remain visible, but no longer accept input or continue input-related activity.</td>
+</tr>
+<tr>
+<td><code>HideAndRetain</code></td>
+<td>Hide and stop activity; keep instances for returning.</td>
+</tr>
+<tr>
+<td><code>HideAndRelease</code></td>
+<td>Hide and release instances; keep history for reconstruction.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, give the editor <code>HideAndRetain</code> to temporarily move the HUD and popups below it out of view; Back returns to the retained menu. The policy includes descendants of those lower screens, but not the owning parent or unrelated regions.</p>
+<p>Use <code>NavigationDefinition.Build</code> and <code>route.AddChildRegion(...)</code> when defining a hierarchy. Register each region's factories through <code>ScreenCatalog.Build(definition, ...)</code>. Factories can also register child construction through <code>creation.RegisterScreens(...)</code> after acquiring a parent scene's references. See the <a href="src/MackySoft.Navigathena/README.html#child-regions">region example</a>.</p>
+<p>Inside a screen, target another permitted region explicitly:</p>
+<pre><code class="lang-csharp">IScreenNavigation rootNavigation =
+    activity.Navigation.GetRegionNavigation(RegionTarget.Root);
+await rootNavigation.ResetAsync(new ChapterRoute(1));
+</code></pre>
+<p>Calls establish navigation boundaries; a result screen cannot use a parent-region target to escape its call. Have application-level flow request an outer reset when it needs to replace the calling flow as well.</p>
+<h2 id="unity-scenes-and-prefabs">Unity scenes and prefabs</h2>
+<p>Build a configured screen in the Inspector: your view component, <code>ScreenPresentation</code>, a UI adapter, and optionally an animation driver. The factory acquires this completed screen and constructs the presenter from the returned view.</p>
+<pre><code class="lang-csharp">// Inside a ScreenDefinition factory. campaignPrefab is an Inspector reference.
+CampaignMapView view = await creation.AcquireScreenAsync(campaignPrefab, token);
+return creation.Lifetime.CreateOwned(() =&gt; new CampaignMapPresenter(view, campaign));
+</code></pre>
+<p>For UI placed in a scene loaded during navigation:</p>
+<pre><code class="lang-csharp">CampaignMapView view = await creation.AcquireScreenAsync&lt;CampaignMapView&gt;(
+    new AddressablesSceneAcquisition(campaignScene), token);
+return creation.Lifetime.CreateOwned(() =&gt; new CampaignMapPresenter(view, campaign));
+</code></pre>
+<p>These snippets use the application types from the <a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples/Campaign">campaign example</a>. <code>AcquireScreenAsync</code> is an extension method from <code>MackySoft.Navigathena.Unity</code>; <code>AddressablesSceneAcquisition</code> is in <code>MackySoft.Navigathena.Unity.Addressables</code>. The acquisition supplies the scene or view; the screen API connects its configured presentation and managed lifetime. Custom view acquisition uses the same entry point with <code>IResourceAcquisition&lt;TView&gt;</code>.</p>
+<p>The scene is acquired before the presenter is constructed. The presenter can therefore receive references to objects placed in that scene. An already loaded scene uses borrowing instead of another load. A retained screen is not reloaded every time it becomes active.</p>
+<ul>
+<li><a href="src/MackySoft.Navigathena.Unity/README.html">Unity setup, scene-placed views, and animation</a></li>
+<li><a href="src/MackySoft.Navigathena.Unity.UGUI/README.html">uGUI view configuration</a></li>
+<li><a href="src/MackySoft.Navigathena.Unity.UIToolkit/README.html">UI Toolkit adapter</a></li>
+<li><a href="src/MackySoft.Navigathena.Unity.Addressables/README.html">Addressables scenes and prefabs</a></li>
+</ul>
+<h2 id="transitions-and-progress">Transitions and progress</h2>
+<p>There are two kinds of animation:</p>
+<ul>
+<li><strong>Screen animation:</strong> enter, cover, reveal, and exit for an individual screen. Configure the driver on the screen prefab or scene object. The presenter does not play it manually.</li>
+<li><strong>Whole-transition effect:</strong> a fade, loading overlay, or another effect spanning the switch. Implement <code>INavigationTransitionEffect</code> and configure a <code>NavigationTransition</code>.</li>
+</ul>
+<p><code>BeginAsync</code> starts the effect, <code>PrepareSwitchAsync</code> runs before the switch is committed, <code>AfterCommitAsync</code> performs post-commit animation, and <code>SettleAsync</code> establishes the final appearance on success or failure. The runtime awaits these callbacks; the effect does not update history, load destination scenes, or dispose of screens.</p>
+<p>The <a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples/Startup">startup example</a> borrows an overlay already present in the starting scene and fades it away only after the first screen is ready:</p>
+<pre><code class="lang-csharp">await host.StartAsync(initialRoute, new NavigationOptions { Transition = startupReveal });
+</code></pre>
+<p>The application creates <code>startupReveal</code> as a <code>NavigationTransition</code>; it is not a special boot API. A root scene, <code>DontDestroyOnLoad</code> owner, or another application lifetime can own that overlay.</p>
+<p>Register ordinary transition policy per region with <code>RegionNavigationOptions.Transitions.On(...).From&lt;...&gt;().To&lt;...&gt;().Use(...)</code>, or select one for a particular operation:</p>
+<pre><code class="lang-csharp">await navigation.PushAsync(route, new NavigationOptions
+{
+    Transition = NavigationTransition.None
+});
+</code></pre>
+<p><code>None</code> omits the whole-transition effect, not the screen's own animation. The selection order is an explicit operation override, the most specific matching operation/from/to rule, the region default, then no effect. Equally specific rules selecting different effects are configuration errors. See the <a href="src/MackySoft.Navigathena/README.html#transition-policy">transition policy example</a>.</p>
+<h3 id="loading-progress">Loading progress</h3>
+<p>Producers report their own typed data through <code>IProgress&lt;T&gt;</code>. A <code>ProgressInput&lt;T&gt;</code> identifies the input contract; a <code>ProgressDefinition&lt;TState&gt;</code> describes how the selected loading display combines those inputs. The transition receives a fresh <code>ProgressSource&lt;TState&gt;</code> for each operation. The producer does not depend on the display state or the loading view.</p>
+<p>Define application-specific inputs once and pass reporters to ordinary services:</p>
+<pre><code class="lang-csharp">public static class GameProgress
+{
+    public static readonly ProgressInput&lt;WorldBuildState&gt; WorldBuild =
+        new(&quot;game.world-build&quot;);
+}
+
+// Inside PrepareAsync(route, preparation, cancellationToken):
+await worldBuilder.BuildAsync(
+    route.StageId,
+    preparation.Progress.GetReporter(GameProgress.WorldBuild),
+    cancellationToken);
+</code></pre>
+<p><code>WorldBuildState</code>, <code>worldBuilder</code>, and <code>route.StageId</code> belong to the application. Its service accepts <code>IProgress&lt;WorldBuildState&gt;</code>; it does not need a Navigathena context. The state can retain domain-specific details such as generated regions, retry reasons, or participants. Navigathena does not require a fixed step-and-percentage representation.</p>
+<p>For example, a loading display can combine Addressables acquisition data with world generation:</p>
+<pre><code class="lang-csharp">public readonly struct LoadingState
+{
+    public LoadingState(
+        AddressablesAcquisitionProgress? assets,
+        WorldBuildState? world)
+    {
+        Assets = assets;
+        World = world;
+    }
+
+    public AddressablesAcquisitionProgress? Assets { get; }
+    public WorldBuildState? World { get; }
+}
+
+var definition = ProgressDefinition.Create(
+        () =&gt; new LoadingState(null, null))
+    .Reduce(AddressablesProgress.Acquisition,
+        (state, update) =&gt; new LoadingState(update.Value, state.World))
+    .Reduce(GameProgress.WorldBuild,
+        (state, update) =&gt; new LoadingState(state.Assets, update.Value))
+    .Build();
+</code></pre>
+<p><code>AddressablesAcquisitionProgress</code> and <code>AddressablesProgress</code> belong to <code>MackySoft.Navigathena.Unity.Addressables</code>. They retain operation progress separately from download bytes. Native Unity scene loading uses <code>UnityProgress.SceneLoading</code> and <code>UnityProgress.SceneUnloading</code>, both carrying <code>SceneProgress</code>.</p>
+<p>This example uses one acquisition at a time. For concurrent acquisitions, use <code>update.WorkId</code> to keep separate values in the display state instead of overwriting one field. Each <code>ProgressUpdate&lt;T&gt;</code> also identifies the operation, phase, history entry when applicable, and report sequence. Input identity is the <code>ProgressInput&lt;T&gt;</code> instance, not its diagnostic name.</p>
+<p>For a display that directly consumes one input, use <code>ProgressDefinition.From(input, () =&gt; initialState)</code>. It needs no reducer, but rejects overlapping reporting callbacks for that input; use an explicit reduction to combine simultaneous work. All reported values, display states, and their referenced data must be immutable snapshots. Reducers must be pure and must not perform reporting or UI side effects.</p>
+<p>Connect the display when acquiring the transition effect:</p>
+<pre><code class="lang-csharp">var loading = NavigationTransition.Create(
+    NavigationTransitionScope.Host,
+    definition,
+    async (preparation, progress, token) =&gt;
+    {
+        var view = await preparation.Lifetime.BorrowAsync(
+            overlayReference, token);
+
+        preparation.RegisterExistingViewAdapter(view.NavigationView);
+        preparation.ObserveProgress(progress, view.Render);
+
+        return preparation.Lifetime.CreateOwned(
+            () =&gt; new LoadingEffect(view));
+    },
+    endTiming: TransitionEndTiming.AfterResourceRelease);
+
+await host.StartAsync(initialRoute,
+    new NavigationOptions { Transition = loading });
+</code></pre>
+<p><code>view.Render</code> accepts the application's <code>LoadingState</code>. <code>LoadingEffect</code> implements only <code>INavigationTransitionEffect</code>; progress does not require additional receiver interfaces. The runtime creates the source before acquiring the effect, immediately supplies the current snapshot when observing, serializes subsequent updates, and disconnects observers before releasing the display. <code>progress.Current</code> also exposes the latest snapshot, including the final snapshot after observation ends.</p>
+<p>Report through the context for the work being performed:</p>
+<table>
+<thead>
+<tr>
+<th>Work</th>
+<th>Reporter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Screen construction</td>
+<td><code>creation.Progress</code></td>
+</tr>
+<tr>
+<td>Instance initialization</td>
+<td><code>initialization.Progress</code></td>
+</tr>
+<tr>
+<td>Route preparation</td>
+<td><code>preparation.Progress</code></td>
+</tr>
+<tr>
+<td>Resource acquisition</td>
+<td><code>ResourceAcquisitionContext.Progress</code></td>
+</tr>
+<tr>
+<td>Screen termination</td>
+<td><code>TerminateAsync(progress)</code> argument</td>
+</tr>
+<tr>
+<td>Resource release</td>
+<td><code>ReleaseAsync(progress)</code> argument</td>
+</tr>
+</tbody>
+</table>
+<p>Call <code>GetReporter(input)</code> once for a service invocation. A reporter stops accepting samples when its owning callback finishes, including failure or cancellation. Use the supplied release reporter for release, rather than retaining the earlier acquisition reporter.</p>
+<p>Show the overlay in <code>BeginAsync</code>, keep it visible in <code>AfterCommitAsync</code>, and fade it away in <code>SettleAsync</code>. With <code>AfterResourceRelease</code>, termination and resource release finish before settlement; destination activation and input follow settlement. A reported fraction of one never completes these callbacks. The effect also covers partial-acquisition cleanup after preparation fails.</p>
+<p>This wait covers screens being ended and previous preparation resources whose use has finished. Resources still used by a retained call or screen work remain owned until those users finish; the transition does not wait for them to resume and complete. The default <code>AfterPresentation</code> settles the effect before releasing retired screens.</p>
+<p>For an effect owned by a screen, connect its display definition using <code>creation.SetTransitionEffect(effect, adapter, definition, receive)</code>. An effect acquired from the destination cannot observe its earlier construction; use an independent overlay for that interval. An effect owned by a removed source screen cannot cover that screen's release with <code>AfterResourceRelease</code>; Navigathena rejects the configuration before stopping the screen.</p>
+<p>A borrowed overlay's external owner must outlive the transition. Do not end its <code>ResourceLifetime</code> from a retiring screen's termination, DI disposal, or resource release: that would wait for an effect which is itself waiting for that screen to end.</p>
+<p>Observers run synchronously on the reporting thread. For background producers, read <code>progress.Current</code> from the display's UI-thread update loop, or provide a UI-thread connection whose pending work ends before releasing the display. Observation does not select threads or run application jobs. Reducer and observer exceptions are reported by the navigation operation after safe settlement; they do not bypass cleanup.</p>
+<p><code>NavigationOptions.Progress</code> separately accepts <code>IProgress&lt;NavigationProgress&gt;</code> for runtime phase checkpoints. Its <code>PhaseFraction</code> may be absent and is not a whole-operation percentage. Host shutdown has no navigation-operation display source.</p>
+<h2 id="blockers">Blockers</h2>
+<p>A blocker supplies the view between an input-blocking popup and the screens below it. It is not another history entry and does not replace lifecycle-based stopping of input subscriptions.</p>
+<p>Set <code>NavigationHostOptions.DefaultBlocker</code> to a <code>BlockerDefinition</code> for a reusable default. A region's <code>RegisterBlocker&lt;TRoute&gt;(definition)</code> supplies a route-specific choice. Share the definition to share one blocker instance within a host, rather than registering a new instance for every region.</p>
+<p>Implement <code>IBlockerPresenter</code> for its content and, optionally, <code>IBlockerAnimator</code> for decoration. <code>SetScreenContext</code> supplies the screen context currently associated with the blocker, allowing game-specific help text. Navigathena manages preparation, connection, sorting, animation completion, and termination. When a higher screen hides the lower content, the obsolete blocker is no longer shown.</p>
+<h2 id="dependency-injection">Dependency injection</h2>
+<p>DI changes construction, not the route or lifecycle contract. The same presenter can be created manually, resolved by Microsoft.Extensions.DependencyInjection, or resolved by VContainer.</p>
+<table>
+<thead>
+<tr>
+<th>Construction</th>
+<th>Factory returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No DI</td>
+<td><code>creation.Lifetime.CreateOwned(() =&gt; new Presenter(view, service))</code></td>
+</tr>
+<tr>
+<td>Microsoft.Extensions.DependencyInjection</td>
+<td><code>creation.CreateScope(services =&gt; { ... })</code>, with <code>AddScreenLifecycleHandler&lt;Presenter&gt;()</code></td>
+</tr>
+<tr>
+<td>VContainer</td>
+<td><code>creation.CreateScope(parentResolver, installer)</code>, with <code>RegisterScreenLifecycleHandler&lt;Presenter&gt;()</code> in the installer</td>
+</tr>
+</tbody>
+</table>
+<p>The scope belongs to the screen instance, not each activation or history entry. Do not register the route in the container, dispose of injected dependencies from the presenter, or separately own a presenter already owned by its container.</p>
+<ul>
+<li><a href="src/MackySoft.Navigathena.Extensions.DependencyInjection/README.html">Microsoft.Extensions.DependencyInjection setup</a></li>
+<li><a href="src/MackySoft.Navigathena.VContainer/README.html">VContainer and Inspector-backed installers</a></li>
+<li><a href="https://github.com/mackysoft/Navigathena/blob/main/tests/Unity/Assets/Samples/Startup/CampaignNavigationSetup.cs">One Unity setup with all three construction modes</a></li>
+</ul>
+<h2 id="ownership-and-shutdown">Ownership and shutdown</h2>
+<p>Use <code>creation.Lifetime</code> and <code>initialization.Lifetime</code> for resources belonging to an instance, and <code>preparation.Lifetime</code> for the current preparation's resources:</p>
+<ul>
+<li><code>CreateOwned</code> constructs an object and registers its disposal with that lifetime.</li>
+<li><code>AcquireAsync</code> executes an <code>IResourceAcquisition&lt;T&gt;</code> and registers cleanup, including partially failed acquisition.</li>
+<li><code>BorrowAsync</code> uses an externally owned object through a <code>ResourceReference&lt;T&gt;</code> without taking responsibility for destroying it.</li>
+</ul>
+<p>Construction and initialization have separate registration windows but share the same instance lifetime. A saved construction context stays closed during initialization; the initialization context closes when its callback returns. Initialization does not create another DI scope. Registration is not available during termination.</p>
+<p><code>CreateOwned</code> and <code>AcquireAsync</code> share one registration sequence within each lifetime and release in reverse registration order, regardless of when asynchronous acquisitions complete. Register dependencies before their users. A DI scope is one owned unit; the container controls disposal inside it. Borrowed objects remain externally owned.</p>
+<p>When a screen ends, Navigathena closes input and work admission, stops activity and owned work, and waits for dependent users to stop. It then calls <code>TerminateAsync</code>, detaches the presentation, releases retained preparation lifetimes from newest to oldest, and releases the instance lifetime. Preparations from earlier re-entry are kept while work or calls still use them.</p>
+<p>Use <code>TerminateAsync</code> for final operations that need resources acquired during initialization or preparation. An earlier-registered object's <code>Dispose</code> or <code>DisposeAsync</code> cannot depend on those later registrations still being alive. Normal disposal can use constructor dependencies registered before the object.</p>
+<p>An acquisition's constructor must not start loading. Implement <code>AcquireAsync(context, token)</code> and <code>ReleaseAsync(progress)</code>; the runtime registers ownership before acquisition starts and awaits release when dependencies have stopped. Release must handle partial acquisition, including cancellation before acquisition starts. A failed release retains earlier registrations and borrowed references, and is not retried automatically. The <a href="src/MackySoft.Navigathena.Unity.Addressables/README.html">Addressables adapter</a> is one such implementation. Ordinary owned services and DI scopes still use their normal <code>IDisposable</code> or <code>IAsyncDisposable</code> disposal contracts.</p>
+<p>The application owns the host. Shutting it down stops screen activity and awaits screen termination and owned cleanup. Dispose of shared application containers and destroy borrowed objects only after the host and their registered users have stopped successfully:</p>
+<pre><code class="lang-csharp">await host.ShutdownAsync();
+await externalLifetime.EndAsync(); // If this owner supplied borrowed resources.
+await applicationProvider.DisposeAsync(); // If this owner created a DI provider.
+</code></pre>
+<p>The last two objects are application-owned and only needed in the corresponding setup. Do not put their destruction in a <code>finally</code> that runs even when shutdown cannot finish safely. Shutdown failures throw; no success flag needs to be checked before proceeding. Concurrent and repeated shutdown calls join the same attempt, including a failed attempt. A shut-down host cannot be restarted; create a new one if the application is replacing the navigation system itself.</p>
+<h2 id="errors-and-cancellation">Errors and cancellation</h2>
+<p>Await navigation completion to observe failures. Invalid arguments or configuration fail with argument exceptions or <code>NavigationConfigurationException</code>. Rejected, conflicting, or failed operations throw <code>NavigationException</code>; cancellation throws <code>OperationCanceledException</code>.</p>
+<p>A failure after history was committed does not silently restore the old history. <code>NavigationException</code> exposes commit and recovery information. Use the host's state and recovery API to handle a screen requiring recovery instead of treating the old view as safe to reactivate.</p>
+<p>Tokens passed to <code>PushAsync</code> and similar methods request transition cancellation and wait for cleanup. <code>operation.WaitAsync(token)</code> cancels only that wait; explicitly call <code>operation.TryRequestCancellation()</code> to request cancellation of the operation. Cancellation cannot undo an already committed destination.</p>
+<p><code>NavigationHostOptions.OperationCompleted</code> is for observation and diagnostics, including unsuccessful requests. It is not a substitute for awaiting a command's success.</p>
+<h2 id="upgrading-from-1x">Upgrading from 1.x</h2>
+<p>Remove the old <code>com.mackysoft.navigathena</code> package and any manually installed Navigathena DLLs or source files before installing 2.0. Do not install the UPM and NuGet versions together: duplicate source files and asset GUIDs will conflict.</p>
+<p>The setup and lifecycle APIs have changed; updating the package reference alone does not migrate screen implementations.</p>
+<table>
+<thead>
+<tr>
+<th>1.x concept</th>
+<th>2.0 usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GlobalSceneNavigator</code> / <code>ISceneNavigator</code></td>
+<td>Application-owned <code>NavigationHost</code>; screen-relative navigation from the activity context.</td>
+</tr>
+<tr>
+<td>Scene identifier as destination</td>
+<td>Route as input; a screen factory chooses and acquires the scene or prefab.</td>
+</tr>
+<tr>
+<td><code>ISceneEntryPoint</code></td>
+<td>One typed <code>IScreenLifecycleHandler</code> for each screen instance.</td>
+</tr>
+<tr>
+<td><code>Push</code> / <code>Pop</code> / <code>Change</code></td>
+<td><code>PushAsync</code> / <code>BackAsync</code> / <code>ResetAsync</code>, or their operation-returning forms.</td>
+</tr>
+<tr>
+<td>Scene data reader/writer</td>
+<td>Typed route input and per-visit captured state.</td>
+</tr>
+<tr>
+<td><code>ITransitionDirector</code></td>
+<td>Screen animations and <code>INavigationTransitionEffect</code>, with separate selection policy.</td>
+</tr>
+<tr>
+<td><code>ScopedSceneEntryPoint</code></td>
+<td>A factory-created screen DI scope and an application installer.</td>
+</tr>
+</tbody>
+</table>
+<p>There is no direct replacement for arbitrary history mutation through <code>GetHistoryBuilderUnsafe</code>, the <code>interruptOperation</code> parameter, or <code>OnEditorFirstPreInitialize</code>. Use supported history commands for navigation, preparation for destination data loading, and application startup code for an Editor-specific starting route. Do not assume these are signature-only renames or that arbitrary insertion into the old transition sequence is supported.</p>
+<p>The 1.x source and documentation remain available at the <a href="https://github.com/mackysoft/Navigathena/tree/1.1.0">1.1.0 tag</a>.</p>
+<h2 id="faq">FAQ</h2>
+<h3 id="must-the-host-live-in-a-permanent-root-scene">Must the host live in a permanent root scene?</h3>
+<p>No. Its owner can be a root scene, a persistent object, a DI scope, or another application component. The owner must await shutdown before destroying the host's dependencies. Resetting the root history does not destroy the host or restart unrelated application services.</p>
+<h3 id="can-a-screen-use-several-scenes-or-auxiliary-prefabs">Can a screen use several scenes or auxiliary prefabs?</h3>
+<p>Yes. Acquire related resources through the construction lifetime, and connect one main screen presentation. Auxiliary prefabs use the lower-level resource APIs; they are not automatically independent screens. Use separate screens or regions only when they require independent navigation and lifecycle.</p>
+<h3 id="can-i-use-a-view-already-placed-in-a-loaded-scene">Can I use a view already placed in a loaded scene?</h3>
+<p>Yes. Its owner provides a resource reference, and the screen factory uses <code>BorrowScreenAsync</code>. Ending the screen disconnects it without unloading the owner's scene. See <a href="src/MackySoft.Navigathena.Unity/README.html#use-a-view-already-in-a-scene">existing scene views</a>.</p>
+<h3 id="can-i-enter-a-feature-directly-in-the-unity-editor">Can I enter a feature directly in the Unity Editor?</h3>
+<p>Have application startup choose that route and supply the same required services and view ownership as normal startup. If the feature's scene is already loaded, borrow its configured view instead of loading it again. There is no automatic replacement for the 1.x Editor pre-initialization hook.</p>
+<h3 id="does-reload-restart-my-whole-game">Does Reload restart my whole game?</h3>
+<p>No. It recreates the selected current screen and child instances. Use <code>ReplaceFromAsync</code> to restart a particular earlier visit, <code>ResetAsync</code> to return to a new root screen, or explicitly shut down and replace the host when restarting its owner and shared services.</p>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li><a href="src/MackySoft.Navigathena/README.html">Core runtime guide</a></li>
+<li><a href="https://mackysoft.github.io/Navigathena/api/MackySoft.Navigathena.html">API reference</a></li>
+<li><a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples">Unity examples</a></li>
+</ul>
+<h2 id="help-and-contribute">Help and contribute</h2>
+<p>Report bugs and request features through <a href="https://github.com/mackysoft/Navigathena/issues">issues</a>, or contribute a <a href="https://github.com/mackysoft/Navigathena/pulls">pull request</a>.</p>
+<p>You can support development through <a href="https://github.com/sponsors/mackysoft">GitHub Sponsors</a>.</p>
+<h2 id="author">Author</h2>
+<p>Created by Hiroya Aramaki (<a href="https://twitter.com/makihiro_dev">Makihiro</a>).</p>
+<h2 id="license">License</h2>
+<p><a href="LICENSE">MIT</a></p>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,144 +1,771 @@
-﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
+<!DOCTYPE html>
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Namespace MackySoft.Navigathena
-   | Navigathena </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Namespace MackySoft.Navigathena
-   | Navigathena ">
-    <meta name="generator" content="docfx 2.59.4.0">
-    
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    <meta property="docfx:newtab" content="true">
+      <title>Namespace MackySoft.Navigathena | Navigathena </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Namespace MackySoft.Navigathena | Navigathena ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
-              </a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
               </form>
             </div>
           </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
-          </div>
         </div>
-      </header>
-      <div class="container body-content">
-        
-        <div id="search-results">
-          <div class="search-list">Search Results for <span></span></div>
-          <div class="sr-items">
-            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
         </div>
       </div>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="MackySoft.Navigathena">
-  
-  <h1 id="MackySoft_Navigathena" data-uid="MackySoft.Navigathena" class="text-break">Namespace MackySoft.Navigathena
-  </h1>
+
+        <article data-uid="MackySoft.Navigathena">
+
+  <h1 id="MackySoft_Navigathena" data-uid="MackySoft.Navigathena" class="text-break">Namespace MackySoft.Navigathena</h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
-    <h3 id="classes">Classes
-  </h3>
-      <h4><a class="xref" href="MackySoft.Navigathena.AsyncOperation.html">AsyncOperation</a></h4>
-      <section></section>
-      <h4><a class="xref" href="MackySoft.Navigathena.History-1.html">History&lt;T&gt;</a></h4>
-      <section></section>
-      <h4><a class="xref" href="MackySoft.Navigathena.ProcessCounter.html">ProcessCounter</a></h4>
-      <section></section>
-      <h4><a class="xref" href="MackySoft.Navigathena.ProgressDataStore.html">ProgressDataStore</a></h4>
-      <section></section>
-      <h4><a class="xref" href="MackySoft.Navigathena.ProgressDataStore-1.html">ProgressDataStore&lt;T&gt;</a></h4>
-      <section></section>
-    <h3 id="structs">Structs
-  </h3>
-      <h4><a class="xref" href="MackySoft.Navigathena.ProcessCounter.ProcessScope.html">ProcessCounter.ProcessScope</a></h4>
-      <section></section>
-    <h3 id="interfaces">Interfaces
-  </h3>
-      <h4><a class="xref" href="MackySoft.Navigathena.IAsyncOperation.html">IAsyncOperation</a></h4>
-      <section></section>
-      <h4><a class="xref" href="MackySoft.Navigathena.IProgressDataStore.html">IProgressDataStore</a></h4>
-      <section></section>
-      <h4><a class="xref" href="MackySoft.Navigathena.IProgressDataStore-1.html">IProgressDataStore&lt;T&gt;</a></h4>
-      <section></section>
+
+    <h3 id="classes">
+Classes
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.BackOptions.html">BackOptions</a></dt>
+      <dd><p>Overrides the direct history destination's return settings for one Back operation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.BlockerDefinition.html">BlockerDefinition</a></dt>
+      <dd><p>Identifies one reusable blocker and its construction, independently of routes and regions.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.BlockerPreparationContext.html">BlockerPreparationContext</a></dt>
+      <dd><p>Registration available only during the runtime-owned preparation callback.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.BlockerScreenContext.html">BlockerScreenContext</a></dt>
+      <dd><p>Identifies the screen using a blocker, not a lower screen being blocked.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ChildRegionDefinitionBuilder.html">ChildRegionDefinitionBuilder</a></dt>
+      <dd><p>Builds the routes accepted by a child region owned by one route registration.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.Destination.html">Destination</a></dt>
+      <dd><p>Creates immutable navigation destination trees.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.HistoryTarget.html">HistoryTarget</a></dt>
+      <dd><p>Selects the inclusive start of a replacement within one region's history.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.LifetimeContext.html">LifetimeContext</a></dt>
+      <dd><p>Registers owned objects, acquired resources, and borrowed references with a runtime-managed lifetime.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationPolicy.html">LowerPresentationPolicy</a></dt>
+      <dd><p>Defines an entry's effect on lower entries in the same region and their descendant screens.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationClientExtensions.html">NavigationClientExtensions</a></dt>
+      <dd><p>Awaits region navigation through the client's fundamental operations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationCommit.html">NavigationCommit</a></dt>
+      <dd><p>Notifies observers of exactly one applied logical history change.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationConfigurationException.html">NavigationConfigurationException</a></dt>
+      <dd><p>Indicates an invalid navigation definition or bound navigation action.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationDefinition.html">NavigationDefinition</a></dt>
+      <dd><p>Contains the immutable region and route structure used by one navigation host.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationDelta.html">NavigationDelta</a></dt>
+      <dd><p>Lists immutable entries created and removed by one logical commit.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationDestinationTree-1.html">NavigationDestinationTree&lt;TRoute&gt;</a></dt>
+      <dd><p>Represents a typed route destination and its immutable initial child configuration.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationDiagnostic.html">NavigationDiagnostic</a></dt>
+      <dd><p>Provides a phase-specific reason suitable for recovery and retry decisions.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationEntry.html">NavigationEntry</a></dt>
+      <dd><p>Stores the immutable route and registration selected for one history entry.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationException.html">NavigationException</a></dt>
+      <dd><p>A rejected, conflicting or failed navigation request with its settled state. A committed destination is not rolled back by this exception.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationHostIncident.html">NavigationHostIncident</a></dt>
+      <dd><p>Describes a host-level failure and the exact presentations required for its recovery.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationOperation.html">NavigationOperation</a></dt>
+      <dd><p>A host-owned operation with independent result waiting and explicit cancellation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationOptions.html">NavigationOptions</a></dt>
+      <dd><p>Configures construction, transition selection and observation for one navigation operation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationProgress.html">NavigationProgress</a></dt>
+      <dd><p>Reports a sequence-numbered checkpoint without defining an operation-wide fraction.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationProgressReporter.html">NavigationProgressReporter</a></dt>
+      <dd><p>Reports values for the current construction, initialization, preparation, acquisition, termination, or release. The runtime assigns operation and work identifiers.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationResult.html">NavigationResult</a></dt>
+      <dd><p>Describes an operation for completion observers. Public operation and recovery waits return committed results; rejection, conflict and execution failures throw <a class="xref" href="MackySoft.Navigathena.NavigationException.html">NavigationException</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationRoute.html">NavigationRoute</a></dt>
+      <dd><p>Common navigation data. Only Route supports ordinary history operations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationRuntimeClosedException.html">NavigationRuntimeClosedException</a></dt>
+      <dd><p>Indicates that an operation or state wait cannot continue because its navigation runtime closed.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationState.html">NavigationState</a></dt>
+      <dd><p>Provides one immutable snapshot of logical histories and presentation correlations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationTerminationRecord.html">NavigationTerminationRecord</a></dt>
+      <dd><p>Identifies unfinished ownership without exposing its mutable native resources.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationTerminationSnapshot.html">NavigationTerminationSnapshot</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransition.html">NavigationTransition</a></dt>
+      <dd><p>Describes how an operation obtains its whole-transition effect.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransitionPreparationContext.html">NavigationTransitionPreparationContext</a></dt>
+      <dd><p>Registration available only during the runtime-owned preparation callback.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransitionRuleBuilder.html">NavigationTransitionRuleBuilder</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransitionRules.html">NavigationTransitionRules</a></dt>
+      <dd><p>Registers exact route and operation matches. Equally specific matches must agree.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.PresentationReference.html">PresentationReference</a></dt>
+      <dd><p>Identifies an exact physical presentation generation together with its logical entry, independently of its availability.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.PresentationState.html">PresentationState</a></dt>
+      <dd><p>Describes the current physical realization associated with one logical entry.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ProgressDefinition.html">ProgressDefinition</a></dt>
+      <dd><p>Defines either a single producer's state or an application-specific composition of typed inputs.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ProgressDefinitionBuilder-1.html">ProgressDefinitionBuilder&lt;TState&gt;</a></dt>
+      <dd><p>Composes producer-owned input types into an application-owned display state.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ProgressDefinition-1.html">ProgressDefinition&lt;TState&gt;</a></dt>
+      <dd><p>Creates an independent progress state for each transition using this definition.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ProgressInput-1.html">ProgressInput&lt;T&gt;</a></dt>
+      <dd><p>Identifies a typed reporting contract shared by a producer and its progress definition.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ProgressSource-1.html">ProgressSource&lt;TState&gt;</a></dt>
+      <dd><p>The latest composed state of this transition, not a global progress channel.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionDefinition.html">RegionDefinition</a></dt>
+      <dd><p>Defines a history slot, its occupancy, and its exact route registrations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionRouteDefinition.html">RegionRouteDefinition</a></dt>
+      <dd><p>Defines how one exact route type enters a region and affects lower presentations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionScreenCatalogBuilder.html">RegionScreenCatalogBuilder</a></dt>
+      <dd><p>Registers construction for routes belonging to one region definition.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionState.html">RegionState</a></dt>
+      <dd><p>Stores the ordered history of one root or entry-owned region instance.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionTarget.html">RegionTarget</a></dt>
+      <dd><p>Specifies a target region relative to the presentation that issued an action.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ReloadOptions.html">ReloadOptions</a></dt>
+      <dd><p>Recreates the current screen and its child instances without adding or removing history entries.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ResourceAcquisitionContext.html">ResourceAcquisitionContext</a></dt>
+      <dd><p>Reports loss of the specific resource generation being acquired.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ResourceLifetime.html">ResourceLifetime</a></dt>
+      <dd><p>Lets an external owner stop all registered users before destroying its resources.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ResourceReference-1.html">ResourceReference&lt;T&gt;</a></dt>
+      <dd><p>Refers to one externally owned value without transferring its disposal authority.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RootRegionDefinitionBuilder.html">RootRegionDefinitionBuilder</a></dt>
+      <dd><p>Builds the root region of one immutable navigation definition.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.Route.html">Route</a></dt>
+      <dd><p>Represents immutable data required to reconstruct a navigation destination.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RouteDefinitionBuilder-1.html">RouteDefinitionBuilder&lt;TRoute&gt;</a></dt>
+      <dd><p>Builds one exact route registration and the child regions it owns.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.Route-1.html">Route&lt;TResult&gt;</a></dt>
+      <dd><p>A destination that requires a typed answer recipient.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenActivityContext.html">ScreenActivityContext</a></dt>
+      <dd><p>Provides navigation and cancellation for exactly one activity period.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenActivityContext-1.html">ScreenActivityContext&lt;TResult&gt;</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenAnimation.html">ScreenAnimation</a></dt>
+      <dd><p>Describes the old and required final appearance for one finite animation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenCallException.html">ScreenCallException</a></dt>
+      <dd><p>A call failed; its already committed answer and history are not rolled back by this exception.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenCall-1.html">ScreenCall&lt;TResult&gt;</a></dt>
+      <dd><p>A typed reply capability belonging to one live screen binding.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenCatalog.html">ScreenCatalog</a></dt>
+      <dd><p>Maps region and route definitions to asynchronous screen construction.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenCatalogBuilder.html">ScreenCatalogBuilder</a></dt>
+      <dd><p>Registers screen factories in independent feature configuration callbacks.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenCatalogDefinitionBuilder.html">ScreenCatalogDefinitionBuilder</a></dt>
+      <dd><p>Defines root routes and their construction, then binds them through the catalog's common registration rules.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenCreationContext.html">ScreenCreationContext</a></dt>
+      <dd><p>Acquires dependencies and connects views during construction. The factory returns the screen's single lifecycle handler.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenCreationContext-1.html">ScreenCreationContext&lt;TRoute&gt;</a></dt>
+      <dd><p>Preserves the route contract for lifecycle and dependency injection construction.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenCreationContext-2.html">ScreenCreationContext&lt;TRoute, TResult&gt;</a></dt>
+      <dd><p>Construction capabilities for a screen that must return an answer.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenDefinition.html">ScreenDefinition</a></dt>
+      <dd><p>A shareable construction identity, independent of routes, history entries and DI registrations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenDefinition-1.html">ScreenDefinition&lt;TRoute&gt;</a></dt>
+      <dd><p>Constructs stable screen dependencies. Changing navigation input is passed to lifecycle methods, not construction.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenDefinition-2.html">ScreenDefinition&lt;TRoute, TResult&gt;</a></dt>
+      <dd><p>Constructs exactly one handler with a mandatory typed return contract.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenHistoryReturnOptions.html">ScreenHistoryReturnOptions</a></dt>
+      <dd><p>Controls preparation and screen enter animation, never physical instance lifetime.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenInitializationContext.html">ScreenInitializationContext</a></dt>
+      <dd><p>Provides instance-owned acquisition and progress during a screen's one-time initialization.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenNavigationExtensions.html">ScreenNavigationExtensions</a></dt>
+      <dd><p>Converts single routes and awaits screen navigation through the same fundamental operations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenPreparationContext.html">ScreenPreparationContext</a></dt>
+      <dd><p>Input-specific preparation and lifetime for one displayed history entry; never a DI registration context.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenPresentationBinding.html">ScreenPresentationBinding</a></dt>
+      <dd><p>Connects the presentation of one acquired screen without transferring resource ownership.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenWork.html">ScreenWork</a></dt>
+      <dd><p>A continuation owned by a screen instance's current history binding. Stopping activity does not cancel it; ending that binding does.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenWorkContext.html">ScreenWorkContext</a></dt>
+      <dd><p>Navigation belongs to the live history binding, not to the activity that started this work.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenWorkContext-1.html">ScreenWorkContext&lt;TResult&gt;</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.TransitionBeginContext.html">TransitionBeginContext</a></dt>
+      <dd><p>Identifies the planned operation before its destination is published.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.TransitionScreenChange.html">TransitionScreenChange</a></dt>
+      <dd><p>Describes one participant's output change without exposing its native view or lifecycle implementation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.TransitionSettlementContext.html">TransitionSettlementContext</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.TransitionTargetsContext.html">TransitionTargetsContext</a></dt>
+      <dd></dd>
+    </dl>
+    <h3 id="structs">
+Structs
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationEntryId.html">NavigationEntryId</a></dt>
+      <dd><p>Identifies one immutable route entry in a region history.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationIncidentId.html">NavigationIncidentId</a></dt>
+      <dd><p>Identifies a presentation-loss or host incident that can be recovered by the navigation host.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationOperationId.html">NavigationOperationId</a></dt>
+      <dd><p>Identifies one accepted navigation operation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.PresentationId.html">PresentationId</a></dt>
+      <dd><p>Identifies one physical realization of a navigation entry.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ProgressUpdate-1.html">ProgressUpdate&lt;T&gt;</a></dt>
+      <dd><p>A typed report from one invocation within a navigation operation. Reporting completion does not complete that operation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionDefinitionId.html">RegionDefinitionId</a></dt>
+      <dd><p>Identifies a region slot in an immutable navigation definition.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionInstanceId.html">RegionInstanceId</a></dt>
+      <dd><p>Identifies one region instance owned by an entry or by the host root.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionRouteDefinitionKey.html">RegionRouteDefinitionKey</a></dt>
+      <dd><p>Identifies a route registration by its region definition and exact route type.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ViewPresentation.html">ViewPresentation</a></dt>
+      <dd><p>Runtime permissions, separate from the view's own opacity, enabled styling, and animation state.</p>
+</dd>
+    </dl>
+    <h3 id="interfaces">
+Interfaces
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IBlockerAnimator.html">IBlockerAnimator</a></dt>
+      <dd><p>Animates blocker decoration without controlling view permissions or navigation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IBlockerPresenter.html">IBlockerPresenter</a></dt>
+      <dd><p>Provides custom blocker content. The runtime owns preparation, connection and termination.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.INavigationClient.html">INavigationClient</a></dt>
+      <dd><p>Defines fundamental operations against explicit regions, independently of screen activity. Extension methods await transition completion.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.INavigationCommitObserver.html">INavigationCommitObserver</a></dt>
+      <dd><p>Receives applied logical changes in revision order.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.INavigationDestinationTree.html">INavigationDestinationTree</a></dt>
+      <dd><p>Represents an immutable route destination and its initial child-region destinations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.INavigationRecoveryClient.html">INavigationRecoveryClient</a></dt>
+      <dd><p>Requests recovery for a current presentation-loss or host incident. Rejection, conflicts and recovery failures throw; successful completion returns the committed state.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.INavigationStateSource.html">INavigationStateSource</a></dt>
+      <dd><p>Provides immutable state snapshots and awaits states newer than an observed revision.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.INavigationTerminationSource.html">INavigationTerminationSource</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.INavigationTransitionEffect.html">INavigationTransitionEffect</a></dt>
+      <dd><p>Implements visual choreography without controlling navigation, screen activity, or resource release.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IResourceAcquisition-1.html">IResourceAcquisition&lt;T&gt;</a></dt>
+      <dd><p>Acquires a value and ends the acquisition, including partial acquisition after failure.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IScreenAnimator.html">IScreenAnimator</a></dt>
+      <dd><p>Animates one screen; it does not control its activity, history, or lifetime.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IScreenLifecycleHandler-1.html">IScreenLifecycleHandler&lt;TRoute&gt;</a></dt>
+      <dd><p>Implements awaited screen lifecycle work. The runtime controls invocation; the registered owner controls disposal.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IScreenLifecycleHandler-2.html">IScreenLifecycleHandler&lt;TRoute, TResult&gt;</a></dt>
+      <dd><p>The single lifecycle entry point for an answering screen. Runtime gates cancellation around callbacks.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IScreenNavigation.html">IScreenNavigation</a></dt>
+      <dd><p>Defines fundamental navigation operations from a live screen. Route conveniences and transition waiting are supplied by extension methods.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IScreenStateCapture.html">IScreenStateCapture</a></dt>
+      <dd><p>Optionally captures immutable data used when a released screen is reconstructed.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IViewAdapter.html">IViewAdapter</a></dt>
+      <dd><p>Applies runtime output and physical input permissions to one concrete view.</p>
+</dd>
+    </dl>
+    <h3 id="enums">
+Enums
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationInput.html">LowerPresentationInput</a></dt>
+      <dd><p>Specifies the input effect applied to lower presentations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationOutput.html">LowerPresentationOutput</a></dt>
+      <dd><p>Specifies the output effect applied to lower presentations.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationRetention.html">LowerPresentationRetention</a></dt>
+      <dd><p>Specifies whether a covered presentation remains physically realized.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationOperationKind.html">NavigationOperationKind</a></dt>
+      <dd><p>Specifies the requested logical navigation operation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationPhase.html">NavigationPhase</a></dt>
+      <dd><p>Specifies the operation phase represented by progress or diagnostics.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationPresentationStatus.html">NavigationPresentationStatus</a></dt>
+      <dd><p>Whether the affected presentation is usable independently of logical destination commitment.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationResultKind.html">NavigationResultKind</a></dt>
+      <dd><p>Classifies the final outcome of a navigation operation.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationTerminationKind.html">NavigationTerminationKind</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationTerminationStatus.html">NavigationTerminationStatus</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransitionScope.html">NavigationTransitionScope</a></dt>
+      <dd><p>The histories whose presentation can be affected by an effect, not its ownership lifetime.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.PresentationMaterialization.html">PresentationMaterialization</a></dt>
+      <dd><p>Describes whether an entry has a current physical realization.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionCompositionMode.html">RegionCompositionMode</a></dt>
+      <dd><p>Specifies whether a region exposes only its top entry or its whole history.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RegionOccupancy.html">RegionOccupancy</a></dt>
+      <dd><p>Specifies whether an owned region may have an empty history.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RestorationOutcome.html">RestorationOutcome</a></dt>
+      <dd><p>Describes whether an operation needed and completed source restoration.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.RouteEntryOperations.html">RouteEntryOperations</a></dt>
+      <dd><p>Specifies the history operations that may create a route entry.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenActivationReason.html">ScreenActivationReason</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenAnimationKind.html">ScreenAnimationKind</a></dt>
+      <dd><p>The presentation change of one screen, independent of its activity and input permission.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenAnimationState.html">ScreenAnimationState</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenCallFailureStage.html">ScreenCallFailureStage</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenEnterAnimationMode.html">ScreenEnterAnimationMode</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenInstancePolicy.html">ScreenInstancePolicy</a></dt>
+      <dd><p>Declares whether a construction definition can supply independent, simultaneously living screens.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenPreparationMode.html">ScreenPreparationMode</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenPreparationReason.html">ScreenPreparationReason</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenResourcePolicy.html">ScreenResourcePolicy</a></dt>
+      <dd><p>Controls whether outgoing screen resources remain available while incoming screens are prepared.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.TransitionEndTiming.html">TransitionEndTiming</a></dt>
+      <dd><p>Determines which work the whole-transition effect covers before it settles.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.TransitionSettlementTarget.html">TransitionSettlementTarget</a></dt>
+      <dd></dd>
+    </dl>
+    <h3 id="delegates">
+Delegates
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.BlockerFactory.html">BlockerFactory</a></dt>
+      <dd><p>Constructs a blocker inside runtime-owned resources, including when construction fails.</p>
+</dd>
+    </dl>
+
+
 </article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
-                <div></div>
-              </nav>
-            </div>
-          </div>
+
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            Navigathena - Scene management framework
-            
-          </div>
-        </div>
-      </footer>
-    </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    </footer>
   </body>
 </html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class NavigationTransition | Navigathena </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class NavigationTransition | Navigathena ">
+      
+      <meta name="description" content="Describes how an operation obtains its whole-transition effect.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/new/main/apiSpec/new?filename=MackySoft_Navigathena_NavigationTransition.md&amp;value=---%0Auid%3A%20MackySoft.Navigathena.NavigationTransition%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="MackySoft.Navigathena.NavigationTransition">
+
+
+
+  <h1 id="MackySoft_Navigathena_NavigationTransition" data-uid="MackySoft.Navigathena.NavigationTransition" class="text-break">
+Class NavigationTransition  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Transitions/NavigationTransition.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><span class="xref">MackySoft</span>.<a class="xref" href="MackySoft.Navigathena.html">Navigathena</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MackySoft.Navigathena.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Describes how an operation obtains its whole-transition effect.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class NavigationTransition</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">NavigationTransition</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+  <h2 id="MackySoft_Navigathena_NavigationTransition_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>The runtime checks cancellation before invoking the effect factory and before using its result. The factory forwards the token to ongoing work without duplicating the entry check. Registered resources and a returned effect are cleaned up even after cancellation.</p>
+</div>
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="MackySoft_Navigathena_NavigationTransition__ctor_" data-uid="MackySoft.Navigathena.NavigationTransition.#ctor*"></a>
+
+  <h3 id="MackySoft_Navigathena_NavigationTransition__ctor_MackySoft_Navigathena_NavigationTransitionScope_System_Func_MackySoft_Navigathena_NavigationTransitionPreparationContext_System_Threading_CancellationToken_System_Threading_Tasks_ValueTask_MackySoft_Navigathena_INavigationTransitionEffect___System_Boolean_MackySoft_Navigathena_TransitionEndTiming_" data-uid="MackySoft.Navigathena.NavigationTransition.#ctor(MackySoft.Navigathena.NavigationTransitionScope,System.Func{MackySoft.Navigathena.NavigationTransitionPreparationContext,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{MackySoft.Navigathena.INavigationTransitionEffect}},System.Boolean,MackySoft.Navigathena.TransitionEndTiming)">
+  NavigationTransition(NavigationTransitionScope, Func&lt;NavigationTransitionPreparationContext, CancellationToken, ValueTask&lt;INavigationTransitionEffect&gt;&gt;, bool, TransitionEndTiming)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Transitions/NavigationTransition.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Defines an operation-owned effect and when it must settle relative to retired screen resources.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NavigationTransition(NavigationTransitionScope scope, Func&lt;NavigationTransitionPreparationContext, CancellationToken, ValueTask&lt;INavigationTransitionEffect&gt;&gt; createEffectAsync, bool requiresSimultaneousScreens = false, TransitionEndTiming endTiming = TransitionEndTiming.AfterPresentation)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scope</code> <a class="xref" href="MackySoft.Navigathena.NavigationTransitionScope.html">NavigationTransitionScope</a></dt>
+    <dd><p>The region or host whose presentation and input the effect covers.</p>
+</dd>
+    <dt><code>createEffectAsync</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-3">Func</a>&lt;<a class="xref" href="MackySoft.Navigathena.NavigationTransitionPreparationContext.html">NavigationTransitionPreparationContext</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken">CancellationToken</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1">ValueTask</a>&lt;<a class="xref" href="MackySoft.Navigathena.INavigationTransitionEffect.html">INavigationTransitionEffect</a>&gt;&gt;</dt>
+    <dd><p>Creates or borrows the effect and registers its dependencies with the supplied lifetime. With AfterResourceRelease, their external owners must outlive settlement and must not end from a retiring screen's cleanup.</p>
+</dd>
+    <dt><code>requiresSimultaneousScreens</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Requires outgoing and incoming screen instances to coexist during the effect.</p>
+</dd>
+    <dt><code>endTiming</code> <a class="xref" href="MackySoft.Navigathena.TransitionEndTiming.html">TransitionEndTiming</a></dt>
+    <dd><p>AfterResourceRelease keeps the effect alive and subscribed to progress until retired screen cleanup completes. Activation always follows settlement.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="MackySoft_Navigathena_NavigationTransition_EndTiming_" data-uid="MackySoft.Navigathena.NavigationTransition.EndTiming*"></a>
+
+  <h3 id="MackySoft_Navigathena_NavigationTransition_EndTiming" data-uid="MackySoft.Navigathena.NavigationTransition.EndTiming">
+  EndTiming
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Transitions/NavigationTransition.cs/#L62"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Determines whether the effect settles before or after retired screen resources finish releasing. Activation always follows settlement.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TransitionEndTiming EndTiming { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.TransitionEndTiming.html">TransitionEndTiming</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_NavigationTransition_None_" data-uid="MackySoft.Navigathena.NavigationTransition.None*"></a>
+
+  <h3 id="MackySoft_Navigathena_NavigationTransition_None" data-uid="MackySoft.Navigathena.NavigationTransition.None">
+  None
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Transitions/NavigationTransition.cs/#L63"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NavigationTransition None { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransition.html">NavigationTransition</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_NavigationTransition_RequiresSimultaneousScreens_" data-uid="MackySoft.Navigathena.NavigationTransition.RequiresSimultaneousScreens*"></a>
+
+  <h3 id="MackySoft_Navigathena_NavigationTransition_RequiresSimultaneousScreens" data-uid="MackySoft.Navigathena.NavigationTransition.RequiresSimultaneousScreens">
+  RequiresSimultaneousScreens
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Transitions/NavigationTransition.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool RequiresSimultaneousScreens { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_NavigationTransition_Scope_" data-uid="MackySoft.Navigathena.NavigationTransition.Scope*"></a>
+
+  <h3 id="MackySoft_Navigathena_NavigationTransition_Scope" data-uid="MackySoft.Navigathena.NavigationTransition.Scope">
+  Scope
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Transitions/NavigationTransition.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NavigationTransitionScope Scope { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransitionScope.html">NavigationTransitionScope</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="MackySoft_Navigathena_NavigationTransition_Create_" data-uid="MackySoft.Navigathena.NavigationTransition.Create*"></a>
+
+  <h3 id="MackySoft_Navigathena_NavigationTransition_Create__1_MackySoft_Navigathena_NavigationTransitionScope_MackySoft_Navigathena_ProgressDefinition___0__System_Func_MackySoft_Navigathena_NavigationTransitionPreparationContext_MackySoft_Navigathena_ProgressSource___0__System_Threading_CancellationToken_System_Threading_Tasks_ValueTask_MackySoft_Navigathena_INavigationTransitionEffect___System_Boolean_MackySoft_Navigathena_TransitionEndTiming_" data-uid="MackySoft.Navigathena.NavigationTransition.Create``1(MackySoft.Navigathena.NavigationTransitionScope,MackySoft.Navigathena.ProgressDefinition{``0},System.Func{MackySoft.Navigathena.NavigationTransitionPreparationContext,MackySoft.Navigathena.ProgressSource{``0},System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{MackySoft.Navigathena.INavigationTransitionEffect}},System.Boolean,MackySoft.Navigathena.TransitionEndTiming)">
+  Create&lt;TState&gt;(NavigationTransitionScope, ProgressDefinition&lt;TState&gt;, Func&lt;NavigationTransitionPreparationContext, ProgressSource&lt;TState&gt;, CancellationToken, ValueTask&lt;INavigationTransitionEffect&gt;&gt;, bool, TransitionEndTiming)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Transitions/NavigationTransition.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Connects an operation-local typed state before constructing the loading effect or acquiring destination screens.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NavigationTransition Create&lt;TState&gt;(NavigationTransitionScope scope, ProgressDefinition&lt;TState&gt; progress, Func&lt;NavigationTransitionPreparationContext, ProgressSource&lt;TState&gt;, CancellationToken, ValueTask&lt;INavigationTransitionEffect&gt;&gt; prepare, bool requiresSimultaneousScreens = false, TransitionEndTiming endTiming = TransitionEndTiming.AfterPresentation)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scope</code> <a class="xref" href="MackySoft.Navigathena.NavigationTransitionScope.html">NavigationTransitionScope</a></dt>
+    <dd><p>The region or host covered by the effect.</p>
+</dd>
+    <dt><code>progress</code> <a class="xref" href="MackySoft.Navigathena.ProgressDefinition-1.html">ProgressDefinition</a>&lt;TState&gt;</dt>
+    <dd><p>The application's immutable state definition. Each execution receives a fresh state.</p>
+</dd>
+    <dt><code>prepare</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-4">Func</a>&lt;<a class="xref" href="MackySoft.Navigathena.NavigationTransitionPreparationContext.html">NavigationTransitionPreparationContext</a>, <a class="xref" href="MackySoft.Navigathena.ProgressSource-1.html">ProgressSource</a>&lt;TState&gt;, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken">CancellationToken</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1">ValueTask</a>&lt;<a class="xref" href="MackySoft.Navigathena.INavigationTransitionEffect.html">INavigationTransitionEffect</a>&gt;&gt;</dt>
+    <dd><p>Acquires or borrows the display and binds the supplied source with ObserveProgress. It does not perform destination initialization.</p>
+</dd>
+    <dt><code>requiresSimultaneousScreens</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Whether outgoing and incoming screen instances must coexist.</p>
+</dd>
+    <dt><code>endTiming</code> <a class="xref" href="MackySoft.Navigathena.TransitionEndTiming.html">TransitionEndTiming</a></dt>
+    <dd><p>Whether settlement also waits for retired screen resources to be released.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransition.html">NavigationTransition</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TState</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_NavigationTransition_FromDestinationScreen_" data-uid="MackySoft.Navigathena.NavigationTransition.FromDestinationScreen*"></a>
+
+  <h3 id="MackySoft_Navigathena_NavigationTransition_FromDestinationScreen_MackySoft_Navigathena_NavigationTransitionScope_MackySoft_Navigathena_TransitionEndTiming_" data-uid="MackySoft.Navigathena.NavigationTransition.FromDestinationScreen(MackySoft.Navigathena.NavigationTransitionScope,MackySoft.Navigathena.TransitionEndTiming)">
+  FromDestinationScreen(NavigationTransitionScope, TransitionEndTiming)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Transitions/NavigationTransition.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Uses the prepared destination's effect. It cannot observe acquisition or initialization preceding its creation and settles before releasing its owner on rollback.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NavigationTransition FromDestinationScreen(NavigationTransitionScope scope, TransitionEndTiming endTiming = TransitionEndTiming.AfterPresentation)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scope</code> <a class="xref" href="MackySoft.Navigathena.NavigationTransitionScope.html">NavigationTransitionScope</a></dt>
+    <dd></dd>
+    <dt><code>endTiming</code> <a class="xref" href="MackySoft.Navigathena.TransitionEndTiming.html">TransitionEndTiming</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransition.html">NavigationTransition</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MackySoft_Navigathena_NavigationTransition_FromSourceScreen_" data-uid="MackySoft.Navigathena.NavigationTransition.FromSourceScreen*"></a>
+
+  <h3 id="MackySoft_Navigathena_NavigationTransition_FromSourceScreen_MackySoft_Navigathena_NavigationTransitionScope_MackySoft_Navigathena_TransitionEndTiming_" data-uid="MackySoft.Navigathena.NavigationTransition.FromSourceScreen(MackySoft.Navigathena.NavigationTransitionScope,MackySoft.Navigathena.TransitionEndTiming)">
+  FromSourceScreen(NavigationTransitionScope, TransitionEndTiming)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Transitions/NavigationTransition.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Uses the source screen's effect. AfterResourceRelease requires that screen to remain alive; a transition retiring its owner is rejected before activity stops.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static NavigationTransition FromSourceScreen(NavigationTransitionScope scope, TransitionEndTiming endTiming = TransitionEndTiming.AfterPresentation)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scope</code> <a class="xref" href="MackySoft.Navigathena.NavigationTransitionScope.html">NavigationTransitionScope</a></dt>
+    <dd></dd>
+    <dt><code>endTiming</code> <a class="xref" href="MackySoft.Navigathena.TransitionEndTiming.html">TransitionEndTiming</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.NavigationTransition.html">NavigationTransition</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

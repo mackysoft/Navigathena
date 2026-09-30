@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>MackySoft.Navigathena | Navigathena </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MackySoft.Navigathena | Navigathena ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="mackysoftnavigathena">MackySoft.Navigathena</h1>
+
+<p>An engine-independent screen navigation library. The runtime manages per-region history, screen instances, typed lifecycles, resource ownership, presentation, input, transitions, blockers, and recovery.</p>
+<h2 id="create-a-host">Create a host</h2>
+<p>For a complete route, presenter, state capture, and setup example, start with <a href="https://mackysoft.github.io/Navigathena/#getting-started">Getting started</a>. The example below uses its application-defined <code>ChapterRoute</code>, <code>ChapterPresenter</code>, and view.</p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using MackySoft.Navigathena;
+using MackySoft.Navigathena.Hosting;
+
+ScreenCatalog catalog = ScreenCatalog.Build(screens =&gt;
+{
+    screens.Register&lt;ChapterRoute&gt;(
+        RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace,
+        LowerPresentationPolicy.HideAndRetain,
+        (creation, token) =&gt;
+        {
+            return new ValueTask&lt;IScreenLifecycleHandler&lt;ChapterRoute&gt;&gt;(
+                creation.Lifetime.CreateOwned(() =&gt; new ChapterPresenter(view)));
+        });
+});
+
+await using var host = NavigationHost.Create(catalog);
+await host.StartAsync(new ChapterRoute(1));
+// Keep this scope alive while the application uses the host.
+</code></pre>
+<p><code>ScreenCatalog.Build</code> combines root route definition and construction registration. Entry permissions and the lower-screen policy are required arguments, before the construction factory. The optional final callback defines child regions; it does not supply these required values. Building a catalog does not construct its screens: the factories run when navigation needs them.</p>
+<p>The factory returns a single presenter as the screen's lifecycle entry point. Receive the route through the arguments to <code>PrepareAsync</code> and <code>ActivateAsync</code>, not through the presenter's constructor.</p>
+<h2 id="lifecycle-and-ownership">Lifecycle and ownership</h2>
+<p>Use <code>creation.Lifetime</code> and <code>initialization.Lifetime</code> to register resources owned or borrowed by the screen instance, and <code>preparation.Lifetime</code> for resources used by the current preparation. Each exposes <code>LifetimeContext</code>, which provides <code>CreateOwned</code>, <code>AcquireAsync</code>, and <code>BorrowAsync</code>. Construction and initialization have separate registration windows but share instance ownership. Keeping the construction context does not extend its registration window. The runtime waits for dependent activity to stop before releasing resources. Do not register an object with <code>CreateOwned</code> if a DI container already owns it. This API is unrelated to Unity's <code>Resources.Load</code>.</p>
+<p><code>InitializeAsync(initialization, token)</code> runs once per instance; <code>PrepareAsync(route, preparation, token)</code> runs for the current history input. Both can report typed progress. <code>TerminateAsync(progress)</code> stops screen-specific work, then acquisitions receive <code>ReleaseAsync(progress)</code> for the ending operation. Normal owned objects and DI scopes retain their standard disposal contracts. Progress is observational: initialization and preparation must finish, then visual effects must finish, before <code>ActivateAsync</code> and input opening.</p>
+<p>Owned objects and acquisitions share one registration sequence and release in reverse order. Register dependencies before their users. At screen termination, preparation lifetimes release before the instance lifetime; perform final operations using initialization or preparation resources in <code>TerminateAsync</code>, while they remain available. See <a href="https://mackysoft.github.io/Navigathena/#ownership-and-shutdown">ownership and shutdown</a> for release failures and external owners.</p>
+<p><code>activity.StartWork</code> schedules a continuation owned by the screen's current history binding. It survives activity suspension; ending the binding cancels and awaits it before cleanup. <code>ScreenWork.WaitAsync</code> includes the entire callback and asynchronous <code>finally</code> blocks. Canceling that wait leaves execution running; <code>ScreenWork.Cancel</code> requests execution cancellation. A finished callback's exception remains observable without preventing cleanup. See <a href="https://mackysoft.github.io/Navigathena/#screen-owned-asynchronous-work">screen-owned asynchronous work</a>.</p>
+<p><code>ScreenDefinition</code> defaults to <code>Single</code>. New history entries for the same definition normally reuse the existing instance; history entries do not each require a separate view or DI scope. Choose <code>Multiple</code> when the factory can acquire and release independent instances.</p>
+<p>Your application owns the host's lifetime. Resetting the root region does not shut down the host or external shared services. Before replacing the host itself, await successful completion of <code>ShutdownAsync</code>. External views and scenes borrowed by a screen have their own lifetimes, separate from the screen and host.</p>
+<h2 id="history-and-presentation">History and presentation</h2>
+<p>Use <code>Reset</code> to return to a starting point, or <code>ReplaceFromAsync</code> to replace a specific history entry and the entries above it. Set <code>NavigationOptions.RecreateInstance</code> to recreate the destination and its initial child screens, including their screen scopes. <code>Reload</code> rebuilds screen instances while preserving the current route and child history; it does not create a new visit.</p>
+<p><code>LowerPresentationPolicy</code> applies to lower screens in the same region and their children. For example, place a HUD, menu, and editor screen in the same history, and give the editor <code>HideAndRetain</code> to hide the lower UI without destroying it. <code>Back</code> then returns to the menu. Parent and unrelated regions are not implicitly hidden. Shared blockers reuse one instance per definition across regions.</p>
+<h2 id="child-regions">Child regions</h2>
+<p>Use separate definition and construction steps when a parent screen owns another navigation history. In this example, <code>ShellRoute</code> is an application route, and <code>shellScreen</code> and <code>chapterScreen</code> are already constructed <code>ScreenDefinition&lt;ShellRoute&gt;</code> and <code>ScreenDefinition&lt;ChapterRoute&gt;</code> values. The shell and chapter factories each return their own lifecycle handler and connect their own views.</p>
+<pre><code class="lang-csharp">RegionDefinitionId rootId = new(&quot;game&quot;);
+RegionDefinitionId contentId = new(&quot;content&quot;);
+
+NavigationDefinition definition = NavigationDefinition.Build(
+    rootId, RegionCompositionMode.Layered, root =&gt;
+    {
+        root.AddRoute&lt;ShellRoute&gt;(
+            RouteEntryOperations.Reset,
+            LowerPresentationPolicy.HideAndRetain,
+            shell =&gt;
+            {
+                shell.AddChildRegion(contentId, RegionCompositionMode.Layered, RegionOccupancy.Required, content =&gt;
+                {
+                    content.AddRoute&lt;ChapterRoute&gt;(
+                        RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace,
+                        LowerPresentationPolicy.HideAndRetain);
+                });
+            });
+    });
+
+ScreenCatalog catalog = ScreenCatalog.Build(definition, builder =&gt;
+{
+    builder.RegisterScreens(rootId, screens =&gt; screens.RegisterScreen(shellScreen));
+    builder.RegisterScreens(contentId, screens =&gt; screens.RegisterScreen(chapterScreen));
+});
+
+await using var host = NavigationHost.Create(catalog);
+await host.StartAsync(
+    Destination.For(new ShellRoute())
+        .Child(contentId, Destination.For(new ChapterRoute(1))));
+</code></pre>
+<p>The required child receives its initial route through <code>Destination.Child</code>. An optional child can start empty. A chapter's <code>activity.Navigation</code> changes the content history, not the shell history. The shell can explicitly address its child with <code>GetRegionNavigation(RegionTarget.Child(contentId))</code>.</p>
+<p>If the child uses references obtained from the shell's scene, register its factories with <code>creation.RegisterScreens(contentId, ...)</code> inside the shell factory instead of registering those factories in the catalog. This makes the references available after loading. Do not register the same factory twice.</p>
+<p>The parent owns its child regions. Removing the parent removes them; reusing a single parent instance for another visit ends the old child instances while retaining that visit's child history and captured state for return.</p>
+<h2 id="transition-policy">Transition policy</h2>
+<p>Configure whole-transition effects separately from screen construction. This example assumes a catalog with <code>ChapterRoute</code> registered in its default <code>root</code> region. <code>fade</code> is an application-created <code>NavigationTransition</code> that acquires or borrows the overlay it needs.</p>
+<pre><code class="lang-csharp">using System.Collections.Generic;
+
+RegionNavigationOptions regionOptions = new()
+{
+    DefaultTransition = fade
+};
+regionOptions.Transitions.On(NavigationOperationKind.Push)
+    .To&lt;ChapterRoute&gt;().Use(fade);
+regionOptions.Transitions.On(NavigationOperationKind.Back)
+    .From&lt;ChapterRoute&gt;().Use(NavigationTransition.None);
+
+NavigationHost host = NavigationHost.Create(catalog, new NavigationHostOptions
+{
+    Regions = new Dictionary&lt;RegionDefinitionId, RegionNavigationOptions&gt;
+    {
+        [new RegionDefinitionId(&quot;root&quot;)] = regionOptions
+    }
+});
+</code></pre>
+<p>Rules match exact route types and operation kinds. A rule specifying both <code>From</code> and <code>To</code> is more specific than a rule specifying only one. Conflicting equally specific rules are rejected; registration order does not resolve the conflict. Register policies before creating the host.</p>
+<p>An operation's <code>NavigationOptions.Transition</code> overrides these rules. <code>null</code> uses policy; <code>NavigationTransition.None</code> explicitly omits the whole-transition effect. Neither choice removes the screen's own animation driver.</p>
+<p>For an effect backed by the source or destination screen, the screen factory can connect it with <code>creation.SetTransitionEffect(effect, viewAdapter)</code> and the policy can select <code>NavigationTransition.FromSourceScreen(...)</code> or <code>FromDestinationScreen(...)</code>. Keep its dependencies in the screen lifetime. An operation-owned effect instead acquires them through <code>NavigationTransitionPreparationContext.Lifetime</code>.</p>
+<p>Set <code>NavigationTransition.EndTiming</code> through the constructor's <code>endTiming</code> argument. The default <code>AfterPresentation</code> settles the effect before retired screens finish releasing. <code>AfterResourceRelease</code> waits for their termination and resource release, keeping the effect subscribed to progress, before settling and activating the destination. A source-owned effect cannot cover the release of its own screen; use an independent overlay for that case. See <a href="https://mackysoft.github.io/Navigathena/#loading-progress">loading progress</a> for reporting and overlay configuration.</p>
+<p><code>RegionNavigationOptions.ResourcePolicy</code> chooses whether incoming preparation precedes outgoing release or vice versa. Use <code>OutgoingFirst</code> when a destination cannot acquire its resource while the outgoing screen owns it. An effect requiring simultaneous screens must declare <code>requiresSimultaneousScreens: true</code>; the runtime rejects plans that cannot satisfy that requirement.</p>
+<h2 id="navigation-and-waiting">Navigation and waiting</h2>
+<p>Within a screen, use <code>ScreenActivityContext.Navigation</code>. From outside a screen, use <code>host.Client</code> with the target <code>RegionInstanceId</code>.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Return value and completion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Push</code>, <code>Replace</code>, <code>Reset</code>, <code>Back</code>, <code>Reload</code></td>
+<td>Submit a request and return a <code>NavigationOperation</code>. Returning from the call does not mean the transition has completed.</td>
+</tr>
+<tr>
+<td><code>PushAsync</code>, <code>ReplaceAsync</code>, <code>ResetAsync</code>, <code>BackAsync</code>, <code>ReloadAsync</code></td>
+<td>Extension methods that return a <code>Task</code> completing when the transition finishes.</td>
+</tr>
+<tr>
+<td><code>InvokeAsync(Route, …)</code></td>
+<td>Wait for the called screen to close and release its resources. Calls made from a screen also wait for the caller to resume activity.</td>
+</tr>
+<tr>
+<td><code>InvokeAsync&lt;TResult&gt;(Route&lt;TResult&gt;, …)</code></td>
+<td>Wait for the same cleanup, then return <code>TResult</code>. Closing without an answer cancels the call.</td>
+</tr>
+</tbody>
+</table>
+<p>Asynchronous navigation methods take the target, options, and <code>CancellationToken</code> in that order. Use a named argument to pass a token without specifying options.</p>
+<pre><code class="lang-csharp">await navigation.PushAsync(route, cancellationToken: cancellationToken);
+
+// answerRoute is an application-defined route derived from Route&lt;TResult&gt;.
+var answer = await navigation.InvokeAsync(
+    answerRoute,
+    cancellationToken: cancellationToken);
+</code></pre>
+<p>Use <code>NavigationOperation</code> to observe or cancel an individual operation.</p>
+<pre><code class="lang-csharp">NavigationOperation operation = navigation.Push(route);
+NavigationResult completed = await operation.WaitAsync(waitCancellationToken);
+</code></pre>
+<p>The token passed to <code>WaitAsync</code> cancels only the wait. To request cancellation of the transition itself, call <code>operation.TryRequestCancellation()</code>. Tokens passed to methods such as <code>PushAsync</code> request transition cancellation and wait for cleanup to finish.</p>
+<h2 id="error-handling">Error handling</h2>
+<p>Both forms of waiting throw <code>NavigationException</code> for rejected, conflicting, or failed requests, and <code>OperationCanceledException</code> for cancellation. <code>RecoverAsync</code> also reports rejected, conflicting, or failed recovery requests through exceptions. You do not need to branch on <code>NavigationResult.Kind</code> or <code>DestinationCommitted</code> to determine success. Exceptions expose the commit and recovery state.</p>
+<p>Invalid arguments or configuration cause argument exceptions or <code>NavigationConfigurationException</code> before a request is accepted.</p>
+<p><code>NavigationHostOptions.OperationCompleted</code> is an observation callback. It also reports rejected and conflicting requests processed by the runtime. Code that controls screens should await operation completion, not use this callback as a success signal.</p>
+<h2 id="platform-support">Platform support</h2>
+<p>Targets .NET Standard 2.1 and C# 9. Microsoft.Extensions.DependencyInjection and VContainer are optional adapters. Unity, uGUI, UI Toolkit, and Addressables adapters provide platform-specific resource acquisition and presentation.</p>
+<ul>
+<li><a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples">Unity examples with and without dependency injection</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

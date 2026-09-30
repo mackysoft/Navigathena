@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Navigathena Microsoft.Extensions.DependencyInjection adapter | Navigathena </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Navigathena Microsoft.Extensions.DependencyInjection adapter | Navigathena ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Extensions.DependencyInjection/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="navigathena-microsoftextensionsdependencyinjection-adapter">Navigathena Microsoft.Extensions.DependencyInjection adapter</h1>
+
+<p>Install <code>MackySoft.Navigathena.Extensions.DependencyInjection</code> alongside the common runtime. In Unity, restore it with NuGetForUnity alongside the Unity adapter. Add these namespaces in composition code:</p>
+<pre><code class="lang-csharp">using MackySoft.Navigathena;
+using MackySoft.Navigathena.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+</code></pre>
+<h2 id="register-a-screen">Register a screen</h2>
+<p>Return the result of <code>creation.CreateScope(services =&gt; …)</code> from the factory of <code>ScreenDefinition&lt;TRoute&gt;</code>.
+Register the screen's single lifecycle entry point with <code>services.AddScreenLifecycleHandler&lt;Presenter&gt;()</code>. The container resolves its constructor dependencies through normal DI resolution.
+A missing handler, multiple handlers, or a mismatched route type causes a configuration error before initialization.
+Do not register the route in the container. Receive it through the arguments to <code>PrepareAsync</code> and <code>ActivateAsync</code>.</p>
+<p>This factory uses the application-defined types from the <a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples/Campaign">Unity campaign sample</a>. <code>campaignScene</code> is an Inspector <code>AssetReference</code>; <code>applicationProvider</code> is the application's already-built provider containing <code>CampaignService</code>.</p>
+<pre><code class="lang-csharp">using MackySoft.Navigathena.Samples.Campaign;
+using MackySoft.Navigathena.Unity;
+using MackySoft.Navigathena.Unity.Addressables;
+
+ScreenDefinition&lt;CampaignMapRoute&gt; screen = new(async (creation, token) =&gt;
+{
+    CampaignMapView view = await creation.AcquireScreenAsync&lt;CampaignMapView&gt;(
+        new AddressablesSceneAcquisition(campaignScene), token);
+
+    return creation.CreateScope(services =&gt;
+    {
+        services.AddSingleton(view);
+        services.ImportService&lt;CampaignService&gt;(applicationProvider);
+        services.AddScreenLifecycleHandler&lt;CampaignMapPresenter&gt;();
+    });
+});
+</code></pre>
+<p>Register <code>screen</code> with the catalog, then create and start the ordinary <code>NavigationHost</code>. The adapter does not create another host. The presenter receives the view and service through its normal constructor. It receives each route only when its lifecycle methods run.</p>
+<p><code>AddSingleton(view)</code> registers an existing object; it does not transfer destruction of the scene object to the container. The scene acquisition still owns that scene. Do not add a second ownership registration for the resolved presenter.</p>
+<h2 id="keep-inspector-registration-in-the-scene">Keep Inspector registration in the scene</h2>
+<p>If several references live in the loaded scene, put the registration code on an application installer component in that scene. The <a href="https://github.com/mackysoft/Navigathena/blob/main/tests/Unity/Assets/Samples/Campaign/CampaignMapInstaller.cs">CampaignMapInstaller</a> example exposes <code>ConfigureServices(IServiceCollection)</code>; this is an application method, not a required Navigathena interface.</p>
+<pre><code class="lang-csharp">CampaignMapInstaller installer = await creation.AcquireScreenAsync&lt;CampaignMapInstaller&gt;(
+    new AddressablesSceneAcquisition(campaignScene), token);
+
+return creation.CreateScope(services =&gt;
+{
+    services.ImportService&lt;CampaignService&gt;(applicationProvider);
+    installer.ConfigureServices(services);
+});
+</code></pre>
+<p>The installer holds serialized references and adds registrations. Navigathena owns the resulting scope's lifetime. For a non-Unity application, omit scene acquisition and register the application's views and dependencies in the same way.</p>
+<h2 id="result-screens">Result screens</h2>
+<p>For screens that return a result, implement <code>IScreenLifecycleHandler&lt;TRoute, TResult&gt;</code>.
+Factories registered through <code>ScreenCatalogDefinitionBuilder.Register&lt;TRoute, TResult&gt;</code> receive the same <code>ScreenCreationContext&lt;TRoute, TResult&gt;</code> as <code>ScreenDefinition&lt;TRoute, TResult&gt;</code>, so they can use <code>creation.CreateScope(services =&gt; …)</code> in the same way.</p>
+<p>For example, register the <a href="https://github.com/mackysoft/Navigathena/blob/main/tests/Unity/Assets/Samples/Common/Confirmation/ConfirmationPresenter.cs">confirmation presenter</a> with <code>services.AddScreenLifecycleHandler&lt;ConfirmationPresenter&gt;()</code>. The adapter checks its <code>ConfirmationRoute</code> / <code>bool</code> contract when constructing the screen. The caller still uses <code>InvokeAsync</code>, and the presenter still answers through <code>ScreenActivityContext&lt;bool&gt;.Call</code>.</p>
+<h2 id="scope-ownership-and-shutdown">Scope ownership and shutdown</h2>
+<p>Each screen instance receives independent service registrations, a service provider, and an asynchronously disposable service scope.
+<code>ImportService&lt;T&gt;(applicationProvider)</code> borrows an existing instance; closing the screen does not dispose of that service.
+Dispose of the application provider only after the navigation host has shut down successfully.</p>
+<p>Microsoft.Extensions.DependencyInjection does not provide nested registration containers through a normal <code>IServiceScope</code>. This adapter creates an independent provider for each screen; it does not copy all registrations from the application provider. Import the shared services the screen needs explicitly. Imports must outlive the screen's use of them.</p>
+<p>Reusing a screen instance for another history entry does not rebuild its DI scope.
+The DI scope participates as one owned unit in the screen lifetime's reverse registration order. Acquire its dependencies before calling <code>CreateScope</code>. After lifecycle termination, later initialization registrations release before the scope; the runtime then awaits asynchronous scope disposal before releasing its earlier dependencies. Use <code>TerminateAsync</code> for final operations that need initialization or preparation resources. See <a href="https://mackysoft.github.io/Navigathena/#ownership-and-shutdown">ownership and shutdown</a>.</p>
+<pre><code class="lang-csharp">await host.ShutdownAsync();
+await applicationProvider.DisposeAsync();
+</code></pre>
+<p>The second line must not run if host shutdown fails to stop users safely. The application owns its provider and startup/shutdown flow; the screen presenter must not dispose of that provider or its shared services.</p>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

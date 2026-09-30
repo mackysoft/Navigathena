@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>MackySoft.Navigathena.Unity | Navigathena </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MackySoft.Navigathena.Unity | Navigathena ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity/README.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="mackysoftnavigathenaunity">MackySoft.Navigathena.Unity</h1>
+
+<p>Connects Unity scenes, prefabs, configured screen views, and Animator playback to the common Navigathena runtime. There is no separate Unity navigation host: create <code>NavigationHost</code> from <code>MackySoft.Navigathena.Hosting</code>.</p>
+<p>Install this NuGet package through <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>. Keep all Navigathena packages at the same version. NuGet dependencies provide the common Runtime and, where required, the base Unity adapter.</p>
+<p>Tested with Unity 6000.5.5f1.</p>
+<p>This package contains Unity source files, assembly definitions, and asset metadata. NuGetForUnity restores them under the package's <code>Sources</code> directory for Unity to compile. It does not embed Unity, third-party assemblies, or another copy of the Navigathena Runtime. Do not install a Navigathena UPM package alongside it.</p>
+<h2 id="configure-a-screen-in-the-inspector">Configure a screen in the Inspector</h2>
+<p>For a uGUI screen, create a scene object or prefab with:</p>
+<pre><code class="lang-text">Campaign screen
+  CampaignMapView              Application labels, buttons, and rendering methods
+  ScreenPresentation          Navigathena presentation configuration
+  Canvas                      Independent screen-space root Canvas
+  GraphicRaycaster
+  CanvasViewAdapter           Visibility, input boundary, and sorting
+  Motion root
+    Animator                  Optional screen animation
+    AnimatorScreenAnimationDriver
+</code></pre>
+<ol>
+<li>Assign the application's labels and buttons to <code>CampaignMapView</code>.</li>
+<li>Add <code>CanvasViewAdapter</code> from the uGUI adapter package and leave <strong>Present Before Navigation</strong> off for a newly acquired screen.</li>
+<li>Add that adapter to <strong>Views</strong> in <code>ScreenPresentation</code>.</li>
+<li>If the screen animates, assign an <code>IScreenAnimator</code> component, such as <code>AnimatorScreenAnimationDriver</code>, to <strong>Animator</strong> in <code>ScreenPresentation</code>.</li>
+<li>Use <strong>Validate Screen Presentation</strong> from the component's context menu to check its references. All referenced components must belong to this screen's hierarchy.</li>
+</ol>
+<p>For UI Toolkit, use <code>UIDocument</code> and <code>UiToolkitViewAdapter</code> instead of the Canvas components. Do not disable the root GameObject to hide an active managed screen: Navigathena controls output and input through the adapter. Application subscriptions still belong to <code>ActivateAsync</code> and <code>DeactivateAsync</code>.</p>
+<p>The requested view or installer component and <code>ScreenPresentation</code> must be on the same GameObject. The view need not expose adapter or animator properties just to connect the screen.</p>
+<h2 id="instantiate-a-configured-prefab">Instantiate a configured prefab</h2>
+<p>The application setup component owns Inspector references. Its factory acquires the configured screen and returns a presenter. The example uses the <a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples/Campaign">campaign sample's</a> <code>CampaignMapView</code>, <code>CampaignMapPresenter</code>, <code>CampaignMapRoute</code>, and <code>CampaignService</code>.</p>
+<pre><code class="lang-csharp">using System.Threading;
+using System.Threading.Tasks;
+using MackySoft.Navigathena;
+using MackySoft.Navigathena.Hosting;
+using MackySoft.Navigathena.Samples.Campaign;
+using MackySoft.Navigathena.Unity;
+using UnityEngine;
+
+public sealed class CampaignSetup : MonoBehaviour
+{
+    [SerializeField] private CampaignMapView campaignPrefab = null!;
+    private NavigationHost? host;
+
+    public async Task InitializeAsync (CampaignService campaign, CancellationToken token)
+    {
+        ScreenCatalog catalog = ScreenCatalog.Build(screens =&gt;
+        {
+            screens.Register&lt;CampaignMapRoute&gt;(
+                RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace,
+                LowerPresentationPolicy.HideAndRetain,
+                async (creation, cancellationToken) =&gt;
+                {
+                    CampaignMapView view = await creation.AcquireScreenAsync(campaignPrefab, cancellationToken);
+                    return creation.Lifetime.CreateOwned(() =&gt; new CampaignMapPresenter(view, campaign));
+                });
+        });
+
+        host = NavigationHost.Create(catalog);
+        await host.StartAsync(new CampaignMapRoute(1), cancellationToken: token);
+    }
+
+    public async ValueTask ShutdownAsync ()
+    {
+        if (host is not null)
+        {
+            await host.ShutdownAsync();
+        }
+    }
+}
+</code></pre>
+<p>The application calls initialization once, observes its exceptions, and calls shutdown before destroying the setup component or its dependencies. An <code>OnDestroy</code> callback alone cannot await that shutdown. <code>CampaignService</code> is supplied and owned by the application; it is not disposed by this factory.</p>
+<p><code>AcquireScreenAsync</code> validates and connects the prefab's presentation and registers destruction of the instance. It does not complete entry animation or start activity before returning to the factory. Those steps are part of the surrounding navigation operation.</p>
+<p>The default single-instance policy is suitable for this chapter screen, which replaces its contents when showing another chapter. A popup that may appear more than once concurrently should use a <code>ScreenDefinition&lt;TRoute, TResult&gt;</code> with <code>ScreenInstancePolicy.Multiple</code>; each factory call must acquire a separate view. See the <a href="https://github.com/mackysoft/Navigathena/blob/main/tests/Unity/Assets/Samples/Common/Confirmation/ConfirmationPopupRegistration.cs">confirmation popup registration</a>.</p>
+<h2 id="load-a-scene-and-use-its-placed-ui">Load a scene and use its placed UI</h2>
+<p>For a scene enabled in the build's scene list, use <code>SceneAcquisition</code> from this package. Supply its full asset path, including the extension, to avoid ambiguous scene names:</p>
+<pre><code class="lang-csharp">// Inside the screen factory.
+CampaignMapView view = await creation.AcquireScreenAsync&lt;CampaignMapView&gt;(
+    new SceneAcquisition(&quot;Assets/Scenes/Campaign.unity&quot;), token);
+return creation.Lifetime.CreateOwned(() =&gt; new CampaignMapPresenter(view, campaign));
+</code></pre>
+<p>The scene is loaded additively; the active scene and unrelated scenes are left intact. Each acquisition owns its loaded instance, even when another instance of the same scene already exists. Built-in acquisitions serialize native loads while identifying each scene instance. Do not concurrently load the same path through an unmanaged loader. A cancelled native load is allowed to finish before the managed lifetime unloads it.</p>
+<p>The same API also accepts other implementations of <code>IResourceAcquisition&lt;Scene&gt;</code>. For an Addressables scene, use <code>AddressablesSceneAcquisition</code>:</p>
+<pre><code class="lang-csharp">using MackySoft.Navigathena.Unity.Addressables;
+
+// Inside the screen factory; campaignScene is an Inspector AssetReference.
+CampaignMapView view = await creation.AcquireScreenAsync&lt;CampaignMapView&gt;(
+    new AddressablesSceneAcquisition(campaignScene), token);
+return creation.Lifetime.CreateOwned(() =&gt; new CampaignMapPresenter(view, campaign));
+</code></pre>
+<p><code>AddressablesSceneAcquisition</code> loads the scene additively. <code>AcquireScreenAsync</code> uses the supplied acquisition, resolves the view, and connects its presentation. It does not choose how a scene is obtained: an <code>IResourceAcquisition&lt;Scene&gt;</code> can also create a scene at runtime. The default overload requires exactly one component of the requested type in the acquired scene. An overload accepting <code>Func&lt;Scene, TView&gt;</code> lets you select a view explicitly when the scene contains more than one. It verifies that the selected component belongs to that scene.</p>
+<p>For DI, request the scene's installer component instead of its view, then pass the acquired installer to <code>creation.CreateScope</code>. The <a href="https://github.com/mackysoft/Navigathena/blob/main/tests/Unity/Assets/Samples/Startup/CampaignNavigationSetup.cs">startup sample</a> does this with <code>CampaignMapInstaller</code> for manual construction, Microsoft.Extensions.DependencyInjection, and VContainer.</p>
+<p>Do not unload an acquired scene yourself while a managed screen uses it. Its acquisition owns unloading, after dependent activity, lifecycle termination, and scope disposal have finished.</p>
+<h2 id="use-a-custom-view-acquisition">Use a custom view acquisition</h2>
+<p>An acquisition that returns a configured component uses the same screen entry point:</p>
+<pre><code class="lang-csharp">// viewAcquisition implements IResourceAcquisition&lt;CampaignMapView&gt;.
+CampaignMapView view = await creation.AcquireScreenAsync(viewAcquisition, token);
+return creation.Lifetime.CreateOwned(() =&gt; new CampaignMapPresenter(view, campaign));
+</code></pre>
+<p>The acquisition decides how to obtain and release the view. <code>AcquireScreenAsync</code> does not clone it or load another scene. It observes the view's native lifetime and connects its <code>ScreenPresentation</code>. The runtime owns the acquisition before calling it, ends it after dependent screen work stops, and also ends partial acquisition after failure or cancellation. Use <code>Progress.GetReporter(input)</code> to report typed acquisition or release state. Native scene acquisition reports <code>SceneProgress</code> through <code>UnityProgress.SceneLoading</code> and <code>UnityProgress.SceneUnloading</code>: the scene path, the native operation fraction, and completion remain distinct from navigation completion.</p>
+<p>Use <code>initialization.Lifetime</code> for supporting assets or objects acquired in <code>InitializeAsync(initialization, token)</code>. They share the screen instance's lifetime without reopening construction or creating another DI scope. Report game-specific generation steps through <code>initialization.Progress</code>. Configure an independent transition with <code>TransitionEndTiming.AfterResourceRelease</code> when the loading overlay must cover unloading as well as loading; activation and input always follow the effect's final settlement.</p>
+<p>Use <code>BorrowScreenAsync</code> for an externally owned view whose owner must outlive the screen. Borrowing does not transfer destruction responsibility to the screen.</p>
+<h2 id="use-a-view-already-in-a-scene">Use a view already in a scene</h2>
+<p>The scene's owner creates a <code>ResourceLifetime</code> and a reference to its existing view. The screen borrows that view rather than loading or cloning it:</p>
+<pre><code class="lang-csharp">ResourceLifetime sceneLifetime = new();
+ResourceReference&lt;CampaignMapView&gt; viewReference = sceneLifetime.Reference(sceneView);
+
+ScreenDefinition&lt;CampaignMapRoute&gt; screen = new(async (creation, token) =&gt;
+{
+    CampaignMapView view = await creation.BorrowScreenAsync(
+        viewReference, ScreenAnimationState.Hidden, token);
+    return creation.Lifetime.CreateOwned(() =&gt; new CampaignMapPresenter(view, campaign));
+});
+</code></pre>
+<p><code>sceneView</code> and <code>campaign</code> are supplied by the application owner. Register <code>screen</code> in the catalog as usual. The specified return state is applied when the screen's presentation connection ends. Choose it for the state the external owner expects; borrowing does not transfer ownership or unload the scene.</p>
+<p>Before destroying that external scene or its view, await successful completion of <code>sceneLifetime.EndAsync()</code>. It stops registered users but does not destroy their borrowed values. If shutting down the whole navigation system, await <code>host.ShutdownAsync()</code> first, then end the external lifetime and release the scene.</p>
+<p><code>ConnectScreen</code> is a lower-level connection method for a view already acquired or borrowed through the creation lifetime. It does not acquire or destroy the object. Prefer the acquisition/borrowing helpers for ordinary screen factories.</p>
+<h2 id="configure-push-in-push-out-pop-in-and-pop-out">Configure push-in, push-out, pop-in, and pop-out</h2>
+<p>Assign a dedicated Animator to <code>AnimatorScreenAnimationDriver</code>. The default state paths are:</p>
+<table>
+<thead>
+<tr>
+<th>Screen action</th>
+<th>Animator state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enter</td>
+<td><code>Base Layer.PushIn</code></td>
+</tr>
+<tr>
+<td>Cover by another screen</td>
+<td><code>Base Layer.PushOut</code></td>
+</tr>
+<tr>
+<td>Reveal when returning</td>
+<td><code>Base Layer.PopIn</code></td>
+</tr>
+<tr>
+<td>Exit</td>
+<td><code>Base Layer.PopOut</code></td>
+</tr>
+</tbody>
+</table>
+<p>Also provide the immediate pose states <code>Base Layer.BeforeEnter</code>, <code>Base Layer.Foreground</code>, <code>Base Layer.Background</code>, <code>Base Layer.Hidden</code>, and <code>Base Layer.AfterExit</code>. Configure different full state paths in the Inspector if your controller uses other names.</p>
+<p>Use finite, non-looping animation clips without automatic transitions. The driver waits for playback to finish, applies the final pose, and stops the Animator. It owns playback exclusively; another component must not write to the same Animator during navigation. The target must stay active until playback has stopped. The driver uses unscaled time and a configurable timeout.</p>
+<p>Keep presentation gating separate from the animated content. Animate a visual child rather than disabling the screen's Canvas adapter or GameObject. For another animation library, implement <code>IScreenAnimator</code> on your own component and assign it in <code>ScreenPresentation</code>.</p>
+<h2 id="startup-overlays-and-persistent-objects">Startup overlays and persistent objects</h2>
+<p>An overlay that must be visible before any loading belongs to the application's initial scene or another existing owner. Do not instantiate it as part of the first screen merely to cover that screen's loading.</p>
+<p>The <a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples/Startup">startup example</a> provides:</p>
+<ul>
+<li><code>CampaignNavigationSetup</code>: Inspector references, catalog creation, and host lifetime.</li>
+<li><code>StartupOverlay</code>: the existing overlay's status label, progress bar, and opacity control.</li>
+<li><code>StartupProgress</code>: the typed composition of Addressables acquisition and campaign preparation state.</li>
+<li><code>StartupRevealEffect</code>: the <code>INavigationTransitionEffect</code> that reveals the initial destination after preparation and resource release.</li>
+</ul>
+<p>Place the overlay in the initial scene with its Canvas enabled, <code>CanvasViewAdapter.presentBeforeNavigation</code> enabled, and its visual <code>CanvasGroup.alpha</code> set to one. Assign the adapter, opacity group, <code>Text</code>, and <code>Slider</code> to <code>StartupOverlay</code> in the Inspector. Configure the overlay's Canvas to cover the starting screen before host initialization. Set <code>campaignScene</code> to the Addressables scene containing the configured <code>CampaignMapInstaller</code> and <code>ScreenPresentation</code>.</p>
+<p>The setup borrows the overlay through an external resource lifetime and passes its typed transition to <code>host.StartAsync</code>. <code>ObserveProgress</code> connects <code>StartupOverlay.Render</code> during transition construction. <code>CampaignMapPresenter.PrepareAsync</code> reports the prepared chapter; it does not operate the overlay. The sample reports on Unity's main thread. After preparation and cleanup, <code>SettleAsync</code> fades out the overlay, then Navigathena activates the campaign screen and enables input. On failure the effect leaves the overlay opaque; the application's startup caller handles the exception and decides whether to retry or show an error.</p>
+<p>Await <code>CampaignNavigationSetup.ShutdownAsync</code> before destroying the setup, overlay, or shared providers. The setup borrows but never destroys the preplaced overlay. It can live in a persistent scene or a persistent object; neither arrangement is required by Navigathena.</p>
+<h2 id="auxiliary-resources">Auxiliary resources</h2>
+<p>Use <code>creation.Lifetime.AcquireSceneAsync&lt;TView&gt;</code> or <code>InstantiatePrefabAsync&lt;TView&gt;</code> for a supporting scene or prefab whose resources belong to the screen but which is not another main screen presentation. These helpers acquire resources without automatically connecting a screen. Use <code>preparation.Lifetime</code> for resources specific to a route preparation.</p>
+<p>Only create a separate screen or child region when it needs its own history, lifecycle, and presentation management. Ordinary labels, headers, and buttons can stay inside the parent view.</p>
+<p>See also <a href="https://mackysoft.github.io/Navigathena/src/MackySoft.Navigathena.Unity.UGUI/README.html">uGUI configuration</a>, <a href="https://mackysoft.github.io/Navigathena/src/MackySoft.Navigathena.Unity.Addressables/README.html">Addressables acquisition</a>, and <a href="https://mackysoft.github.io/Navigathena/">the complete user guide</a>.</p>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
