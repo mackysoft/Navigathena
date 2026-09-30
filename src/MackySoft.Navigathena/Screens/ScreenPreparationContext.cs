@@ -20,7 +20,8 @@ namespace MackySoft.Navigathena
         public NavigationEntryId EntryId { get; }
         public RegionInstanceId RegionId { get; }
         public object? SavedState { get; }
-        /// <summary>Ownership and borrowing for this preparation. Previous preparations are released once they are no longer in use.</summary>
+        /// <summary>Ownership and borrowing for this preparation. Previous preparations remain available while owned work or calls still use them.</summary>
+        /// <remarks>At screen termination, preparation resources release after TerminateAsync and before instance-owned resources.</remarks>
         public LifetimeContext Lifetime { get; }
     }
 }

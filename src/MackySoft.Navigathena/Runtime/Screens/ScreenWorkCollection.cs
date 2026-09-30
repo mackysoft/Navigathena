@@ -23,27 +23,6 @@ namespace MackySoft.Navigathena.Runtime.Screens
         }
 
         public NavigationEntry Entry { get; }
-        internal int Count
-        {
-            get
-            {
-                lock (sync)
-                {
-                    return works.Count;
-                }
-            }
-        }
-
-        internal void CancelPendingSince (int index)
-        {
-            lock (sync)
-            {
-                foreach (Work work in works.Skip(index).Where(work => !work.Started))
-                {
-                    work.Completion.TrySetCanceled();
-                }
-            }
-        }
         public bool IsAlive => !ending && !owner.IsEnding && owner.Entry.Id == Entry.Id;
         public bool HasPending
         {
@@ -51,45 +30,76 @@ namespace MackySoft.Navigathena.Runtime.Screens
             {
                 lock (sync)
                 {
-                    return works.Any(work => !work.Completion.Task.IsCompleted);
+                    return works.Count != 0;
                 }
             }
         }
 
-        public ScreenWork Add (Func<ScreenWorkContext, ValueTask> callback)
+        internal void CancelPendingFrom (CancellationToken activity)
         {
-            Work work;
+            lock (sync)
+            {
+                // Completed work can disappear during activation, so collection positions are not ownership.
+                foreach (Work work in works.Where(work => !work.Started && work.Activity == activity).ToArray())
+                {
+                    Complete(work, new OperationCanceledException(activity));
+                }
+            }
+        }
+
+        public ScreenWork Add (Func<ScreenWorkContext, ValueTask> callback, CancellationToken activity)
+        {
+            Work work = new(callback, activity);
+            ScreenWork result = new(work.Id, work.Completion.Task, () => Cancel(work));
+            work.Result = result;
             lock (sync)
             {
                 if (!IsAlive)
                 {
+                    work.Cancellation.Dispose();
                     throw new InvalidOperationException("The screen binding has ended.");
                 }
-                work = new Work(callback);
                 works.Add(work);
             }
             runtime.ScheduleWork();
-            return new ScreenWork(token => WaitAsync(work, token), () =>
+            return result;
+        }
+
+        private void Cancel (Work work)
+        {
+            lock (sync)
             {
-                try
+                if (work.Callback is null)
                 {
-                    lock (sync)
+                    return;
+                }
+                if (!work.Started)
+                {
+                    Complete(work, new OperationCanceledException());
+                    return;
+                }
+                if (work.CancellationRequests++ == 0)
+                {
+                    work.CancellationFinished = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
+                }
+            }
+
+            // Cancellation invokes user callbacks. Keep them outside the collection lock and
+            // let completion wait for them before disposing the source or releasing the binding.
+            try
+            {
+                work.Cancellation.Cancel();
+            }
+            finally
+            {
+                lock (sync)
+                {
+                    if (--work.CancellationRequests == 0)
                     {
-                        if (work.Completion.Task.IsCompleted)
-                        {
-                            return;
-                        }
-                        if (!work.Started)
-                        {
-                            work.Completion.TrySetCanceled();
-                        }
+                        work.CancellationFinished!.TrySetResult(null);
                     }
-                    work.Cancellation.Cancel();
                 }
-                catch (ObjectDisposedException) when (work.Completion.Task.IsCompleted)
-                {
-                }
-            });
+            }
         }
 
         public void StartReady ()
@@ -101,10 +111,11 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 {
                     return;
                 }
-                pending = works.Where(work => !work.Started && !work.Completion.Task.IsCompleted).ToArray();
+                pending = works.Where(work => !work.Started).ToArray();
                 foreach (Work work in pending)
                 {
                     work.Started = true;
+                    work.Activity = default;
                 }
             }
             foreach (Work work in pending)
@@ -113,17 +124,9 @@ namespace MackySoft.Navigathena.Runtime.Screens
             }
         }
 
-        private static Task WaitAsync (Work work, CancellationToken waitCancellationToken)
-        {
-            if (NavigationCallbackScope.IsExecuting || ScreenWorkExecution.WorkId == work.Id)
-            {
-                throw new InvalidOperationException("A lifecycle callback or the work itself cannot wait for owned work to finish.");
-            }
-            return AsyncWait.WaitAsync(work.Completion.Task, waitCancellationToken).AsTask();
-        }
-
         private async Task RunAsync (Work work)
         {
+            Exception? failure = null;
             try
             {
                 work.Cancellation.Token.ThrowIfCancellationRequested();
@@ -132,29 +135,67 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 IScreenCallScope calls = runtime.BindCall(Entry, owner.Id, IsValid);
                 IScreenNavigation navigation = new ActivityNavigation(owner.Navigation, IsValid, runtime.State);
                 ScreenWorkContext context = new(Entry.Id, navigation, work.Cancellation.Token, calls);
-                await ScreenWorkExecution.RunAsync(work.Id, Entry.Id, work.Cancellation.Token, () => work.Callback(context));
+                await ScreenWorkExecution.RunAsync(work.Id, Entry.Id, work.Cancellation.Token, () => work.Callback!(context));
                 work.Cancellation.Token.ThrowIfCancellationRequested();
-                work.Completion.TrySetResult(null);
             }
             catch (OperationCanceledException exception)
             {
-                work.Completion.TrySetCanceled(exception.CancellationToken);
+                failure = exception;
             }
             catch (Exception exception)
             {
-                work.Completion.TrySetException(exception);
+                failure = exception;
                 runtime.ReportEquipmentFailure("Owned screen work failed: " + exception.Message);
             }
-            finally
+
+            Task cancellationFinished;
+            lock (sync)
             {
-                try
-                {
-                    await owner.ReleasePreviousInputAsync(null);
-                }
-                catch (Exception exception)
-                {
-                    runtime.ReportEquipmentFailure("Previous preparation resources could not be released: " + exception.Message);
-                }
+                work.Callback = null;
+                cancellationFinished = work.CancellationFinished?.Task ?? Task.CompletedTask;
+            }
+            await cancellationFinished;
+            lock (sync)
+            {
+                // The callback, its finally blocks, cancellation callbacks and usage lease have ended.
+                Complete(work, failure);
+            }
+
+            // Rebinding can hold the lifecycle lock while joining work. Resource cleanup must
+            // therefore follow completion, independently of the work's use of those resources.
+            try
+            {
+                await owner.ReleasePreviousInputAsync(null);
+            }
+            catch (Exception exception)
+            {
+                runtime.ReportEquipmentFailure("Previous preparation resources could not be released: " + exception.Message);
+            }
+        }
+
+        private void Complete (Work work, Exception? failure)
+        {
+            CancellationToken cancellationToken = work.Cancellation.Token;
+            bool canceled = cancellationToken.IsCancellationRequested;
+            work.Callback = null;
+            work.Result!.DetachCancellation();
+            work.Cancellation.Dispose();
+            works.Remove(work);
+            if (failure is OperationCanceledException cancellation)
+            {
+                work.Completion.TrySetCanceled(cancellation.CancellationToken);
+            }
+            else if (failure is not null)
+            {
+                work.Completion.TrySetException(failure);
+            }
+            else if (canceled)
+            {
+                work.Completion.TrySetCanceled(cancellationToken);
+            }
+            else
+            {
+                work.Completion.TrySetResult(null);
             }
         }
 
@@ -167,20 +208,15 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 pending = works.ToArray();
             }
             runtime.EndBindingCalls(Entry.Id, owner.Id);
-            List<Exception> failures = new();
             foreach (Work work in pending)
             {
                 try
                 {
-                    work.Cancellation.Cancel();
+                    Cancel(work);
                 }
                 catch (Exception exception)
                 {
-                    failures.Add(exception);
-                }
-                if (!work.Started)
-                {
-                    work.Completion.TrySetCanceled();
+                    runtime.ReportEquipmentFailure("Canceling owned screen work failed: " + exception.Message);
                 }
             }
             foreach (Work work in pending)
@@ -192,34 +228,35 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 catch (OperationCanceledException)
                 {
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
-                    failures.Add(exception);
+                    // The result handle and diagnostics preserve failure. A finished callback
+                    // no longer uses the screen and must not prevent termination and release.
                 }
-                work.Cancellation.Dispose();
-            }
-            if (failures.Count > 0)
-            {
-                throw new AggregateException("Screen work could not finish safely.", failures);
             }
         }
 
         private sealed class Work
         {
             public Guid Id { get; } = Guid.NewGuid();
-            public Work (Func<ScreenWorkContext, ValueTask> callback)
+            public Work (Func<ScreenWorkContext, ValueTask> callback, CancellationToken activity)
             {
                 Callback = callback;
+                Activity = activity;
                 _ = Completion.Task.ContinueWith(task =>
                 {
                     _ = task.Exception;
                 }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
             }
 
-            public Func<ScreenWorkContext, ValueTask> Callback { get; }
+            public Func<ScreenWorkContext, ValueTask>? Callback { get; set; }
+            public CancellationToken Activity { get; set; }
             public CancellationTokenSource Cancellation { get; } = new();
             public TaskCompletionSource<object?> Completion { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            public ScreenWork? Result { get; set; }
             public bool Started { get; set; }
+            public int CancellationRequests { get; set; }
+            public TaskCompletionSource<object?>? CancellationFinished { get; set; }
         }
     }
 }

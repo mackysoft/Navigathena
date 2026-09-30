@@ -66,7 +66,7 @@ public sealed class ScreenDependencyInjectionContractTests
         presenter.Activity!.Call.Complete(42);
 
         Assert.Equal(42, await call.WaitAsync(TimeSpan.FromSeconds(5)));
-        Assert.Equal(new[] { "selection.terminate", "selection.dispose", "service.dispose", "initialized-resource.release", "resource.dispose" }, shared.Ending);
+        Assert.Equal(new[] { "selection.terminate", "initialized-resource.release", "selection.dispose", "service.dispose", "resource.dispose" }, shared.Ending);
         Assert.IsType<OtherRoute>(host.State.Current.GetEntry(Assert.Single(host.State.Current.GetRegion(host.Root).Entries)).Route);
         await host.ShutdownAsync();
         Assert.Equal(5, shared.Ending.Count);
@@ -93,7 +93,11 @@ public sealed class ScreenDependencyInjectionContractTests
 
         public async ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
         {
-            await initialization.Lifetime.AcquireAsync(new Acquisition(() => shared.Ending.Add("initialized-resource.release")), cancellationToken);
+            await initialization.Lifetime.AcquireAsync(new Acquisition(() =>
+            {
+                Service.Use();
+                shared.Ending.Add("initialized-resource.release");
+            }), cancellationToken);
         }
 
         public ValueTask PrepareAsync (SelectionRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
@@ -119,6 +123,7 @@ public sealed class ScreenDependencyInjectionContractTests
 
         public ValueTask DisposeAsync ()
         {
+            Service.Use();
             shared.Ending.Add("selection.dispose");
             return default;
         }
@@ -342,8 +347,14 @@ public sealed class ScreenDependencyInjectionContractTests
     public sealed class ScreenService : IDisposable
     {
         private readonly SharedService shared;
+        private bool disposed;
         public ScreenService (SharedService shared) => this.shared = shared;
-        public void Dispose () => shared.Ending.Add("service.dispose");
+        public void Use () => ObjectDisposedException.ThrowIf(disposed, this);
+        public void Dispose ()
+        {
+            disposed = true;
+            shared.Ending.Add("service.dispose");
+        }
     }
 
     public sealed class ItemPresenter : IScreenLifecycleHandler<ItemRoute>, IAsyncDisposable

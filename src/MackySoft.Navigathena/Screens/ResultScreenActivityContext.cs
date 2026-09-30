@@ -13,6 +13,7 @@ namespace MackySoft.Navigathena
 
         public ScreenCall<TResult> Call { get; }
 
+        /// <inheritdoc cref="ScreenActivityContext.StartWork"/>
         public ScreenWork StartWork (Func<ScreenWorkContext<TResult>, ValueTask> work)
         {
             if (work is null)

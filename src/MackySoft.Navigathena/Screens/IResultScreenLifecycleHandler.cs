@@ -12,7 +12,8 @@ namespace MackySoft.Navigathena
         ValueTask PrepareAsync (TRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken);
         ValueTask ActivateAsync (TRoute route, ScreenActivityContext<TResult> activity);
         ValueTask DeactivateAsync ();
-        /// <summary>Awaits final screen-specific stopping and reports progress for the ending operation before resources are released. This callback is not cancelled.</summary>
+        /// <summary>Completes final shutdown after activity and owned work stop, while screen resources remain available. This callback is not cancelled.</summary>
+        /// <remarks>Finish operations using initialization or preparation resources here. Those resources may be released before the handler's registered disposal. A failed termination retains its dependencies.</remarks>
         ValueTask TerminateAsync (NavigationProgressReporter progress);
     }
 }

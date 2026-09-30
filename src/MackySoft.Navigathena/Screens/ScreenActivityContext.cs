@@ -32,6 +32,11 @@ namespace MackySoft.Navigathena
         public bool IsFirstActivation { get; }
 
         /// <summary>Schedules owned work after the current navigation settles. Do not await its completion inside a lifecycle callback.</summary>
+        /// <remarks>Work registered during activation starts only after activation succeeds; a failed activation cancels its pending work. Once started, work survives deactivation until it finishes, is canceled, or its screen binding ends.</remarks>
+        /// <param name="work">The complete asynchronous operation, including any cleanup that uses screen resources.</param>
+        /// <returns>A handle for observing completion or requesting execution cancellation.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="work"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">This activity or its screen binding has ended.</exception>
         public ScreenWork StartWork (Func<ScreenWorkContext, ValueTask> work) => startWork(work ?? throw new ArgumentNullException(nameof(work)));
     }
 }

@@ -49,7 +49,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
                     request();
                 }
                 return default;
-            });
+            }, token);
         }
 
         public ScreenInstance (NavigationEntry entry, PresentationContext context, RegionRouteDefinition definition, ScreenDefinition construction, ViewRegistry views, INavigationStateSource state, Action<ScreenInstance, string> reportLoss, Func<ScreenInstance, ValueTask> endUser, Action<ScreenInstance, object> claimHandler, IScreenActivityRuntime runtime)
@@ -312,7 +312,6 @@ namespace MackySoft.Navigathena.Runtime.Screens
                     await stoppingActivity;
                 }
 
-                int workCheckpoint = work.Count;
                 CancellationTokenSource current = new();
                 activity = current;
                 stoppingActivity = null;
@@ -329,7 +328,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
                             {
                                 throw new InvalidOperationException("The activity that started this work is no longer valid.");
                             }
-                            return binding.Add(callback);
+                            return binding.Add(callback, current.Token);
                         }, !runtime.HasActivated(Entry.Id), reason, PreparationReason);
                     current.Token.ThrowIfCancellationRequested();
                     handlerActive = true;
@@ -339,7 +338,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 }
                 catch
                 {
-                    work.CancelPendingSince(workCheckpoint);
+                    work.CancelPendingFrom(current.Token);
                     await StopActivityAsync();
                     throw;
                 }
@@ -495,22 +494,24 @@ namespace MackySoft.Navigathena.Runtime.Screens
         private async Task TerminateCoreAsync (INavigationOperationProgressReporter? operationProgress)
         {
             await prepared.Task;
-            await work.StopAsync();
+            List<Exception> inputFailures = new();
+            try
+            {
+                InvalidateActivity();
+            }
+            catch (Exception exception)
+            {
+                inputFailures.Add(exception);
+            }
+
+            // Activity and work can both use instance resources while stopping. Start both
+            // stops before joining them so deactivation can release work-specific waits.
+            Task stoppingWork = work.StopAsync().AsTask();
+            await Task.WhenAll(stoppingWork, DeactivateAsync().AsTask());
             await unused.Task;
             await lifecycle.WaitAsync();
             try
             {
-                List<Exception> inputFailures = new();
-                try
-                {
-                    InvalidateActivity();
-                }
-                catch (Exception exception)
-                {
-                    inputFailures.Add(exception);
-                }
-
-                await StopActivityAsync();
                 if (handler is not null && !handlerTerminated)
                 {
                     NavigationProgressReporter progress = operationProgress?.CreateWork(NavigationPhase.Cleanup, Entry.Id, "Termination") ?? NavigationProgressReporter.None;
@@ -527,8 +528,6 @@ namespace MackySoft.Navigathena.Runtime.Screens
 
                 Creation.TransitionView?.Release();
                 Creation.ReleasePresentation();
-                // Owned services may reference input resources and scene views during their disposal.
-                await Lifetime.ReleaseOwnedAsync();
                 NavigationProgressReporter releaseProgress = operationProgress?.CreateWork(NavigationPhase.Cleanup, Entry.Id, "ResourceRelease") ?? NavigationProgressReporter.None;
                 try
                 {

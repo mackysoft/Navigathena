@@ -88,6 +88,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 QuestionPresenter previous = game.Question;
                 await previous.Activity.Navigation.ReloadAsync();
                 Assert.That(previous.Disposals, Is.EqualTo(1));
+                Assert.That(previous.InitializationReleases, Is.EqualTo(1));
                 Assert.That(game.Question, Is.Not.SameAs(previous));
                 Assert.That(game.Question.Activity.EntryId, Is.EqualTo(previous.Activity.EntryId));
                 Assert.That(answer.IsCompleted, Is.False);
@@ -98,6 +99,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 callerObject.name = "Answer applied";
                 Assert.That(callerObject.name, Is.EqualTo("Answer applied"));
                 Assert.That(game.Question.Disposals, Is.EqualTo(1));
+                Assert.That(game.Question.InitializationReleases, Is.EqualTo(1));
                 Assert.That(game.Presenter.Activity.EntryId, Is.EqualTo(first.EntryId));
                 Assert.That(game.Presenter.Activity.IsFirstActivation, Is.False);
                 Assert.That(game.Presenter.Activity.Reason, Is.EqualTo(ScreenActivationReason.HistoryReturn));
@@ -141,8 +143,12 @@ namespace MackySoft.Navigathena.Unity.Tests
             }
             public int Cost { get; private set; }
             public int Disposals { get; private set; }
+            public int InitializationReleases { get; private set; }
             public ScreenActivityContext<bool> Activity { get; private set; } = null!;
-            public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken token) => default;
+            public async ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken token)
+            {
+                await initialization.Lifetime.AcquireAsync(new InitializationResource(this), token);
+            }
             public ValueTask PrepareAsync (QuestionRoute route, ScreenPreparationContext preparation, CancellationToken token)
             {
                 Cost = route.Cost;
@@ -157,9 +163,26 @@ namespace MackySoft.Navigathena.Unity.Tests
             public ValueTask TerminateAsync (NavigationProgressReporter progress)
             {
                 Assert.That(view != null, Is.True);
+                Assert.That(InitializationReleases, Is.Zero);
                 return default;
             }
             public void Dispose () => Disposals++;
+
+            private sealed class InitializationResource : IResourceAcquisition<object>
+            {
+                private readonly QuestionPresenter owner;
+                public InitializationResource (QuestionPresenter owner) => this.owner = owner;
+                public ValueTask<object> AcquireAsync (ResourceAcquisitionContext context, CancellationToken cancellationToken) => new(new object());
+                public ValueTask ReleaseAsync (NavigationProgressReporter progress)
+                {
+                    if (owner.Disposals != 0)
+                    {
+                        throw new ObjectDisposedException(nameof(QuestionPresenter));
+                    }
+                    owner.InitializationReleases++;
+                    return default;
+                }
+            }
         }
 
         [UnityTest] public IEnumerator Placed_canvas_with_manual_dependencies_reuses_one_screen () => CheckSingle(0);

@@ -18,7 +18,6 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
         private bool open = true;
         private int pending;
         private Task? disposal;
-        private Task? ownedDisposal;
         private Task? requestedEnd;
 
         public ResourceScope (Func<ValueTask> endUser, Action<string> reportLoss)
@@ -42,7 +41,7 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
         {
             lock (sync)
             {
-                if (open || pending != 0 || disposal is not null || ownedDisposal is not null || ending.IsCancellationRequested)
+                if (open || pending != 0 || disposal is not null || ending.IsCancellationRequested)
                 {
                     throw new InvalidOperationException("Resource registration cannot start while another callback or release is running.");
                 }
@@ -322,8 +321,8 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             try
             {
                 await drained.Task;
-                await ReleaseOwnedAsync();
-                // Acquisitions can depend on earlier acquisitions. A failed dependent must retain them.
+                // Both owned objects and acquisitions may depend on earlier registrations.
+                // A failed release must retain every earlier dependency.
                 for (int i = acquisitions.Count - 1; i >= 0; i--)
                 {
                     await acquisitions[i].ReleaseAsync(progress);
@@ -341,18 +340,6 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             catch (Exception exception)
             {
                 completion.TrySetException(exception);
-            }
-        }
-
-        public ValueTask ReleaseOwnedAsync () => new(ownedDisposal ??= ReleaseOwnedCoreAsync());
-
-        private async Task ReleaseOwnedCoreAsync ()
-        {
-            await drained.Task;
-            foreach (IOwnedObject owner in acquisitions.OfType<IOwnedObject>().Reverse().ToArray())
-            {
-                await owner.ReleaseAsync(NavigationProgressReporter.None);
-                acquisitions.Remove(owner);
             }
         }
 

@@ -5,7 +5,12 @@ using System.Threading.Tasks;
 namespace MackySoft.Navigathena
 {
     /// <summary>Registers owned objects, acquired resources, and borrowed references with a runtime-managed lifetime.</summary>
-    /// <remarks>Registration is available only during the associated creation, initialization, or preparation callback. The runtime ends ownership and borrowing after their users have stopped.</remarks>
+    /// <remarks>
+    /// Registration is available only during the associated creation, initialization, or preparation callback.
+    /// CreateOwned and AcquireAsync share one registration order and release in reverse order after their users stop.
+    /// Register owned dependencies before the objects or acquisitions that use them; asynchronous acquisition completion does not change this order.
+    /// A failed release retains earlier registrations and borrowed references. The failed attempt is not retried.
+    /// </remarks>
     public abstract class LifetimeContext
     {
         internal LifetimeContext ()

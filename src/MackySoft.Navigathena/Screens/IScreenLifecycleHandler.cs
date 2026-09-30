@@ -21,7 +21,8 @@ namespace MackySoft.Navigathena
         /// <summary>Starts activity after preparation and transition effects finish. Native input opens only after this callback completes.</summary>
         ValueTask ActivateAsync (TRoute route, ScreenActivityContext activity);
         ValueTask DeactivateAsync ();
-        /// <summary>Awaits final screen-specific stopping before owned services and resources are released. Reports belong to this termination.</summary>
+        /// <summary>Completes final screen-specific shutdown after activity and owned work stop, while screen resources remain available.</summary>
+        /// <remarks>Finish operations using initialization or preparation resources here. Those resources may be released before the handler's registered disposal. A failed termination retains its dependencies.</remarks>
         /// <param name="progress">Reports for the ending navigation operation, or an inactive reporter when no operation is running. Retained reports are ignored after termination finishes.</param>
         ValueTask TerminateAsync (NavigationProgressReporter progress);
     }

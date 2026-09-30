@@ -1,24 +1,42 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MackySoft.Navigathena.Runtime.Navigation;
 
 namespace MackySoft.Navigathena
 {
-    /// <summary>A runtime-owned continuation. Stopping activity does not cancel it; ending its screen binding does.</summary>
+    /// <summary>A continuation owned by a screen instance's current history binding. Stopping activity does not cancel it; ending that binding does.</summary>
+    /// <remarks>Completion releases the execution callback and cancellation resources. The handle keeps the result available for later waits.</remarks>
     public sealed class ScreenWork
     {
-        private readonly Action cancel;
-        private readonly Func<CancellationToken, Task> wait;
-        internal ScreenWork (Func<CancellationToken, Task> wait, Action cancel)
+        private readonly Guid id;
+        private readonly Task<object?> completion;
+        private Action? cancel;
+        internal ScreenWork (Guid id, Task<object?> completion, Action cancel)
         {
-            this.wait = wait;
+            this.id = id;
+            this.completion = completion;
             this.cancel = cancel;
         }
 
-        public void Cancel () => cancel();
+        internal void DetachCancellation () => Interlocked.Exchange(ref cancel, null);
 
-        /// <summary>Waits for the entire callback, including code after InvokeAsync. Canceling this wait does not cancel the work.</summary>
+        /// <summary>Requests execution cancellation, or cancels pending work without invoking it. Completed work is unaffected.</summary>
+        /// <remarks>Await <see cref="WaitAsync"/> to observe completion, including asynchronous cleanup in the callback.</remarks>
+        /// <exception cref="AggregateException">A callback registered with the work's cancellation token throws.</exception>
+        public void Cancel () => Volatile.Read(ref cancel)?.Invoke();
+
+        /// <summary>Waits until the entire callback, including asynchronous finally blocks and code after InvokeAsync, has finished using screen resources.</summary>
+        /// <param name="waitCancellationToken">Cancels only this wait, without canceling execution.</param>
+        /// <returns>A task carrying the callback's success, failure, or cancellation after its resource use has ended.</returns>
         /// <exception cref="InvalidOperationException">A lifecycle callback or this work attempts to wait for the work.</exception>
-        public Task WaitAsync (CancellationToken waitCancellationToken = default) => wait(waitCancellationToken);
+        public Task WaitAsync (CancellationToken waitCancellationToken = default)
+        {
+            if (NavigationCallbackScope.IsExecuting || ScreenWorkExecution.WorkId == id)
+            {
+                throw new InvalidOperationException("A lifecycle callback or the work itself cannot wait for owned work to finish.");
+            }
+            return AsyncWait.WaitAsync(completion, waitCancellationToken).AsTask();
+        }
     }
 }

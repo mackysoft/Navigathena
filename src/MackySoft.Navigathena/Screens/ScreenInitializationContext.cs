@@ -10,7 +10,8 @@ namespace MackySoft.Navigathena
             Progress = progress;
         }
 
-        /// <summary>Registers resources owned by this screen instance, without configuring its presentation or dependency injection.</summary>
+        /// <summary>Registers resources in the same ownership sequence as construction, without configuring presentation or dependency injection.</summary>
+        /// <remarks>These later registrations release before earlier construction registrations. Use TerminateAsync for final operations that need them.</remarks>
         public LifetimeContext Lifetime { get; }
 
         /// <summary>Reports typed values or fractions for this initialization invocation.</summary>
