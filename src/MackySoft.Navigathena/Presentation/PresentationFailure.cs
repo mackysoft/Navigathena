@@ -71,40 +71,19 @@ namespace MackySoft.Navigathena.Presentation
             HostIncident = hostIncident;
         }
 
-        public PresentationFailureScope Scope
-        {
-            get;
-        }
+        public PresentationFailureScope Scope { get; }
 
-        public NavigationPhase Phase
-        {
-            get;
-        }
+        public NavigationPhase Phase { get; }
 
-        public string Reason
-        {
-            get;
-        }
+        public string Reason { get; }
 
-        public Exception? Exception
-        {
-            get; init;
-        }
+        public Exception? Exception { get; init; }
 
-        public IReadOnlyList<PresentationReference> AffectedPresentations
-        {
-            get;
-        }
+        public IReadOnlyList<PresentationReference> AffectedPresentations { get; }
 
-        public string? SurfaceDiagnostic
-        {
-            get;
-        }
+        public string? SurfaceDiagnostic { get; }
 
-        public NavigationHostIncident? HostIncident
-        {
-            get;
-        }
+        public NavigationHostIncident? HostIncident { get; }
     }
 
 }

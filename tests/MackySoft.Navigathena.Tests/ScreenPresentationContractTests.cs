@@ -18,17 +18,11 @@ public sealed class ScreenPresentationContractTests
         RegionDefinitionId left = new("left");
         RegionDefinitionId right = new("right");
         List<Screen> screens = new();
-        static void Configure (RouteDefinitionBuilder<Popup> route)
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Reset;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-        }
-        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<Popup>(route =>
-        {
-            Configure(route);
-            route.AddChildRegion(left, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<Popup>(Configure));
-            route.AddChildRegion(right, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<Popup>(Configure));
-        }));
+        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
+{
+    route.AddChildRegion(left, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve));
+    route.AddChildRegion(right, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve));
+}));
         ScreenDefinition<Popup> screenDefinition = new((creation, _) =>
         {
             Screen screen = creation.Lifetime.CreateOwned(() => new Screen());
@@ -207,11 +201,7 @@ public sealed class ScreenPresentationContractTests
     {
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<Popup>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Reset | RouteEntryOperations.Replace;
-                route.LowerPresentationPolicy = policy ?? LowerPresentationPolicy.BlockInput;
-            });
+            root.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Reset | RouteEntryOperations.Replace, policy ?? LowerPresentationPolicy.BlockInput);
         });
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, registrations =>
         {
@@ -236,23 +226,11 @@ public sealed class ScreenPresentationContractTests
         public List<ScreenAnimation> Animations { get; } = new();
         public List<(ScreenAnimationKind Kind, int Input)> AnimatedInputs { get; } = new();
         private int input;
-        public ScreenAnimationState State
-        {
-            get; private set;
-        }
-        public int Disposals
-        {
-            get; private set;
-        }
-        public int Preparations
-        {
-            get; private set;
-        }
-        public Func<ScreenAnimation, CancellationToken, Task>? Play
-        {
-            get; set;
-        }
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ScreenAnimationState State { get; private set; }
+        public int Disposals { get; private set; }
+        public int Preparations { get; private set; }
+        public Func<ScreenAnimation, CancellationToken, Task>? Play { get; set; }
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (Popup route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
         {
             Preparations++;
@@ -261,7 +239,7 @@ public sealed class ScreenPresentationContractTests
         }
         public ValueTask ActivateAsync (Popup route, ScreenActivityContext activity) => default;
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync () => default;
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
         public void Dispose () => Disposals++;
         public void SetStateImmediately (ScreenAnimationState state) => State = state;
         public async ValueTask PlayAsync (ScreenAnimation animation, CancellationToken cancellationToken)
@@ -280,14 +258,8 @@ public sealed class ScreenPresentationContractTests
         public object Identity { get; } = new();
         public object OrderingDomain => "test";
         public bool IsAlive => true;
-        public ViewPresentation Presentation
-        {
-            get; private set;
-        }
-        public int Writes
-        {
-            get; private set;
-        }
+        public ViewPresentation Presentation { get; private set; }
+        public int Writes { get; private set; }
         public event Action<string>? Lost { add { } remove { } }
         public void Validate (ViewPresentation presentation)
         {

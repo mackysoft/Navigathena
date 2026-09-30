@@ -50,23 +50,11 @@ public sealed class NavigationConcurrencyContractTests
     private static NavigationDefinition CreateDefinition ()
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Exclusive, root =>
-            root.AddRoute<MainRoute>(main =>
-            {
-                main.AllowedEntryOperations = RouteEntryOperations.Reset;
-                main.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                main.AddChildRegion(Left, RegionCompositionMode.Layered, RegionOccupancy.Optional, left =>
-                    left.AddRoute<LeftRoute>(route =>
-                    {
-                        route.AllowedEntryOperations = RouteEntryOperations.Push;
-                        route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    }));
-                main.AddChildRegion(Right, RegionCompositionMode.Layered, RegionOccupancy.Optional, right =>
-                    right.AddRoute<RightRoute>(route =>
-                    {
-                        route.AllowedEntryOperations = RouteEntryOperations.Push;
-                        route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    }));
-            }));
+            root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, main =>
+{
+    main.AddChildRegion(Left, RegionCompositionMode.Layered, RegionOccupancy.Optional, left => left.AddRoute<LeftRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+    main.AddChildRegion(Right, RegionCompositionMode.Layered, RegionOccupancy.Optional, right => right.AddRoute<RightRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+}));
     }
 
     private sealed record MainRoute : Route;

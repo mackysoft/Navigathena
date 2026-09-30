@@ -8,10 +8,7 @@ namespace MackySoft.Navigathena
     /// <summary>Describes an operation for completion observers. Public operation and recovery waits return committed results; rejection, conflict and execution failures throw <see cref="NavigationException"/>.</summary>
     public sealed record NavigationResult (NavigationOperationId OperationId, NavigationOperationKind Operation, NavigationResultKind Kind, bool DestinationCommitted, NavigationState FinalSnapshot, NavigationDelta Changes, RestorationOutcome Restoration, IReadOnlyList<NavigationDiagnostic> Diagnostics)
     {
-        public NavigationPresentationStatus PresentationStatus
-        {
-            get; init;
-        }
+        public NavigationPresentationStatus PresentationStatus { get; init; }
 
         internal void EnsureCommitted ()
         {

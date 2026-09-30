@@ -224,26 +224,10 @@ public sealed class NavigationGroupedLossContractTests
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<MainRoute>(main =>
-            {
-                main.AllowedEntryOperations = RouteEntryOperations.Reset;
-                main.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
-            root.AddRoute<OverlayRoute>(overlay =>
-            {
-                overlay.AllowedEntryOperations = RouteEntryOperations.Push;
-                overlay.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
-            root.AddRoute<ReplacementRoute>(replacement =>
-            {
-                replacement.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Replace;
-                replacement.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
-            root.AddRoute<SurvivorRoute>(survivor =>
-            {
-                survivor.AllowedEntryOperations = RouteEntryOperations.Push;
-                survivor.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
+            root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+            root.AddRoute<OverlayRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve);
+            root.AddRoute<ReplacementRoute>(RouteEntryOperations.Reset | RouteEntryOperations.Replace, LowerPresentationPolicy.Preserve);
+            root.AddRoute<SurvivorRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve);
         });
     }
 

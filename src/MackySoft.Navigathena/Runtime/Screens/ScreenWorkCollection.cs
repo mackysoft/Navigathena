@@ -22,10 +22,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
             Entry = entry ?? owner.Entry;
         }
 
-        public NavigationEntry Entry
-        {
-            get;
-        }
+        public NavigationEntry Entry { get; }
         internal int Count
         {
             get
@@ -152,7 +149,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
             {
                 try
                 {
-                    await owner.ReleasePreviousInputAsync();
+                    await owner.ReleasePreviousInputAsync(null);
                 }
                 catch (Exception exception)
                 {
@@ -219,16 +216,10 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
             }
 
-            public Func<ScreenWorkContext, ValueTask> Callback
-            {
-                get;
-            }
+            public Func<ScreenWorkContext, ValueTask> Callback { get; }
             public CancellationTokenSource Cancellation { get; } = new();
             public TaskCompletionSource<object?> Completion { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-            public bool Started
-            {
-                get; set;
-            }
+            public bool Started { get; set; }
         }
     }
 }

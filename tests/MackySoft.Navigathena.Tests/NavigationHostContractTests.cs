@@ -212,37 +212,19 @@ public sealed class NavigationHostContractTests
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Exclusive, root =>
         {
-            root.AddRoute<TitleRoute>(title =>
-            {
-                title.AllowedEntryOperations = RouteEntryOperations.Reset;
-                title.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
-            root.AddRoute<MainRoute>(main =>
-            {
-                main.AllowedEntryOperations = RouteEntryOperations.Reset;
-                main.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                main.AddChildRegion(Tabs, RegionCompositionMode.Exclusive, RegionOccupancy.Required, tabs =>
-                {
-                    tabs.AddRoute<LobbyRoute>(lobby =>
-                    {
-                        lobby.AllowedEntryOperations = RouteEntryOperations.Replace;
-                        lobby.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    });
-                    tabs.AddRoute<InventoryRoute>(inventory =>
-                    {
-                        inventory.AllowedEntryOperations = RouteEntryOperations.Replace;
-                        inventory.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    });
-                });
-                main.AddChildRegion(Notices, RegionCompositionMode.Layered, RegionOccupancy.Optional, notices =>
-                {
-                    notices.AddRoute<NoticeRoute>(notice =>
-                    {
-                        notice.AllowedEntryOperations = RouteEntryOperations.Push;
-                        notice.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-                    });
-                });
-            });
+            root.AddRoute<TitleRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+            root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, main =>
+{
+    main.AddChildRegion(Tabs, RegionCompositionMode.Exclusive, RegionOccupancy.Required, tabs =>
+    {
+        tabs.AddRoute<LobbyRoute>(RouteEntryOperations.Replace, LowerPresentationPolicy.Preserve);
+        tabs.AddRoute<InventoryRoute>(RouteEntryOperations.Replace, LowerPresentationPolicy.Preserve);
+    });
+    main.AddChildRegion(Notices, RegionCompositionMode.Layered, RegionOccupancy.Optional, notices =>
+    {
+        notices.AddRoute<NoticeRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
+    });
+});
         });
     }
 

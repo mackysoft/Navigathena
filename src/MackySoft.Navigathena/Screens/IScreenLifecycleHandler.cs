@@ -12,10 +12,17 @@ namespace MackySoft.Navigathena
     /// </remarks>
     public interface IScreenLifecycleHandler<in TRoute> where TRoute : Route
     {
-        ValueTask InitializeAsync (CancellationToken cancellationToken);
+        /// <summary>Initializes the instance once, optionally acquiring instance-owned resources and reporting progress.</summary>
+        /// <param name="initialization">Registration and reporting for this invocation. Both close when initialization finishes; registered resources remain owned by the screen instance.</param>
+        /// <param name="cancellationToken">Cancellation for initialization work; owned resources are still released if initialization is cancelled.</param>
+        ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken);
+        /// <summary>Prepares the route's data and saved state before presentation. Does not run again for an ordinary activity-only resume.</summary>
         ValueTask PrepareAsync (TRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken);
+        /// <summary>Starts activity after preparation and transition effects finish. Native input opens only after this callback completes.</summary>
         ValueTask ActivateAsync (TRoute route, ScreenActivityContext activity);
         ValueTask DeactivateAsync ();
-        ValueTask TerminateAsync ();
+        /// <summary>Awaits final screen-specific stopping before owned services and resources are released. Reports belong to this termination.</summary>
+        /// <param name="progress">Reports for the ending navigation operation, or an inactive reporter when no operation is running. Retained reports are ignored after termination finishes.</param>
+        ValueTask TerminateAsync (NavigationProgressReporter progress);
     }
 }

@@ -25,21 +25,11 @@ public sealed class ScreenRuntimeContractTests
         RecordingScreen rightScreen = new("right", events);
         TaskCompletionSource<bool> entered = new(TaskCreationOptions.RunContinuationsAsynchronously);
         TaskCompletionSource<bool> proceed = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Exclusive, root => root.AddRoute<FirstRoute>(route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Reset;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            route.AddChildRegion(left, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<SecondRoute>(item =>
+        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Exclusive, root => root.AddRoute<FirstRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
 {
-    item.AllowedEntryOperations = RouteEntryOperations.Push;
-    item.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
+    route.AddChildRegion(left, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<SecondRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+    route.AddChildRegion(right, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<SecondRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
 }));
-            route.AddChildRegion(right, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<SecondRoute>(item =>
-{
-    item.AllowedEntryOperations = RouteEntryOperations.Push;
-    item.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-}));
-        }));
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder =>
         {
             builder.RegisterScreens(Root, screens => Register<FirstRoute>(screens, (preparation, _) =>
@@ -467,26 +457,10 @@ public sealed class ScreenRuntimeContractTests
         int commonCreated = 0;
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<FirstRoute>(route =>
-{
-    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-    route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-});
-            root.AddRoute<SecondRoute>(route =>
-{
-    route.AllowedEntryOperations = RouteEntryOperations.Push;
-    route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-});
-            root.AddRoute<ModalRoute>(route =>
-{
-    route.AllowedEntryOperations = RouteEntryOperations.Push;
-    route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-});
-            root.AddRoute<CustomModalRoute>(route =>
-{
-    route.AllowedEntryOperations = RouteEntryOperations.Push;
-    route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-});
+            root.AddRoute<FirstRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
+            root.AddRoute<SecondRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRetain);
+            root.AddRoute<ModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
+            root.AddRoute<CustomModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
         });
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens =>
         {
@@ -687,23 +661,11 @@ public sealed class ScreenRuntimeContractTests
     private sealed class RecordingBlocker : IBlockerPresenter, IBlockerAnimator, IAsyncDisposable
     {
         public RecordingView View { get; } = new();
-        public BlockerScreenContext? Context
-        {
-            get; private set;
-        }
+        public BlockerScreenContext? Context { get; private set; }
         public ValueTask TerminateAsync () => default;
-        public int EnterCount
-        {
-            get; private set;
-        }
-        public int ExitCount
-        {
-            get; private set;
-        }
-        public int DisposeCount
-        {
-            get; private set;
-        }
+        public int EnterCount { get; private set; }
+        public int ExitCount { get; private set; }
+        public int DisposeCount { get; private set; }
         public ValueTask PrepareAsync (BlockerPreparationContext preparation, CancellationToken cancellationToken)
         {
             preparation.RegisterViewAdapter(View);
@@ -742,16 +704,8 @@ public sealed class ScreenRuntimeContractTests
     {
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<FirstRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
-            root.AddRoute<SecondRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-            });
+            root.AddRoute<FirstRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+            root.AddRoute<SecondRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
         });
         return ScreenCatalog.Build(definition, catalog => catalog.RegisterScreens(Root, screens =>
         {
@@ -767,10 +721,7 @@ public sealed class ScreenRuntimeContractTests
     {
         private static readonly object Domain = new();
         public RecordingView (object? identity = null) => Identity = identity ?? new object();
-        public object Identity
-        {
-            get;
-        }
+        public object Identity { get; }
         public object OrderingDomain => Domain;
         public bool IsAlive { get; private set; } = true;
         public event Action<string>? Lost;
@@ -797,35 +748,17 @@ public sealed class ScreenRuntimeContractTests
         }
 
         public RecordingView View { get; } = new();
-        public object? SavedState
-        {
-            get; init;
-        }
-        public object? ExpectedRestoration
-        {
-            get; init;
-        }
+        public object? SavedState { get; init; }
+        public object? ExpectedRestoration { get; init; }
         public object? CaptureState () => SavedState;
         public List<PresentationChangeContext> Changes { get; } = new();
         public void OnNavigationChanged (PresentationChangeContext context) => Changes.Add(context);
         public List<ScreenActivityContext> Activities { get; } = new();
-        public bool FailDispose
-        {
-            get; init;
-        }
-        public bool FailInitialize
-        {
-            get; init;
-        }
-        public bool FailDeactivate
-        {
-            get; init;
-        }
-        public Task? DisposeBarrier
-        {
-            get; init;
-        }
-        public ValueTask InitializeAsync (CancellationToken cancellationToken)
+        public bool FailDispose { get; init; }
+        public bool FailInitialize { get; init; }
+        public bool FailDeactivate { get; init; }
+        public Task? DisposeBarrier { get; init; }
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
         {
             events.Enqueue(name + ".initialize");
             if (FailInitialize)
@@ -865,7 +798,7 @@ public sealed class ScreenRuntimeContractTests
             return default;
         }
 
-        public async ValueTask TerminateAsync ()
+        public async ValueTask TerminateAsync (NavigationProgressReporter progress)
         {
             events.Enqueue(name + ".dispose");
             if (DisposeBarrier is not null)
@@ -904,7 +837,7 @@ public sealed class ScreenRuntimeContractTests
             return new ValueTask<object>(new object());
         }
 
-        public ValueTask DisposeAsync ()
+        public ValueTask ReleaseAsync (NavigationProgressReporter progress)
         {
             events.Enqueue(name + ".release");
             return default;
@@ -915,14 +848,8 @@ public sealed class ScreenRuntimeContractTests
     {
         private readonly ConcurrentQueue<string> events;
         public RecordingEffect (ConcurrentQueue<string> events) => this.events = events;
-        public bool Revealed
-        {
-            get; private set;
-        }
-        public bool FailDispose
-        {
-            get; init;
-        }
+        public bool Revealed { get; private set; }
+        public bool FailDispose { get; init; }
         public ValueTask BeginAsync (TransitionBeginContext context, CancellationToken cancellationToken)
         {
             events.Enqueue("effect.begin");

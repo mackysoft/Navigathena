@@ -10,10 +10,7 @@ namespace MackySoft.Navigathena.Runtime.Messaging
     // Public waits require a committed result; execution failures throw before observation.
     internal sealed record NavigationOutcome (NavigationOperationId OperationId, NavigationOperationKind Operation, NavigationOutcomeKind Kind, bool DestinationCommitted, NavigationState FinalSnapshot, NavigationDelta Changes, RestorationOutcome Restoration, IReadOnlyList<NavigationDiagnostic> Diagnostics)
     {
-        public NavigationPresentationStatus PresentationStatus
-        {
-            get; init;
-        }
+        public NavigationPresentationStatus PresentationStatus { get; init; }
 
         public NavigationResult GetResult (CancellationToken cancellationToken)
         {

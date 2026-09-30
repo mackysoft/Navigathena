@@ -24,6 +24,7 @@ namespace MackySoft.Navigathena.Unity.Tests
 {
     public sealed class ScreenPresentationUnityTests
     {
+        private static readonly ProgressInput<double?> ViewAcquisitionProgress = new("custom.view.acquisition");
         private readonly List<NavigationHost> hosts = new();
         private readonly List<GameObject> objects = new();
         private string assetFolder = "";
@@ -58,6 +59,67 @@ namespace MackySoft.Navigathena.Unity.Tests
         });
 
         [UnityTest]
+        public IEnumerator Custom_view_acquisition_connects_the_supplied_instance_and_ends_after_the_presenter () => UniTask.ToCoroutine(async () =>
+        {
+            ViewAcquisition acquisition = new(this);
+            WorkProgress progress = new();
+            Presenter? presenter = null;
+            NavigationHost host = CreateHost(async (creation, token) =>
+            {
+                RuntimeTestView view = await creation.AcquireScreenAsync(acquisition, token);
+                Assert.That(view, Is.SameAs(acquisition.View));
+                Assert.That(view.GetComponent<Canvas>().enabled, Is.False);
+                presenter = creation.Lifetime.CreateOwned(() => new Presenter(view));
+                acquisition.BeforeRelease = () => Assert.That(presenter.Disposals, Is.EqualTo(1));
+                return presenter;
+            });
+
+            await host.StartAsync(new Popup(), new NavigationOptions
+            {
+                Transition = NavigationTransition.Create(NavigationTransitionScope.Region,
+                    ProgressDefinition.From(ViewAcquisitionProgress, () => (double?)null),
+                    (context, source, _) =>
+                    {
+                        context.ObserveProgress(source, progress.Report);
+                        return new ValueTask<INavigationTransitionEffect>(progress);
+                    })
+            });
+
+            Assert.That(acquisition.View!.GetComponent<Canvas>().enabled, Is.True);
+            Assert.That(acquisition.View.GetComponent<CanvasViewAdapter>().Presentation.InputEnabled, Is.True);
+            Assert.That(progress.Values, Does.Contain(0.5));
+
+            await host.ShutdownAsync();
+
+            Assert.That(acquisition.Releases, Is.EqualTo(1));
+            Assert.That(acquisition.View == null, Is.True);
+        });
+
+        [UnityTest]
+        public IEnumerator Invalid_custom_view_presentation_releases_the_acquisition_without_committing () => UniTask.ToCoroutine(async () =>
+        {
+            ViewAcquisition acquisition = new(this, configured: false);
+            NavigationHost host = CreateHost(async (creation, token) =>
+            {
+                RuntimeTestView view = await creation.AcquireScreenAsync(acquisition, token);
+                return creation.Lifetime.CreateOwned(() => new Presenter(view));
+            });
+
+            try
+            {
+                await host.StartAsync(new Popup());
+                Assert.Fail("A view without a screen presentation must fail navigation.");
+            }
+            catch (NavigationException exception)
+            {
+                Assert.That(exception.DestinationCommitted, Is.False);
+            }
+
+            Assert.That(acquisition.Releases, Is.EqualTo(1));
+            Assert.That(acquisition.View == null, Is.True);
+        });
+
+        [UnityTest]
         public IEnumerator Configured_prefab_connects_identically_with_manual_and_both_DI_modes () => UniTask.ToCoroutine(async () =>
         {
             RuntimeTestView template = CreateScreen("Template");
@@ -71,7 +133,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 using IObjectResolver parent = parentBuilder.Build();
                 NavigationHost host = CreateHost(async (creation, token) =>
                 {
-                    acquired = await creation.InstantiateScreenAsync(prefab!, token);
+                    acquired = await creation.AcquireScreenAsync(prefab!, token);
                     Assert.That(acquired.GetComponent<Canvas>().enabled, Is.False);
                     Assert.That(acquired.GetComponent<CanvasViewAdapter>().Presentation.InputEnabled, Is.False);
                     if (mode == 0)
@@ -116,7 +178,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             RuntimeTestView? instance = null;
             NavigationHost host = CreateHost(async (creation, token) =>
             {
-                instance = await creation.InstantiateScreenAsync(template, token);
+                instance = await creation.AcquireScreenAsync(template, token);
                 throw new InvalidOperationException("Presenter construction failed.");
             });
             try
@@ -155,12 +217,12 @@ namespace MackySoft.Navigathena.Unity.Tests
         });
 
         [UnityTest]
-        public IEnumerator Loaded_scene_can_select_one_of_multiple_configured_screens () => UniTask.ToCoroutine(async () =>
+        public IEnumerator Runtime_created_scene_can_select_one_of_multiple_configured_screens () => UniTask.ToCoroutine(async () =>
         {
             SceneAcquisition scene = new(this);
             NavigationHost host = CreateHost(async (creation, token) =>
             {
-                RuntimeTestView view = await creation.LoadScreenAsync(scene, _ => scene.Selected!, token);
+                RuntimeTestView view = await creation.AcquireScreenAsync(scene, _ => scene.Selected!, token);
                 return creation.Lifetime.CreateOwned(() => new Presenter(view));
             });
             await host.StartAsync(new Popup());
@@ -181,7 +243,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             {
                 SceneAcquisition acquisition = new(this);
                 acquisitions.Add(acquisition);
-                RuntimeTestView view = await creation.LoadScreenAsync(acquisition, _ => acquisition.Selected!, token);
+                RuntimeTestView view = await creation.AcquireScreenAsync(acquisition, _ => acquisition.Selected!, token);
                 Presenter presenter = creation.Lifetime.CreateOwned(() => new Presenter(view));
                 presenters.Add(presenter);
                 return presenter;
@@ -273,34 +335,27 @@ namespace MackySoft.Navigathena.Unity.Tests
             GameObject world = new("World", typeof(SpriteRenderer));
             objects.Add(world);
             List<RegionPresenter> instances = new();
-            static void Configure<T> (RouteDefinitionBuilder<T> route) where T : Route
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Push;
-                route.LowerPresentationPolicy = typeof(T) == typeof(EditorRoute) ? LowerPresentationPolicy.HideAndRetain
-                    : typeof(T) == typeof(Popup) ? LowerPresentationPolicy.BlockInput : LowerPresentationPolicy.Preserve;
-            }
             NavigationDefinition definition = NavigationDefinition.Build(root, RegionCompositionMode.Layered, builder =>
             {
-                builder.AddRoute<PanelRoute>(route =>
+                builder.AddRoute<PanelRoute>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
                 {
-                    Configure(route);
                     foreach (RegionDefinitionId region in new[] { left, right })
                     {
                         route.AddChildRegion(region, RegionCompositionMode.Layered, RegionOccupancy.Required, child =>
                         {
-                            child.AddRoute<PanelRoute>(Configure);
-                            child.AddRoute<Popup>(Configure);
-                            child.AddRoute<EditorRoute>(Configure);
+                            child.AddRoute<PanelRoute>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+                            child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+                            child.AddRoute<EditorRoute>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
                         });
                     }
                 });
-                builder.AddRoute<EditorRoute>(Configure);
+                builder.AddRoute<EditorRoute>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
             });
             ScreenDefinition<T> Define<T> () where T : Route
             {
                 return new ScreenDefinition<T>(async (creation, token) =>
                 {
-                    RuntimeTestView view = await creation.InstantiateScreenAsync(prefab, token);
+                    RuntimeTestView view = await creation.AcquireScreenAsync(prefab, token);
                     RegionPresenter handler = creation.Lifetime.CreateOwned(() => new RegionPresenter(creation.RegionId, view));
                     instances.Add(handler);
                     return handler;
@@ -373,23 +428,11 @@ namespace MackySoft.Navigathena.Unity.Tests
                 Region = region;
                 View = view;
             }
-            public RegionInstanceId Region
-            {
-                get;
-            }
-            public RuntimeTestView View
-            {
-                get;
-            }
-            public int Preparations
-            {
-                get; private set;
-            }
-            public int Activations
-            {
-                get; private set;
-            }
-            public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+            public RegionInstanceId Region { get; }
+            public RuntimeTestView View { get; }
+            public int Preparations { get; private set; }
+            public int Activations { get; private set; }
+            public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
             public ValueTask PrepareAsync (Route route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
             {
                 Preparations++;
@@ -401,7 +444,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 return default;
             }
             public ValueTask DeactivateAsync () => default;
-            public ValueTask TerminateAsync () => default;
+            public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
         }
 
         private RuntimeTestView CreateScreen (string name)
@@ -452,11 +495,7 @@ namespace MackySoft.Navigathena.Unity.Tests
         private NavigationHost CreateHost (Func<ScreenCreationContext<Popup>, CancellationToken, ValueTask<IScreenLifecycleHandler<Popup>>> create)
         {
             RegionDefinitionId root = new("root");
-            NavigationDefinition definition = NavigationDefinition.Build(root, RegionCompositionMode.Layered, builder => builder.AddRoute<Popup>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Push;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-            }));
+            NavigationDefinition definition = NavigationDefinition.Build(root, RegionCompositionMode.Layered, builder => builder.AddRoute<Popup>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput));
             ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(root, screens => screens.RegisterScreen(new ScreenDefinition<Popup>(create, ScreenInstancePolicy.Multiple))));
             NavigationHost host = NavigationHost.Create(catalog);
             hosts.Add(host);
@@ -469,15 +508,12 @@ namespace MackySoft.Navigathena.Unity.Tests
         {
             private readonly RuntimeTestView view;
             public Presenter (RuntimeTestView view) => this.view = view;
-            public int Disposals
-            {
-                get; private set;
-            }
-            public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+            public int Disposals { get; private set; }
+            public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
             public ValueTask PrepareAsync (Popup route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => default;
             public ValueTask ActivateAsync (Popup route, ScreenActivityContext activity) => default;
             public ValueTask DeactivateAsync () => default;
-            public ValueTask TerminateAsync () => default;
+            public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
             public void Dispose ()
             {
                 Assert.That(view != null, Is.True);
@@ -485,26 +521,68 @@ namespace MackySoft.Navigathena.Unity.Tests
             }
         }
 
+        private sealed class WorkProgress : INavigationTransitionEffect
+        {
+            public List<double?> Values { get; } = new();
+
+            public void Report (double? value) => Values.Add(value);
+            public ValueTask BeginAsync (TransitionBeginContext context, CancellationToken cancellationToken) => default;
+            public ValueTask PrepareSwitchAsync (TransitionTargetsContext context, CancellationToken cancellationToken) => default;
+            public ValueTask AfterCommitAsync (TransitionTargetsContext context, CancellationToken cancellationToken) => default;
+            public ValueTask SettleAsync (TransitionSettlementContext context, CancellationToken cancellationToken) => default;
+        }
+
+        private sealed class ViewAcquisition : IResourceAcquisition<RuntimeTestView>
+        {
+            private readonly ScreenPresentationUnityTests fixture;
+            private readonly bool configured;
+
+            public ViewAcquisition (ScreenPresentationUnityTests fixture, bool configured = true)
+            {
+                this.fixture = fixture;
+                this.configured = configured;
+            }
+
+            public RuntimeTestView? View { get; private set; }
+            public int Releases { get; private set; }
+            public Action? BeforeRelease { get; set; }
+
+            public ValueTask<RuntimeTestView> AcquireAsync (ResourceAcquisitionContext context, CancellationToken cancellationToken)
+            {
+                View = configured
+                    ? fixture.CreateScreen("Custom view")
+                    : new GameObject("Unconfigured view").AddComponent<RuntimeTestView>();
+                if (!configured)
+                {
+                    fixture.objects.Add(View.gameObject);
+                }
+                context.Progress.GetReporter(ViewAcquisitionProgress).Report(0.5);
+                return new ValueTask<RuntimeTestView>(View);
+            }
+
+            public async ValueTask ReleaseAsync (NavigationProgressReporter progress)
+            {
+                BeforeRelease?.Invoke();
+                Releases++;
+                if (View != null)
+                {
+                    Object.Destroy(View.gameObject);
+                    while (View != null)
+                    {
+                        await UniTask.NextFrame();
+                    }
+                }
+            }
+        }
+
         private sealed class SceneAcquisition : IResourceAcquisition<Scene>
         {
             private readonly ScreenPresentationUnityTests fixture;
             public SceneAcquisition (ScreenPresentationUnityTests fixture) => this.fixture = fixture;
-            public Scene Scene
-            {
-                get; private set;
-            }
-            public RuntimeTestView? Selected
-            {
-                get; private set;
-            }
-            public RuntimeTestView? Other
-            {
-                get; private set;
-            }
-            public int Releases
-            {
-                get; private set;
-            }
+            public Scene Scene { get; private set; }
+            public RuntimeTestView? Selected { get; private set; }
+            public RuntimeTestView? Other { get; private set; }
+            public int Releases { get; private set; }
             public ValueTask<Scene> AcquireAsync (ResourceAcquisitionContext context, CancellationToken cancellationToken)
             {
                 Scene = SceneManager.CreateScene("Screen acquisition " + Guid.NewGuid());
@@ -514,7 +592,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 SceneManager.MoveGameObjectToScene(Other.gameObject, Scene);
                 return new ValueTask<Scene>(Scene);
             }
-            public async ValueTask DisposeAsync ()
+            public async ValueTask ReleaseAsync (NavigationProgressReporter progress)
             {
                 Releases++;
                 await SceneManager.UnloadSceneAsync(Scene);

@@ -7,7 +7,14 @@ namespace MackySoft.Navigathena
     {
         private readonly Action<string> reportLoss;
 
-        internal ResourceAcquisitionContext (Action<string> reportLoss) => this.reportLoss = reportLoss;
+        internal ResourceAcquisitionContext (Action<string> reportLoss, NavigationProgressReporter progress)
+        {
+            this.reportLoss = reportLoss;
+            Progress = progress;
+        }
+
+        /// <summary>Reports acquisition progress until AcquireAsync returns or throws. It is not a release-progress channel.</summary>
+        public NavigationProgressReporter Progress { get; }
 
         public void ReportLoss (string reason)
         {

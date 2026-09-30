@@ -19,11 +19,12 @@ namespace MackySoft.Navigathena.Samples.Campaign
             this.campaign = campaign;
         }
 
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
 
         public ValueTask PrepareAsync (CampaignMapRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
         {
             view.Render(campaign.GetTitle(route.ChapterId));
+            preparation.Progress.GetReporter(CampaignProgress.PreparedChapter).Report(route.ChapterId);
             return default;
         }
 
@@ -71,6 +72,6 @@ namespace MackySoft.Navigathena.Samples.Campaign
             return default;
         }
 
-        public ValueTask TerminateAsync () => DeactivateAsync();
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => DeactivateAsync();
     }
 }

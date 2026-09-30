@@ -13,7 +13,7 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
 
         public ConfirmationPresenter (ConfirmationPopupView view) => this.view = view;
 
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
 
         public ValueTask PrepareAsync (ConfirmationRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
         {
@@ -43,6 +43,6 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
             return default;
         }
 
-        public ValueTask TerminateAsync () => default;
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
     }
 }

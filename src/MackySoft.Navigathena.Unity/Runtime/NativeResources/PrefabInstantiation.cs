@@ -35,7 +35,7 @@ namespace MackySoft.Navigathena.Unity.NativeResources
             return new ValueTask<T>(views[0]);
         }
 
-        public async ValueTask DisposeAsync ()
+        public async ValueTask ReleaseAsync (NavigationProgressReporter progress)
         {
             UnityThread.AssertCurrent();
             if (monitor != null)
@@ -46,12 +46,15 @@ namespace MackySoft.Navigathena.Unity.NativeResources
 
             if (instance != null)
             {
+                IProgress<double?> reports = progress.GetReporter(UnityProgress.PrefabRelease);
+                reports.Report(null);
                 UnityEngine.Object.Destroy(instance);
                 // Native destruction is deferred. Do not release the source asset before it finishes.
                 while (instance != null)
                 {
                     await Awaitable.NextFrameAsync();
                 }
+                reports.Report(1);
             }
         }
     }

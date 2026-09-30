@@ -11,10 +11,7 @@ namespace MackySoft.Navigathena
             Call = context.Calls.Connect<TResult>();
         }
 
-        public ScreenCall<TResult> Call
-        {
-            get;
-        }
+        public ScreenCall<TResult> Call { get; }
 
         public ScreenWork StartWork (Func<ScreenWorkContext<TResult>, ValueTask> work)
         {

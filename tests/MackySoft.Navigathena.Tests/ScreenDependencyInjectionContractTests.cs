@@ -25,31 +25,24 @@ public sealed class ScreenDependencyInjectionContractTests
         TaskCompletionSource<bool> opened = new(TaskCreationOptions.RunContinuationsAsynchronously);
         ScreenCatalog catalog = ScreenCatalog.Build(screens =>
         {
-            screens.Register<OtherRoute>((_, _) => new(new OtherPresenter()), route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
-            screens.Register<SelectionRoute, int>(async (creation, token) =>
-            {
-                await creation.Lifetime.AcquireAsync(new Acquisition(() => shared.Ending.Add("resource.dispose")), token);
-                if (useDI)
-                {
-                    return creation.CreateScope(services =>
-                    {
-                        services.AddSingleton(shared);
-                        services.AddSingleton(activated);
-                        services.AddScoped<ScreenService>();
-                        services.AddScreenLifecycleHandler<SelectionPresenter>();
-                    });
-                }
-                ScreenService service = creation.Lifetime.CreateOwned(() => new ScreenService(shared));
-                return creation.Lifetime.CreateOwned(() => new SelectionPresenter(shared, service, activated));
-            }, route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Push;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-            });
+            screens.Register<OtherRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, (_, _) => new(new OtherPresenter()));
+            screens.Register<SelectionRoute, int>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput, async (creation, token) =>
+{
+    await creation.Lifetime.AcquireAsync(new Acquisition(() => shared.Ending.Add("resource.dispose")), token);
+    if (useDI)
+    {
+        return creation.CreateScope(services =>
+        {
+            services.AddSingleton(shared);
+            services.AddSingleton(activated);
+            services.AddScoped<ScreenService>();
+            services.AddScreenLifecycleHandler<SelectionPresenter>();
+        });
+    }
+
+    ScreenService service = creation.Lifetime.CreateOwned(() => new ScreenService(shared));
+    return creation.Lifetime.CreateOwned(() => new SelectionPresenter(shared, service, activated));
+});
         });
         await using NavigationHost host = NavigationHost.Create(catalog, new NavigationHostOptions
         {
@@ -73,10 +66,10 @@ public sealed class ScreenDependencyInjectionContractTests
         presenter.Activity!.Call.Complete(42);
 
         Assert.Equal(42, await call.WaitAsync(TimeSpan.FromSeconds(5)));
-        Assert.Equal(new[] { "selection.terminate", "selection.dispose", "service.dispose", "resource.dispose" }, shared.Ending);
+        Assert.Equal(new[] { "selection.terminate", "selection.dispose", "service.dispose", "initialized-resource.release", "resource.dispose" }, shared.Ending);
         Assert.IsType<OtherRoute>(host.State.Current.GetEntry(Assert.Single(host.State.Current.GetRegion(host.Root).Entries)).Route);
         await host.ShutdownAsync();
-        Assert.Equal(4, shared.Ending.Count);
+        Assert.Equal(5, shared.Ending.Count);
         Assert.Equal(0, shared.Disposals);
     }
 
@@ -94,20 +87,14 @@ public sealed class ScreenDependencyInjectionContractTests
             Service = service;
         }
 
-        public ScreenService Service
-        {
-            get;
-        }
-        public int Input
-        {
-            get; private set;
-        }
-        public ScreenActivityContext<int>? Activity
-        {
-            get; private set;
-        }
+        public ScreenService Service { get; }
+        public int Input { get; private set; }
+        public ScreenActivityContext<int>? Activity { get; private set; }
 
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public async ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
+        {
+            await initialization.Lifetime.AcquireAsync(new Acquisition(() => shared.Ending.Add("initialized-resource.release")), cancellationToken);
+        }
 
         public ValueTask PrepareAsync (SelectionRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
         {
@@ -124,7 +111,7 @@ public sealed class ScreenDependencyInjectionContractTests
 
         public ValueTask DeactivateAsync () => default;
 
-        public ValueTask TerminateAsync ()
+        public ValueTask TerminateAsync (NavigationProgressReporter progress)
         {
             shared.Ending.Add("selection.terminate");
             return default;
@@ -330,20 +317,16 @@ public sealed class ScreenDependencyInjectionContractTests
 
     private sealed class OtherPresenter : IScreenLifecycleHandler<OtherRoute>
     {
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (OtherRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => default;
         public ValueTask ActivateAsync (OtherRoute route, ScreenActivityContext activity) => default;
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync () => default;
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
     }
 
     private static NavigationHost CreateHost (ScreenDefinition<ItemRoute> screen)
     {
-        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<ItemRoute>(route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-        }));
+        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<ItemRoute>(RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace, LowerPresentationPolicy.HideAndRetain));
         return NavigationHost.Create(ScreenCatalog.Build(definition, catalog => catalog.RegisterScreens(Root, screens => screens.RegisterScreen(screen))));
     }
 
@@ -351,14 +334,8 @@ public sealed class ScreenDependencyInjectionContractTests
     {
         public List<ItemPresenter> Presenters { get; } = new();
         public List<string> Ending { get; } = new();
-        public bool FailInitialization
-        {
-            get; init;
-        }
-        public int Disposals
-        {
-            get; private set;
-        }
+        public bool FailInitialization { get; init; }
+        public int Disposals { get; private set; }
         public void Dispose () => Disposals++;
     }
 
@@ -378,20 +355,11 @@ public sealed class ScreenDependencyInjectionContractTests
             Service = service;
             shared.Presenters.Add(this);
         }
-        public ScreenService Service
-        {
-            get;
-        }
-        public int InitializeCount
-        {
-            get; private set;
-        }
+        public ScreenService Service { get; }
+        public int InitializeCount { get; private set; }
         public List<int> Inputs { get; } = new();
-        public ScreenActivityContext? Activity
-        {
-            get; private set;
-        }
-        public ValueTask InitializeAsync (CancellationToken cancellationToken)
+        public ScreenActivityContext? Activity { get; private set; }
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
         {
             InitializeCount++;
             if (shared.FailInitialization)
@@ -411,7 +379,7 @@ public sealed class ScreenDependencyInjectionContractTests
             return default;
         }
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync ()
+        public ValueTask TerminateAsync (NavigationProgressReporter progress)
         {
             shared.Ending.Add("terminate");
             return default;
@@ -428,7 +396,7 @@ public sealed class ScreenDependencyInjectionContractTests
         private readonly Action release;
         public Acquisition (Action release) => this.release = release;
         public ValueTask<object> AcquireAsync (ResourceAcquisitionContext context, CancellationToken cancellationToken) => new(new object());
-        public ValueTask DisposeAsync ()
+        public ValueTask ReleaseAsync (NavigationProgressReporter progress)
         {
             release();
             return default;
@@ -444,11 +412,11 @@ public sealed class ScreenDependencyInjectionContractTests
             this.disposing = disposing;
             this.finish = finish;
         }
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (ItemRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => default;
         public ValueTask ActivateAsync (ItemRoute route, ScreenActivityContext activity) => default;
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync () => default;
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
         public async ValueTask DisposeAsync ()
         {
             disposing.SetResult(true);

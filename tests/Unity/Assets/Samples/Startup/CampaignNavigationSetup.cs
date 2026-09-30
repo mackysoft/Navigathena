@@ -54,7 +54,7 @@ namespace MackySoft.Navigathena.Samples.Startup
 
             ScreenDefinition<CampaignMapRoute> screen = new(async (creation, token) =>
             {
-                CampaignMapInstaller installer = await creation.LoadScreenAsync<CampaignMapInstaller>(new AddressablesSceneAcquisition(campaignScene), token);
+                CampaignMapInstaller installer = await creation.AcquireScreenAsync<CampaignMapInstaller>(new AddressablesSceneAcquisition(campaignScene), token);
                 switch (dependencies)
                 {
                     case DependencyMode.Manual:
@@ -71,19 +71,16 @@ namespace MackySoft.Navigathena.Samples.Startup
                         throw new InvalidOperationException("Unknown dependency mode.");
                 }
             });
-            ScreenCatalog catalog = ScreenCatalog.Build(Root, RegionCompositionMode.Layered, screens => screens.Register(screen, route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-            }));
+            ScreenCatalog catalog = ScreenCatalog.Build(Root, RegionCompositionMode.Layered, screens => screens.Register(RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace, LowerPresentationPolicy.HideAndRetain, screen));
             host = NavigationHost.Create(catalog);
             ResourceReference<StartupOverlay> overlay = externalLifetime.Reference(startupOverlay);
-            NavigationTransition reveal = new(NavigationTransitionScope.Host, async (preparation, token) =>
+            NavigationTransition reveal = NavigationTransition.Create(NavigationTransitionScope.Host, StartupProgress.Definition, async (preparation, progress, token) =>
             {
                 StartupOverlay view = await preparation.Lifetime.BorrowAsync(overlay, token);
                 preparation.RegisterExistingViewAdapter(view.NavigationView);
+                preparation.ObserveProgress(progress, view.Render);
                 return preparation.Lifetime.CreateOwned(() => new StartupRevealEffect(view));
-            });
+            }, endTiming: TransitionEndTiming.AfterResourceRelease);
             await host.StartAsync(new CampaignMapRoute(1), new NavigationOptions { Transition = reveal });
         }
 

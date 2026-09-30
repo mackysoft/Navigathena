@@ -11,7 +11,10 @@ namespace MackySoft.Navigathena
         internal RootRegionDefinitionBuilder (RegionDefinitionId id, RegionCompositionMode mode) => core = new RegionDefinitionBuilderCore(id, mode, RegionOccupancy.Required, null);
 
         /// <summary>Adds an exact route type to the root region.</summary>
-        public void AddRoute<TRoute> (Action<RouteDefinitionBuilder<TRoute>> define) where TRoute : NavigationRoute => core.AddRoute(define);
+        /// <param name="allowedEntryOperations">One or more operations permitted to create a new entry. Back and restoration do not use these permissions.</param>
+        /// <param name="lowerPresentationPolicy">How this route affects lower entries in this region and their descendants, not sibling regions.</param>
+        /// <param name="defineChildren">Optional definitions of child regions owned by this route.</param>
+        public void AddRoute<TRoute> (RouteEntryOperations allowedEntryOperations, LowerPresentationPolicy lowerPresentationPolicy, Action<RouteDefinitionBuilder<TRoute>>? defineChildren = null) where TRoute : NavigationRoute => core.AddRoute(allowedEntryOperations, lowerPresentationPolicy, defineChildren);
         internal RegionDefinition Complete () => core.Complete();
         internal void Close () => core.Close();
     }

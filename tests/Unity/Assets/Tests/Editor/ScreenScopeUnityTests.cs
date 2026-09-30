@@ -50,18 +50,15 @@ namespace MackySoft.Navigathena.Unity.Tests
             };
             ScreenCatalog catalog = ScreenCatalog.Build(Root, RegionCompositionMode.Layered, screens =>
             {
-                screens.Register(caller, route =>
-                {
-                    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                    route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                });
-                screens.Register<QuestionRoute, bool>((creation, _) =>
+                screens.Register(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, caller);
+                screens.Register<QuestionRoute, bool>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput, (creation, _) =>
                 {
                     creation.ConnectPresentation(new ScreenPresentationBinding(new[] { answerView }, returnState: ScreenAnimationState.BeforeEnter));
                     if (mode == 0)
                     {
                         return new(creation.Lifetime.CreateOwned(() => new QuestionPresenter(game, answerView)));
                     }
+
                     if (mode == 1)
                     {
                         return new(creation.CreateScope(services =>
@@ -71,11 +68,8 @@ namespace MackySoft.Navigathena.Unity.Tests
                             services.AddScreenLifecycleHandler<QuestionPresenter>();
                         }));
                     }
+
                     return new(creation.CreateScope(parent, new QuestionInstaller(answerView)));
-                }, route =>
-                {
-                    route.AllowedEntryOperations = RouteEntryOperations.Push;
-                    route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
                 });
             });
             NavigationHost host = NavigationHost.Create(catalog);
@@ -123,10 +117,7 @@ namespace MackySoft.Navigathena.Unity.Tests
         public sealed record QuestionRoute : Route<bool>
         {
             public QuestionRoute (int cost) => Cost = cost;
-            public int Cost
-            {
-                get;
-            }
+            public int Cost { get; }
         }
 
         private sealed class QuestionInstaller : IInstaller
@@ -148,16 +139,10 @@ namespace MackySoft.Navigathena.Unity.Tests
                 game.Question = this;
                 this.view = view;
             }
-            public int Cost
-            {
-                get; private set;
-            }
-            public int Disposals
-            {
-                get; private set;
-            }
+            public int Cost { get; private set; }
+            public int Disposals { get; private set; }
             public ScreenActivityContext<bool> Activity { get; private set; } = null!;
-            public ValueTask InitializeAsync (CancellationToken token) => default;
+            public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken token) => default;
             public ValueTask PrepareAsync (QuestionRoute route, ScreenPreparationContext preparation, CancellationToken token)
             {
                 Cost = route.Cost;
@@ -169,7 +154,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 return default;
             }
             public ValueTask DeactivateAsync () => default;
-            public ValueTask TerminateAsync ()
+            public ValueTask TerminateAsync (NavigationProgressReporter progress)
             {
                 Assert.That(view != null, Is.True);
                 return default;
@@ -370,30 +355,20 @@ namespace MackySoft.Navigathena.Unity.Tests
 
         private sealed class Cleanup : IDisposable
         {
-            public int Disposals
-            {
-                get; private set;
-            }
+            public int Disposals { get; private set; }
             public void Dispose () => Disposals++;
         }
 
         private static NavigationHost CreateHost (ScreenDefinition<PopupRoute> screen)
         {
-            NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<PopupRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-            }));
+            NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<PopupRoute>(RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace, LowerPresentationPolicy.HideAndRetain));
             return NavigationHost.Create(ScreenCatalog.Build(definition, catalog => catalog.RegisterScreens(Root, screens => screens.RegisterScreen(screen))));
         }
 
         public sealed record PopupRoute : Route
         {
             public PopupRoute (int value) => Value = value;
-            public int Value
-            {
-                get;
-            }
+            public int Value { get; }
         }
 
         public sealed class GameService
@@ -432,17 +407,11 @@ namespace MackySoft.Navigathena.Unity.Tests
                 this.game = game;
                 game.Presenter = this;
             }
-            public int Current
-            {
-                get; private set;
-            }
-            public int Selection
-            {
-                get; set;
-            }
+            public int Current { get; private set; }
+            public int Selection { get; set; }
             public ScreenActivityContext Activity { get; private set; } = null!;
             public object CaptureState () => Selection;
-            public ValueTask InitializeAsync (CancellationToken cancellationToken)
+            public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
             {
                 Assert.That(view != null, Is.True);
                 return default;
@@ -464,7 +433,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 Assert.That(Activity.CancellationToken.IsCancellationRequested, Is.True);
                 return default;
             }
-            public ValueTask TerminateAsync ()
+            public ValueTask TerminateAsync (NavigationProgressReporter progress)
             {
                 Assert.That(view != null, Is.True);
                 game.Events.Add("terminate");

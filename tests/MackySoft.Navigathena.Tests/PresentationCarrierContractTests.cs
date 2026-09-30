@@ -418,41 +418,17 @@ public sealed class PresentationCarrierContractTests
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<MainRoute>(main =>
-            {
-                main.AllowedEntryOperations = RouteEntryOperations.Reset;
-                main.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                main.AddChildRegion(Tabs, RegionCompositionMode.Exclusive, RegionOccupancy.Required, tabs =>
-                {
-                    tabs.AddRoute<HomeRoute>(route =>
-                    {
-                        route.AllowedEntryOperations = RouteEntryOperations.Replace;
-                        route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    });
-                    tabs.AddRoute<SettingsRoute>(route =>
-                    {
-                        route.AllowedEntryOperations = RouteEntryOperations.Replace;
-                        route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    });
-                });
-                main.AddChildRegion(Notices, RegionCompositionMode.Layered, RegionOccupancy.Optional, notices =>
-                    notices.AddRoute<NoticeRoute>(route =>
-                    {
-                        route.AllowedEntryOperations = RouteEntryOperations.Push;
-                        route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    }));
-                main.AddChildRegion(Sibling, RegionCompositionMode.Layered, RegionOccupancy.Optional, sibling =>
-                    sibling.AddRoute<SiblingRoute>(route =>
-                    {
-                        route.AllowedEntryOperations = RouteEntryOperations.Push;
-                        route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    }));
-            });
-            root.AddRoute<OverlayRoute>(overlay =>
-            {
-                overlay.AllowedEntryOperations = RouteEntryOperations.Push;
-                overlay.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRelease;
-            });
+            root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, main =>
+{
+    main.AddChildRegion(Tabs, RegionCompositionMode.Exclusive, RegionOccupancy.Required, tabs =>
+    {
+        tabs.AddRoute<HomeRoute>(RouteEntryOperations.Replace, LowerPresentationPolicy.Preserve);
+        tabs.AddRoute<SettingsRoute>(RouteEntryOperations.Replace, LowerPresentationPolicy.Preserve);
+    });
+    main.AddChildRegion(Notices, RegionCompositionMode.Layered, RegionOccupancy.Optional, notices => notices.AddRoute<NoticeRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+    main.AddChildRegion(Sibling, RegionCompositionMode.Layered, RegionOccupancy.Optional, sibling => sibling.AddRoute<SiblingRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+});
+            root.AddRoute<OverlayRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRelease);
         });
     }
 

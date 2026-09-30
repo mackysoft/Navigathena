@@ -193,11 +193,7 @@ public sealed class NavigationPublicationFinalityContractTests
     private static NavigationDefinition CreateDefinition ()
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
-            root.AddRoute<MainRoute>(main =>
-            {
-                main.AllowedEntryOperations = RouteEntryOperations.Reset;
-                main.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            }));
+            root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve));
     }
 
     private sealed class RecordingObserver : INavigationCommitObserver

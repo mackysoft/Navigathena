@@ -18,40 +18,23 @@ namespace MackySoft.Navigathena
             OwnerDefinitionId = ownerDefinitionId;
         }
 
-        public RegionDefinitionId Id
-        {
-            get;
-        }
-        public RegionCompositionMode Mode
-        {
-            get;
-        }
-        public RegionOccupancy Occupancy
-        {
-            get;
-        }
-        public RegionDefinitionId? OwnerDefinitionId
-        {
-            get;
-        }
+        public RegionDefinitionId Id { get; }
+        public RegionCompositionMode Mode { get; }
+        public RegionOccupancy Occupancy { get; }
+        public RegionDefinitionId? OwnerDefinitionId { get; }
 
-        public void AddRoute<TRoute> (Action<RouteDefinitionBuilder<TRoute>> define) where TRoute : NavigationRoute
+        public void AddRoute<TRoute> (RouteEntryOperations allowedEntryOperations, LowerPresentationPolicy lowerPresentationPolicy, Action<RouteDefinitionBuilder<TRoute>>? defineChildren = null) where TRoute : NavigationRoute
         {
             EnsureOpen();
-            if (define is null)
-            {
-                throw new ArgumentNullException(nameof(define));
-            }
-
             if (routeBuilders.Any(builder => builder.RouteType == typeof(TRoute)))
             {
                 throw new NavigationConfigurationException("A region may register an exact route type only once.");
             }
 
-            RouteDefinitionBuilder<TRoute> builder = new(this);
+            RouteDefinitionBuilder<TRoute> builder = new(this, allowedEntryOperations, lowerPresentationPolicy);
             try
             {
-                define(builder);
+                defineChildren?.Invoke(builder);
                 routeBuilders.Add(builder);
             }
             finally
@@ -89,10 +72,7 @@ namespace MackySoft.Navigathena
 
         internal interface IRouteBuilder
         {
-            Type RouteType
-            {
-                get;
-            }
+            Type RouteType { get; }
             RegionRouteDefinition Complete ();
         }
     }

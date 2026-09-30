@@ -5,6 +5,7 @@ using MackySoft.Navigathena.Unity.NativeResources;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using AddressablesApi = UnityEngine.AddressableAssets.Addressables;
 
 namespace MackySoft.Navigathena.Unity.Addressables
 {
@@ -20,24 +21,32 @@ namespace MackySoft.Navigathena.Unity.Addressables
         {
             UnityThread.AssertCurrent();
             cancellationToken.ThrowIfCancellationRequested();
-            handle = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<GameObject>(reference);
-            GameObject asset = await handle.Task;
+            handle = AddressablesApi.LoadAssetAsync<GameObject>(reference);
+            IProgress<AddressablesAcquisitionProgress> reports = context.Progress.GetReporter(AddressablesProgress.Acquisition);
+            while (!handle.IsDone)
+            {
+                reports.Report(new AddressablesAcquisitionProgress(reference.AssetGUID, handle.PercentComplete, handle.GetDownloadStatus()));
+                await Awaitable.NextFrameAsync();
+            }
+            GameObject asset = handle.Result;
             if (handle.Status != AsyncOperationStatus.Succeeded || asset == null)
             {
                 throw handle.OperationException ?? new InvalidOperationException("Addressables completed without a prefab asset.");
             }
 
             cancellationToken.ThrowIfCancellationRequested();
+            reports.Report(new AddressablesAcquisitionProgress(reference.AssetGUID, 1, handle.GetDownloadStatus()));
             return asset;
         }
 
-        public ValueTask DisposeAsync ()
+        public ValueTask ReleaseAsync (NavigationProgressReporter progress)
         {
             UnityThread.AssertCurrent();
             if (handle.IsValid())
             {
-                UnityEngine.AddressableAssets.Addressables.Release(handle);
+                AddressablesApi.Release(handle);
                 handle = default;
+                progress.GetReporter(AddressablesProgress.Release).Report(1);
             }
 
             return default;

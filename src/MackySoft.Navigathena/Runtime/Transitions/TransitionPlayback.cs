@@ -28,36 +28,33 @@ namespace MackySoft.Navigathena.Runtime.Transitions
         private Task? finalization;
         private bool begun;
 
-        public TransitionPlayback (IScreenRuntimeServices runtime, PresentationTransition transition, NavigationTransition configuration, ViewRegistry views)
+        public TransitionPlayback (IScreenRuntimeServices runtime, PresentationTransition transition, NavigationTransition configuration, ViewRegistry views, INavigationOperationProgressReporter progress)
         {
             this.runtime = runtime;
             this.transition = transition;
             Configuration = configuration;
-            lifetime = new ResourceScope(() => new ValueTask(ended.Task), _ => lifetime!.RequestEndAsync());
+            Progress = progress;
+            lifetime = new ResourceScope(() => new ValueTask(ended.Task), _ => lifetime!.RequestEndAsync())
+            {
+                Progress = progress.CreateWork(NavigationPhase.Prepare, null, "TransitionConstruction")
+            };
             preparation = new ManagedTransitionPreparationContext(lifetime, views);
         }
 
-        public NavigationTransition Configuration
-        {
-            get;
-        }
+        public NavigationTransition Configuration { get; }
         public NavigationOperationId OperationId => transition.OperationId;
+        public INavigationOperationProgressReporter Progress { get; }
         internal NavigationOperationKind Operation => transition.Operation;
         internal ReloadOptions? ReloadOptions => transition.Options?.Reload;
-        internal bool WaitForTermination => transition.WaitForTermination || transition.Operation == NavigationOperationKind.Reload;
+        internal bool EndsAfterResourceRelease => Configuration.EndTiming == TransitionEndTiming.AfterResourceRelease;
+        internal bool WaitForTermination => EndsAfterResourceRelease || transition.WaitForTermination || transition.Operation == NavigationOperationKind.Reload;
         internal RegionInstanceId? TargetRegion => transition.TargetRegion;
         internal BackOptions? BackOptions => transition.Options?.Back;
         internal CallChange? CallChange => transition.CallChange;
         public bool HasEnded => ended.Task.IsCompletedSuccessfully;
         public bool FinalizationStarted => finalization is not null;
-        public bool DestinationCommitted
-        {
-            get; set;
-        }
-        public bool Departed
-        {
-            get; set;
-        }
+        public bool DestinationCommitted { get; set; }
+        public bool Departed { get; set; }
         public Task Ended => ended.Task;
         public bool Retains (ScreenInstance screen) => !HasEnded && ReferenceEquals(screenOwner, screen);
         public void BeginRebinding () => transition.ActiveOperation?.ApplyCommit(() =>
@@ -83,7 +80,14 @@ namespace MackySoft.Navigathena.Runtime.Transitions
                 }
                 finally
                 {
-                    await lifetime.CloseAsync();
+                    try
+                    {
+                        await lifetime.CloseAsync();
+                    }
+                    finally
+                    {
+                        lifetime.Progress.Close();
+                    }
                 }
             }
             else
@@ -102,6 +106,15 @@ namespace MackySoft.Navigathena.Runtime.Transitions
                 effect = screenOwner.Creation.TransitionEffect
                     ?? throw new NavigationConfigurationException("The selected screen did not register a transition effect.");
                 screenView = screenOwner.Creation.TransitionView;
+                try
+                {
+                    screenOwner.Creation.BindTransitionProgress?.Invoke(preparation);
+                }
+                finally
+                {
+                    await lifetime.CloseAsync();
+                    lifetime.Progress.Close();
+                }
             }
 
             cancellation.Token.ThrowIfCancellationRequested();
@@ -155,6 +168,8 @@ namespace MackySoft.Navigathena.Runtime.Transitions
                     }
                 }
 
+                preparation.EndProgress();
+
                 if (screenView is not null)
                 {
                     screenView.Apply(new ViewPresentation(false, false, screenView.Original.Order));
@@ -166,7 +181,15 @@ namespace MackySoft.Navigathena.Runtime.Transitions
                 }
                 runtime.RemoveTransitionViews(this);
 
-                await lifetime.DisposeAsync();
+                NavigationProgressReporter release = Progress.CreateWork(NavigationPhase.Cleanup, null, "TransitionRelease");
+                try
+                {
+                    await lifetime.ReleaseAsync(release);
+                }
+                finally
+                {
+                    release.Close();
+                }
                 screenUsage?.Dispose();
                 screenUsage = null;
                 ended.TrySetResult(null);
@@ -176,6 +199,11 @@ namespace MackySoft.Navigathena.Runtime.Transitions
                 // Keep screen usage and borrowed lifetime when the effect has not stopped safely.
                 ended.TrySetException(exception);
                 throw;
+            }
+            finally
+            {
+                preparation.EndProgress();
+                lifetime.Progress.Close();
             }
         }
 

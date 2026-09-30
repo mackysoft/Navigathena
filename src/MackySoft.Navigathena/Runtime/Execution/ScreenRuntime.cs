@@ -132,19 +132,10 @@ namespace MackySoft.Navigathena.Runtime.Execution
             Orders = new PresentationOrderCoordinator(this, Blockers);
         }
 
-        public ScreenCatalog Catalog
-        {
-            get;
-        }
-        public BlockerCoordinator Blockers
-        {
-            get;
-        }
+        public ScreenCatalog Catalog { get; }
+        public BlockerCoordinator Blockers { get; }
         public TerminationJournal Terminations { get; } = new();
-        public PresentationOrderCoordinator Orders
-        {
-            get;
-        }
+        public PresentationOrderCoordinator Orders { get; }
 
         public void Bind (INavigationStateSource state, INavigationLossSink loss, INavigationHostIncidentSink incidents)
         {
@@ -162,7 +153,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             ValidateInstanceTransition(transition, configuration);
             bool outgoingFirst = RequiresOutgoingFirst(transition, configuration);
 
-            TransitionPlayback playback = new(this, transition, configuration, views);
+            TransitionPlayback playback = new(this, transition, configuration, views, progress);
             lock (sync)
             {
                 if (running.Any(item => item.Configuration.Scope == NavigationTransitionScope.Host) || (configuration.Scope == NavigationTransitionScope.Host && running.Count > 0))
@@ -202,6 +193,21 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
         private bool RequiresOutgoingFirst (PresentationTransition transition, NavigationTransition configuration)
         {
+            if (configuration.Source == TransitionEffectSource.SourceScreen
+                && configuration.EndTiming == TransitionEndTiming.AfterResourceRelease
+                && transition.TargetRegion is RegionInstanceId sourceRegion)
+            {
+                RegionState sourceState = transition.Before.GetRegion(sourceRegion);
+                if (sourceState.Entries.Count > 0)
+                {
+                    PresentationState source = transition.Before.GetPresentation(sourceState.Entries[sourceState.Entries.Count - 1]);
+                    if (!transition.ProposedAfter.Presentations.Values.Any(presentation => presentation.Id == source.Id && presentation.Materialization == PresentationMaterialization.Available))
+                    {
+                        throw new NavigationConfigurationException("A source-owned transition cannot outlive the release of its own screen. Use an independently owned effect to cover that release.");
+                    }
+                }
+            }
+
             bool outgoingFirst = transition.TargetRegion is RegionInstanceId region
                 && resourcePolicies.TryGetValue(transition.Before.GetRegion(region).DefinitionId, out ScreenResourcePolicy policy)
                 && policy == ScreenResourcePolicy.OutgoingFirst && transition.AllowedDepartureEntries.Count > 0;
@@ -342,7 +348,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             }
         }
 
-        public async ValueTask PrepareAsync (ScreenInstance screen, NavigationState candidate, CancellationToken cancellationToken, ScreenPreparationReason reason = ScreenPreparationReason.NewEntry)
+        public async ValueTask PrepareAsync (ScreenInstance screen, NavigationState candidate, INavigationOperationProgressReporter progress, CancellationToken cancellationToken, ScreenPreparationReason reason = ScreenPreparationReason.NewEntry)
         {
             NavigationEntryId? parentId = candidate.GetRegion(screen.Entry.RegionId).OwnerEntryId;
             if (parentId is NavigationEntryId parent && Find(candidate.GetPresentation(parent)) is ScreenInstance owner
@@ -351,7 +357,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 screen.Parent = owner;
             }
 
-            await screen.PrepareAsync(cancellationToken, reason);
+            await screen.PrepareAsync(progress, cancellationToken, reason);
         }
 
         public void Forget (ScreenInstance screen)
@@ -369,7 +375,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             }
         }
 
-        public ValueTask TerminateAsync (ScreenInstance screen)
+        public ValueTask TerminateAsync (ScreenInstance screen, INavigationOperationProgressReporter? progress = null)
         {
             if (screen.IsTerminated)
             {
@@ -389,20 +395,20 @@ namespace MackySoft.Navigathena.Runtime.Execution
             }
             screen.MarkEnding();
             Calls.TrackRetirement(screen, completion.Task);
-            _ = CompleteTerminationAsync(screen, completion);
+            _ = CompleteTerminationAsync(screen, completion, progress);
             return new ValueTask(completion.Task);
         }
 
-        public void Retire (ScreenInstance screen)
+        public void Retire (ScreenInstance screen, INavigationOperationProgressReporter? progress = null)
         {
-            Task termination = TerminateAsync(screen).AsTask();
+            Task termination = TerminateAsync(screen, progress).AsTask();
             _ = termination.ContinueWith(task =>
 {
     _ = task.Exception;
 }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
         }
 
-        private async Task CompleteTerminationAsync (ScreenInstance screen, TaskCompletionSource<object?> completion)
+        private async Task CompleteTerminationAsync (ScreenInstance screen, TaskCompletionSource<object?> completion, INavigationOperationProgressReporter? progress)
         {
             try
             {
@@ -421,9 +427,9 @@ namespace MackySoft.Navigathena.Runtime.Execution
                             throw new InvalidOperationException("A child screen still uses this screen's resources.");
                         }
 
-                        await TerminateAsync(child);
+                        await TerminateAsync(child, progress);
                     }
-                    await screen.TerminateAsync();
+                    await screen.TerminateAsync(progress);
                     Forget(screen);
                 });
                 completion.SetResult(null);

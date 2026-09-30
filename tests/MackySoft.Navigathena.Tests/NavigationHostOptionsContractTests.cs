@@ -44,19 +44,12 @@ public sealed class NavigationHostOptionsContractTests
     private static NavigationDefinition CreateDefinition ()
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
-            root.AddRoute<MainRoute>(main =>
-            {
-                main.AllowedEntryOperations = RouteEntryOperations.Reset;
-                main.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            }));
+            root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve));
     }
 
     private sealed class RecordingObserver : INavigationCommitObserver
     {
-        public int CommitCount
-        {
-            get; private set;
-        }
+        public int CommitCount { get; private set; }
 
         public void OnCommitted (NavigationCommit commit) => CommitCount++;
     }

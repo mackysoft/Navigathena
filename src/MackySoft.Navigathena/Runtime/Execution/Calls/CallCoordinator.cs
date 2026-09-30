@@ -333,7 +333,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                         && state.Current.Presentations.TryGetValue(caller, out PresentationState? presentation)
                         && screens.Find(presentation) is ScreenInstance screen && screen.Id == call.OwnerPresentation)
                     {
-                        await screen.ReleasePreviousInputAsync(retainForCalls: false);
+                        await screen.ReleasePreviousInputAsync(null, retainForCalls: false);
                     }
                     call.Finish(state.Current);
                 }

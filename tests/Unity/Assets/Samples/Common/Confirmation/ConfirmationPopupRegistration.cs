@@ -10,11 +10,7 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
 
         public void DefineRoutes (RootRegionDefinitionBuilder root)
         {
-            root.AddRoute<ConfirmationRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Push;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-            });
+            root.AddRoute<ConfirmationRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
         }
 
         public void RegisterScreens (RegionScreenCatalogBuilder screens)
@@ -22,7 +18,7 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
             ConfirmationPopupView configuredPrefab = prefab;
             screens.RegisterScreen(new ScreenDefinition<ConfirmationRoute, bool>(async (creation, token) =>
             {
-                ConfirmationPopupView view = await creation.InstantiateScreenAsync(configuredPrefab, token);
+                ConfirmationPopupView view = await creation.AcquireScreenAsync(configuredPrefab, token);
                 return creation.Lifetime.CreateOwned(() => new ConfirmationPresenter(view));
             }, ScreenInstancePolicy.Multiple));
         }

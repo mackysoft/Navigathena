@@ -125,16 +125,8 @@ public sealed class NavigationShutdownAndFaultContractTests
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<MainRoute>(main =>
-            {
-                main.AllowedEntryOperations = RouteEntryOperations.Reset;
-                main.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
-            root.AddRoute<OverlayRoute>(overlay =>
-            {
-                overlay.AllowedEntryOperations = RouteEntryOperations.Push;
-                overlay.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
+            root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+            root.AddRoute<OverlayRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve);
         });
     }
 

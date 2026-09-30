@@ -236,11 +236,7 @@ public sealed class NavigationFailureContractTests
 
     private static NavigationHost Create (Func<ScreenCreationContext<TestRoute>, CancellationToken, ValueTask<IScreenLifecycleHandler<TestRoute>>> create, ScreenInstancePolicy policy = ScreenInstancePolicy.Single, NavigationHostOptions? options = null)
     {
-        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<TestRoute>(route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Push;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-        }));
+        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<TestRoute>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRetain));
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens => screens.RegisterScreen(new ScreenDefinition<TestRoute>(create, policy))));
         return NavigationHost.Create(catalog, options);
     }
@@ -251,26 +247,17 @@ public sealed class NavigationFailureContractTests
 
     private sealed class Handler : IScreenLifecycleHandler<TestRoute>, IAsyncDisposable
     {
-        public string? Phase
-        {
-            get; init;
-        }
+        public string? Phase { get; init; }
         public Exception Failure { get; init; } = new InvalidOperationException();
-        public TaskCompletionSource<bool>? Disposing
-        {
-            get; init;
-        }
+        public TaskCompletionSource<bool>? Disposing { get; init; }
         public Task Release { get; init; } = Task.CompletedTask;
-        public int Disposals
-        {
-            get; private set;
-        }
+        public int Disposals { get; private set; }
 
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => Fail("initialize");
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => Fail("initialize");
         public ValueTask PrepareAsync (TestRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => Fail("prepare");
         public ValueTask ActivateAsync (TestRoute route, ScreenActivityContext activity) => Fail("activate");
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync () => Fail("terminate");
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => Fail("terminate");
 
         public async ValueTask DisposeAsync ()
         {
@@ -292,10 +279,7 @@ public sealed class NavigationFailureContractTests
 
     private sealed class Dependency : IAsyncDisposable
     {
-        public bool Disposed
-        {
-            get; private set;
-        }
+        public bool Disposed { get; private set; }
         public ValueTask DisposeAsync ()
         {
             Disposed = true;

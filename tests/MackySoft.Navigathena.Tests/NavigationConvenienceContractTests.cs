@@ -104,26 +104,16 @@ public sealed class NavigationConvenienceContractTests
 
     private static NavigationHost CreateHost (Handler handler)
     {
-        return NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register<TestRoute>((_, _) => new(handler), route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-        })));
+        return NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register<TestRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, (_, _) => new(handler))));
     }
 
     private sealed record TestRoute (int Value) : Route;
 
     private sealed class Handler : IScreenLifecycleHandler<TestRoute>
     {
-        public ScreenActivityContext? Activity
-        {
-            get; private set;
-        }
-        public TestRoute? Route
-        {
-            get; private set;
-        }
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ScreenActivityContext? Activity { get; private set; }
+        public TestRoute? Route { get; private set; }
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (TestRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => default;
         public ValueTask ActivateAsync (TestRoute route, ScreenActivityContext activity)
         {
@@ -132,7 +122,7 @@ public sealed class NavigationConvenienceContractTests
             return default;
         }
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync () => default;
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
     }
 
     private sealed class RecordingNavigation : IScreenNavigation
@@ -140,14 +130,8 @@ public sealed class NavigationConvenienceContractTests
         private readonly IScreenNavigation navigation;
 
         public RecordingNavigation (IScreenNavigation navigation) => this.navigation = navigation;
-        public int RequestCount
-        {
-            get; private set;
-        }
-        public NavigationOptions? LastOptions
-        {
-            get; private set;
-        }
+        public int RequestCount { get; private set; }
+        public NavigationOptions? LastOptions { get; private set; }
 
         public NavigationOperation Push<TRoute> (NavigationDestinationTree<TRoute> destination, NavigationOptions? options = null) where TRoute : Route
             => Record(() => navigation.Push(destination, options), options);

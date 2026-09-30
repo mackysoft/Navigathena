@@ -25,7 +25,7 @@ namespace MackySoft.Navigathena.Unity.NativeResources
             return new ValueTask<T>(component);
         }
 
-        public ValueTask DisposeAsync ()
+        public ValueTask ReleaseAsync (NavigationProgressReporter progress)
         {
             UnityThread.AssertCurrent();
             if (monitor != null)

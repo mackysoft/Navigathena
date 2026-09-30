@@ -9,11 +9,11 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
     internal sealed class ResourceScope : IAsyncDisposable, IResourceUser
     {
         private readonly object sync = new();
-        private readonly List<IAsyncDisposable> acquisitions = new();
+        private readonly List<IResourceOwnership> acquisitions = new();
         private readonly HashSet<ResourceLifetime> borrowed = new();
         private readonly Func<ValueTask> endUser;
         private readonly Action<string> reportLoss;
-        private readonly TaskCompletionSource<object?> drained = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        private TaskCompletionSource<object?> drained = new(TaskCreationOptions.RunContinuationsAsynchronously);
         private readonly CancellationTokenSource ending = new();
         private bool open = true;
         private int pending;
@@ -25,17 +25,37 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
         {
             this.endUser = endUser;
             this.reportLoss = reportLoss;
-            Context = new ManagedLifetimeContext(this);
+            Registration = new ManagedLifetimeContext(this, NavigationProgressReporter.None);
         }
 
-        public LifetimeContext Context
-        {
-            get;
-        }
+        internal ManagedLifetimeContext Registration { get; private set; }
+        public LifetimeContext Context => Registration;
         public CancellationToken EndingToken => ending.Token;
+        internal NavigationProgressReporter Progress
+        {
+            get => Registration.Progress;
+            set => Registration.Progress = value;
+        }
         public void ReportLoss (string reason) => reportLoss(reason);
 
-        public T CreateOwned<T> (Func<T> create) where T : class
+        internal ManagedLifetimeContext OpenRegistration (NavigationProgressReporter progress)
+        {
+            lock (sync)
+            {
+                if (open || pending != 0 || disposal is not null || ownedDisposal is not null || ending.IsCancellationRequested)
+                {
+                    throw new InvalidOperationException("Resource registration cannot start while another callback or release is running.");
+                }
+
+                // A new callback gets its own capability; retained creation contexts stay closed.
+                Registration = new ManagedLifetimeContext(this, progress);
+                drained = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
+                open = true;
+                return Registration;
+            }
+        }
+
+        public T CreateOwned<T> (ManagedLifetimeContext registration, Func<T> create) where T : class
         {
             if (create is null)
             {
@@ -44,7 +64,7 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             OwnedObject<T> owner = new();
             lock (sync)
             {
-                EnsureOpen();
+                EnsureOpen(registration);
                 acquisitions.Add(owner);
                 pending++;
             }
@@ -74,22 +94,23 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             }
         }
 
-        private interface IOwnedObject : IAsyncDisposable
+        private interface IResourceOwnership
         {
-            object? Instance
-            {
-                get;
-            }
+            object? Identity { get; }
+            ValueTask ReleaseAsync (NavigationProgressReporter progress);
+        }
+
+        private interface IOwnedObject : IResourceOwnership
+        {
+            object? Instance { get; }
         }
 
         private sealed class OwnedObject<T> : IOwnedObject where T : class
         {
-            public T? Value
-            {
-                get; set;
-            }
+            public T? Value { get; set; }
             public object? Instance => Value;
-            public async ValueTask DisposeAsync ()
+            public object? Identity => Value;
+            public async ValueTask ReleaseAsync (NavigationProgressReporter progress)
             {
                 if (Value is IAsyncDisposable asynchronous)
                 {
@@ -103,18 +124,41 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             }
         }
 
-        public void EnsureOpen ()
+        private sealed class AcquiredResource<T> : IResourceOwnership
         {
-            lock (sync)
+            private readonly IResourceAcquisition<T> acquisition;
+
+            public AcquiredResource (IResourceAcquisition<T> acquisition) => this.acquisition = acquisition;
+            public object Identity => acquisition;
+
+            public async ValueTask ReleaseAsync (NavigationProgressReporter progress)
             {
-                if (!open || ending.IsCancellationRequested)
+                NavigationProgressReporter release = progress.CreateChild(acquisition.GetType().Name);
+                try
                 {
-                    throw new InvalidOperationException("Resource registration is only available during preparation.");
+                    await acquisition.ReleaseAsync(release);
+                }
+                finally
+                {
+                    release.Close();
                 }
             }
         }
 
-        public async ValueTask<T> AcquireAsync<T> (IResourceAcquisition<T> acquisition, CancellationToken cancellationToken)
+        public void EnsureOpen () => EnsureOpen(Registration);
+
+        internal void EnsureOpen (ManagedLifetimeContext registration)
+        {
+            lock (sync)
+            {
+                if (!open || !ReferenceEquals(registration, Registration) || ending.IsCancellationRequested)
+                {
+                    throw new InvalidOperationException("Resource registration is only available during its owning callback.");
+                }
+            }
+        }
+
+        public async ValueTask<T> AcquireAsync<T> (ManagedLifetimeContext registration, IResourceAcquisition<T> acquisition, CancellationToken cancellationToken)
         {
             if (acquisition is null)
             {
@@ -123,13 +167,13 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
 
             lock (sync)
             {
-                EnsureOpen();
-                if (acquisitions.Any(item => ReferenceEquals(item, acquisition)))
+                EnsureOpen(registration);
+                if (acquisitions.Any(item => ReferenceEquals(item.Identity, acquisition)))
                 {
                     throw new InvalidOperationException("Each acquisition object can only be registered once.");
                 }
 
-                acquisitions.Add(acquisition);
+                acquisitions.Add(new AcquiredResource<T>(acquisition));
                 pending++;
             }
 
@@ -137,9 +181,17 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             {
                 using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, ending.Token);
                 cancellation.Token.ThrowIfCancellationRequested();
-                T value = await acquisition.AcquireAsync(new ResourceAcquisitionContext(reportLoss), cancellation.Token);
-                cancellation.Token.ThrowIfCancellationRequested();
-                return value;
+                NavigationProgressReporter progress = registration.Progress.CreateChild(acquisition.GetType().Name);
+                try
+                {
+                    T value = await acquisition.AcquireAsync(new ResourceAcquisitionContext(reportLoss, progress), cancellation.Token);
+                    cancellation.Token.ThrowIfCancellationRequested();
+                    return value;
+                }
+                finally
+                {
+                    progress.Close();
+                }
             }
             finally
             {
@@ -154,11 +206,11 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             }
         }
 
-        public T Borrow<T> (ResourceReference<T> resource) where T : class
+        public T Borrow<T> (ManagedLifetimeContext registration, ResourceReference<T> resource) where T : class
         {
             lock (sync)
             {
-                EnsureOpen();
+                EnsureOpen(registration);
                 resource.Lifetime.AddUser(this);
                 borrowed.Add(resource.Lifetime);
                 return resource.Value;
@@ -235,7 +287,9 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             }
         }
 
-        public ValueTask DisposeAsync ()
+        public ValueTask DisposeAsync () => ReleaseAsync(NavigationProgressReporter.None);
+
+        public ValueTask ReleaseAsync (NavigationProgressReporter progress)
         {
             TaskCompletionSource<object?>? completion = null;
             Task task;
@@ -257,13 +311,13 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
 
             if (completion is not null)
             {
-                _ = DisposeResourcesAsync(completion);
+                _ = DisposeResourcesAsync(completion, progress);
             }
 
             return new ValueTask(task);
         }
 
-        private async Task DisposeResourcesAsync (TaskCompletionSource<object?> completion)
+        private async Task DisposeResourcesAsync (TaskCompletionSource<object?> completion, NavigationProgressReporter progress)
         {
             try
             {
@@ -272,7 +326,7 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
                 // Acquisitions can depend on earlier acquisitions. A failed dependent must retain them.
                 for (int i = acquisitions.Count - 1; i >= 0; i--)
                 {
-                    await acquisitions[i].DisposeAsync();
+                    await acquisitions[i].ReleaseAsync(progress);
                     acquisitions.RemoveAt(i);
                 }
 
@@ -297,9 +351,10 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             await drained.Task;
             foreach (IOwnedObject owner in acquisitions.OfType<IOwnedObject>().Reverse().ToArray())
             {
-                await owner.DisposeAsync();
+                await owner.ReleaseAsync(NavigationProgressReporter.None);
                 acquisitions.Remove(owner);
             }
         }
+
     }
 }

@@ -52,7 +52,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             TestLifecycleHandler? handler = null;
             NavigationHost host = Create(async (preparation, token) =>
             {
-                UnityScene<RuntimeTestView> loaded = await preparation.Lifetime.LoadSceneAsync<RuntimeTestView>(scene, token);
+                UnityScene<RuntimeTestView> loaded = await preparation.Lifetime.AcquireSceneAsync<RuntimeTestView>(scene, token);
                 Assert.That(loaded.Scene, Is.EqualTo(scene.Scene));
                 handler = new TestLifecycleHandler(loaded.Root);
                 return handler;
@@ -94,7 +94,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             };
             NavigationHost host = Create(async (preparation, token) =>
             {
-                UnityScene<RuntimeTestView> loaded = await preparation.Lifetime.LoadSceneAsync<RuntimeTestView>(scene, token);
+                UnityScene<RuntimeTestView> loaded = await preparation.Lifetime.AcquireSceneAsync<RuntimeTestView>(scene, token);
                 return new TestLifecycleHandler(loaded.Root);
             });
             try
@@ -118,7 +118,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             TestLifecycleHandler? handler = null;
             NavigationHost host = Create(async (preparation, token) =>
             {
-                UnityScene<RuntimeTestView> loaded = await preparation.Lifetime.LoadSceneAsync<RuntimeTestView>(scene, token);
+                UnityScene<RuntimeTestView> loaded = await preparation.Lifetime.AcquireSceneAsync<RuntimeTestView>(scene, token);
                 return handler = new TestLifecycleHandler(loaded.Root) { AllowDestroyedViewOnDispose = true };
             });
             await host.StartAsync(new TestRoute());
@@ -253,7 +253,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 }
                 TestSceneAcquisition acquisition = new();
                 scenes.Add(acquisition);
-                UnityScene<RuntimeTestView> scene = await creation.Lifetime.LoadSceneAsync<RuntimeTestView>(acquisition, token);
+                UnityScene<RuntimeTestView> scene = await creation.Lifetime.AcquireSceneAsync<RuntimeTestView>(acquisition, token);
                 TestLifecycleHandler handler = new(scene.Root);
                 handlers.Add(handler);
                 return handler;
@@ -274,11 +274,7 @@ namespace MackySoft.Navigathena.Unity.Tests
 
         private NavigationHost Create (Func<ScreenCreationContext<TestRoute>, CancellationToken, ValueTask<IScreenLifecycleHandler<TestRoute>>> factory)
         {
-            NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<TestRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-            }));
+            NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<TestRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain));
             ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens => screens.RegisterScreen(new ScreenDefinition<TestRoute>(async (creation, token) =>
             {
                 IScreenLifecycleHandler<TestRoute> handler = await factory(creation, token);
@@ -315,38 +311,20 @@ namespace MackySoft.Navigathena.Unity.Tests
         private sealed class TestLifecycleHandler : IScreenLifecycleHandler<TestRoute>, IAsyncDisposable
         {
             public TestLifecycleHandler (RuntimeTestView view) => View = view;
-            public RuntimeTestView View
-            {
-                get;
-            }
-            public bool Initialized
-            {
-                get; private set;
-            }
-            public bool Active
-            {
-                get; private set;
-            }
-            public bool Disposed
-            {
-                get; private set;
-            }
-            public bool AllowDestroyedViewOnDispose
-            {
-                get; set;
-            }
-            public ScreenActivityContext? Activity
-            {
-                get; private set;
-            }
-            public ValueTask InitializeAsync (CancellationToken cancellationToken)
+            public RuntimeTestView View { get; }
+            public bool Initialized { get; private set; }
+            public bool Active { get; private set; }
+            public bool Disposed { get; private set; }
+            public bool AllowDestroyedViewOnDispose { get; set; }
+            public ScreenActivityContext? Activity { get; private set; }
+            public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
             {
                 Assert.That(View != null, Is.True);
                 Initialized = true;
                 return default;
             }
             public ValueTask PrepareAsync (TestRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => default;
-            public ValueTask TerminateAsync () => default;
+            public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
             public ValueTask ActivateAsync (TestRoute route, ScreenActivityContext activity)
             {
                 Activity = activity;
@@ -372,15 +350,9 @@ namespace MackySoft.Navigathena.Unity.Tests
 
         private sealed class TestSceneAcquisition : IResourceAcquisition<Scene>
         {
-            public Scene Scene
-            {
-                get; private set;
-            }
+            public Scene Scene { get; private set; }
             public bool IncludeView { get; set; } = true;
-            public int Releases
-            {
-                get; private set;
-            }
+            public int Releases { get; private set; }
             public ValueTask<Scene> AcquireAsync (ResourceAcquisitionContext context, CancellationToken cancellationToken)
             {
                 Scene = SceneManager.CreateScene("Navigation test " + Guid.NewGuid());
@@ -391,7 +363,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 }
                 return new ValueTask<Scene>(Scene);
             }
-            public async ValueTask DisposeAsync ()
+            public async ValueTask ReleaseAsync (NavigationProgressReporter progress)
             {
                 Releases++;
                 if (Scene.isLoaded)
@@ -409,16 +381,10 @@ namespace MackySoft.Navigathena.Unity.Tests
         {
             private readonly GameObject prefab;
             public TestPrefabAcquisition (GameObject prefab) => this.prefab = prefab;
-            public Action? BeforeRelease
-            {
-                get; set;
-            }
-            public int Releases
-            {
-                get; private set;
-            }
+            public Action? BeforeRelease { get; set; }
+            public int Releases { get; private set; }
             public ValueTask<GameObject> AcquireAsync (ResourceAcquisitionContext context, CancellationToken cancellationToken) => new(prefab);
-            public ValueTask DisposeAsync ()
+            public ValueTask ReleaseAsync (NavigationProgressReporter progress)
             {
                 BeforeRelease?.Invoke();
                 Releases++;

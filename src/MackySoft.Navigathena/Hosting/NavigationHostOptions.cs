@@ -30,21 +30,12 @@ namespace MackySoft.Navigathena.Hosting
         }
 
         /// <summary>Gets the observers in the order owned by this configuration.</summary>
-        public IReadOnlyList<INavigationCommitObserver> CommitObservers
-        {
-            get;
-        }
+        public IReadOnlyList<INavigationCommitObserver> CommitObservers { get; }
 
         public IReadOnlyDictionary<RegionDefinitionId, RegionNavigationOptions> Regions { get; init; } = new Dictionary<RegionDefinitionId, RegionNavigationOptions>();
-        public Action<NavigationResult>? OperationCompleted
-        {
-            get; init;
-        }
+        public Action<NavigationResult>? OperationCompleted { get; init; }
         /// <summary>Gets the shared blocker definition, instantiated at most once at a time within this host.</summary>
-        public BlockerDefinition? DefaultBlocker
-        {
-            get; init;
-        }
+        public BlockerDefinition? DefaultBlocker { get; init; }
     }
 
 }

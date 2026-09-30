@@ -11,7 +11,23 @@ namespace MackySoft.Navigathena.Unity
     /// <summary>Acquires one configured screen and connects its presentation to the common runtime.</summary>
     public static class UnityScreenCreationExtensions
     {
-        public static async ValueTask<TView> InstantiateScreenAsync<TView> (this ScreenCreationContext creation, TView prefab, CancellationToken cancellationToken = default) where TView : Component
+        /// <summary>Acquires a view through the supplied implementation and connects its configured screen presentation.</summary>
+        /// <param name="acquisition">Acquires the view and releases its ownership, including partial acquisition after failure.</param>
+        /// <returns>The acquired view, connected to the screen lifetime. Entry animation and activity have not started.</returns>
+        public static async ValueTask<TView> AcquireScreenAsync<TView> (this ScreenCreationContext creation, IResourceAcquisition<TView> acquisition, CancellationToken cancellationToken = default) where TView : Component
+        {
+            if (creation is null)
+            {
+                throw new ArgumentNullException(nameof(creation));
+            }
+            TView view = await creation.Lifetime.AcquireAsync(acquisition, cancellationToken);
+            await creation.Lifetime.AcquireAsync(new ComponentObservation<TView>(view), cancellationToken);
+            return creation.ConnectScreen(view);
+        }
+
+        /// <summary>Acquires an independent instance of a configured screen prefab and connects its presentation.</summary>
+        /// <param name="prefab">The view on the prefab root. The prefab remains externally owned; the screen owns the instance.</param>
+        public static async ValueTask<TView> AcquireScreenAsync<TView> (this ScreenCreationContext creation, TView prefab, CancellationToken cancellationToken = default) where TView : Component
         {
             if (creation is null)
             {
@@ -31,7 +47,9 @@ namespace MackySoft.Navigathena.Unity
             return creation.ConnectScreen(view);
         }
 
-        public static async ValueTask<TView> InstantiateScreenAsync<TView> (this ScreenCreationContext creation, IResourceAcquisition<GameObject> prefab, CancellationToken cancellationToken = default) where TView : Component
+        /// <summary>Acquires a prefab asset, creates a screen instance, and connects its presentation.</summary>
+        /// <param name="prefab">Acquires the prefab asset, not a live screen. The instance is destroyed before the asset is released.</param>
+        public static async ValueTask<TView> AcquireScreenAsync<TView> (this ScreenCreationContext creation, IResourceAcquisition<GameObject> prefab, CancellationToken cancellationToken = default) where TView : Component
         {
             if (creation is null)
             {
@@ -43,43 +61,30 @@ namespace MackySoft.Navigathena.Unity
             {
                 throw new NavigationConfigurationException("The screen prefab must have exactly one requested view, on its root.");
             }
-            return await creation.InstantiateScreenAsync(view, cancellationToken);
+            return await creation.AcquireScreenAsync(view, cancellationToken);
         }
 
-        public static async ValueTask<TView> LoadScreenAsync<TView> (this ScreenCreationContext creation, IResourceAcquisition<Scene> scene, CancellationToken cancellationToken = default) where TView : Component
+        /// <summary>Acquires a scene through the supplied implementation and connects its uniquely resolved screen view.</summary>
+        /// <param name="scene">Owns the acquired scene. Loading or creating it is the acquisition implementation's responsibility.</param>
+        public static async ValueTask<TView> AcquireScreenAsync<TView> (this ScreenCreationContext creation, IResourceAcquisition<Scene> scene, CancellationToken cancellationToken = default) where TView : Component
         {
             if (creation is null)
             {
                 throw new ArgumentNullException(nameof(creation));
             }
-            UnityScene<TView> acquired = await creation.Lifetime.LoadSceneAsync<TView>(scene, cancellationToken);
+            UnityScene<TView> acquired = await creation.Lifetime.AcquireSceneAsync<TView>(scene, cancellationToken);
             return creation.ConnectScreen(acquired.Root);
         }
 
         /// <summary>Acquires an owned scene and explicitly selects a screen when the scene contains multiple views.</summary>
-        public static async ValueTask<TView> LoadScreenAsync<TView> (this ScreenCreationContext creation, IResourceAcquisition<Scene> scene, Func<Scene, TView> select, CancellationToken cancellationToken = default) where TView : Component
+        public static async ValueTask<TView> AcquireScreenAsync<TView> (this ScreenCreationContext creation, IResourceAcquisition<Scene> scene, Func<Scene, TView> select, CancellationToken cancellationToken = default) where TView : Component
         {
             if (creation is null)
             {
                 throw new ArgumentNullException(nameof(creation));
             }
-            if (select is null)
-            {
-                throw new ArgumentNullException(nameof(select));
-            }
-            Scene acquired = await creation.Lifetime.AcquireAsync(scene, cancellationToken);
-            UnityThread.AssertCurrent();
-            if (!acquired.IsValid() || !acquired.isLoaded)
-            {
-                throw new NavigationConfigurationException("The acquired scene is not loaded.");
-            }
-            TView view = select(acquired);
-            if (view == null || view.gameObject.scene != acquired)
-            {
-                throw new NavigationConfigurationException("The selected view must belong to the acquired scene.");
-            }
-            await creation.Lifetime.AcquireAsync(new ComponentObservation<TView>(view), cancellationToken);
-            return creation.ConnectScreen(view);
+            UnityScene<TView> acquired = await creation.Lifetime.AcquireSceneAsync(scene, select, cancellationToken);
+            return creation.ConnectScreen(acquired.Root);
         }
 
         public static async ValueTask<TView> BorrowScreenAsync<TView> (this ScreenCreationContext creation, ResourceReference<TView> screen, ScreenAnimationState returnState, CancellationToken cancellationToken = default) where TView : Component

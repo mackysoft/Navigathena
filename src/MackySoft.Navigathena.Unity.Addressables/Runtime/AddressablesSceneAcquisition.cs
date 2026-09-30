@@ -2,10 +2,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MackySoft.Navigathena.Unity.NativeResources;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
+using AddressablesApi = UnityEngine.AddressableAssets.Addressables;
 
 namespace MackySoft.Navigathena.Unity.Addressables
 {
@@ -26,24 +28,30 @@ namespace MackySoft.Navigathena.Unity.Addressables
             cancellationToken.ThrowIfCancellationRequested();
             this.context = context;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
-            handle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(reference, LoadSceneMode.Additive, activateOnLoad: true);
-            SceneInstance loaded = await handle.Task;
+            handle = AddressablesApi.LoadSceneAsync(reference, LoadSceneMode.Additive, activateOnLoad: true);
+            IProgress<AddressablesAcquisitionProgress> reports = context.Progress.GetReporter(AddressablesProgress.Acquisition);
+            while (!handle.IsDone)
+            {
+                reports.Report(new AddressablesAcquisitionProgress(reference.AssetGUID, handle.PercentComplete, handle.GetDownloadStatus()));
+                await Awaitable.NextFrameAsync();
+            }
             if (handle.Status != AsyncOperationStatus.Succeeded)
             {
                 throw handle.OperationException ?? new InvalidOperationException("Addressables scene acquisition failed.");
             }
 
-            scene = loaded.Scene;
+            scene = handle.Result.Scene;
             cancellationToken.ThrowIfCancellationRequested();
             if (!scene.IsValid() || !scene.isLoaded)
             {
                 throw new InvalidOperationException("Addressables completed without a loaded scene.");
             }
 
+            reports.Report(new AddressablesAcquisitionProgress(reference.AssetGUID, 1, handle.GetDownloadStatus()));
             return scene;
         }
 
-        public async ValueTask DisposeAsync ()
+        public async ValueTask ReleaseAsync (NavigationProgressReporter progress)
         {
             UnityThread.AssertCurrent();
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
@@ -52,24 +60,31 @@ namespace MackySoft.Navigathena.Unity.Addressables
             {
                 return;
             }
+            IProgress<double?> reports = progress.GetReporter(AddressablesProgress.Release);
 
             if (handle.Status != AsyncOperationStatus.Succeeded || !scene.IsValid() || !scene.isLoaded)
             {
-                UnityEngine.AddressableAssets.Addressables.Release(handle);
+                AddressablesApi.Release(handle);
                 handle = default;
+                reports.Report(1);
                 return;
             }
 
-            unload = UnityEngine.AddressableAssets.Addressables.UnloadSceneAsync(handle, UnloadSceneOptions.None, autoReleaseHandle: false);
-            await unload.Task;
+            unload = AddressablesApi.UnloadSceneAsync(handle, UnloadSceneOptions.None, autoReleaseHandle: false);
+            while (!unload.IsDone)
+            {
+                reports.Report(unload.PercentComplete);
+                await Awaitable.NextFrameAsync();
+            }
             if (unload.Status != AsyncOperationStatus.Succeeded)
             {
                 throw unload.OperationException ?? new InvalidOperationException("Addressables scene termination failed.");
             }
 
-            UnityEngine.AddressableAssets.Addressables.Release(unload);
+            AddressablesApi.Release(unload);
             handle = default;
             unload = default;
+            reports.Report(1);
         }
 
         private void OnSceneUnloaded (Scene unloaded)

@@ -15,8 +15,15 @@ namespace MackySoft.Navigathena.Samples.Startup
             return default;
         }
         public ValueTask PrepareSwitchAsync (TransitionTargetsContext context, CancellationToken cancellationToken) => default;
-        public async ValueTask AfterCommitAsync (TransitionTargetsContext context, CancellationToken cancellationToken)
+        public ValueTask AfterCommitAsync (TransitionTargetsContext context, CancellationToken cancellationToken) => default;
+
+        public async ValueTask SettleAsync (TransitionSettlementContext context, CancellationToken cancellationToken)
         {
+            if (context.Target != TransitionSettlementTarget.Destination)
+            {
+                overlay.Opacity = 1;
+                return;
+            }
             float elapsed = 0;
             while (elapsed < 0.3f)
             {
@@ -25,11 +32,7 @@ namespace MackySoft.Navigathena.Samples.Startup
                 overlay.Opacity = 1 - Mathf.Clamp01(elapsed / 0.3f);
                 await UniTask.NextFrame(cancellationToken: cancellationToken);
             }
-        }
-        public ValueTask SettleAsync (TransitionSettlementContext context, CancellationToken cancellationToken)
-        {
-            overlay.Opacity = context.Target == TransitionSettlementTarget.Destination ? 0 : 1;
-            return default;
+            overlay.Opacity = 0;
         }
     }
 }

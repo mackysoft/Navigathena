@@ -421,22 +421,10 @@ public sealed class RegionPresentationContractTests
         public ConcurrentBag<Blocker> Blockers { get; } = new();
         public List<object> Endings { get; } = new();
         private readonly bool parentOwnedBlocker;
-        public Func<Screen, ScreenAnimation, Task>? Play
-        {
-            get; set;
-        }
-        public Func<Screen, bool>? FailPrepare
-        {
-            get; set;
-        }
-        public Func<Screen, bool>? FailValidation
-        {
-            get; set;
-        }
-        public NavigationHost Host
-        {
-            get;
-        }
+        public Func<Screen, ScreenAnimation, Task>? Play { get; set; }
+        public Func<Screen, bool>? FailPrepare { get; set; }
+        public Func<Screen, bool>? FailValidation { get; set; }
+        public NavigationHost Host { get; }
 
         public Fixture (bool independentBlockers = false, bool sharedRegistration = false, bool parentOwnedBlocker = false)
         {
@@ -444,32 +432,30 @@ public sealed class RegionPresentationContractTests
             BlockerDefinition common = DefineBlocker();
             NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
             {
-                root.AddRoute<Hud>(Configure);
-                root.AddRoute<Popup>(Configure);
-                root.AddRoute<Editor>(Configure);
-                root.AddRoute<ReleaseEditor>(Configure);
-                root.AddRoute<Shell>(route =>
-                {
-                    Configure(route);
-                    route.AddChildRegion(Left, RegionCompositionMode.Layered, RegionOccupancy.Required, child =>
-                    {
-                        child.AddRoute<Hud>(hud =>
-                        {
-                            Configure(hud);
-                            hud.AddChildRegion(Details, RegionCompositionMode.Layered, RegionOccupancy.Optional, details => details.AddRoute<Hud>(Configure));
-                        });
-                        child.AddRoute<Popup>(Configure);
-                        child.AddRoute<Editor>(Configure);
-                        child.AddRoute<ReleaseEditor>(Configure);
-                    });
-                    route.AddChildRegion(Right, RegionCompositionMode.Layered, RegionOccupancy.Required, child =>
-                    {
-                        child.AddRoute<Hud>(Configure);
-                        child.AddRoute<Popup>(Configure);
-                        child.AddRoute<Editor>(Configure);
-                        child.AddRoute<ReleaseEditor>(Configure);
-                    });
-                });
+                root.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+                root.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+                root.AddRoute<Editor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
+                root.AddRoute<ReleaseEditor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
+                root.AddRoute<Shell>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
+{
+    route.AddChildRegion(Left, RegionCompositionMode.Layered, RegionOccupancy.Required, child =>
+    {
+        child.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, hud =>
+        {
+            hud.AddChildRegion(Details, RegionCompositionMode.Layered, RegionOccupancy.Optional, details => details.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve));
+        });
+        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+        child.AddRoute<Editor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
+        child.AddRoute<ReleaseEditor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
+    });
+    route.AddChildRegion(Right, RegionCompositionMode.Layered, RegionOccupancy.Required, child =>
+    {
+        child.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+        child.AddRoute<Editor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
+        child.AddRoute<ReleaseEditor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
+    });
+});
             });
             ScreenCatalog catalog = ScreenCatalog.Build(definition, builder =>
             {
@@ -527,14 +513,6 @@ public sealed class RegionPresentationContractTests
             NavigationEntryId entry = Host.State.Current.GetRegion(region).Entries.Last();
             return Screens.Single(screen => screen.Entry == entry && screen.Disposals == 0);
         }
-        private static void Configure<T> (RouteDefinitionBuilder<T> route) where T : Route
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Reset | RouteEntryOperations.Replace;
-            route.LowerPresentationPolicy = typeof(T) == typeof(Popup) ? LowerPresentationPolicy.BlockInput
-                : typeof(T) == typeof(Editor) ? LowerPresentationPolicy.HideAndRetain
-                : typeof(T) == typeof(ReleaseEditor) ? LowerPresentationPolicy.HideAndRelease
-                : LowerPresentationPolicy.Preserve;
-        }
         private ScreenDefinition<T> Define<T> () where T : Route
         {
             return new ScreenDefinition<T>((creation, _) =>
@@ -559,36 +537,18 @@ public sealed class RegionPresentationContractTests
             this.game = game;
             View = new View(() => game.FailValidation?.Invoke(this) == true);
         }
-        public View View
-        {
-            get;
-        }
+        public View View { get; }
         public View FrontView { get; } = new(order: 8);
-        public NavigationEntryId Entry
-        {
-            get; private set;
-        }
+        public NavigationEntryId Entry { get; private set; }
         public Route Route { get; private set; } = null!;
         public ScreenActivityContext Activity { get; private set; } = null!;
-        public int Selection
-        {
-            get; set;
-        }
-        public int Preparations
-        {
-            get; private set;
-        }
-        public int Activations
-        {
-            get; private set;
-        }
-        public int Disposals
-        {
-            get; private set;
-        }
+        public int Selection { get; set; }
+        public int Preparations { get; private set; }
+        public int Activations { get; private set; }
+        public int Disposals { get; private set; }
         public List<ScreenAnimation> Animations { get; } = new();
         public object CaptureState () => Selection;
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (Route route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
         {
             Entry = preparation.EntryId;
@@ -608,7 +568,7 @@ public sealed class RegionPresentationContractTests
             return default;
         }
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync () => default;
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
         public void Dispose ()
         {
             Disposals++;
@@ -631,19 +591,10 @@ public sealed class RegionPresentationContractTests
     {
         private readonly List<object> endings;
         public Blocker (List<object> endings) => this.endings = endings;
-        public RegionInstanceId Region
-        {
-            get; private set;
-        }
+        public RegionInstanceId Region { get; private set; }
         public View View { get; } = new();
-        public BlockerScreenContext? Context
-        {
-            get; private set;
-        }
-        public int Disposals
-        {
-            get; private set;
-        }
+        public BlockerScreenContext? Context { get; private set; }
+        public int Disposals { get; private set; }
         public ValueTask PrepareAsync (BlockerPreparationContext preparation, CancellationToken cancellationToken)
         {
             preparation.RegisterViewAdapter(View);
@@ -676,10 +627,7 @@ public sealed class RegionPresentationContractTests
         public object Identity { get; } = new();
         public object OrderingDomain => "test";
         public bool IsAlive => true;
-        public ViewPresentation Presentation
-        {
-            get; private set;
-        }
+        public ViewPresentation Presentation { get; private set; }
         public event Action<string>? Lost { add { } remove { } }
         public void Validate (ViewPresentation presentation)
         {

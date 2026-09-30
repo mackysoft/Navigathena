@@ -905,18 +905,12 @@ public sealed class ScreenCallContractTests
         private TaskCompletionSource<bool> changed = Signal<bool>();
         private NavigationRoute? completedTop;
         public HomeScreen Home { get; private set; } = new();
-        public Func<CancellationToken, ValueTask>? PrepareQuestion
-        {
-            get; set;
-        }
+        public Func<CancellationToken, ValueTask>? PrepareQuestion { get; set; }
         public OrdinaryScreen<DetailsRoute> Details { get; } = new();
         public OrdinaryScreen<EndRoute> End { get; } = new();
         public AnswerScreen<QuestionRoute, bool> Question { get; private set; } = new();
         public AnswerScreen<NameRoute, string?> Name { get; private set; } = new();
-        public NavigationHost Host
-        {
-            get;
-        }
+        public NavigationHost Host { get; }
         public List<NavigationResult> CompletedOperations { get; } = new();
 
         public Harness (bool useDi = false, bool releaseCaller = false, LowerPresentationPolicy? detailsLower = null, ScreenHistoryReturnOptions? historyReturn = null, LowerPresentationPolicy? homeLower = null)
@@ -924,26 +918,11 @@ public sealed class ScreenCallContractTests
             RegionDefinitionId rootId = new("game");
             NavigationDefinition definition = NavigationDefinition.Build(rootId, RegionCompositionMode.Layered, root =>
             {
-                root.AddRoute<HomeRoute>(route =>
-                {
-                    Configure(route);
-                    route.LowerPresentationPolicy = homeLower ?? LowerPresentationPolicy.BlockInput;
-                });
-                root.AddRoute<DetailsRoute>(route =>
-                {
-                    Configure(route);
-                    route.LowerPresentationPolicy = detailsLower ?? LowerPresentationPolicy.BlockInput;
-                });
-                root.AddRoute<EndRoute>(Configure);
-                root.AddRoute<QuestionRoute>(route =>
-                {
-                    Configure(route);
-                    if (releaseCaller)
-                    {
-                        route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRelease;
-                    }
-                });
-                root.AddRoute<NameRoute>(Configure);
+                root.AddRoute<HomeRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, homeLower ?? LowerPresentationPolicy.BlockInput);
+                root.AddRoute<DetailsRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, detailsLower ?? LowerPresentationPolicy.BlockInput);
+                root.AddRoute<EndRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+                root.AddRoute<QuestionRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, releaseCaller ? LowerPresentationPolicy.HideAndRelease : LowerPresentationPolicy.BlockInput);
+                root.AddRoute<NameRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
             });
             ScreenCatalog catalog = ScreenCatalog.Build(definition, catalog => catalog.RegisterScreens(rootId, screens =>
             {
@@ -1010,12 +989,6 @@ public sealed class ScreenCallContractTests
             });
         }
 
-        private static void Configure<T> (RouteDefinitionBuilder<T> route) where T : NavigationRoute
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-        }
-
         private static ScreenDefinition<T> Define<T> (OrdinaryScreen<T> screen) where T : Route
             => new((creation, _) =>
             {
@@ -1046,50 +1019,20 @@ public sealed class ScreenCallContractTests
     private class OrdinaryScreen<T> : IScreenLifecycleHandler<T>, IScreenStateCapture, IDisposable where T : Route
     {
         public View View { get; } = new();
-        public ScreenActivityContext? Activity
-        {
-            get; private set;
-        }
-        public T? Route
-        {
-            get; private set;
-        }
-        public int Activated
-        {
-            get; private set;
-        }
-        public int Disposed
-        {
-            get; private set;
-        }
-        public Action<ScreenActivityContext>? OnActivate
-        {
-            get; set;
-        }
-        public Func<ValueTask>? OnPrepare
-        {
-            get; set;
-        }
-        public Func<ValueTask>? OnTerminate
-        {
-            get; set;
-        }
-        public int Initialized
-        {
-            get; private set;
-        }
-        public int Selection
-        {
-            get; set;
-        }
+        public ScreenActivityContext? Activity { get; private set; }
+        public T? Route { get; private set; }
+        public int Activated { get; private set; }
+        public int Disposed { get; private set; }
+        public Action<ScreenActivityContext>? OnActivate { get; set; }
+        public Func<ValueTask>? OnPrepare { get; set; }
+        public Func<ValueTask>? OnTerminate { get; set; }
+        public int Initialized { get; private set; }
+        public int Selection { get; set; }
         public Animator Animator { get; } = new();
         public List<ScreenPreparationContext> Preparations { get; } = new();
-        public OwnedResource? PreparationResource
-        {
-            get; private set;
-        }
+        public OwnedResource? PreparationResource { get; private set; }
         public object CaptureState () => Selection;
-        public ValueTask InitializeAsync (CancellationToken cancellationToken)
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
         {
             Initialized++;
             return default;
@@ -1113,7 +1056,7 @@ public sealed class ScreenCallContractTests
             return default;
         }
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync () => OnTerminate?.Invoke() ?? default;
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => OnTerminate?.Invoke() ?? default;
         public void Dispose () => Disposed++;
     }
 
@@ -1123,23 +1066,14 @@ public sealed class ScreenCallContractTests
 
     private sealed class OwnedResource : IDisposable
     {
-        public int Disposed
-        {
-            get; private set;
-        }
+        public int Disposed { get; private set; }
         public void Dispose () => Disposed++;
     }
 
     private sealed class Animator : IScreenAnimator
     {
-        public int Entered
-        {
-            get; private set;
-        }
-        public ScreenAnimationState State
-        {
-            get; private set;
-        }
+        public int Entered { get; private set; }
+        public ScreenAnimationState State { get; private set; }
         public void SetStateImmediately (ScreenAnimationState state) => State = state;
         public ValueTask PlayAsync (ScreenAnimation animation, CancellationToken cancellationToken)
         {
@@ -1154,27 +1088,12 @@ public sealed class ScreenCallContractTests
     private sealed class AnswerScreen<TRoute, TResult> : IScreenLifecycleHandler<TRoute, TResult>, IDisposable where TRoute : Route<TResult>
     {
         public View View { get; } = new();
-        public ScreenActivityContext<TResult>? Activity
-        {
-            get; private set;
-        }
-        public int Input
-        {
-            get; private set;
-        }
-        public int Prepared
-        {
-            get; private set;
-        }
-        public int Terminated
-        {
-            get; private set;
-        }
-        public int Disposed
-        {
-            get; private set;
-        }
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ScreenActivityContext<TResult>? Activity { get; private set; }
+        public int Input { get; private set; }
+        public int Prepared { get; private set; }
+        public int Terminated { get; private set; }
+        public int Disposed { get; private set; }
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (TRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
         {
             Prepared++;
@@ -1187,7 +1106,7 @@ public sealed class ScreenCallContractTests
             return default;
         }
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync ()
+        public ValueTask TerminateAsync (NavigationProgressReporter progress)
         {
             Terminated++;
             return default;
@@ -1201,10 +1120,7 @@ public sealed class ScreenCallContractTests
         public object Identity { get; } = new();
         public object OrderingDomain => Domain;
         public bool IsAlive => true;
-        public string? Text
-        {
-            get; set;
-        }
+        public string? Text { get; set; }
         public ViewPresentation Presentation { get; private set; } = new(false, false, 0);
         public event Action<string>? Lost
         {

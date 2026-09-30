@@ -48,16 +48,8 @@ public sealed class ScreenHistoryContractTests
         });
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<ChapterRoute>(route =>
-{
-    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-    route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-});
-            root.AddRoute<CoverRoute>(route =>
-{
-    route.AllowedEntryOperations = RouteEntryOperations.Push;
-    route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRelease;
-});
+            root.AddRoute<ChapterRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
+            root.AddRoute<CoverRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRelease);
         });
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens =>
         {
@@ -123,13 +115,11 @@ public sealed class ScreenHistoryContractTests
     return new(new PassiveHandler<Route>());
 }, policy);
         ScreenDefinition<ChapterRoute> parent = new((_, _) => new(new PassiveHandler<ChapterRoute>()));
-        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<ChapterRoute>(route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Reset;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            route.AddChildRegion(left, RegionCompositionMode.Exclusive, RegionOccupancy.Required, child => child.AddRoute<ChapterRoute>(Configure));
-            route.AddChildRegion(right, RegionCompositionMode.Exclusive, RegionOccupancy.Required, child => child.AddRoute<ChildRoute>(Configure));
-        }));
+        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<ChapterRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
+{
+    route.AddChildRegion(left, RegionCompositionMode.Exclusive, RegionOccupancy.Required, child => child.AddRoute<ChapterRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve));
+    route.AddChildRegion(right, RegionCompositionMode.Exclusive, RegionOccupancy.Required, child => child.AddRoute<ChildRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve));
+}));
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder =>
         {
             builder.RegisterScreens(Root, screens => screens.RegisterScreen(parent));
@@ -148,11 +138,6 @@ public sealed class ScreenHistoryContractTests
             Assert.True((await host.Start(destination).WaitAsync()).DestinationCommitted);
         }
         Assert.Equal(expectedCreations, creations);
-        static void Configure<TRoute> (RouteDefinitionBuilder<TRoute> route) where TRoute : Route
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Reset;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-        }
     }
 
     [Theory]
@@ -173,16 +158,10 @@ public sealed class ScreenHistoryContractTests
             children.Add(child);
             return new(child);
         }, childPolicy);
-        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<ChapterRoute>(route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Push;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-            route.AddChildRegion(childRegion, RegionCompositionMode.Exclusive, RegionOccupancy.Required, child => child.AddRoute<ChildRoute>(childRoute =>
-            {
-                childRoute.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Replace;
-                childRoute.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            }));
-        }));
+        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<ChapterRoute>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRetain, route =>
+{
+    route.AddChildRegion(childRegion, RegionCompositionMode.Exclusive, RegionOccupancy.Required, child => child.AddRoute<ChildRoute>(RouteEntryOperations.Reset | RouteEntryOperations.Replace, LowerPresentationPolicy.Preserve));
+}));
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder =>
         {
             builder.RegisterScreens(Root, screens => screens.RegisterScreen(parentScreen));
@@ -305,11 +284,7 @@ public sealed class ScreenHistoryContractTests
 
     private static NavigationHost CreateHost (ScreenDefinition<ChapterRoute> screen, LowerPresentationPolicy? lower = null)
     {
-        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<ChapterRoute>(route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset;
-            route.LowerPresentationPolicy = lower ?? LowerPresentationPolicy.HideAndRetain;
-        }));
+        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<ChapterRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, lower ?? LowerPresentationPolicy.HideAndRetain));
         return NavigationHost.Create(ScreenCatalog.Build(definition, catalog => catalog.RegisterScreens(Root, screens => screens.RegisterScreen(screen))));
     }
 
@@ -331,11 +306,7 @@ public sealed class ScreenHistoryContractTests
             instances.Add(presenter);
             return new(presenter);
         }, policy);
-        ScreenCatalog catalog = ScreenCatalog.Build(screens => screens.Register(screen, route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Reset;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-        }));
+        ScreenCatalog catalog = ScreenCatalog.Build(screens => screens.Register(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, screen));
         await using NavigationHost host = NavigationHost.Create(catalog);
         await host.StartAsync(new ChapterRoute(7));
         ChapterPresenter old = instances.Single();
@@ -393,28 +364,22 @@ public sealed class ScreenHistoryContractTests
         List<ChapterPresenter> parents = new();
         List<ChildPresenter> children = new();
         List<ChapterPresenter> childOwners = new();
-        ScreenCatalog catalog = ScreenCatalog.Build(screens => screens.Register<ChapterRoute>((creation, _) =>
-        {
-            ChapterPresenter parent = creation.Lifetime.CreateOwned(() => new ChapterPresenter());
-            parents.Add(parent);
-            creation.RegisterScreens(childRegion, childScreens => childScreens.RegisterScreen(new ScreenDefinition<ChildRoute>((_, _) =>
-            {
-                ChildPresenter child = new();
-                children.Add(child);
-                childOwners.Add(parent);
-                return new(child);
-            })));
-            return new(parent);
-        }, route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Reset;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-            route.AddChildRegion(childRegion, RegionCompositionMode.Exclusive, RegionOccupancy.Required, child => child.AddRoute<ChildRoute>(childRoute =>
-            {
-                childRoute.AllowedEntryOperations = RouteEntryOperations.Replace;
-                childRoute.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            }));
-        }));
+        ScreenCatalog catalog = ScreenCatalog.Build(screens => screens.Register<ChapterRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, (creation, _) =>
+{
+    ChapterPresenter parent = creation.Lifetime.CreateOwned(() => new ChapterPresenter());
+    parents.Add(parent);
+    creation.RegisterScreens(childRegion, childScreens => childScreens.RegisterScreen(new ScreenDefinition<ChildRoute>((_, _) =>
+    {
+        ChildPresenter child = new();
+        children.Add(child);
+        childOwners.Add(parent);
+        return new(child);
+    })));
+    return new(parent);
+}, route =>
+{
+    route.AddChildRegion(childRegion, RegionCompositionMode.Exclusive, RegionOccupancy.Required, child => child.AddRoute<ChildRoute>(RouteEntryOperations.Replace, LowerPresentationPolicy.Preserve));
+}));
         await using NavigationHost host = NavigationHost.Create(catalog);
         await host.StartAsync(Destination.For(new ChapterRoute(7)).Child(childRegion, Destination.For(new ChildRoute(3))));
         NavigationEntryId[] history = host.State.Current.Entries.Keys.ToArray();
@@ -443,16 +408,10 @@ public sealed class ScreenHistoryContractTests
                 creations++;
                 return new(child);
             })));
-            screens.Register<ChapterRoute>((_, _) => new(parent), route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                route.AddChildRegion(childRegion, RegionCompositionMode.Exclusive, RegionOccupancy.Required, childRoutes => childRoutes.AddRoute<ChildRoute>(childRoute =>
-                {
-                    childRoute.AllowedEntryOperations = RouteEntryOperations.Replace;
-                    childRoute.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                }));
-            });
+            screens.Register<ChapterRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, (_, _) => new(parent), route =>
+{
+    route.AddChildRegion(childRegion, RegionCompositionMode.Exclusive, RegionOccupancy.Required, childRoutes => childRoutes.AddRoute<ChildRoute>(RouteEntryOperations.Replace, LowerPresentationPolicy.Preserve));
+});
         });
         Assert.Equal(0, creations);
         await using NavigationHost host = NavigationHost.Create(catalog);
@@ -466,52 +425,28 @@ public sealed class ScreenHistoryContractTests
 
     private sealed class PassiveHandler<TRoute> : IScreenLifecycleHandler<TRoute> where TRoute : Route
     {
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (TRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => default;
         public ValueTask ActivateAsync (TRoute route, ScreenActivityContext activity) => default;
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync () => default;
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
     }
 
     private sealed class ChapterPresenter : IScreenLifecycleHandler<ChapterRoute>, IScreenStateCapture, IAsyncDisposable
     {
-        public ChapterRoute? Route
-        {
-            get; private set;
-        }
-        public int Selection
-        {
-            get; set;
-        }
-        public int? FailChapter
-        {
-            get; init;
-        }
+        public ChapterRoute? Route { get; private set; }
+        public int Selection { get; set; }
+        public int? FailChapter { get; init; }
         public Task DisposalCompletion { get; init; } = Task.CompletedTask;
-        public bool ClearSavedSelection
-        {
-            get; set;
-        }
-        public int InitializeCount
-        {
-            get; private set;
-        }
-        public int DeactivateCount
-        {
-            get; private set;
-        }
-        public int TerminateCount
-        {
-            get; private set;
-        }
-        public int DisposeCount
-        {
-            get; private set;
-        }
+        public bool ClearSavedSelection { get; set; }
+        public int InitializeCount { get; private set; }
+        public int DeactivateCount { get; private set; }
+        public int TerminateCount { get; private set; }
+        public int DisposeCount { get; private set; }
         public List<ChapterRoute> Prepared { get; } = new();
         public List<ScreenActivityContext> Activities { get; } = new();
         public object? CaptureState () => ClearSavedSelection ? null : Selection;
-        public ValueTask InitializeAsync (CancellationToken cancellationToken)
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
         {
             InitializeCount++;
             return default;
@@ -538,7 +473,7 @@ public sealed class ScreenHistoryContractTests
             DeactivateCount++;
             return default;
         }
-        public ValueTask TerminateAsync ()
+        public ValueTask TerminateAsync (NavigationProgressReporter progress)
         {
             TerminateCount++;
             return default;
@@ -552,20 +487,11 @@ public sealed class ScreenHistoryContractTests
 
     private sealed class ChildPresenter : IScreenLifecycleHandler<ChildRoute>, IScreenStateCapture
     {
-        public ChildRoute? Route
-        {
-            get; private set;
-        }
-        public int Selection
-        {
-            get; set;
-        }
-        public int Terminations
-        {
-            get; private set;
-        }
+        public ChildRoute? Route { get; private set; }
+        public int Selection { get; set; }
+        public int Terminations { get; private set; }
         public object CaptureState () => Selection;
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (ChildRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
         {
             Route = route;
@@ -574,7 +500,7 @@ public sealed class ScreenHistoryContractTests
         }
         public ValueTask ActivateAsync (ChildRoute route, ScreenActivityContext activity) => default;
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync ()
+        public ValueTask TerminateAsync (NavigationProgressReporter progress)
         {
             Terminations++;
             return default;

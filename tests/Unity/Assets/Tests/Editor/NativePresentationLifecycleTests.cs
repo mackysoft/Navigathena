@@ -58,21 +58,9 @@ namespace MackySoft.Navigathena.Unity.Tests
             RegionDefinitionId rootId = new("root");
             NavigationDefinition definition = NavigationDefinition.Build(rootId, RegionCompositionMode.Layered, root =>
             {
-                root.AddRoute<TitleRoute>(route =>
-{
-    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-    route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-});
-                root.AddRoute<PopupRoute>(route =>
-{
-    route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Replace;
-    route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-});
-                root.AddRoute<FullRoute>(route =>
-{
-    route.AllowedEntryOperations = RouteEntryOperations.Push;
-    route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-});
+                root.AddRoute<TitleRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
+                root.AddRoute<PopupRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace, LowerPresentationPolicy.BlockInput);
+                root.AddRoute<FullRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRetain);
             });
             ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(rootId, screens =>
             {
@@ -163,19 +151,19 @@ namespace MackySoft.Navigathena.Unity.Tests
             RegionDefinitionId rootId = new("root");
             RegionDefinitionId leftId = new("left");
             RegionDefinitionId rightId = new("right");
-            NavigationDefinition definition = NavigationDefinition.Build(rootId, RegionCompositionMode.Layered, root => root.AddRoute<TitleRoute>(route =>
+            NavigationDefinition definition = NavigationDefinition.Build(rootId, RegionCompositionMode.Layered, root =>
             {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                foreach (RegionDefinitionId region in new[] { leftId, rightId })
+                root.AddRoute<TitleRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
                 {
-                    route.AddChildRegion(region, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<PopupRoute>(popup =>
+                    foreach (RegionDefinitionId region in new[] { leftId, rightId })
                     {
-                        popup.AllowedEntryOperations = RouteEntryOperations.Push;
-                        popup.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-                    }));
-                }
-            }));
+                        route.AddChildRegion(region, RegionCompositionMode.Layered, RegionOccupancy.Optional, child =>
+                        {
+                            child.AddRoute<PopupRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
+                        });
+                    }
+                });
+            });
             ScreenDefinition<T> Screen<T> (CanvasViewAdapter view) where T : Route => new(async (creation, token) =>
             {
                 creation.ConnectPresentation(new ScreenPresentationBinding(new[] { await creation.Lifetime.BorrowAsync(lifetime.Reference(view), token) }));
@@ -245,17 +233,14 @@ namespace MackySoft.Navigathena.Unity.Tests
         private sealed record PopupRoute : Route
         {
             public PopupRoute (int value) => Value = value;
-            public int Value
-            {
-                get;
-            }
+            public int Value { get; }
         }
 
         private sealed class NativeScreen<T> : IScreenLifecycleHandler<T> where T : Route
         {
             public List<T> Prepared { get; } = new();
             public ScreenActivityContext Activity { get; private set; } = null!;
-            public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+            public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
             public ValueTask PrepareAsync (T route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
             {
                 Prepared.Add(route);
@@ -267,7 +252,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 return default;
             }
             public ValueTask DeactivateAsync () => default;
-            public ValueTask TerminateAsync () => default;
+            public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
         }
 
         private sealed class BlockerInstaller : IInstaller
@@ -283,18 +268,9 @@ namespace MackySoft.Navigathena.Unity.Tests
             public NativeBlocker (CanvasViewAdapter view) => this.view = view;
             public TaskCompletionSource<object?> CancellationObserved { get; } = new();
             public TaskCompletionSource<object?> AnimationFinished { get; } = new();
-            public BlockerScreenContext? Context
-            {
-                get; private set;
-            }
-            public int Terminations
-            {
-                get; private set;
-            }
-            public int Disposals
-            {
-                get; private set;
-            }
+            public BlockerScreenContext? Context { get; private set; }
+            public int Terminations { get; private set; }
+            public int Disposals { get; private set; }
             public ValueTask PrepareAsync (BlockerPreparationContext preparation, CancellationToken cancellationToken)
             {
                 preparation.RegisterViewAdapter(view);
@@ -319,14 +295,8 @@ namespace MackySoft.Navigathena.Unity.Tests
         private sealed class NativeReveal : INavigationTransitionEffect, IDisposable
         {
             public NativeReveal (CanvasGroup opacity) => Opacity = opacity;
-            public CanvasGroup Opacity
-            {
-                get;
-            }
-            public int Disposals
-            {
-                get; private set;
-            }
+            public CanvasGroup Opacity { get; }
+            public int Disposals { get; private set; }
             public ValueTask BeginAsync (TransitionBeginContext context, CancellationToken cancellationToken)
             {
                 Opacity.alpha = 1;

@@ -38,7 +38,7 @@ public sealed class ScreenRestartContractTests
             return handler;
         }, policy);
         await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(Root, RegionCompositionMode.Layered,
-            screens => screens.Register(boot, Configure)));
+            screens => screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, boot)));
         await host.StartAsync(new BootRoute());
         RegionInstanceId root = host.Root;
         ScreenActivityContext initial = boots[0].Activity!;
@@ -82,14 +82,12 @@ public sealed class ScreenRestartContractTests
         });
         ScreenCatalog catalog = ScreenCatalog.Build(Root, RegionCompositionMode.Layered, screens =>
         {
-            screens.Register(Define(boots), Configure);
-            screens.Register(game, route =>
-            {
-                Configure(route);
-                route.AddChildRegion(Hud, RegionCompositionMode.Layered, RegionOccupancy.Required,
-                    child => child.AddRoute<HudRoute>(Configure));
-            });
-            screens.Register(Define(popups, ScreenInstancePolicy.Multiple), Configure);
+            screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, Define(boots));
+            screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, game, route =>
+{
+    route.AddChildRegion(Hud, RegionCompositionMode.Layered, RegionOccupancy.Required, child => child.AddRoute<HudRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain));
+});
+            screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, Define(popups, ScreenInstancePolicy.Multiple));
         });
         await using NavigationHost host = NavigationHost.Create(catalog);
         await host.StartAsync(new BootRoute());
@@ -120,7 +118,7 @@ public sealed class ScreenRestartContractTests
     {
         List<Handler<GameRoute>> games = new();
         await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(Root, RegionCompositionMode.Layered,
-            screens => screens.Register(Define(games, ScreenInstancePolicy.Multiple), Configure)));
+            screens => screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, Define(games, ScreenInstancePolicy.Multiple))));
         await host.StartAsync(new GameRoute(1));
         await host.Client.PushAsync(host.Root, Destination.For(new GameRoute(2)));
         ScreenActivityContext top = games[1].Activity!;
@@ -149,12 +147,10 @@ public sealed class ScreenRestartContractTests
         List<Handler<HudRoute>> huds = new();
         ScreenCatalog catalog = ScreenCatalog.Build(Root, RegionCompositionMode.Layered, screens =>
         {
-            screens.Register(Define(games), route =>
-            {
-                Configure(route);
-                route.AddChildRegion(Hud, RegionCompositionMode.Layered, RegionOccupancy.Required,
-                    child => child.AddRoute<HudRoute>(Configure));
-            });
+            screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, Define(games), route =>
+{
+    route.AddChildRegion(Hud, RegionCompositionMode.Layered, RegionOccupancy.Required, child => child.AddRoute<HudRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain));
+});
             screens.RegisterScreens(Hud, child => child.RegisterScreen(Define(huds)));
         });
         await using NavigationHost host = NavigationHost.Create(catalog);
@@ -183,7 +179,7 @@ public sealed class ScreenRestartContractTests
         TaskCompletionSource<object?> disposing = new(TaskCreationOptions.RunContinuationsAsynchronously);
         TaskCompletionSource<object?> release = new(TaskCreationOptions.RunContinuationsAsynchronously);
         List<Handler<GameRoute>> games = new();
-        await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(Define(games, policy), Configure)));
+        await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, Define(games, policy))));
         await host.StartAsync(new GameRoute(1));
         games[0].OnDispose = async () =>
         {
@@ -214,7 +210,7 @@ public sealed class ScreenRestartContractTests
     public async Task Fresh_push_saves_the_previous_visit_and_back_restores_it_without_reusing_its_old_scope ()
     {
         List<Handler<GameRoute>> games = new();
-        await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(Define(games), Configure)));
+        await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, Define(games))));
         await host.StartAsync(new GameRoute(1));
         NavigationEntryId first = games[0].Activity!.EntryId;
         games[0].SavedState = 42;
@@ -233,7 +229,7 @@ public sealed class ScreenRestartContractTests
     public async Task Failed_release_does_not_construct_a_second_single_instance_or_repeat_disposal ()
     {
         List<Handler<GameRoute>> games = new();
-        NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(Define(games), Configure)));
+        NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, Define(games))));
         await host.StartAsync(new GameRoute(1));
         games[0].OnDispose = () => throw new InvalidOperationException("Still using a resource.");
         await Assert.ThrowsAsync<NavigationException>(() => games[0].Activity!.Navigation.ReplaceAsync(new GameRoute(2),
@@ -250,7 +246,7 @@ public sealed class ScreenRestartContractTests
     public async Task A_single_instance_cannot_be_recreated_for_a_simultaneous_screen_transition ()
     {
         List<Handler<GameRoute>> games = new();
-        await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(Define(games), Configure)));
+        await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, Define(games))));
         await host.StartAsync(new GameRoute(1));
         ScreenActivityContext original = games[0].Activity!;
         NavigationTransition transition = new(NavigationTransitionScope.Region, (_, _) => throw new InvalidOperationException("Must not run."), requiresSimultaneousScreens: true);
@@ -277,7 +273,7 @@ public sealed class ScreenRestartContractTests
             games.Add(handler);
             return new(handler);
         }, policy);
-        await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(definition, Configure)));
+        await using NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens => screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, definition)));
         await host.StartAsync(new GameRoute(1));
         ScreenActivityContext original = games[0].Activity!;
         games[0].SavedState = 42;
@@ -306,7 +302,7 @@ public sealed class ScreenRestartContractTests
             boots.Add(handler);
             return handler;
         });
-        ScreenCatalog catalog = ScreenCatalog.Build(screens => screens.Register(screen, Configure));
+        ScreenCatalog catalog = ScreenCatalog.Build(screens => screens.Register(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain, screen));
         NavigationHost previous = NavigationHost.Create(catalog);
         await previous.StartAsync(new BootRoute());
         ScreenActivityContext old = boots[0].Activity!;
@@ -334,58 +330,25 @@ public sealed class ScreenRestartContractTests
         }, policy);
     }
 
-    private static void Configure<TRoute> (RouteDefinitionBuilder<TRoute> route) where TRoute : NavigationRoute
-    {
-        route.AllowedEntryOperations = RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset;
-        route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-    }
-
     private sealed class ExternalView : IDisposable
     {
-        public int Disposals
-        {
-            get; private set;
-        }
+        public int Disposals { get; private set; }
         public void Dispose () => Disposals++;
     }
 
     private sealed class Handler<TRoute> : IScreenLifecycleHandler<TRoute>, IScreenStateCapture, IAsyncDisposable where TRoute : Route
     {
-        public TRoute? Route
-        {
-            get; private set;
-        }
-        public ScreenActivityContext? Activity
-        {
-            get; private set;
-        }
-        public object? SavedState
-        {
-            get; set;
-        }
-        public object? RestoredState
-        {
-            get; private set;
-        }
-        public int Activations
-        {
-            get; private set;
-        }
-        public int Disposals
-        {
-            get; private set;
-        }
-        public Action? OnPrepare
-        {
-            get; set;
-        }
-        public Func<Task>? OnDispose
-        {
-            get; set;
-        }
+        public TRoute? Route { get; private set; }
+        public ScreenActivityContext? Activity { get; private set; }
+        public object? SavedState { get; set; }
+        public object? RestoredState { get; private set; }
+        public int Activations { get; private set; }
+        public int Disposals { get; private set; }
+        public Action? OnPrepare { get; set; }
+        public Func<Task>? OnDispose { get; set; }
 
         public object? CaptureState () => SavedState;
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => default;
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (TRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
         {
             Route = route;
@@ -400,7 +363,7 @@ public sealed class ScreenRestartContractTests
             return default;
         }
         public ValueTask DeactivateAsync () => default;
-        public ValueTask TerminateAsync () => default;
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
         public async ValueTask DisposeAsync ()
         {
             Disposals++;

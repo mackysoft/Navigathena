@@ -183,11 +183,7 @@ public sealed class ScreenLifecycleFailureContractTests
 
     private static NavigationHost Create (ScreenDefinition<InputRoute> screen)
     {
-        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<InputRoute>(route =>
-        {
-            route.AllowedEntryOperations = RouteEntryOperations.Reset | RouteEntryOperations.Push;
-            route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-        }));
+        NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<InputRoute>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRetain));
         return NavigationHost.Create(ScreenCatalog.Build(definition, catalog => catalog.RegisterScreens(Root, screens => screens.RegisterScreen(screen))));
     }
 
@@ -200,19 +196,10 @@ public sealed class ScreenLifecycleFailureContractTests
             this.name = name;
             this.events = events;
         }
-        public ScreenActivityContext? Activity
-        {
-            get; private set;
-        }
-        public Func<InputRoute, ValueTask>? Prepare
-        {
-            get; init;
-        }
-        public Func<InputRoute, ValueTask>? Activate
-        {
-            get; init;
-        }
-        public ValueTask InitializeAsync (CancellationToken cancellationToken)
+        public ScreenActivityContext? Activity { get; private set; }
+        public Func<InputRoute, ValueTask>? Prepare { get; init; }
+        public Func<InputRoute, ValueTask>? Activate { get; init; }
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
         {
             events.Add(name + ".initialize");
             return default;
@@ -239,7 +226,7 @@ public sealed class ScreenLifecycleFailureContractTests
             events.Add(name + ".deactivate");
             return default;
         }
-        public ValueTask TerminateAsync ()
+        public ValueTask TerminateAsync (NavigationProgressReporter progress)
         {
             events.Add(name + ".terminate");
             return default;
@@ -256,7 +243,7 @@ public sealed class ScreenLifecycleFailureContractTests
         private readonly Handler handler;
         public HandlerAcquisition (Handler handler) => this.handler = handler;
         public ValueTask<Handler> AcquireAsync (ResourceAcquisitionContext context, CancellationToken cancellationToken) => new(handler);
-        public ValueTask DisposeAsync () => handler.DisposeAsync();
+        public ValueTask ReleaseAsync (NavigationProgressReporter progress) => handler.DisposeAsync();
     }
 
     private sealed class ThrowingView : IViewAdapter
@@ -264,10 +251,7 @@ public sealed class ScreenLifecycleFailureContractTests
         public object Identity => this;
         public object OrderingDomain => typeof(ThrowingView);
         public bool IsAlive => true;
-        public bool FailNextClose
-        {
-            get; set;
-        }
+        public bool FailNextClose { get; set; }
         public ViewPresentation Presentation { get; private set; } = new(false, false, 0);
         public event Action<string>? Lost
         {

@@ -63,17 +63,10 @@ public sealed class NavigationCallbackFaultContractTests
     private static NavigationDefinition CreateDefinition ()
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Exclusive, root =>
-            root.AddRoute<MainRoute>(main =>
-            {
-                main.AllowedEntryOperations = RouteEntryOperations.Reset;
-                main.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                main.AddChildRegion(Notices, RegionCompositionMode.Layered, RegionOccupancy.Optional, notices =>
-                    notices.AddRoute<NoticeRoute>(route =>
-                    {
-                        route.AllowedEntryOperations = RouteEntryOperations.Push;
-                        route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-                    }));
-            }));
+            root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, main =>
+{
+    main.AddChildRegion(Notices, RegionCompositionMode.Layered, RegionOccupancy.Optional, notices => notices.AddRoute<NoticeRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput));
+}));
     }
 
     private sealed class ThrowingObserver : INavigationCommitObserver
@@ -90,7 +83,7 @@ public sealed class NavigationCallbackFaultContractTests
         public void OnCommitted (NavigationCommit commit) => commits.Add(commit);
     }
 
-    private sealed class ThrowingProgressReceiver : INavigationProgressReceiver
+    private sealed class ThrowingProgressReceiver : IProgress<NavigationProgress>
     {
         public void Report (NavigationProgress progress) => throw new InvalidOperationException("progress fault");
     }
@@ -105,22 +98,10 @@ public sealed class NavigationCallbackFaultContractTests
             this.realizer = realizer;
         }
 
-        public IScreenNavigation? Action
-        {
-            get; set;
-        }
-        public Task<NavigationResult>? ReentrantOperation
-        {
-            get; private set;
-        }
-        public int PreparationsBeforeReentry
-        {
-            get; private set;
-        }
-        public int PreparationsWhenReentryWasQueued
-        {
-            get; private set;
-        }
+        public IScreenNavigation? Action { get; set; }
+        public Task<NavigationResult>? ReentrantOperation { get; private set; }
+        public int PreparationsBeforeReentry { get; private set; }
+        public int PreparationsWhenReentryWasQueued { get; private set; }
 
         public void OnCommitted (NavigationCommit commit)
         {

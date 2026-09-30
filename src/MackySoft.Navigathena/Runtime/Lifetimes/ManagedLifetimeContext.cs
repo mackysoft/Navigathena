@@ -8,11 +8,18 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
     internal sealed class ManagedLifetimeContext : LifetimeContext
     {
         private readonly ResourceScope scope;
-        internal ManagedLifetimeContext (ResourceScope scope) => this.scope = scope;
+        internal ManagedLifetimeContext (ResourceScope scope, NavigationProgressReporter progress)
+        {
+            this.scope = scope;
+            Progress = progress;
+        }
 
-        public override T CreateOwned<T> (Func<T> create) => scope.CreateOwned(create);
+        internal NavigationProgressReporter Progress { get; set; }
+        internal void EnsureOpen () => scope.EnsureOpen(this);
 
-        public override ValueTask<T> AcquireAsync<T> (IResourceAcquisition<T> acquisition, CancellationToken cancellationToken = default) => scope.AcquireAsync(acquisition, cancellationToken);
+        public override T CreateOwned<T> (Func<T> create) => scope.CreateOwned(this, create);
+
+        public override ValueTask<T> AcquireAsync<T> (IResourceAcquisition<T> acquisition, CancellationToken cancellationToken = default) => scope.AcquireAsync(this, acquisition, cancellationToken);
 
         public override ValueTask<T> BorrowAsync<T> (ResourceReference<T> resource, CancellationToken cancellationToken = default)
         {
@@ -22,7 +29,7 @@ namespace MackySoft.Navigathena.Runtime.Lifetimes
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            return new ValueTask<T>(scope.Borrow(resource));
+            return new ValueTask<T>(scope.Borrow(this, resource));
         }
     }
 }

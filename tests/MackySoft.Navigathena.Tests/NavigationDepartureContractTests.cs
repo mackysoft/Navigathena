@@ -66,16 +66,8 @@ public sealed class NavigationDepartureContractTests
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Exclusive, root =>
         {
-            root.AddRoute<HomeRoute>(home =>
-            {
-                home.AllowedEntryOperations = RouteEntryOperations.Reset;
-                home.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
-            root.AddRoute<PlayRoute>(play =>
-            {
-                play.AllowedEntryOperations = RouteEntryOperations.Reset;
-                play.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRelease;
-            });
+            root.AddRoute<HomeRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+            root.AddRoute<PlayRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
         });
     }
 

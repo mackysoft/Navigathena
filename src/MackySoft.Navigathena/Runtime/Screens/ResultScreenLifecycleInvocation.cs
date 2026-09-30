@@ -14,10 +14,10 @@ namespace MackySoft.Navigathena.Runtime.Screens
         }
 
         public object Handler => handler;
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => handler.InitializeAsync(cancellationToken);
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => handler.InitializeAsync(initialization, cancellationToken);
         public ValueTask PrepareAsync (NavigationRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => handler.PrepareAsync((TRoute)route, preparation, cancellationToken);
         public ValueTask ActivateAsync (NavigationRoute route, ScreenActivityContext activity) => handler.ActivateAsync((TRoute)route, new ScreenActivityContext<TResult>(activity));
         public ValueTask DeactivateAsync () => handler.DeactivateAsync();
-        public ValueTask TerminateAsync () => handler.TerminateAsync();
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => handler.TerminateAsync(progress);
     }
 }

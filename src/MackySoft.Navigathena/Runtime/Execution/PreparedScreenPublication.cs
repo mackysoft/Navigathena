@@ -149,9 +149,9 @@ namespace MackySoft.Navigathena.Runtime.Execution
                     foreach (ScreenInstance child in before.Keys.Where(child => ScreenRuntime.IsDescendant(child.Entry.RegionId, screen.Entry.Id, update.Before)).OrderByDescending(child => child.OwnershipDepth))
                     {
                         ReleaseUse(child);
-                        await runtime.TerminateAsync(child);
+                        await runtime.TerminateAsync(child, playback.Progress);
                     }
-                    await screen.RebindAsync(change.AfterEntry!, change.Context!, cancellationToken, PreparationFor(change.AfterEntry!));
+                    await screen.RebindAsync(change.AfterEntry!, change.Context!, playback.Progress, cancellationToken, PreparationFor(change.AfterEntry!));
                 }
             }
 
@@ -184,7 +184,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                     }
                     await runtime.Blockers.TerminateDependentsAsync(screen);
                     screen.Apply(new ViewPresentation(false, false, screen.Presentation.Order));
-                    await screen.RebindAsync(saved, screen.Navigation, cancellationToken, ScreenPreparationReason.Reentry);
+                    await screen.RebindAsync(saved, screen.Navigation, playback.Progress, cancellationToken, ScreenPreparationReason.Reentry);
                 }
             }
 
@@ -210,7 +210,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 ScreenInstance screen = runtime.Create(construction, update.ProposedAfter);
                 created.Add(screen);
                 users.Add(screen, screen.Use());
-                await runtime.PrepareAsync(screen, update.ProposedAfter, cancellationToken, PreparationFor(screen.Entry));
+                await runtime.PrepareAsync(screen, update.ProposedAfter, playback.Progress, cancellationToken, PreparationFor(screen.Entry));
             }
 
             if (update.Kind != PresentationUpdateKind.Departure)
@@ -361,7 +361,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                     {
                         await PlayDepartureAsync(screen, committed, shutdownToken);
                         ReleaseUse(screen);
-                        await runtime.TerminateAsync(screen);
+                        await runtime.TerminateAsync(screen, playback.Progress);
                     }
                     completed = true;
                     return new PresentationCompletion(failures.ToArray());
@@ -377,11 +377,14 @@ namespace MackySoft.Navigathena.Runtime.Execution
                     await ScreenAnimationBatch.RunAsync(animations, shutdownToken);
                 }
 
-                await playback.FinishAsync(failures.Count == 0 ? (update.Kind == PresentationUpdateKind.Restoration ? TransitionSettlementTarget.Source : TransitionSettlementTarget.Destination) : TransitionSettlementTarget.Unavailable, playback.DestinationCommitted);
+                if (!playback.EndsAfterResourceRelease)
+                {
+                    await FinishTransitionAsync();
+                }
 
                 foreach (ScreenInstance screen in rebound.Keys)
                 {
-                    await screen.ReleasePreviousInputAsync();
+                    await screen.ReleasePreviousInputAsync(playback.Progress);
                 }
 
                 ScreenInstance[] retired = before.Keys.Where(screen => !WillRetain(screen, committed)).OrderByDescending(screen => ScreenRuntime.Depth(screen.Entry.RegionId, update.Before)).ToArray();
@@ -392,17 +395,22 @@ namespace MackySoft.Navigathena.Runtime.Execution
                     {
                         if (playback.WaitForTermination)
                         {
-                            await runtime.TerminateAsync(screen);
+                            await runtime.TerminateAsync(screen, playback.Progress);
                         }
                         else
                         {
-                            runtime.Retire(screen);
+                            runtime.Retire(screen, playback.Progress);
                         }
                     }
                     catch (Exception exception)
                     {
                         failures.Add(new PresentationFailure(PresentationFailureScope.RetiredResources, NavigationPhase.Complete, exception.Message, Array.Empty<PresentationReference>()) { Exception = exception });
                     }
+                }
+
+                if (playback.EndsAfterResourceRelease)
+                {
+                    await FinishTransitionAsync();
                 }
 
                 if (failures.All(failure => failure.Scope == PresentationFailureScope.RetiredResources))
@@ -467,6 +475,12 @@ namespace MackySoft.Navigathena.Runtime.Execution
             return new PresentationCompletion(failures.ToArray());
         }
 
+        private ValueTask FinishTransitionAsync () => playback.FinishAsync(
+            failures.All(failure => failure.Scope == PresentationFailureScope.RetiredResources)
+                ? update.Kind == PresentationUpdateKind.Restoration ? TransitionSettlementTarget.Source : TransitionSettlementTarget.Destination
+                : TransitionSettlementTarget.Unavailable,
+            playback.DestinationCommitted);
+
         public async ValueTask DisposeAsync ()
         {
             if (disposed)
@@ -493,7 +507,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             }
             try
             {
-                if (!playback.Departed)
+                if (!playback.Departed && (!playback.EndsAfterResourceRelease || created.Any(playback.Retains) || rebound.Keys.Any(playback.Retains)))
                 {
                     await playback.FinishAsync(TransitionSettlementTarget.Source, false);
                 }
@@ -521,7 +535,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                         throw new InvalidOperationException("An unfinished transition still uses the prepared screen.");
                     }
 
-                    await runtime.TerminateAsync(screen);
+                    await runtime.TerminateAsync(screen, playback.Progress);
                 }
                 catch (Exception exception)
                 {
@@ -544,16 +558,23 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
                     if (rebound.TryGetValue(screen, out var original))
                     {
-                        await screen.RebindAsync(original.Entry, original.Navigation, CancellationToken.None);
-                        await screen.ReleasePreviousInputAsync();
+                        await screen.RebindAsync(original.Entry, original.Navigation, playback.Progress, CancellationToken.None);
+                        await screen.ReleasePreviousInputAsync(playback.Progress);
                     }
                     screen.Creation.Animator?.SetStateImmediately(appearanceBefore[screen]);
-                    if (activeBefore.Contains(screen))
-                    {
-                        await screen.ActivateAsync();
-                    }
+                }
+                catch (Exception exception)
+                {
+                    errors.Add(exception);
+                }
+            }
 
-                    screen.Apply(before[screen]);
+            // Independent loading effects cover both partial acquisition cleanup and source restoration.
+            if (playback.EndsAfterResourceRelease && !playback.Departed && !playback.FinalizationStarted)
+            {
+                try
+                {
+                    await playback.FinishAsync(errors.Count == 0 ? TransitionSettlementTarget.Source : TransitionSettlementTarget.Unavailable, false);
                 }
                 catch (Exception exception)
                 {
@@ -569,6 +590,17 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
             try
             {
+                if (!playback.Departed)
+                {
+                    foreach (ScreenInstance screen in before.Keys.Where(screen => !screen.IsEnding && !playback.Retains(screen)))
+                    {
+                        if (activeBefore.Contains(screen))
+                        {
+                            await screen.ActivateAsync();
+                        }
+                        screen.Apply(before[screen]);
+                    }
+                }
                 foreach (BlockerCoordinator.SuspendedConnection connection in suspendedBlockers)
                 {
                     connection.Restore();

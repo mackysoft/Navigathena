@@ -183,16 +183,8 @@ public sealed class ScreenCancellationContractTests
     {
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<HomeRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-            });
-            root.AddRoute<DialogRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Push;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput;
-            });
+            root.AddRoute<HomeRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
+            root.AddRoute<DialogRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
         });
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens =>
         {
@@ -214,11 +206,11 @@ public sealed class ScreenCancellationContractTests
             this.name = name;
             this.visit = visit;
         }
-        public ValueTask InitializeAsync (CancellationToken cancellationToken) => visit(name + ".initialize");
+        public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => visit(name + ".initialize");
         public ValueTask PrepareAsync (Route route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => visit(name + ".prepare");
         public ValueTask ActivateAsync (Route route, ScreenActivityContext activity) => visit(name + ".activate");
         public ValueTask DeactivateAsync () => visit(name + ".deactivate");
-        public ValueTask TerminateAsync () => visit(name + ".terminate");
+        public ValueTask TerminateAsync (NavigationProgressReporter progress) => visit(name + ".terminate");
         public ValueTask DisposeAsync () => visit(name + ".dispose");
     }
 
@@ -253,21 +245,15 @@ public sealed class ScreenCancellationContractTests
     {
         private readonly Action cancel;
         public Acquisition (Action cancel) => this.cancel = cancel;
-        public int Calls
-        {
-            get; private set;
-        }
-        public int Disposals
-        {
-            get; private set;
-        }
+        public int Calls { get; private set; }
+        public int Disposals { get; private set; }
         public ValueTask<object> AcquireAsync (ResourceAcquisitionContext context, CancellationToken cancellationToken)
         {
             Calls++;
             cancel();
             return new(new object());
         }
-        public ValueTask DisposeAsync ()
+        public ValueTask ReleaseAsync (NavigationProgressReporter progress)
         {
             Disposals++;
             return default;

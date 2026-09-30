@@ -39,22 +39,11 @@ public sealed class NavigationReservationContractTests
     {
         return NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<MainRoute>(main =>
-            {
-                main.AllowedEntryOperations = RouteEntryOperations.Reset;
-                main.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                main.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, child =>
-                    child.AddRoute<ChildRoute>(route =>
-                    {
-                        route.AllowedEntryOperations = RouteEntryOperations.Push;
-                        route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    }));
-            });
-            root.AddRoute<OverlayRoute>(overlay =>
-            {
-                overlay.AllowedEntryOperations = RouteEntryOperations.Push;
-                overlay.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRetain;
-            });
+            root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, main =>
+{
+    main.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+});
+            root.AddRoute<OverlayRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRetain);
         });
     }
 

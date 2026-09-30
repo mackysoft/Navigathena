@@ -1,24 +1,14 @@
+using System;
+
 namespace MackySoft.Navigathena
 {
     /// <summary>Overrides the direct history destination's return settings for one Back operation.</summary>
     public sealed record BackOptions
     {
-        public ScreenPreparationMode? Preparation
-        {
-            get; init;
-        }
-        public ScreenEnterAnimationMode? EnterAnimation
-        {
-            get; init;
-        }
-        public NavigationTransition? Transition
-        {
-            get; init;
-        }
-        public INavigationProgressReceiver? Progress
-        {
-            get; init;
-        }
+        public ScreenPreparationMode? Preparation { get; init; }
+        public ScreenEnterAnimationMode? EnterAnimation { get; init; }
+        public NavigationTransition? Transition { get; init; }
+        public IProgress<NavigationProgress>? Progress { get; init; }
 
         internal NavigationOptions ToNavigationOptions ()
         {

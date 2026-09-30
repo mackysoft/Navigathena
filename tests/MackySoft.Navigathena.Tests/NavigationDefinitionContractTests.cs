@@ -15,18 +15,11 @@ public sealed class NavigationDefinitionContractTests
     {
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<RootRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional,
-                    child => child.AddRoute<ChildRoute>(DefinePushRoute));
-            });
-            root.AddRoute<SecondRootRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Push;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            });
+            root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
+{
+    route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+});
+            root.AddRoute<SecondRootRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve);
         });
         RegionDefinition root = definition.GetRegion(Root);
         RegionRouteDefinition route = root.Routes[0];
@@ -50,24 +43,19 @@ public sealed class NavigationDefinitionContractTests
         RegionDefinitionId grandchild = new("grandchild");
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            Assert.Throws<InvalidOperationException>(() => root.AddRoute<SecondRootRoute>(route =>
+            Assert.Throws<InvalidOperationException>(() => root.AddRoute<SecondRootRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve, route =>
             {
                 route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, child =>
-                    child.AddRoute<ChildRoute>(childRoute =>
-                    {
-                        DefinePushRoute(childRoute);
-                        childRoute.AddChildRegion(grandchild, RegionCompositionMode.Layered, RegionOccupancy.Optional,
-                            region => region.AddRoute<ChildRoute>(DefinePushRoute));
-                    }));
+                    child.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve, childRoute =>
+{
+    childRoute.AddChildRegion(grandchild, RegionCompositionMode.Layered, RegionOccupancy.Optional, region => region.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+}));
                 throw new InvalidOperationException("Configuration failed.");
             }));
-            root.AddRoute<RootRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional,
-                    child => child.AddRoute<ChildRoute>(DefinePushRoute));
-            });
+            root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
+{
+    route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, child => child.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+});
         });
 
         Assert.Equal(2, definition.Regions.Count);
@@ -83,23 +71,19 @@ public sealed class NavigationDefinitionContractTests
     {
         RegionDefinitionId grandchild = new("grandchild");
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
-            root.AddRoute<RootRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                Action<ChildRegionDefinitionBuilder> defineChild = child => child.AddRoute<ChildRoute>(childRoute =>
-                {
-                    DefinePushRoute(childRoute);
-                    childRoute.AddChildRegion(grandchild, RegionCompositionMode.Layered, RegionOccupancy.Optional,
-                        region => region.AddRoute<ChildRoute>(DefinePushRoute));
-                });
-                Assert.Throws<InvalidOperationException>(() => route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, child =>
-                {
-                    defineChild(child);
-                    throw new InvalidOperationException("Configuration failed.");
-                }));
-                route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, defineChild);
-            }));
+            root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
+{
+    Action<ChildRegionDefinitionBuilder> defineChild = child => child.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve, childRoute =>
+{
+    childRoute.AddChildRegion(grandchild, RegionCompositionMode.Layered, RegionOccupancy.Optional, region => region.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+});
+    Assert.Throws<InvalidOperationException>(() => route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, child =>
+    {
+        defineChild(child);
+        throw new InvalidOperationException("Configuration failed.");
+    }));
+    route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, defineChild);
+}));
 
         Assert.Equal(3, definition.Regions.Count);
         Assert.Equal(3, definition.Regions.Select(region => region.Id).Distinct().Count());
@@ -122,75 +106,31 @@ public sealed class NavigationDefinitionContractTests
         Assert.Throws<NavigationConfigurationException>(() => NavigationDefinition.Build(
             Root,
             RegionCompositionMode.Exclusive,
-            root => root.AddRoute<RootRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Push;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            })));
+            root => root.AddRoute<RootRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve)));
     }
 
     [Fact]
-    public void Build_requires_each_route_to_declare_its_entry_operations_and_lower_presentation_policy ()
-    {
-        Assert.Throws<NavigationConfigurationException>(() => NavigationDefinition.Build(
-            Root,
-            RegionCompositionMode.Exclusive,
-            root => root.AddRoute<RootRoute>(route => route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve)));
-
-        Assert.Throws<NavigationConfigurationException>(() => NavigationDefinition.Build(
-            Root,
-            RegionCompositionMode.Exclusive,
-            root => root.AddRoute<RootRoute>(route => route.AllowedEntryOperations = RouteEntryOperations.Reset)));
-    }
-
-    [Fact]
-    public void Route_configuration_can_read_and_override_settings_before_the_definition_is_built ()
+    public void Registration_records_the_supplied_entry_permissions_and_lower_policy ()
     {
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
-            root.AddRoute<RootRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-
-                Assert.Equal(RouteEntryOperations.Reset, route.AllowedEntryOperations);
-                Assert.Equal(LowerPresentationPolicy.Preserve, route.LowerPresentationPolicy);
-
-                route.AllowedEntryOperations |= RouteEntryOperations.Push;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRelease;
-            }));
+            root.AddRoute<RootRoute>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRelease));
 
         RegionRouteDefinition registration = Assert.Single(definition.GetRegion(Root).Routes);
         Assert.Equal(RouteEntryOperations.Reset | RouteEntryOperations.Push, registration.AllowedEntryOperations);
         Assert.Equal(LowerPresentationPolicy.HideAndRelease, registration.LowerPresentationPolicy);
     }
 
-    [Fact]
-    public void Unconfigured_route_settings_cannot_be_read_as_defaults ()
-    {
-        NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
-            root.AddRoute<RootRoute>(route =>
-            {
-                Assert.Throws<InvalidOperationException>(() => route.AllowedEntryOperations);
-                Assert.Throws<InvalidOperationException>(() => route.LowerPresentationPolicy);
-
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-            }));
-    }
-
     [Theory]
     [InlineData(RouteEntryOperations.None)]
     [InlineData((RouteEntryOperations)8)]
     [InlineData(RouteEntryOperations.Reset | (RouteEntryOperations)8)]
-    public void Invalid_entry_operations_are_rejected_without_replacing_the_configured_permissions (RouteEntryOperations invalidOperations)
+    public void Invalid_entry_operations_do_not_reserve_the_route_type (RouteEntryOperations invalidOperations)
     {
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
-            root.AddRoute<RootRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                Assert.Throws<NavigationConfigurationException>(() => route.AllowedEntryOperations = invalidOperations);
-            }));
+        {
+            Assert.Throws<NavigationConfigurationException>(() => root.AddRoute<RootRoute>(invalidOperations, LowerPresentationPolicy.Preserve));
+            root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+        });
 
         Assert.Equal(RouteEntryOperations.Reset, Assert.Single(definition.GetRegion(Root).Routes).AllowedEntryOperations);
     }
@@ -201,17 +141,15 @@ public sealed class NavigationDefinitionContractTests
     [InlineData((LowerPresentationOutput)2, LowerPresentationInput.Block, LowerPresentationRetention.Retain)]
     [InlineData(LowerPresentationOutput.Hide, (LowerPresentationInput)2, LowerPresentationRetention.Retain)]
     [InlineData(LowerPresentationOutput.Hide, LowerPresentationInput.Block, (LowerPresentationRetention)2)]
-    public void Invalid_lower_presentation_policy_is_rejected_without_replacing_the_configured_policy (
+    public void Invalid_lower_policy_does_not_reserve_the_route_type (
         LowerPresentationOutput output, LowerPresentationInput input, LowerPresentationRetention retention)
     {
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
-            root.AddRoute<RootRoute>(route =>
-            {
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                Assert.Throws<ArgumentException>(() => route.LowerPresentationPolicy = new LowerPresentationPolicy(output, input, retention));
-                Assert.Throws<ArgumentNullException>(() => route.LowerPresentationPolicy = null!);
-            }));
+        {
+            Assert.Throws<ArgumentException>(() => root.AddRoute<RootRoute>(RouteEntryOperations.Reset, new LowerPresentationPolicy(output, input, retention)));
+            Assert.Throws<ArgumentNullException>(() => root.AddRoute<RootRoute>(RouteEntryOperations.Reset, null!));
+            root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+        });
 
         Assert.Equal(LowerPresentationPolicy.Preserve, Assert.Single(definition.GetRegion(Root).Routes).LowerPresentationPolicy);
     }
@@ -227,33 +165,34 @@ public sealed class NavigationDefinitionContractTests
         RouteDefinitionBuilder<ChildRoute>? capturedChildRoute = null;
         Exception failure = new("Configuration failed.");
 
+        static void AddLateChild<TRoute> (RouteDefinitionBuilder<TRoute> route) where TRoute : NavigationRoute
+        {
+            route.AddChildRegion(new RegionDefinitionId("late"), RegionCompositionMode.Layered, RegionOccupancy.Optional,
+                child => child.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+        }
+
         NavigationDefinition Build () => NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
             capturedRoot = root;
-            root.AddRoute<RootRoute>(route =>
+            root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
             {
                 capturedRoute = route;
-                route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
                 route.AddChildRegion(Child, RegionCompositionMode.Exclusive, RegionOccupancy.Optional, child =>
                 {
                     capturedChild = child;
-                    child.AddRoute<ChildRoute>(childRoute =>
+                    child.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve, childRoute =>
                     {
                         capturedChildRoute = childRoute;
-                        DefinePushRoute(childRoute);
                         if (failConfiguration)
                         {
                             throw failure;
                         }
                     });
-                    Assert.Throws<InvalidOperationException>(() => capturedChildRoute!.AllowedEntryOperations = RouteEntryOperations.Reset);
+                    Assert.Throws<InvalidOperationException>(() => AddLateChild(capturedChildRoute!));
                 });
-                Assert.Throws<InvalidOperationException>(() => capturedChild!.AddRoute<SecondRootRoute>(_ =>
-{
-}));
+                Assert.Throws<InvalidOperationException>(() => capturedChild!.AddRoute<SecondRootRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
             });
-            Assert.Throws<InvalidOperationException>(() => capturedRoute!.LowerPresentationPolicy = LowerPresentationPolicy.HideAndRelease);
+            Assert.Throws<InvalidOperationException>(() => AddLateChild(capturedRoute!));
         });
 
         if (failConfiguration)
@@ -269,18 +208,10 @@ public sealed class NavigationDefinitionContractTests
         Assert.NotNull(capturedRoute);
         Assert.NotNull(capturedChild);
         Assert.NotNull(capturedChildRoute);
-        Assert.Throws<InvalidOperationException>(() => capturedRoot.AddRoute<SecondRootRoute>(_ =>
-{
-}));
-        Assert.Throws<InvalidOperationException>(() => capturedRoute.AllowedEntryOperations = RouteEntryOperations.Push);
-        Assert.Throws<InvalidOperationException>(() => capturedRoute.LowerPresentationPolicy = LowerPresentationPolicy.BlockInput);
-        Assert.Throws<InvalidOperationException>(() => capturedRoute.AddChildRegion(new RegionDefinitionId("late"), RegionCompositionMode.Layered, RegionOccupancy.Optional, _ =>
-{
-}));
-        Assert.Throws<InvalidOperationException>(() => capturedChild.AddRoute<SecondRootRoute>(_ =>
-{
-}));
-        Assert.Throws<InvalidOperationException>(() => capturedChildRoute.AllowedEntryOperations = RouteEntryOperations.Reset);
+        Assert.Throws<InvalidOperationException>(() => capturedRoot.AddRoute<SecondRootRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+        Assert.Throws<InvalidOperationException>(() => AddLateChild(capturedRoute));
+        Assert.Throws<InvalidOperationException>(() => capturedChild.AddRoute<SecondRootRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+        Assert.Throws<InvalidOperationException>(() => AddLateChild(capturedChildRoute));
     }
 
     [Fact]
@@ -291,24 +222,20 @@ public sealed class NavigationDefinitionContractTests
             RegionCompositionMode.Exclusive,
             root =>
             {
-                root.AddRoute<RootRoute>(route =>
-                {
-                    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                    route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    route.AddChildRegion(Child, RegionCompositionMode.Exclusive, RegionOccupancy.Optional, child =>
-                    {
-                        child.AddRoute<ChildRoute>(DefinePushRoute);
-                    });
-                });
-                root.AddRoute<SecondRootRoute>(route =>
-                {
-                    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                    route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, child =>
-                    {
-                        child.AddRoute<ChildRoute>(DefinePushRoute);
-                    });
-                });
+                root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
+{
+    route.AddChildRegion(Child, RegionCompositionMode.Exclusive, RegionOccupancy.Optional, child =>
+    {
+        child.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve);
+    });
+});
+                root.AddRoute<SecondRootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
+{
+    route.AddChildRegion(Child, RegionCompositionMode.Layered, RegionOccupancy.Optional, child =>
+    {
+        child.AddRoute<ChildRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve);
+    });
+});
             }));
 
         Assert.Throws<NavigationConfigurationException>(() => NavigationDefinition.Build(
@@ -316,16 +243,8 @@ public sealed class NavigationDefinitionContractTests
             RegionCompositionMode.Exclusive,
             root =>
             {
-                root.AddRoute<RootRoute>(route =>
-                {
-                    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                    route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                });
-                root.AddRoute<RootRoute>(route =>
-                {
-                    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                    route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                });
+                root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+                root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
             }));
     }
 
@@ -337,22 +256,11 @@ public sealed class NavigationDefinitionContractTests
             RegionCompositionMode.Exclusive,
             root =>
             {
-                root.AddRoute<SharedRoute>(route =>
-                {
-                    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                    route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                });
-                root.AddRoute<RootRoute>(route =>
-                {
-                    route.AllowedEntryOperations = RouteEntryOperations.Reset;
-                    route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                    route.AddChildRegion(Child, RegionCompositionMode.Exclusive, RegionOccupancy.Optional, child =>
-                        child.AddRoute<SharedRoute>(shared =>
-                        {
-                            shared.AllowedEntryOperations = RouteEntryOperations.Push;
-                            shared.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
-                        }));
-                });
+                root.AddRoute<SharedRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
+                root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
+{
+    route.AddChildRegion(Child, RegionCompositionMode.Exclusive, RegionOccupancy.Optional, child => child.AddRoute<SharedRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+});
             });
 
         Assert.True(definition.TryGetRoute(Root, typeof(SharedRoute), out RegionRouteDefinition? rootRegistration));
@@ -368,12 +276,6 @@ public sealed class NavigationDefinitionContractTests
         Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Preserve, LowerPresentationInput.Block, LowerPresentationRetention.Retain), LowerPresentationPolicy.BlockInput);
         Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Hide, LowerPresentationInput.Block, LowerPresentationRetention.Retain), LowerPresentationPolicy.HideAndRetain);
         Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Hide, LowerPresentationInput.Block, LowerPresentationRetention.Release), LowerPresentationPolicy.HideAndRelease);
-    }
-
-    private static void DefinePushRoute (RouteDefinitionBuilder<ChildRoute> route)
-    {
-        route.AllowedEntryOperations = RouteEntryOperations.Push;
-        route.LowerPresentationPolicy = LowerPresentationPolicy.Preserve;
     }
 
     private sealed record RootRoute : Route;

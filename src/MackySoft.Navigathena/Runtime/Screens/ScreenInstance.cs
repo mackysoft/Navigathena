@@ -34,14 +34,8 @@ namespace MackySoft.Navigathena.Runtime.Screens
         private Exception? activityCancellationFailure;
         private readonly IScreenActivityRuntime runtime;
         private ScreenWorkCollection work;
-        internal ScreenPreparationReason? PreparationReason
-        {
-            get; set;
-        }
-        internal bool NavigationSettled
-        {
-            get; set;
-        }
+        internal ScreenPreparationReason? PreparationReason { get; set; }
+        internal bool NavigationSettled { get; set; }
         internal bool HasWork => work.HasPending;
         internal bool HasPendingUse => HasWork || runtime.OwnsCall(Entry.Id, Id);
         internal void StartReadyWork () => work.StartReady();
@@ -74,42 +68,18 @@ namespace MackySoft.Navigathena.Runtime.Screens
             Creation = new ManagedScreenCreationContext(entry, Lifetime, views, definition);
         }
 
-        public NavigationEntry Entry
-        {
-            get; private set;
-        }
-        public ScreenDefinition Definition
-        {
-            get;
-        }
-        public PresentationId Id
-        {
-            get;
-        }
-        public ScreenInstance? Parent
-        {
-            get; set;
-        }
+        public NavigationEntry Entry { get; private set; }
+        public ScreenDefinition Definition { get; }
+        public PresentationId Id { get; }
+        public ScreenInstance? Parent { get; set; }
         public int OwnershipDepth => Parent is null ? 0 : Parent.OwnershipDepth + 1;
-        public ManagedScreenCreationContext Creation
-        {
-            get;
-        }
+        public ManagedScreenCreationContext Creation { get; }
         internal object? LifecycleHandler => handler?.Handler;
-        public ResourceScope Lifetime
-        {
-            get;
-        }
+        public ResourceScope Lifetime { get; }
         public bool IsActive => activityReady && activity is not null && !activity.IsCancellationRequested;
         public bool IsEnding => Volatile.Read(ref ending) != 0 || Lifetime.EndingToken.IsCancellationRequested;
-        public bool IsTerminated
-        {
-            get; private set;
-        }
-        public ViewPresentation Presentation
-        {
-            get; private set;
-        }
+        public bool IsTerminated { get; private set; }
+        public ViewPresentation Presentation { get; private set; }
 
         public IDisposable Use ()
         {
@@ -178,12 +148,13 @@ namespace MackySoft.Navigathena.Runtime.Screens
         }
         public IScreenNavigation ConnectNavigation (Func<bool> connected) => new ActivityNavigation(navigation, () => connected() && IsActive, state);
 
-        public async ValueTask PrepareAsync (CancellationToken cancellationToken, ScreenPreparationReason reason = ScreenPreparationReason.NewEntry)
+        public async ValueTask PrepareAsync (INavigationOperationProgressReporter progress, CancellationToken cancellationToken, ScreenPreparationReason reason = ScreenPreparationReason.NewEntry)
         {
             await lifecycle.WaitAsync();
             try
             {
                 using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, Lifetime.EndingToken);
+                Lifetime.Progress = progress.CreateWork(NavigationPhase.Prepare, Entry.Id, "Construction");
                 try
                 {
                     cancellation.Token.ThrowIfCancellationRequested();
@@ -194,13 +165,37 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 }
                 finally
                 {
-                    await Lifetime.CloseAsync();
+                    try
+                    {
+                        await Lifetime.CloseAsync();
+                    }
+                    finally
+                    {
+                        Lifetime.Progress.Close();
+                    }
                 }
                 cancellation.Token.ThrowIfCancellationRequested();
-                await NavigationCallbackScope.RunAsync(() => handler.InitializeAsync(cancellation.Token));
+                NavigationProgressReporter initializationProgress = progress.CreateWork(NavigationPhase.Prepare, Entry.Id, "Initialization");
+                try
+                {
+                    ManagedLifetimeContext initializationLifetime = Lifetime.OpenRegistration(initializationProgress);
+                    ScreenInitializationContext initialization = new(initializationLifetime, initializationProgress);
+                    await NavigationCallbackScope.RunAsync(() => handler.InitializeAsync(initialization, cancellation.Token));
+                }
+                finally
+                {
+                    try
+                    {
+                        await Lifetime.CloseAsync();
+                    }
+                    finally
+                    {
+                        initializationProgress.Close();
+                    }
+                }
                 cancellation.Token.ThrowIfCancellationRequested();
                 initialized = true;
-                await PrepareInputAsync(cancellation.Token, reason);
+                await PrepareInputAsync(progress, cancellation.Token, reason);
             }
             finally
             {
@@ -209,12 +204,12 @@ namespace MackySoft.Navigathena.Runtime.Screens
             }
         }
 
-        public async ValueTask RebindAsync (NavigationEntry entry, PresentationContext context, CancellationToken cancellationToken, ScreenPreparationReason reason)
-            => await RebindAsync(entry, context.Navigation, cancellationToken, reason);
+        public async ValueTask RebindAsync (NavigationEntry entry, PresentationContext context, INavigationOperationProgressReporter progress, CancellationToken cancellationToken, ScreenPreparationReason reason)
+            => await RebindAsync(entry, context.Navigation, progress, cancellationToken, reason);
 
         internal IScreenNavigation Navigation => navigation;
 
-        internal async ValueTask RebindAsync (NavigationEntry entry, IScreenNavigation nextNavigation, CancellationToken cancellationToken, ScreenPreparationReason reason = ScreenPreparationReason.Recovery)
+        internal async ValueTask RebindAsync (NavigationEntry entry, IScreenNavigation nextNavigation, INavigationOperationProgressReporter progress, CancellationToken cancellationToken, ScreenPreparationReason reason = ScreenPreparationReason.Recovery)
         {
             await lifecycle.WaitAsync();
             try
@@ -230,7 +225,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 }
                 Entry = entry;
                 navigation = nextNavigation;
-                await PrepareInputAsync(cancellationToken, reason);
+                await PrepareInputAsync(progress, cancellationToken, reason);
             }
             finally
             {
@@ -238,11 +233,15 @@ namespace MackySoft.Navigathena.Runtime.Screens
             }
         }
 
-        private async ValueTask PrepareInputAsync (CancellationToken cancellationToken, ScreenPreparationReason reason)
+        private async ValueTask PrepareInputAsync (INavigationOperationProgressReporter operationProgress, CancellationToken cancellationToken, ScreenPreparationReason reason)
         {
-            ResourceScope input = new(() => endUser(this), reason => reportLoss(this, reason));
+            NavigationProgressReporter progress = operationProgress.CreateWork(reason == ScreenPreparationReason.Recovery ? NavigationPhase.Restore : NavigationPhase.Prepare, Entry.Id, "Preparation");
+            ResourceScope input = new(() => endUser(this), reason => reportLoss(this, reason))
+            {
+                Progress = progress
+            };
             inputResources.Add(input);
-            ScreenPreparationContext preparation = new(Entry, input.Context, reason);
+            ScreenPreparationContext preparation = new(Entry, input.Context, reason, progress);
             using CancellationTokenSource cancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, Lifetime.EndingToken, input.EndingToken);
             try
             {
@@ -253,11 +252,18 @@ namespace MackySoft.Navigathena.Runtime.Screens
             }
             finally
             {
-                await input.CloseAsync();
+                try
+                {
+                    await input.CloseAsync();
+                }
+                finally
+                {
+                    progress.Close();
+                }
             }
         }
 
-        public async ValueTask ReleasePreviousInputAsync (bool retainForCalls = true)
+        public async ValueTask ReleasePreviousInputAsync (INavigationOperationProgressReporter? operationProgress, bool retainForCalls = true)
         {
             await lifecycle.WaitAsync();
             try
@@ -268,7 +274,15 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 }
                 while (inputResources.Count > 1)
                 {
-                    await inputResources[0].DisposeAsync();
+                    NavigationProgressReporter progress = operationProgress?.CreateWork(NavigationPhase.Cleanup, Entry.Id, "PreparationRelease") ?? NavigationProgressReporter.None;
+                    try
+                    {
+                        await inputResources[0].ReleaseAsync(progress);
+                    }
+                    finally
+                    {
+                        progress.Close();
+                    }
                     inputResources.RemoveAt(0);
                 }
             }
@@ -298,10 +312,10 @@ namespace MackySoft.Navigathena.Runtime.Screens
                     await stoppingActivity;
                 }
 
+                int workCheckpoint = work.Count;
                 CancellationTokenSource current = new();
                 activity = current;
                 stoppingActivity = null;
-                int workCheckpoint = work.Count;
                 ActivityNavigation bound = new(navigation, () => activityReady && !current.IsCancellationRequested && !IsEnding, state,
                     () => !current.IsCancellationRequested && !IsEnding);
                 try
@@ -446,7 +460,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
             return capture is null ? null : new PresentationStateCapture(Entry.Id, Id, capture.CaptureState());
         }
 
-        public ValueTask TerminateAsync ()
+        public ValueTask TerminateAsync (INavigationOperationProgressReporter? progress)
         {
             Interlocked.Exchange(ref ending, 1);
             TaskCompletionSource<object?> completion;
@@ -461,15 +475,15 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 termination = completion.Task;
             }
 
-            _ = FinishTerminationAsync(completion);
+            _ = FinishTerminationAsync(completion, progress);
             return new ValueTask(completion.Task);
         }
 
-        private async Task FinishTerminationAsync (TaskCompletionSource<object?> completion)
+        private async Task FinishTerminationAsync (TaskCompletionSource<object?> completion, INavigationOperationProgressReporter? progress)
         {
             try
             {
-                await TerminateCoreAsync();
+                await TerminateCoreAsync(progress);
                 completion.SetResult(null);
             }
             catch (Exception exception)
@@ -478,7 +492,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
             }
         }
 
-        private async Task TerminateCoreAsync ()
+        private async Task TerminateCoreAsync (INavigationOperationProgressReporter? operationProgress)
         {
             await prepared.Task;
             await work.StopAsync();
@@ -499,7 +513,15 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 await StopActivityAsync();
                 if (handler is not null && !handlerTerminated)
                 {
-                    await NavigationCallbackScope.RunAsync(handler.TerminateAsync);
+                    NavigationProgressReporter progress = operationProgress?.CreateWork(NavigationPhase.Cleanup, Entry.Id, "Termination") ?? NavigationProgressReporter.None;
+                    try
+                    {
+                        await NavigationCallbackScope.RunAsync(() => handler.TerminateAsync(progress));
+                    }
+                    finally
+                    {
+                        progress.Close();
+                    }
                     handlerTerminated = true;
                 }
 
@@ -507,12 +529,20 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 Creation.ReleasePresentation();
                 // Owned services may reference input resources and scene views during their disposal.
                 await Lifetime.ReleaseOwnedAsync();
-                for (int i = inputResources.Count - 1; i >= 0; i--)
+                NavigationProgressReporter releaseProgress = operationProgress?.CreateWork(NavigationPhase.Cleanup, Entry.Id, "ResourceRelease") ?? NavigationProgressReporter.None;
+                try
                 {
-                    await inputResources[i].DisposeAsync();
+                    for (int i = inputResources.Count - 1; i >= 0; i--)
+                    {
+                        await inputResources[i].ReleaseAsync(releaseProgress);
+                    }
+                    inputResources.Clear();
+                    await Lifetime.ReleaseAsync(releaseProgress);
                 }
-                inputResources.Clear();
-                await Lifetime.DisposeAsync();
+                finally
+                {
+                    releaseProgress.Close();
+                }
                 IsTerminated = true;
                 if (inputFailures.Count > 0)
                 {
