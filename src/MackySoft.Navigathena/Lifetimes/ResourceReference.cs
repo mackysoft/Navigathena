@@ -9,13 +9,7 @@ namespace MackySoft.Navigathena
             Value = value;
         }
 
-        internal ResourceLifetime Lifetime
-        {
-            get;
-        }
-        internal T Value
-        {
-            get;
-        }
+        internal ResourceLifetime Lifetime { get; }
+        internal T Value { get; }
     }
 }

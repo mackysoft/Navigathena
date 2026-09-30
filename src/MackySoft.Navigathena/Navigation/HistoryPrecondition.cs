@@ -15,10 +15,7 @@ namespace MackySoft.Navigathena
             regions = snapshot.Regions.Values.Where(candidate => IsWithin(candidate.Id, region, snapshot)).ToArray();
         }
 
-        public NavigationEntryId EntryId
-        {
-            get;
-        }
+        public NavigationEntryId EntryId { get; }
 
         public bool IsCurrent (NavigationState state)
         {

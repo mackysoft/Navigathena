@@ -32,26 +32,11 @@ namespace MackySoft.Navigathena.Hosting
             HostIncidents = runtime;
         }
 
-        public INavigationClient Client
-        {
-            get;
-        }
-        public INavigationStateSource State
-        {
-            get;
-        }
-        public INavigationRecoveryClient Recovery
-        {
-            get;
-        }
-        public INavigationLossSink Loss
-        {
-            get;
-        }
-        public INavigationHostIncidentSink HostIncidents
-        {
-            get;
-        }
+        public INavigationClient Client { get; }
+        public INavigationStateSource State { get; }
+        public INavigationRecoveryClient Recovery { get; }
+        public INavigationLossSink Loss { get; }
+        public INavigationHostIncidentSink HostIncidents { get; }
         public INavigationTerminationSource Terminations => screens?.Terminations ?? throw new InvalidOperationException("The protocol test host does not own screen resources.");
         public RegionInstanceId Root => runtime.Root;
 

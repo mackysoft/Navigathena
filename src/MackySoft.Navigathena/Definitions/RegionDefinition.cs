@@ -17,26 +17,11 @@ namespace MackySoft.Navigathena
             Routes = Array.AsReadOnly(routes.ToArray());
         }
 
-        public RegionDefinitionId Id
-        {
-            get;
-        }
-        public RegionCompositionMode Mode
-        {
-            get;
-        }
-        public RegionOccupancy Occupancy
-        {
-            get;
-        }
-        public RegionDefinitionId? OwnerDefinitionId
-        {
-            get;
-        }
-        public IReadOnlyList<RegionRouteDefinition> Routes
-        {
-            get;
-        }
+        public RegionDefinitionId Id { get; }
+        public RegionCompositionMode Mode { get; }
+        public RegionOccupancy Occupancy { get; }
+        public RegionDefinitionId? OwnerDefinitionId { get; }
+        public IReadOnlyList<RegionRouteDefinition> Routes { get; }
     }
 
 }

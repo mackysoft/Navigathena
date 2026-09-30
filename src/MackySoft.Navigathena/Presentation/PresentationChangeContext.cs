@@ -13,13 +13,7 @@ namespace MackySoft.Navigathena.Presentation
             ChildChanges = Array.AsReadOnly(childChanges.ToArray());
         }
 
-        public PresentationChange Self
-        {
-            get;
-        }
-        public IReadOnlyList<ChildRegionChange> ChildChanges
-        {
-            get;
-        }
+        public PresentationChange Self { get; }
+        public IReadOnlyList<ChildRegionChange> ChildChanges { get; }
     }
 }

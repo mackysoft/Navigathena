@@ -59,20 +59,11 @@ namespace MackySoft.Navigathena
             RequiredPresentations = Array.AsReadOnly(snapshot);
         }
 
-        public NavigationIncidentId Id
-        {
-            get;
-        }
+        public NavigationIncidentId Id { get; }
 
-        public string Reason
-        {
-            get;
-        }
+        public string Reason { get; }
 
-        public IReadOnlyList<PresentationReference> RequiredPresentations
-        {
-            get;
-        }
+        public IReadOnlyList<PresentationReference> RequiredPresentations { get; }
     }
 
 }

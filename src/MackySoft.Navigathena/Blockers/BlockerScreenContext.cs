@@ -10,21 +10,9 @@ namespace MackySoft.Navigathena
             Route = entry.Route;
             Navigation = navigation;
         }
-        public RegionInstanceId RegionId
-        {
-            get;
-        }
-        public NavigationEntryId EntryId
-        {
-            get;
-        }
-        public NavigationRoute Route
-        {
-            get;
-        }
-        public IScreenNavigation Navigation
-        {
-            get;
-        }
+        public RegionInstanceId RegionId { get; }
+        public NavigationEntryId EntryId { get; }
+        public NavigationRoute Route { get; }
+        public IScreenNavigation Navigation { get; }
     }
 }

@@ -21,21 +21,12 @@ namespace MackySoft.Navigathena
             HostIncident = hostIncident;
         }
 
-        public long Revision
-        {
-            get;
-        }
-        public RegionInstanceId RootRegionInstanceId
-        {
-            get;
-        }
+        public long Revision { get; }
+        public RegionInstanceId RootRegionInstanceId { get; }
         public IReadOnlyDictionary<RegionInstanceId, RegionState> Regions => regions;
         public IReadOnlyDictionary<NavigationEntryId, NavigationEntry> Entries => entries;
         public IReadOnlyDictionary<NavigationEntryId, PresentationState> Presentations => presentations;
-        public NavigationHostIncident? HostIncident
-        {
-            get;
-        }
+        public NavigationHostIncident? HostIncident { get; }
 
         public RegionState GetRegion (RegionInstanceId id) => regions.TryGetValue(id, out RegionState? region) ? region : throw new ArgumentException("The region instance is not present in this state.", nameof(id));
         public NavigationEntry GetEntry (NavigationEntryId id) => entries.TryGetValue(id, out NavigationEntry? entry) ? entry : throw new ArgumentException("The entry is not present in this state.", nameof(id));

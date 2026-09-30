@@ -4,10 +4,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
 {
     internal sealed class ViewInputBoundary : PointerManipulator
     {
-        public bool Enabled
-        {
-            get; set;
-        }
+        public bool Enabled { get; set; }
 
         protected override void RegisterCallbacksOnTarget ()
         {

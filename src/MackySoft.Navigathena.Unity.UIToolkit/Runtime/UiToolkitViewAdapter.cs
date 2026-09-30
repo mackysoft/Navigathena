@@ -25,10 +25,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
             ? (Document.panelSettings.GetEntityId(), baseSortingOrder)
             : throw new NavigationConfigurationException("A UIDocument requires PanelSettings.");
         public bool IsAlive => this != null && document != null && enabled && gameObject.activeInHierarchy && root is not null && ReferenceEquals(root, document.rootVisualElement);
-        public ViewPresentation Presentation
-        {
-            get; private set;
-        }
+        public ViewPresentation Presentation { get; private set; }
         private UIDocument Document => document != null ? document : document = GetComponent<UIDocument>();
 
         private void Awake ()

@@ -16,24 +16,12 @@ namespace MackySoft.Navigathena
             ChildRegions = Array.AsReadOnly(childRegions.ToArray());
         }
 
-        public RegionRouteDefinitionKey Key
-        {
-            get;
-        }
+        public RegionRouteDefinitionKey Key { get; }
         /// <summary>Gets the operations allowed to create a new entry for this route.</summary>
-        public RouteEntryOperations AllowedEntryOperations
-        {
-            get;
-        }
+        public RouteEntryOperations AllowedEntryOperations { get; }
         /// <summary>Gets this route's effects on lower presentations, not its own presentation.</summary>
-        public LowerPresentationPolicy LowerPresentationPolicy
-        {
-            get;
-        }
-        public IReadOnlyList<RegionDefinition> ChildRegions
-        {
-            get;
-        }
+        public LowerPresentationPolicy LowerPresentationPolicy { get; }
+        public IReadOnlyList<RegionDefinition> ChildRegions { get; }
     }
 
 }

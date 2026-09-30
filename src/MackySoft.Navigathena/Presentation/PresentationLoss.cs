@@ -51,16 +51,10 @@ namespace MackySoft.Navigathena.Presentation
         }
 
         /// <summary>Gets the complete detached member snapshot for this physical event.</summary>
-        public IReadOnlyList<PresentationReference> Members
-        {
-            get;
-        }
+        public IReadOnlyList<PresentationReference> Members { get; }
 
         /// <summary>Gets the diagnostic reason shared by this physical event.</summary>
-        public string Reason
-        {
-            get;
-        }
+        public string Reason { get; }
     }
 
 }

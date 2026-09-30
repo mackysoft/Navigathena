@@ -16,22 +16,10 @@ namespace MackySoft.Navigathena
             Entries = Array.AsReadOnly(entries.ToArray());
         }
 
-        public RegionInstanceId Id
-        {
-            get;
-        }
-        public RegionDefinitionId DefinitionId
-        {
-            get;
-        }
-        public NavigationEntryId? OwnerEntryId
-        {
-            get;
-        }
-        public IReadOnlyList<NavigationEntryId> Entries
-        {
-            get;
-        }
+        public RegionInstanceId Id { get; }
+        public RegionDefinitionId DefinitionId { get; }
+        public NavigationEntryId? OwnerEntryId { get; }
+        public IReadOnlyList<NavigationEntryId> Entries { get; }
     }
 
 }

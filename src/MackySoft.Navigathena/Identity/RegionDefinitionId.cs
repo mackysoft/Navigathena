@@ -16,10 +16,7 @@ namespace MackySoft.Navigathena
             Value = value;
         }
 
-        public string Value
-        {
-            get;
-        }
+        public string Value { get; }
 
         public bool Equals (RegionDefinitionId other) => string.Equals(Value, other.Value, StringComparison.Ordinal);
         public override bool Equals (object? obj) => obj is RegionDefinitionId other && Equals(other);

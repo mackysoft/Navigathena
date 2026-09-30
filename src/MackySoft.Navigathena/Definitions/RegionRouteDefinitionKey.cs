@@ -17,14 +17,8 @@ namespace MackySoft.Navigathena
             RouteType = routeType;
         }
 
-        public RegionDefinitionId RegionId
-        {
-            get;
-        }
-        public Type RouteType
-        {
-            get;
-        }
+        public RegionDefinitionId RegionId { get; }
+        public Type RouteType { get; }
         public bool Equals (RegionRouteDefinitionKey other) => RegionId.Equals(other.RegionId) && RouteType == other.RouteType;
         public override bool Equals (object? obj) => obj is RegionRouteDefinitionKey other && Equals(other);
         public override int GetHashCode () => HashCode.Combine(RegionId, RouteType);

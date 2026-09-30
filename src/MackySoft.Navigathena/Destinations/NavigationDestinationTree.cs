@@ -15,10 +15,7 @@ namespace MackySoft.Navigathena
             this.children = new System.Collections.ObjectModel.ReadOnlyDictionary<RegionDefinitionId, INavigationDestinationTree>(children is null ? new Dictionary<RegionDefinitionId, INavigationDestinationTree>() : new Dictionary<RegionDefinitionId, INavigationDestinationTree>(children));
         }
 
-        public TRoute Route
-        {
-            get;
-        }
+        public TRoute Route { get; }
         NavigationRoute INavigationDestinationTree.Route => Route;
         public IReadOnlyDictionary<RegionDefinitionId, INavigationDestinationTree> Children => children;
 

@@ -11,10 +11,7 @@ namespace MackySoft.Navigathena.Runtime.Messaging
             Loss = loss;
         }
 
-        public PresentationLoss Loss
-        {
-            get;
-        }
+        public PresentationLoss Loss { get; }
         public TaskCompletionSource<PresentationLossResult> Completion { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
     }
 

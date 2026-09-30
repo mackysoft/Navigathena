@@ -20,14 +20,8 @@ namespace MackySoft.Navigathena
         /// <summary>Selects an existing visit in the target region, not a physical screen instance.</summary>
         public static HistoryTarget Entry (NavigationEntryId entryId) => new(entryId);
 
-        internal NavigationEntryId? EntryId
-        {
-            get;
-        }
-        internal Type? RouteType
-        {
-            get;
-        }
+        internal NavigationEntryId? EntryId { get; }
+        internal Type? RouteType { get; }
         internal bool IsCurrent => EntryId is null && RouteType is null;
     }
 }

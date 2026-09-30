@@ -124,10 +124,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 Screens = screens;
                 this.views = views;
             }
-            public List<ScreenInstance> Screens
-            {
-                get;
-            }
+            public List<ScreenInstance> Screens { get; }
             public void Validate ()
             {
                 for (int i = 0; i < views.Count; i++)

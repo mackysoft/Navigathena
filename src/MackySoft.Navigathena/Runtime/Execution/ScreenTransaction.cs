@@ -17,10 +17,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             this.playback = playback;
             DepartureEntries = departures;
         }
-        public IReadOnlyList<NavigationEntryId> DepartureEntries
-        {
-            get;
-        }
+        public IReadOnlyList<NavigationEntryId> DepartureEntries { get; }
 
         public async ValueTask<IPreparedPublication> PrepareAsync (PresentationUpdate update, CancellationToken cancellationToken)
         {

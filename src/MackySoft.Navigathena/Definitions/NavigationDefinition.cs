@@ -19,14 +19,8 @@ namespace MackySoft.Navigathena
             routes = regions.SelectMany(static region => region.Routes).ToDictionary(static route => route.Key);
         }
 
-        public RegionDefinitionId RootRegionId
-        {
-            get;
-        }
-        public IReadOnlyList<RegionDefinition> Regions
-        {
-            get;
-        }
+        public RegionDefinitionId RootRegionId { get; }
+        public IReadOnlyList<RegionDefinition> Regions { get; }
 
         public static NavigationDefinition Build (RegionDefinitionId rootId, RegionCompositionMode mode, Action<RootRegionDefinitionBuilder> define)
         {

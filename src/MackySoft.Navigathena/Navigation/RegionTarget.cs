@@ -10,18 +10,9 @@ namespace MackySoft.Navigathena
             Second = second;
         }
 
-        internal RegionTargetKind Kind
-        {
-            get;
-        }
-        internal RegionDefinitionId? First
-        {
-            get;
-        }
-        internal RegionDefinitionId? Second
-        {
-            get;
-        }
+        internal RegionTargetKind Kind { get; }
+        internal RegionDefinitionId? First { get; }
+        internal RegionDefinitionId? Second { get; }
         public static RegionTarget OwnRegion { get; } = new(RegionTargetKind.OwnRegion, null, null);
         public static RegionTarget Root { get; } = new(RegionTargetKind.Root, null, null);
         public static RegionTarget Child (RegionDefinitionId id) => new(RegionTargetKind.Child, id, null);

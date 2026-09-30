@@ -12,18 +12,9 @@ internal sealed class TestPresentationRealizer : IPresentationRealizer
     private readonly List<PresentationContext> contexts = new();
 
     public IReadOnlyList<PresentationContext> Contexts => contexts;
-    public int PrepareCount
-    {
-        get; private set;
-    }
-    public bool RejectCommit
-    {
-        get; set;
-    }
-    public Action<INavigationOperationProgressReporter>? ReportProgress
-    {
-        get; set;
-    }
+    public int PrepareCount { get; private set; }
+    public bool RejectCommit { get; set; }
+    public Action<INavigationOperationProgressReporter>? ReportProgress { get; set; }
 
     public IPresentationTransaction Begin (PresentationTransition transition, INavigationOperationProgressReporter progress)
     {

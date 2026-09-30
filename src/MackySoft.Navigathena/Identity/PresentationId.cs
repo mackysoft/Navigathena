@@ -7,10 +7,7 @@ namespace MackySoft.Navigathena
     public readonly struct PresentationId : IEquatable<PresentationId>
     {
         public PresentationId (Guid value) => Value = value == Guid.Empty ? throw new ArgumentException("An identifier is required.", nameof(value)) : value;
-        public Guid Value
-        {
-            get;
-        }
+        public Guid Value { get; }
         public bool Equals (PresentationId other) => Value.Equals(other.Value);
         public override bool Equals (object? obj) => obj is PresentationId other && Equals(other);
         public override int GetHashCode () => Value.GetHashCode();

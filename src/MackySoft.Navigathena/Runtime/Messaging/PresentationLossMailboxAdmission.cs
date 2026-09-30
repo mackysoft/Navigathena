@@ -12,14 +12,8 @@ namespace MackySoft.Navigathena.Runtime.Messaging
             Completion = completion;
         }
 
-        public bool Accepted
-        {
-            get;
-        }
-        public Task<PresentationLossResult> Completion
-        {
-            get;
-        }
+        public bool Accepted { get; }
+        public Task<PresentationLossResult> Completion { get; }
     }
 
 }

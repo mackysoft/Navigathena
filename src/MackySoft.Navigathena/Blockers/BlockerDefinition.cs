@@ -11,9 +11,6 @@ namespace MackySoft.Navigathena
             Create = create ?? throw new ArgumentNullException(nameof(create));
         }
 
-        internal BlockerFactory Create
-        {
-            get;
-        }
+        internal BlockerFactory Create { get; }
     }
 }

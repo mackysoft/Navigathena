@@ -14,10 +14,7 @@ namespace MackySoft.Navigathena
             this.factories = factories;
         }
 
-        public NavigationDefinition Definition
-        {
-            get;
-        }
+        public NavigationDefinition Definition { get; }
         internal IReadOnlyDictionary<RegionRouteDefinitionKey, BlockerDefinition> Blockers { get; private set; } = new Dictionary<RegionRouteDefinitionKey, BlockerDefinition>();
 
         /// <summary>Defines a layered root and its screen construction together.</summary>

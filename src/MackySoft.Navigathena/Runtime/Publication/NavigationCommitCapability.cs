@@ -28,14 +28,8 @@ namespace MackySoft.Navigathena.Runtime.Publication
             this.operation = operation;
         }
 
-        public NavigationState Candidate
-        {
-            get; private set;
-        }
-        public EffectiveComposition CandidateComposition
-        {
-            get;
-        }
+        public NavigationState Candidate { get; private set; }
+        public EffectiveComposition CandidateComposition { get; }
         public bool IsApplied => Volatile.Read(ref applied) != 0;
 
         internal void SelectScreenDefinitions (IReadOnlyDictionary<NavigationEntryId, Guid> selections)

@@ -7,10 +7,7 @@ namespace MackySoft.Navigathena
         {
         }
         /// <summary>Ownership and borrowing for this blocker instance.</summary>
-        public abstract LifetimeContext Lifetime
-        {
-            get;
-        }
+        public abstract LifetimeContext Lifetime { get; }
         public abstract void RegisterViewAdapter (IViewAdapter adapter);
     }
 }

@@ -13,31 +13,13 @@ namespace MackySoft.Navigathena.Presentation
             SavedState = savedState;
         }
 
-        public RegionRouteDefinitionKey RouteDefinitionKey
-        {
-            get;
-        }
-        public RegionInstanceId RegionId
-        {
-            get;
-        }
-        public NavigationEntryId EntryId
-        {
-            get;
-        }
-        public PresentationId PresentationId
-        {
-            get;
-        }
-        public IScreenNavigation Navigation
-        {
-            get;
-        }
+        public RegionRouteDefinitionKey RouteDefinitionKey { get; }
+        public RegionInstanceId RegionId { get; }
+        public NavigationEntryId EntryId { get; }
+        public PresentationId PresentationId { get; }
+        public IScreenNavigation Navigation { get; }
 
         /// <summary> Gets the immutable entry-local restoration value, or null before the first successful capture. </summary>
-        public object? SavedState
-        {
-            get;
-        }
+        public object? SavedState { get; }
     }
 }

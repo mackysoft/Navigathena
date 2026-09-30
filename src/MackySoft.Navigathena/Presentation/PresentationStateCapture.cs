@@ -13,17 +13,8 @@ namespace MackySoft.Navigathena.Presentation
             Value = value;
         }
 
-        public NavigationEntryId EntryId
-        {
-            get;
-        }
-        public PresentationId PresentationId
-        {
-            get;
-        }
-        public object? Value
-        {
-            get;
-        }
+        public NavigationEntryId EntryId { get; }
+        public PresentationId PresentationId { get; }
+        public object? Value { get; }
     }
 }

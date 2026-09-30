@@ -15,21 +15,9 @@ namespace MackySoft.Navigathena.Presentation
             AfterEntries = Array.AsReadOnly(afterEntries.ToArray());
         }
 
-        public RegionDefinitionId DefinitionId
-        {
-            get;
-        }
-        public RegionInstanceId InstanceId
-        {
-            get;
-        }
-        public IReadOnlyList<ChildRegionEntry> BeforeEntries
-        {
-            get;
-        }
-        public IReadOnlyList<ChildRegionEntry> AfterEntries
-        {
-            get;
-        }
+        public RegionDefinitionId DefinitionId { get; }
+        public RegionInstanceId InstanceId { get; }
+        public IReadOnlyList<ChildRegionEntry> BeforeEntries { get; }
+        public IReadOnlyList<ChildRegionEntry> AfterEntries { get; }
     }
 }

@@ -11,22 +11,10 @@ namespace MackySoft.Navigathena.Runtime.Execution
             Progress = new RuntimeProgressReporter(operationId, request.Options?.Progress, Diagnostics);
         }
 
-        public NavigationOperationId OperationId
-        {
-            get;
-        }
-        public NavigationRequest Request
-        {
-            get;
-        }
-        public OperationDiagnostics Diagnostics
-        {
-            get;
-        }
-        public RuntimeProgressReporter Progress
-        {
-            get;
-        }
+        public NavigationOperationId OperationId { get; }
+        public NavigationRequest Request { get; }
+        public OperationDiagnostics Diagnostics { get; }
+        public RuntimeProgressReporter Progress { get; }
     }
 
 }

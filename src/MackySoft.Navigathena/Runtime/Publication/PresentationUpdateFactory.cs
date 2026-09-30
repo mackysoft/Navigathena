@@ -161,34 +161,13 @@ namespace MackySoft.Navigathena.Runtime.Publication
                 AfterParticipation = AfterComposition.Presentations.ToDictionary(static item => item.EntryId, static item => item.Participation);
             }
 
-            public NavigationState Before
-            {
-                get;
-            }
-            public NavigationState After
-            {
-                get;
-            }
-            public IReadOnlyCollection<RegionInstanceId>? RetainedRegionScope
-            {
-                get;
-            }
-            public EffectiveComposition BeforeComposition
-            {
-                get;
-            }
-            public EffectiveComposition AfterComposition
-            {
-                get;
-            }
-            public IReadOnlyDictionary<NavigationEntryId, PresentationParticipation> BeforeParticipation
-            {
-                get;
-            }
-            public IReadOnlyDictionary<NavigationEntryId, PresentationParticipation> AfterParticipation
-            {
-                get;
-            }
+            public NavigationState Before { get; }
+            public NavigationState After { get; }
+            public IReadOnlyCollection<RegionInstanceId>? RetainedRegionScope { get; }
+            public EffectiveComposition BeforeComposition { get; }
+            public EffectiveComposition AfterComposition { get; }
+            public IReadOnlyDictionary<NavigationEntryId, PresentationParticipation> BeforeParticipation { get; }
+            public IReadOnlyDictionary<NavigationEntryId, PresentationParticipation> AfterParticipation { get; }
         }
     }
 }

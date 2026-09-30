@@ -10,17 +10,8 @@ namespace MackySoft.Navigathena
             ProposedAfter = after;
         }
 
-        public NavigationOperationKind Operation
-        {
-            get;
-        }
-        public NavigationState Before
-        {
-            get;
-        }
-        public NavigationState ProposedAfter
-        {
-            get;
-        }
+        public NavigationOperationKind Operation { get; }
+        public NavigationState Before { get; }
+        public NavigationState ProposedAfter { get; }
     }
 }

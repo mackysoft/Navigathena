@@ -13,14 +13,8 @@ namespace MackySoft.Navigathena.Runtime.Messaging
             Request = request ?? throw new ArgumentNullException(nameof(request));
         }
 
-        public NavigationRequest Request
-        {
-            get;
-        }
-        public ReservationCoordinator.ReservationLease Reservation
-        {
-            get;
-        }
+        public NavigationRequest Request { get; }
+        public ReservationCoordinator.ReservationLease Reservation { get; }
         public TaskCompletionSource<NavigationOutcome> Completion { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public NavigationOutcome Closed (NavigationState finalSnapshot) => new(new NavigationOperationId(Guid.NewGuid()), Request.Kind, NavigationOutcomeKind.Faulted, false, finalSnapshot, NavigationDelta.Empty, RestorationOutcome.NotRequired, new[] { new NavigationDiagnostic(NavigationPhase.Prepare, "The runtime is closed.") { Exception = new NavigationRuntimeClosedException() } });
     }

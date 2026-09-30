@@ -14,13 +14,7 @@ namespace MackySoft.Navigathena.Extensions.DependencyInjection.Registration
             Type = type;
             Role = role;
         }
-        public Type Type
-        {
-            get;
-        }
-        public ScreenServiceRole Role
-        {
-            get;
-        }
+        public Type Type { get; }
+        public ScreenServiceRole Role { get; }
     }
 }

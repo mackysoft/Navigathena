@@ -22,10 +22,7 @@ namespace MackySoft.Navigathena.Unity.UGUI
         public object Identity => Canvas.GetEntityId();
         public object OrderingDomain => (Canvas.renderMode, Canvas.targetDisplay, Canvas.sortingLayerID, Canvas.worldCamera != null ? Canvas.worldCamera.GetEntityId() : default, baseSortingOrder);
         public bool IsAlive => this != null && canvas != null && raycaster != null && enabled && gameObject.activeInHierarchy;
-        public ViewPresentation Presentation
-        {
-            get; private set;
-        }
+        public ViewPresentation Presentation { get; private set; }
         private Canvas Canvas => canvas != null ? canvas : canvas = GetComponent<Canvas>();
 
         private void Awake ()

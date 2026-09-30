@@ -47,10 +47,7 @@ namespace MackySoft.Navigathena.Runtime.Navigation
             }
         }
 
-        public RegionInstanceId OwnRegion
-        {
-            get;
-        }
+        public RegionInstanceId OwnRegion { get; }
 
         public bool TryGetOwner (RegionInstanceId region, out NavigationEntryId owner) => ownerEntries.TryGetValue(region, out owner);
 

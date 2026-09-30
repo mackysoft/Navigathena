@@ -18,14 +18,8 @@ namespace MackySoft.Navigathena
 
         public Guid Id { get; } = Guid.NewGuid();
         public ScreenHistoryReturnOptions HistoryReturn { get; init; } = new();
-        public ScreenInstancePolicy InstancePolicy
-        {
-            get;
-        }
-        internal abstract Type RouteType
-        {
-            get;
-        }
+        public ScreenInstancePolicy InstancePolicy { get; }
+        internal abstract Type RouteType { get; }
         internal abstract ValueTask CreateAsync (ScreenCreationServices creation, CancellationToken cancellationToken);
     }
 

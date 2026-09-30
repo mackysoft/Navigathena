@@ -28,66 +28,21 @@ internal sealed class CoordinatedPresentationRealizer : IPresentationRealizer
     private int blockNextRestorationCommit;
     private int blockNextCompletion;
 
-    public bool DepartAllowedEntries
-    {
-        get; set;
-    }
-    public DestinationCommitBehavior DestinationCommitBehavior
-    {
-        get; set;
-    }
-    public PresentationFailure? DestinationCompletionFailure
-    {
-        get; set;
-    }
-    public PresentationFailureScope? DestinationFailureScope
-    {
-        get; set;
-    }
-    public bool FailDepartureCompletion
-    {
-        get; set;
-    }
-    public bool FailHostRecoveryAfterApply
-    {
-        get; set;
-    }
-    public bool IgnoreShutdownWhileCompletionIsBlocked
-    {
-        get; set;
-    }
-    public INavigationCommit? LastDestinationCommit
-    {
-        get; private set;
-    }
-    public bool RejectDestinationCommit
-    {
-        get; set;
-    }
-    public bool RejectRestorationCommit
-    {
-        get; set;
-    }
-    public int PublicationDisposeCount
-    {
-        get; private set;
-    }
-    public bool PreparationCancellationObserved
-    {
-        get; private set;
-    }
-    public bool ThrowOnDestinationCompletion
-    {
-        get; set;
-    }
-    public int TransactionDisposeCount
-    {
-        get; private set;
-    }
-    public bool CompletionCancellationObserved
-    {
-        get; private set;
-    }
+    public bool DepartAllowedEntries { get; set; }
+    public DestinationCommitBehavior DestinationCommitBehavior { get; set; }
+    public PresentationFailure? DestinationCompletionFailure { get; set; }
+    public PresentationFailureScope? DestinationFailureScope { get; set; }
+    public bool FailDepartureCompletion { get; set; }
+    public bool FailHostRecoveryAfterApply { get; set; }
+    public bool IgnoreShutdownWhileCompletionIsBlocked { get; set; }
+    public INavigationCommit? LastDestinationCommit { get; private set; }
+    public bool RejectDestinationCommit { get; set; }
+    public bool RejectRestorationCommit { get; set; }
+    public int PublicationDisposeCount { get; private set; }
+    public bool PreparationCancellationObserved { get; private set; }
+    public bool ThrowOnDestinationCompletion { get; set; }
+    public int TransactionDisposeCount { get; private set; }
+    public bool CompletionCancellationObserved { get; private set; }
 
     public IReadOnlyList<CommittedPublication> CommittedPublications
     {
@@ -217,10 +172,7 @@ internal sealed class CoordinatedPresentationRealizer : IPresentationRealizer
             DepartureEntries = departureEntries;
         }
 
-        public IReadOnlyList<NavigationEntryId> DepartureEntries
-        {
-            get;
-        }
+        public IReadOnlyList<NavigationEntryId> DepartureEntries { get; }
 
         public ValueTask DisposeAsync ()
         {

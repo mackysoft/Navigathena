@@ -18,34 +18,13 @@ namespace MackySoft.Navigathena.Runtime.Planning
             WriteRegions = writeRegions;
         }
 
-        public NavigationState Before
-        {
-            get;
-        }
-        public NavigationState ProposedAfter
-        {
-            get;
-        }
-        public NavigationOperationKind Operation
-        {
-            get;
-        }
-        public RegionInstanceId Target
-        {
-            get;
-        }
-        public NavigationDelta Changes
-        {
-            get;
-        }
-        public IReadOnlyCollection<RegionInstanceId> ReadRegions
-        {
-            get;
-        }
-        public IReadOnlyCollection<RegionInstanceId> WriteRegions
-        {
-            get;
-        }
+        public NavigationState Before { get; }
+        public NavigationState ProposedAfter { get; }
+        public NavigationOperationKind Operation { get; }
+        public RegionInstanceId Target { get; }
+        public NavigationDelta Changes { get; }
+        public IReadOnlyCollection<RegionInstanceId> ReadRegions { get; }
+        public IReadOnlyCollection<RegionInstanceId> WriteRegions { get; }
 
         public bool TryMerge (NavigationState latest, out NavigationState candidate)
         {

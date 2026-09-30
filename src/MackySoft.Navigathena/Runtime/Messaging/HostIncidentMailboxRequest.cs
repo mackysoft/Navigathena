@@ -13,20 +13,11 @@ namespace MackySoft.Navigathena.Runtime.Messaging
             Incident = incident ?? throw new ArgumentNullException(nameof(incident));
         }
 
-        public NavigationHostIncident Incident
-        {
-            get;
-        }
+        public NavigationHostIncident Incident { get; }
 
-        internal long AdmissionOrder
-        {
-            get; set;
-        }
+        internal long AdmissionOrder { get; set; }
 
-        internal long AdmissionWatermark
-        {
-            get; set;
-        }
+        internal long AdmissionWatermark { get; set; }
 
         public TaskCompletionSource<HostIncidentReportResult> Completion { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
     }

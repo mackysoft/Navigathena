@@ -12,13 +12,7 @@ namespace MackySoft.Navigathena.Unity
             Root = root;
         }
 
-        public Scene Scene
-        {
-            get;
-        }
-        public TView Root
-        {
-            get;
-        }
+        public Scene Scene { get; }
+        public TView Root { get; }
     }
 }

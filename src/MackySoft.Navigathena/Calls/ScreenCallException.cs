@@ -14,21 +14,9 @@ namespace MackySoft.Navigathena
             FinalSnapshot = finalSnapshot;
         }
 
-        public Guid CallId
-        {
-            get;
-        }
-        public ScreenCallFailureStage Stage
-        {
-            get;
-        }
-        public bool AnswerCommitted
-        {
-            get;
-        }
-        public NavigationState FinalSnapshot
-        {
-            get;
-        }
+        public Guid CallId { get; }
+        public ScreenCallFailureStage Stage { get; }
+        public bool AnswerCommitted { get; }
+        public NavigationState FinalSnapshot { get; }
     }
 }

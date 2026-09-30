@@ -19,34 +19,13 @@ namespace MackySoft.Navigathena.Presentation
             RetainedChanges = Array.AsReadOnly(retainedChanges.ToArray());
         }
 
-        public PresentationUpdateKind Kind
-        {
-            get;
-        }
-        public NavigationState Before
-        {
-            get;
-        }
-        public NavigationState ProposedAfter
-        {
-            get;
-        }
-        public EffectiveComposition BeforeComposition
-        {
-            get;
-        }
-        public EffectiveComposition ProposedComposition
-        {
-            get;
-        }
-        public IReadOnlyList<PresentationChange> Changes
-        {
-            get;
-        }
-        public IReadOnlyList<PresentationChangeContext> RetainedChanges
-        {
-            get;
-        }
+        public PresentationUpdateKind Kind { get; }
+        public NavigationState Before { get; }
+        public NavigationState ProposedAfter { get; }
+        public EffectiveComposition BeforeComposition { get; }
+        public EffectiveComposition ProposedComposition { get; }
+        public IReadOnlyList<PresentationChange> Changes { get; }
+        public IReadOnlyList<PresentationChangeContext> RetainedChanges { get; }
 
     }
 

@@ -8,13 +8,7 @@ namespace MackySoft.Navigathena
             Revision = revision;
             Records = records;
         }
-        public long Revision
-        {
-            get;
-        }
-        public IReadOnlyList<NavigationTerminationRecord> Records
-        {
-            get;
-        }
+        public long Revision { get; }
+        public IReadOnlyList<NavigationTerminationRecord> Records { get; }
     }
 }

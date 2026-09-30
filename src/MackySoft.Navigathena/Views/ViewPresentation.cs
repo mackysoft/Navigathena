@@ -10,17 +10,8 @@ namespace MackySoft.Navigathena
             Order = order;
         }
 
-        public bool OutputEnabled
-        {
-            get;
-        }
-        public bool InputEnabled
-        {
-            get;
-        }
-        public int Order
-        {
-            get;
-        }
+        public bool OutputEnabled { get; }
+        public bool InputEnabled { get; }
+        public int Order { get; }
     }
 }

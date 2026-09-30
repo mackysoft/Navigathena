@@ -11,9 +11,6 @@ namespace MackySoft.Navigathena
             Changes = Array.AsReadOnly(changes.ToArray());
         }
 
-        public IReadOnlyList<TransitionScreenChange> Changes
-        {
-            get;
-        }
+        public IReadOnlyList<TransitionScreenChange> Changes { get; }
     }
 }

@@ -13,22 +13,10 @@ namespace MackySoft.Navigathena
             ExpectedTop = expectedTop;
         }
 
-        public NavigationEntryId EntryId
-        {
-            get;
-        }
-        public PresentationId PresentationId
-        {
-            get;
-        }
-        public RegionInstanceId? TargetRegion
-        {
-            get;
-        }
-        public NavigationEntryId? ExpectedTop
-        {
-            get;
-        }
+        public NavigationEntryId EntryId { get; }
+        public PresentationId PresentationId { get; }
+        public RegionInstanceId? TargetRegion { get; }
+        public NavigationEntryId? ExpectedTop { get; }
 
         public bool IsCurrent (NavigationState state)
         {

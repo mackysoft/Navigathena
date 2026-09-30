@@ -18,10 +18,7 @@ namespace MackySoft.Navigathena
         internal IReadOnlyCollection<NavigationEntryId> RemovedEntries { get; set; } = Array.Empty<NavigationEntryId>();
 
         internal NavigationOperation () => Id = new NavigationOperationId(Guid.NewGuid());
-        public NavigationOperationId Id
-        {
-            get;
-        }
+        public NavigationOperationId Id { get; }
         internal CancellationToken CancellationToken => cancellation.Token;
         internal bool CancellationRequested
         {

@@ -6,10 +6,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
 {
     internal interface IScreenActivityRuntime
     {
-        INavigationStateSource State
-        {
-            get;
-        }
+        INavigationStateSource State { get; }
         bool HasActivated (NavigationEntryId entry);
         bool OwnsCall (NavigationEntryId entry, PresentationId presentation);
         IScreenCallScope BindCall (NavigationEntry entry, PresentationId presentation, Func<bool> isValid);

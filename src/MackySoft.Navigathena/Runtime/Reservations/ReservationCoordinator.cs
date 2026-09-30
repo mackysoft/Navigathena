@@ -63,14 +63,8 @@ namespace MackySoft.Navigathena.Runtime.Reservations
                 Writes = writes;
             }
 
-            public IReadOnlyCollection<RegionInstanceId> Reads
-            {
-                get;
-            }
-            public IReadOnlyCollection<RegionInstanceId> Writes
-            {
-                get;
-            }
+            public IReadOnlyCollection<RegionInstanceId> Reads { get; }
+            public IReadOnlyCollection<RegionInstanceId> Writes { get; }
 
             public void Dispose ()
             {

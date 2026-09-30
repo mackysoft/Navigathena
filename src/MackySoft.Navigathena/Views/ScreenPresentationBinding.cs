@@ -27,17 +27,8 @@ namespace MackySoft.Navigathena
             ReturnState = returnState;
         }
 
-        public IReadOnlyList<IViewAdapter> Views
-        {
-            get;
-        }
-        public IScreenAnimator? Animator
-        {
-            get;
-        }
-        public ScreenAnimationState? ReturnState
-        {
-            get;
-        }
+        public IReadOnlyList<IViewAdapter> Views { get; }
+        public IScreenAnimator? Animator { get; }
+        public ScreenAnimationState? ReturnState { get; }
     }
 }

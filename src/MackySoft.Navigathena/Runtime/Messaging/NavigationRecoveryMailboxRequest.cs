@@ -13,14 +13,8 @@ namespace MackySoft.Navigathena.Runtime.Messaging
             CancellationToken = cancellationToken;
         }
 
-        public NavigationIncidentId IncidentId
-        {
-            get;
-        }
-        public CancellationToken CancellationToken
-        {
-            get;
-        }
+        public NavigationIncidentId IncidentId { get; }
+        public CancellationToken CancellationToken { get; }
         public TaskCompletionSource<NavigationOutcome> Completion { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         public NavigationOutcome Closed (NavigationState finalSnapshot) => new(new NavigationOperationId(Guid.NewGuid()), NavigationOperationKind.Recovery, NavigationOutcomeKind.Faulted, false, finalSnapshot, NavigationDelta.Empty, RestorationOutcome.NotRequired, new[] { new NavigationDiagnostic(NavigationPhase.Prepare, "The runtime is closed.") { Exception = new NavigationRuntimeClosedException() } });
     }

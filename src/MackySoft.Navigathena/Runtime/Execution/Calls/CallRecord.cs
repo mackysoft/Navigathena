@@ -16,57 +16,21 @@ namespace MackySoft.Navigathena.Runtime.Execution
         }
 
         public Guid Id { get; } = Guid.NewGuid();
-        public NavigationEntryId? Owner
-        {
-            get;
-        }
-        public PresentationId? OwnerPresentation
-        {
-            get;
-        }
-        public RegionInstanceId Region
-        {
-            get;
-        }
-        public Guid? Parent
-        {
-            get;
-        }
-        public bool Published
-        {
-            get; set;
-        }
-        public bool Ending
-        {
-            get; set;
-        }
-        public bool Closing
-        {
-            get; set;
-        }
-        public CallEndReason? EndReason
-        {
-            get; set;
-        }
+        public NavigationEntryId? Owner { get; }
+        public PresentationId? OwnerPresentation { get; }
+        public RegionInstanceId Region { get; }
+        public Guid? Parent { get; }
+        public bool Published { get; set; }
+        public bool Ending { get; set; }
+        public bool Closing { get; set; }
+        public CallEndReason? EndReason { get; set; }
         public bool Answered => EndReason == CallEndReason.Answer;
-        public bool Discarded
-        {
-            get; set;
-        }
+        public bool Discarded { get; set; }
         public List<Task> Retirements { get; } = new();
-        public NavigationOperation? Opening
-        {
-            get; set;
-        }
+        public NavigationOperation? Opening { get; set; }
         public TaskCompletionSource<NavigationResult> Opened { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public CancellationTokenRegistration Cancellation
-        {
-            get; set;
-        }
-        public abstract Task Completion
-        {
-            get;
-        }
+        public CancellationTokenRegistration Cancellation { get; set; }
+        public abstract Task Completion { get; }
         public abstract void Finish (NavigationState finalSnapshot);
         public abstract void CancelOwner ();
         public abstract void Fail (Exception exception);
@@ -75,10 +39,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
     internal sealed class CallRecord<TResult> : CallRecord
     {
         private readonly TaskCompletionSource<TResult> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public bool RequiresAnswer
-        {
-            get;
-        }
+        public bool RequiresAnswer { get; }
 
         public CallRecord (NavigationEntryId? owner, PresentationId? presentation, RegionInstanceId region, Guid? parent, bool requiresAnswer)
             : base(owner, presentation, region, parent)

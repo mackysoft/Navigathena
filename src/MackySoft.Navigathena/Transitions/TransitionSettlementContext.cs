@@ -8,13 +8,7 @@ namespace MackySoft.Navigathena
             DestinationCommitted = destinationCommitted;
         }
 
-        public TransitionSettlementTarget Target
-        {
-            get;
-        }
-        public bool DestinationCommitted
-        {
-            get;
-        }
+        public TransitionSettlementTarget Target { get; }
+        public bool DestinationCommitted { get; }
     }
 }

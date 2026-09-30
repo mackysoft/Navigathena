@@ -21,20 +21,11 @@ namespace MackySoft.Navigathena.Runtime.Views
             Original = adapter.Presentation;
         }
 
-        public IViewAdapter Adapter
-        {
-            get;
-        }
-        public ViewPresentation Original
-        {
-            get;
-        }
+        public IViewAdapter Adapter { get; }
+        public ViewPresentation Original { get; }
         public bool IsReleased => released;
         public int Order => order ?? Adapter.Presentation.Order;
-        public object OrderingDomain
-        {
-            get;
-        }
+        public object OrderingDomain { get; }
 
         public void ObserveLoss (Action<string> reportLoss)
         {

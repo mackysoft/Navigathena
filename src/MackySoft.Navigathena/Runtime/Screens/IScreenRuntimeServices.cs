@@ -6,14 +6,8 @@ namespace MackySoft.Navigathena.Runtime.Screens
 {
     internal interface IScreenRuntimeServices
     {
-        ScreenCatalog Catalog
-        {
-            get;
-        }
-        TerminationJournal Terminations
-        {
-            get;
-        }
+        ScreenCatalog Catalog { get; }
+        TerminationJournal Terminations { get; }
         ScreenInstance? Find (PresentationState? presentation);
         void AddTransitionViews (object transition, IReadOnlyList<ViewRegistration> views);
         void RemoveTransitionViews (object transition);

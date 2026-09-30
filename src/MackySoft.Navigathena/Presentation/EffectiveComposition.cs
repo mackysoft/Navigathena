@@ -12,14 +12,8 @@ namespace MackySoft.Navigathena.Presentation
             InputBoundaries = inputBoundaries;
         }
 
-        public IReadOnlyList<EffectivePresentation> Presentations
-        {
-            get;
-        }
-        public IReadOnlyList<InputBoundary> InputBoundaries
-        {
-            get;
-        }
+        public IReadOnlyList<EffectivePresentation> Presentations { get; }
+        public IReadOnlyList<InputBoundary> InputBoundaries { get; }
     }
 
 }

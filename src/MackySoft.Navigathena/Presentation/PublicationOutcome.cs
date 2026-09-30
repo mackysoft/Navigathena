@@ -26,20 +26,11 @@ namespace MackySoft.Navigathena.Presentation
             HostIncident = hostIncident;
         }
 
-        public CommitDisposition Disposition
-        {
-            get;
-        }
+        public CommitDisposition Disposition { get; }
 
-        public IReadOnlyList<PresentationFailure> Failures
-        {
-            get;
-        }
+        public IReadOnlyList<PresentationFailure> Failures { get; }
 
-        public NavigationHostIncident? HostIncident
-        {
-            get;
-        }
+        public NavigationHostIncident? HostIncident { get; }
 
         public static PublicationOutcome Applied (params PresentationFailure[] failures)
         {

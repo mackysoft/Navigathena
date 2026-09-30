@@ -25,16 +25,10 @@ namespace MackySoft.Navigathena
         }
 
         /// <summary>Gets the logical entry that owns the referenced presentation.</summary>
-        public NavigationEntryId EntryId
-        {
-            get;
-        }
+        public NavigationEntryId EntryId { get; }
 
         /// <summary>Gets the exact physical presentation generation being referenced.</summary>
-        public PresentationId PresentationId
-        {
-            get;
-        }
+        public PresentationId PresentationId { get; }
     }
 
 }

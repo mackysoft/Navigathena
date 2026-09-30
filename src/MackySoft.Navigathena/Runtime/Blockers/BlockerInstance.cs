@@ -36,33 +36,15 @@ namespace MackySoft.Navigathena.Runtime.Blockers
 });
             Preparation = new ManagedBlockerPreparationContext(Lifetime, views);
         }
-        public ResourceScope Lifetime
-        {
-            get;
-        }
-        public ManagedBlockerPreparationContext Preparation
-        {
-            get;
-        }
+        public ResourceScope Lifetime { get; }
+        public ManagedBlockerPreparationContext Preparation { get; }
         public bool IsEnding => ending || Lifetime.EndingToken.IsCancellationRequested;
-        public bool IsTerminated
-        {
-            get; private set;
-        }
+        public bool IsTerminated { get; private set; }
         public bool IsShown => shown;
         public bool HasOutput => Preparation.Registrations.Any(view => view.Adapter.IsAlive && view.Adapter.Presentation.OutputEnabled);
-        public ScreenInstance? OrderAnchor
-        {
-            get; private set;
-        }
-        public ScreenInstance? Screen
-        {
-            get; private set;
-        }
-        public ScreenInstance? Parent
-        {
-            get;
-        }
+        public ScreenInstance? OrderAnchor { get; private set; }
+        public ScreenInstance? Screen { get; private set; }
+        public ScreenInstance? Parent { get; }
 
         public async ValueTask PrepareAsync (CancellationToken cancellationToken)
         {

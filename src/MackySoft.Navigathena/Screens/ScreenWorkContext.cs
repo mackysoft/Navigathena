@@ -5,10 +5,7 @@ namespace MackySoft.Navigathena
     /// <summary>Navigation belongs to the live history binding, not to the activity that started this work.</summary>
     public class ScreenWorkContext
     {
-        internal IScreenCallScope Calls
-        {
-            get;
-        }
+        internal IScreenCallScope Calls { get; }
 
         internal ScreenWorkContext (NavigationEntryId entryId, IScreenNavigation navigation, CancellationToken cancellationToken, IScreenCallScope calls)
         {
@@ -18,18 +15,9 @@ namespace MackySoft.Navigathena
             Calls = calls;
         }
 
-        public NavigationEntryId EntryId
-        {
-            get;
-        }
-        public IScreenNavigation Navigation
-        {
-            get;
-        }
-        public CancellationToken CancellationToken
-        {
-            get;
-        }
+        public NavigationEntryId EntryId { get; }
+        public IScreenNavigation Navigation { get; }
+        public CancellationToken CancellationToken { get; }
 
     }
 
@@ -41,9 +29,6 @@ namespace MackySoft.Navigathena
             Call = context.Calls.Connect<TResult>();
         }
 
-        public ScreenCall<TResult> Call
-        {
-            get;
-        }
+        public ScreenCall<TResult> Call { get; }
     }
 }

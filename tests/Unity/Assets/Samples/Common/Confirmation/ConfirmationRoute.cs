@@ -10,21 +10,9 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
             DeclineText = declineText;
         }
 
-        public string Title
-        {
-            get;
-        }
-        public string Message
-        {
-            get;
-        }
-        public string AcceptText
-        {
-            get;
-        }
-        public string DeclineText
-        {
-            get;
-        }
+        public string Title { get; }
+        public string Message { get; }
+        public string AcceptText { get; }
+        public string DeclineText { get; }
     }
 }
