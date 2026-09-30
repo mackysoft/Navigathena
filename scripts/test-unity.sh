@@ -13,4 +13,4 @@ cd "$repository_root"
 mkdir -p artifacts/unity-results
 result_directory="$(mktemp -d "$repository_root/artifacts/unity-results/run.XXXXXX")"
 unity test artifacts/unity-project --output "$result_directory/results.xml" "${arguments[@]}"
-python3 scripts/verify-unity-results.py "$result_directory"
+dotnet run --project eng/RepositoryTools --configuration Release -- verify-unity-results "$result_directory"

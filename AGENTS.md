@@ -13,6 +13,7 @@
 
 - `src/`：NuGet 配布する共通本体、DI 連携、Unity アダプター。
 - `eng/`：Unity ソースパッケージに共通の MSBuild 定義。
+- `eng/RepositoryTools/`：XML・JSON・NuGet パッケージの処理。スクリプトの実行順序とファイル配置は `scripts/*.sh` が担当する。
 - `tests/MackySoft.Navigathena.Tests/`：共通 Runtime の振る舞いのテスト。
 - `tests/Unity/`：七つの NuGet 配布物を NuGetForUnity で復元する Unity 検証プロジェクトと利用例。外部依存は各配布元の UPM を使用する。
 
@@ -27,6 +28,6 @@ bash scripts/verify.sh --documentation
 
 Unity Editor と有効なライセンスは実行環境の前提とする。ライセンスの設定をスクリプトで隠蔽しない。パッケージの復元には `scripts/prepare-unity.sh` を使う。
 
-.NET の検証には .NET SDK 10 と Python 3.9 以降を使用する。Unity のローカル検証には Unity CLI も必要。
+.NET の検証には .NET SDK 10 を使用する。Unity のローカル検証には Unity CLI も必要。
 
 `--documentation` は Unity の検証と解析用プロジェクトの生成後、DocFX で公開サイトを生成する。生成物は `artifacts/documentation` 以下に限定し、Git に登録しない。入力の生成後は `bash scripts/build-documentation.sh` でサイトを再生成できる。

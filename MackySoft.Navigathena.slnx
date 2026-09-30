@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/eng/">
+    <Project Path="eng/RepositoryTools/RepositoryTools.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/MackySoft.Navigathena/MackySoft.Navigathena.csproj" />
     <Project Path="src/MackySoft.Navigathena.Extensions.DependencyInjection/MackySoft.Navigathena.Extensions.DependencyInjection.csproj" />
@@ -10,5 +13,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/MackySoft.Navigathena.Tests/MackySoft.Navigathena.Tests.csproj" />
+    <Project Path="tests/RepositoryTools.Tests/RepositoryTools.Tests.csproj" />
   </Folder>
 </Solution>

@@ -54,7 +54,7 @@ jobs:
           artifactsPath: artifacts/unity-results/playmode
           githubToken: ''
       - name: Require successful adapter test results
-        run: python3 scripts/verify-unity-results.py artifacts/unity-results/playmode
+        run: dotnet run --project eng/RepositoryTools --configuration Release -- verify-unity-results artifacts/unity-results/playmode
       - name: Build public documentation
         if: inputs.build-documentation
         run: |

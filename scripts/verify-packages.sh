@@ -9,7 +9,7 @@ package_directory="$(cd -- "$1" && pwd -P)"
 repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 package_version="$(dotnet msbuild "$repository_root/src/MackySoft.Navigathena/MackySoft.Navigathena.csproj" -nologo -getProperty:PackageVersion)"
 repository_commit="$(git -C "$repository_root" rev-parse --verify HEAD)"
-python3 "$repository_root/scripts/verify-package-contents.py" "$package_directory" "$package_version" "$repository_commit"
+dotnet run --project "$repository_root/eng/RepositoryTools" --configuration Release -- verify-packages "$repository_root" "$package_directory" "$package_version" "$repository_commit"
 
 temporary_root="$(mktemp -d "${TMPDIR:-/tmp}/navigathena-package-tests.XXXXXX")"
 trap 'rm -rf -- "$temporary_root"' EXIT

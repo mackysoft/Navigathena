@@ -36,7 +36,6 @@ bash scripts/code-quality.sh verify
 dotnet build MackySoft.Navigathena.slnx --configuration Release --no-restore --nologo
 dotnet test MackySoft.Navigathena.slnx --configuration Release --no-build --no-restore --nologo
 dotnet pack MackySoft.Navigathena.slnx --configuration Release --no-build --no-restore --output "$package_directory" --nologo
-python3 -m unittest discover -s scripts/tests -v
 bash scripts/verify-packages.sh "$package_directory"
 if [[ "$run_unity" == true ]]; then
   bash scripts/prepare-unity.sh "$package_directory"

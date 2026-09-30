@@ -87,12 +87,12 @@ jobs:
         env:
           PACKAGE_VERSION: ${{ needs.package.outputs.version }}
           RELEASE_SHA: ${{ needs.package.outputs.sha }}
-        run: python3 scripts/verify-package-contents.py artifacts/packages "$PACKAGE_VERSION" "$RELEASE_SHA"
+        run: dotnet run --project eng/RepositoryTools --configuration Release -- verify-packages "$GITHUB_WORKSPACE" artifacts/packages "$PACKAGE_VERSION" "$RELEASE_SHA"
       - name: Inspect publication state
         id: packages
         env:
           PACKAGE_VERSION: ${{ needs.package.outputs.version }}
-        run: python3 scripts/publication.py prepare artifacts/packages "$PACKAGE_VERSION" artifacts/pending
+        run: dotnet run --project eng/RepositoryTools --configuration Release -- prepare-publication artifacts/packages "$PACKAGE_VERSION" artifacts/pending
       - name: Require NuGet account configuration
         if: steps.packages.outputs['publish-required'] == 'true'
         env:
@@ -130,8 +130,8 @@ jobs:
           RELEASE_SHA: ${{ needs.package.outputs.sha }}
         run: |
           set -euo pipefail
-          python3 scripts/publication.py verify artifacts/packages "$PACKAGE_VERSION" artifacts/published
-          python3 scripts/verify-package-contents.py artifacts/published "$PACKAGE_VERSION" "$RELEASE_SHA"
+          dotnet run --project eng/RepositoryTools --configuration Release -- verify-publication artifacts/packages "$PACKAGE_VERSION" artifacts/published
+          dotnet run --project eng/RepositoryTools --configuration Release -- verify-packages "$GITHUB_WORKSPACE" artifacts/published "$PACKAGE_VERSION" "$RELEASE_SHA"
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
