@@ -13,6 +13,125 @@ public sealed class ScreenLifecycleFailureContractTests
     private static readonly RegionDefinitionId Root = new("root");
     private sealed record InputRoute (int Value) : Route;
 
+    [Fact]
+    public async Task Single_activation_failure_recovers_the_committed_entry_after_releasing_its_old_instance ()
+    {
+        List<string> events = new();
+        bool fail = false;
+        int generations = 0;
+        await using NavigationHost host = Create(new ScreenDefinition<InputRoute>((creation, _) =>
+        {
+            if (generations > 0)
+            {
+                Assert.Contains("screen0.dispose", events);
+            }
+            Handler handler = creation.Lifetime.CreateOwned(() => new Handler("screen" + generations++, events)
+            {
+                Activate = _ => fail ? throw new InvalidOperationException("Activation failed.") : default
+            });
+            return new(handler);
+        }));
+        await host.StartAsync(new InputRoute(1));
+        fail = true;
+        NavigationException activation = await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.ResetAsync(host.Root, Destination.For(new InputRoute(2))));
+        Assert.True(activation.DestinationCommitted);
+        Assert.Equal(NavigationPresentationStatus.RecoveryRequired, activation.PresentationStatus);
+        NavigationEntryId entry = host.State.Current.GetRegion(host.Root).Entries.Single();
+        PresentationState lost = host.State.Current.GetPresentation(entry);
+        Assert.Equal(PresentationMaterialization.Lost, lost.Materialization);
+        fail = false;
+
+        NavigationResult recovery = await host.Recovery.RecoverAsync(lost.IncidentId!.Value);
+
+        Assert.Equal(NavigationPresentationStatus.Ready, recovery.PresentationStatus);
+        Assert.Equal(entry, host.State.Current.GetRegion(host.Root).Entries.Single());
+        Assert.Equal(new InputRoute(2), host.State.Current.GetEntry(entry).Route);
+        Assert.Equal(PresentationMaterialization.Available, host.State.Current.GetPresentation(entry).Materialization);
+        Assert.Contains("screen1.activate.2", events);
+    }
+
+    [Fact]
+    public async Task Single_recovery_waits_for_old_termination_before_acquiring_a_replacement ()
+    {
+        List<string> events = new();
+        TaskCompletionSource<bool> terminating = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource<bool> release = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        bool fail = false;
+        int generations = 0;
+        await using NavigationHost host = Create(new ScreenDefinition<InputRoute>((creation, _) =>
+        {
+            int generation = generations++;
+            return new(creation.Lifetime.CreateOwned(() => new Handler("screen" + generation, events)
+            {
+                Activate = _ => fail ? throw new InvalidOperationException("Activation failed.") : default,
+                Terminate = async () =>
+                {
+                    if (generation == 0)
+                    {
+                        terminating.TrySetResult(true);
+                        await release.Task;
+                    }
+                }
+            }));
+        }));
+        await host.StartAsync(new InputRoute(1));
+        fail = true;
+        await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.ResetAsync(host.Root, Destination.For(new InputRoute(2))));
+        NavigationEntryId entry = host.State.Current.GetRegion(host.Root).Entries.Single();
+        fail = false;
+        Task<NavigationResult> recovery = host.Recovery.RecoverAsync(host.State.Current.GetPresentation(entry).IncidentId!.Value).AsTask();
+        try
+        {
+            Task first = await Task.WhenAny(terminating.Task, recovery).WaitAsync(TimeSpan.FromSeconds(5));
+            Assert.Same(terminating.Task, first);
+            Assert.False(recovery.IsCompleted);
+            Assert.Equal(1, generations);
+            Assert.DoesNotContain("screen0.dispose", events);
+        }
+        finally
+        {
+            release.TrySetResult(true);
+        }
+
+        NavigationResult restored = await recovery.WaitAsync(TimeSpan.FromSeconds(5));
+        Assert.Equal(NavigationPresentationStatus.Ready, restored.PresentationStatus);
+        Assert.Equal(entry, host.State.Current.GetRegion(host.Root).Entries.Single());
+        Assert.True(events.IndexOf("screen0.dispose") < events.IndexOf("screen1.initialize"));
+    }
+
+    [Fact]
+    public async Task Single_recovery_preserves_the_lost_entry_when_old_termination_fails ()
+    {
+        List<string> events = new();
+        bool fail = false;
+        int generations = 0;
+        NavigationHost host = Create(new ScreenDefinition<InputRoute>((creation, _) =>
+        {
+            generations++;
+            return new(creation.Lifetime.CreateOwned(() => new Handler("screen", events)
+            {
+                Activate = _ => fail ? throw new InvalidOperationException("Activation failed.") : default,
+                Terminate = () => throw new InvalidOperationException("Termination failed.")
+            }));
+        }));
+        await host.StartAsync(new InputRoute(1));
+        fail = true;
+        await Assert.ThrowsAsync<NavigationException>(async () => await host.Client.ResetAsync(host.Root, Destination.For(new InputRoute(2))));
+        NavigationEntryId entry = host.State.Current.GetRegion(host.Root).Entries.Single();
+        PresentationState lost = host.State.Current.GetPresentation(entry);
+        fail = false;
+
+        NavigationException recovery = await Assert.ThrowsAsync<NavigationException>(async () => await host.Recovery.RecoverAsync(lost.IncidentId!.Value));
+
+        Assert.False(recovery.DestinationCommitted);
+        Assert.Contains("Termination failed.", recovery.ToString());
+        Assert.Equal(1, generations);
+        Assert.Equal(entry, host.State.Current.GetRegion(host.Root).Entries.Single());
+        Assert.Equal(new InputRoute(2), host.State.Current.GetEntry(entry).Route);
+        Assert.Equal(lost, host.State.Current.GetPresentation(entry));
+        await Assert.ThrowsAsync<AggregateException>(() => host.ShutdownAsync().AsTask());
+    }
+
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -199,6 +318,7 @@ public sealed class ScreenLifecycleFailureContractTests
         public ScreenActivityContext? Activity { get; private set; }
         public Func<InputRoute, ValueTask>? Prepare { get; init; }
         public Func<InputRoute, ValueTask>? Activate { get; init; }
+        public Func<ValueTask>? Terminate { get; init; }
         public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken)
         {
             events.Add(name + ".initialize");
@@ -226,10 +346,13 @@ public sealed class ScreenLifecycleFailureContractTests
             events.Add(name + ".deactivate");
             return default;
         }
-        public ValueTask TerminateAsync (NavigationProgressReporter progress)
+        public async ValueTask TerminateAsync (NavigationProgressReporter progress)
         {
             events.Add(name + ".terminate");
-            return default;
+            if (Terminate is not null)
+            {
+                await Terminate();
+            }
         }
         public ValueTask DisposeAsync ()
         {
