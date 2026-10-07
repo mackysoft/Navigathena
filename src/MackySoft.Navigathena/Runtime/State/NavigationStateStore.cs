@@ -52,7 +52,7 @@ namespace MackySoft.Navigathena.Runtime.State
                     cancellationToken.Register(static state => ((TaskCompletionSource<NavigationState>)state!).TrySetCanceled(), waiter);
                 }
 
-                return new ValueTask<NavigationState>(waiter.Task);
+                return new ValueTask<NavigationState>(AsyncWait.WaitAsync(waiter.Task));
             }
         }
 

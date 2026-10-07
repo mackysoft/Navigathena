@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using MackySoft.Navigathena.Presentation;
 using MackySoft.Navigathena.Runtime.Lifetimes;
 using MackySoft.Navigathena.Runtime.Navigation;
+using MackySoft.Navigathena.Runtime.Synchronization;
 using MackySoft.Navigathena.Runtime.Views;
 
 namespace MackySoft.Navigathena.Runtime.Screens
 {
     internal sealed class ScreenInstance
     {
-        private readonly SemaphoreSlim lifecycle = new(1, 1);
+        private readonly AsyncGate lifecycle = new();
         private readonly INavigationStateSource state;
         private IScreenNavigation navigation;
         private readonly Action<ScreenInstance, string> reportLoss;

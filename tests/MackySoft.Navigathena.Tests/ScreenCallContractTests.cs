@@ -193,26 +193,36 @@ public sealed class ScreenCallContractTests
     [Fact]
     public async Task Work_can_render_a_retained_inactive_view_without_a_library_execution_context ()
     {
-        await using Harness game = new();
-        await game.Host.StartAsync(new HomeRoute("home"));
-        ScreenActivityContext initial = game.Home.Activity!;
-        ScreenWork flow = initial.StartWork(async work =>
+        SynchronizationContext? previous = SynchronizationContext.Current;
+        SynchronizationContext execution = new PreservingSynchronizationContext();
+        SynchronizationContext.SetSynchronizationContext(execution);
+        try
         {
-            SynchronizationContext? execution = SynchronizationContext.Current;
-            Task call = work.Navigation.InvokeAsync(new DetailsRoute());
-            await game.WaitForTopAsync<DetailsRoute>();
-            Assert.True(initial.CancellationToken.IsCancellationRequested);
-            Assert.False(work.CancellationToken.IsCancellationRequested);
-            Assert.Equal(0, game.Home.Disposed);
-            Assert.False(game.Home.View.Presentation.InputEnabled);
-            Assert.Same(execution, SynchronizationContext.Current);
-            game.Home.View.Text = "Updated behind the popup";
-            await game.Host.Client.BackAsync(game.Host.Root);
-            await call;
-            Assert.Same(execution, SynchronizationContext.Current);
-        });
-        await flow.WaitAsync().WaitAsync(TestTimeout);
-        Assert.Equal("Updated behind the popup", game.Home.View.Text);
+            await using Harness game = new();
+            await game.Host.StartAsync(new HomeRoute("home"));
+            ScreenActivityContext initial = game.Home.Activity!;
+            ScreenWork flow = initial.StartWork(async work =>
+            {
+                Assert.Same(execution, SynchronizationContext.Current);
+                Task call = work.Navigation.InvokeAsync(new DetailsRoute());
+                await game.WaitForTopAsync<DetailsRoute>();
+                Assert.True(initial.CancellationToken.IsCancellationRequested);
+                Assert.False(work.CancellationToken.IsCancellationRequested);
+                Assert.Equal(0, game.Home.Disposed);
+                Assert.False(game.Home.View.Presentation.InputEnabled);
+                Assert.Same(execution, SynchronizationContext.Current);
+                game.Home.View.Text = "Updated behind the popup";
+                await game.Host.Client.BackAsync(game.Host.Root);
+                await call;
+                Assert.Same(execution, SynchronizationContext.Current);
+            });
+            await flow.WaitAsync().WaitAsync(TestTimeout);
+            Assert.Equal("Updated behind the popup", game.Home.View.Text);
+        }
+        finally
+        {
+            SynchronizationContext.SetSynchronizationContext(previous);
+        }
     }
 
     [Fact]
@@ -891,6 +901,27 @@ public sealed class ScreenCallContractTests
         Assert.Equal(0, game.Home.Disposed);
         game.Question.Activity!.Call.Complete(true);
         Assert.True(await answer.WaitAsync(TestTimeout));
+    }
+
+    // The application context, unlike the test runner's context, restores itself on Post.
+    private sealed class PreservingSynchronizationContext : SynchronizationContext
+    {
+        public override void Post (SendOrPostCallback callback, object? state)
+        {
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                SynchronizationContext? previous = Current;
+                SetSynchronizationContext(this);
+                try
+                {
+                    callback(state);
+                }
+                finally
+                {
+                    SetSynchronizationContext(previous);
+                }
+            });
+        }
     }
 
     private sealed record HomeRoute (string Name) : Route;

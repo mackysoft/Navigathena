@@ -49,7 +49,7 @@ namespace MackySoft.Navigathena
                 _ = EndUsersAsync(snapshot, completion);
             }
 
-            return new ValueTask(task);
+            return new ValueTask(AsyncWait.WaitAsync(task));
         }
 
         internal void AddUser (IResourceUser user)
@@ -81,7 +81,7 @@ namespace MackySoft.Navigathena
         {
             try
             {
-                await Task.WhenAll(snapshot.Select(static user => user.RequestEndAsync().AsTask()));
+                await AsyncWait.WhenAll(snapshot.Select(static user => user.RequestEndAsync().AsTask()));
                 completion.TrySetResult(null);
             }
             catch (Exception exception)

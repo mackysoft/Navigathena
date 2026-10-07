@@ -484,7 +484,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 }
             }
 
-            Task allReports = Task.WhenAll(reports);
+            Task allReports = AsyncWait.WhenAll(reports);
             try
             {
                 await allReports;
@@ -529,14 +529,26 @@ namespace MackySoft.Navigathena.Runtime.Execution
             {
                 lossReports.Add(report);
             }
-            _ = report.ContinueWith(task =>
+            _ = UntrackLossReportAsync(report);
+        }
+
+        private async Task UntrackLossReportAsync (Task report)
+        {
+            try
             {
-                _ = task.Exception;
+                await report;
+            }
+            catch (Exception)
+            {
+                // The loss-reporting path retains failure diagnostics.
+            }
+            finally
+            {
                 lock (sync)
                 {
-                    lossReports.Remove(task);
+                    lossReports.Remove(report);
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+            }
         }
 
         private async Task HandleEquipmentFailureAsync (string reason)

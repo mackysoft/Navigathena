@@ -16,7 +16,7 @@ namespace MackySoft.Navigathena.Runtime.Reservations
         {
             lock (sync)
             {
-                return leases.Count == 0 ? null : Task.WhenAll(leases.Select(lease => lease.Released.Task));
+                return leases.Count == 0 ? null : AsyncWait.WhenAll(leases.Select(lease => lease.Released.Task));
             }
         }
 

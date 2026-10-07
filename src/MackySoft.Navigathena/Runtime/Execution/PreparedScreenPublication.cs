@@ -41,6 +41,30 @@ namespace MackySoft.Navigathena.Runtime.Execution
         public async ValueTask PrepareAsync (CancellationToken cancellationToken)
         {
             runtime.SetResultStatus(playback.OperationId, NavigationPresentationStatus.RecoveryRequired);
+            if (update.Kind == PresentationUpdateKind.Restoration)
+            {
+                // Single recovery needs the old instance's ownership to end before creation.
+                // Retire dependent screens first, before acquiring uses on these instances.
+                ScreenInstance[] replaced = update.Changes
+                    .Where(change => change.After?.Materialization == PresentationMaterialization.Available && change.Before?.Id != change.After.Id)
+                    .Select(change => runtime.Find(change.Before))
+                    .OfType<ScreenInstance>()
+                    .Distinct()
+                    .ToArray();
+                ScreenInstance[] singleOwners = replaced.Where(screen => screen.Definition.InstancePolicy == ScreenInstancePolicy.Single).ToArray();
+                ScreenInstance[] retiring = replaced
+                    .Where(screen => singleOwners.Contains(screen) || singleOwners.Any(screen.DependsOn))
+                    .OrderByDescending(screen => screen.OwnershipDepth)
+                    .ToArray();
+                cancellationToken.ThrowIfCancellationRequested();
+                foreach (ScreenInstance screen in retiring)
+                {
+                    screen.MarkEnding();
+                }
+                // Start all stops before joining so dependent cleanup can wait on its owner.
+                await AsyncWait.WhenAll(retiring.Select(screen => runtime.TerminateAsync(screen, playback.Progress).AsTask()));
+            }
+
             HashSet<RegionInstanceId> regions = new(update.Changes.Where(change => change.Before?.Id != change.After?.Id
                 || change.BeforeParticipation?.OutputPresented != change.AfterParticipation?.OutputPresented
                 || change.BeforeParticipation?.SemanticInputEligible != change.AfterParticipation?.SemanticInputEligible)

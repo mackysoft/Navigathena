@@ -13,7 +13,7 @@ namespace MackySoft.Navigathena.Unity
     public sealed class SceneAcquisition : IResourceAcquisition<Scene>
     {
         // Unity returns an AsyncOperation, not a scene handle. Serialize native loads while the sceneLoaded event identifies the acquired instance.
-        private static readonly SemaphoreSlim LoadGate = new(1, 1);
+        private static bool loading;
         private readonly string scenePath;
         private Scene scene;
         private ResourceAcquisitionContext? context;
@@ -39,7 +39,15 @@ namespace MackySoft.Navigathena.Unity
                 throw new InvalidOperationException("A scene acquisition can only be started once.");
             }
             started = true;
-            await LoadGate.WaitAsync(cancellationToken);
+            // Scene acquisition runs on the Unity thread. Yield competing loads through
+            // that thread's player loop without a managed thread-pool dependency.
+            while (loading)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Awaitable.NextFrameAsync();
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            loading = true;
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -70,7 +78,7 @@ namespace MackySoft.Navigathena.Unity
             finally
             {
                 SceneManager.sceneLoaded -= OnSceneLoaded;
-                LoadGate.Release();
+                loading = false;
             }
         }
 
