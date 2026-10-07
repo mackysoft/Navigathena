@@ -132,7 +132,7 @@ namespace MackySoft.Navigathena.Hosting
             {
                 if (shutdown is not null)
                 {
-                    return new ValueTask(shutdown);
+                    return new ValueTask(AsyncWait.WaitAsync(shutdown));
                 }
 
                 completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -140,7 +140,7 @@ namespace MackySoft.Navigathena.Hosting
             }
 
             _ = FinishShutdownAsync(completion);
-            return new ValueTask(completion.Task);
+            return new ValueTask(AsyncWait.WaitAsync(completion.Task));
         }
 
         private async Task FinishShutdownAsync (TaskCompletionSource<object?> completion)

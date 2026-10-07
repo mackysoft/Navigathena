@@ -349,7 +349,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
         {
             lock (sync)
             {
-                return Task.WhenAll(call.Retirements.ToArray());
+                return AsyncWait.WhenAll(call.Retirements.ToArray());
             }
         }
 

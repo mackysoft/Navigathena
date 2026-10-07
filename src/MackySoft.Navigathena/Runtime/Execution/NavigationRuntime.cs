@@ -12,6 +12,7 @@ using MackySoft.Navigathena.Runtime.Publication;
 using MackySoft.Navigathena.Runtime.Reservations;
 using MackySoft.Navigathena.Runtime.Screens;
 using MackySoft.Navigathena.Runtime.State;
+using MackySoft.Navigathena.Runtime.Synchronization;
 
 namespace MackySoft.Navigathena.Runtime.Execution
 {
@@ -24,7 +25,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
         private readonly NavigationPlanner planner;
         private readonly PresentationUpdateFactory updates;
         private readonly ReservationCoordinator reservations = new();
-        private readonly SemaphoreSlim commitGate = new(1, 1);
+        private readonly AsyncGate commitGate = new();
         private readonly CancellationTokenSource shutdown = new();
         private readonly NavigationMailbox mailbox = new();
         private readonly NotificationBarrier notificationBarrier = new();
@@ -327,7 +328,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                     NavigationMailboxItem? item = await mailbox.ReadAsync(shutdown.Token);
                     if (item is null)
                     {
-                        continue;
+                        break;
                     }
 
                     await notificationBarrier.WaitAsync();
@@ -515,13 +516,26 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 activeOperations.Add(operation);
             }
 
-            _ = operation.ContinueWith(completed =>
+            _ = UntrackOperationAsync(operation);
+        }
+
+        private async Task UntrackOperationAsync (Task operation)
+        {
+            try
+            {
+                await operation;
+            }
+            catch (Exception)
+            {
+                // The operation handle preserves its failure for callers.
+            }
+            finally
             {
                 lock (operationSync)
                 {
-                    activeOperations.Remove(completed);
+                    activeOperations.Remove(operation);
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+            }
         }
 
         private async Task WaitForActiveOperationsAsync ()
@@ -540,6 +554,12 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 }
 
                 await Task.WhenAll(pending.Select(AwaitIgnoringFailureAsync));
+                // A captured-context cleanup continuation may still be queued. Joining
+                // completed operations must not spin while waiting for that continuation.
+                lock (operationSync)
+                {
+                    activeOperations.ExceptWith(pending);
+                }
             }
         }
 
@@ -1163,7 +1183,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 return await completion;
             }
 
-            if (await Task.WhenAny(completion, cancellation.Task) == completion)
+            if (await AsyncWait.WhenAny(completion, cancellation.Task) == completion)
             {
                 return await completion;
             }
@@ -1186,7 +1206,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 return await completion;
             }
 
-            if (await Task.WhenAny(completion, cancellation.Task) == completion)
+            if (await AsyncWait.WhenAny(completion, cancellation.Task) == completion)
             {
                 return await completion;
             }
@@ -1510,7 +1530,6 @@ namespace MackySoft.Navigathena.Runtime.Execution
             state.Close();
             commitGate.Release();
             shutdown.Dispose();
-            commitGate.Dispose();
         }
 
         private static IReadOnlyList<NavigationEntryId> CollectDepartureCandidates (NavigationState before, NavigationState after) => before.Presentations.Where(pair => pair.Value.Materialization == PresentationMaterialization.Available && (!after.Presentations.TryGetValue(pair.Key, out PresentationState? next) || next.Materialization != PresentationMaterialization.Available || next.Id != pair.Value.Id)).Select(static pair => pair.Key).ToArray();
