@@ -40,10 +40,10 @@ Unity adapters include source files, assembly definitions, and asset metadata fo
 ## Unity installation
 
 1. Install [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity).
-2. Install the dependencies required by your adapters through Unity Package Manager. Obtain uGUI, Addressables, and VContainer from their official distributions. UI Toolkit uses Unity's built-in module.
+2. Check the [Unity requirements](src/MackySoft.Navigathena.Unity/README.md#requirements), then install the dependencies required by your adapters through Unity Package Manager. Obtain uGUI, Addressables, and VContainer from their official distributions. UI Toolkit uses Unity's built-in module.
 3. In NuGetForUnity, install `MackySoft.Navigathena.Unity` and the UI, Addressables, or dependency injection adapters you need. The core runtime is installed as a NuGet dependency. Keep all Navigathena packages at the same version.
 
-Tested with Unity 6000.5.5f1 and NuGetForUnity 4.5.0. NuGet does not install UPM dependencies for you.
+Unity 2021.3 and newer are supported. UniTask is required before Unity 2023.1; on Unity 2023.1 and newer, it is optional. NuGet does not install UPM dependencies for you.
 
 ### .NET installation
 
