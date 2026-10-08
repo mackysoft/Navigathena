@@ -272,6 +272,44 @@ namespace MackySoft.Navigathena.Unity.Tests
             Assert.That(scenes[1].Scene.isLoaded, Is.False);
         });
 
+        [Test]
+        public void Canvas_views_share_ordering_only_when_their_native_camera_matches ()
+        {
+            GameObject firstObject = Track(new GameObject("First canvas", typeof(Canvas)));
+            GameObject secondObject = Track(new GameObject("Second canvas", typeof(Canvas)));
+            Camera firstCamera = Track(new GameObject("First camera")).AddComponent<Camera>();
+            Camera secondCamera = Track(new GameObject("Second camera")).AddComponent<Camera>();
+            Canvas firstCanvas = firstObject.GetComponent<Canvas>();
+            Canvas secondCanvas = secondObject.GetComponent<Canvas>();
+            firstCanvas.renderMode = secondCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            firstCanvas.worldCamera = secondCanvas.worldCamera = firstCamera;
+            CanvasViewAdapter first = firstObject.AddComponent<CanvasViewAdapter>();
+            CanvasViewAdapter second = secondObject.AddComponent<CanvasViewAdapter>();
+
+            object identity = first.Identity;
+            firstObject.name = "Renamed canvas";
+            Assert.That(first.Identity, Is.EqualTo(identity));
+            Assert.That(first.Identity, Is.Not.EqualTo(second.Identity));
+            Assert.That(first.OrderingDomain, Is.EqualTo(second.OrderingDomain));
+            secondCanvas.worldCamera = secondCamera;
+            Assert.That(first.OrderingDomain, Is.Not.EqualTo(second.OrderingDomain));
+        }
+
+        [Test]
+        public void Toolkit_views_share_ordering_only_when_their_native_panel_matches ()
+        {
+            UiToolkitViewAdapter first = CreateDocument();
+            UiToolkitViewAdapter second = CreateDocument();
+            UIDocument firstDocument = first.GetComponent<UIDocument>();
+            UIDocument secondDocument = second.GetComponent<UIDocument>();
+            object identity = second.Identity;
+            Assert.That(first.Identity, Is.Not.EqualTo(second.Identity));
+            Assert.That(first.OrderingDomain, Is.Not.EqualTo(second.OrderingDomain));
+            secondDocument.panelSettings = firstDocument.panelSettings;
+            Assert.That(second.Identity, Is.EqualTo(identity));
+            Assert.That(first.OrderingDomain, Is.EqualTo(second.OrderingDomain));
+        }
+
         private NavigationHost Create (Func<ScreenCreationContext<TestRoute>, CancellationToken, ValueTask<IScreenLifecycleHandler<TestRoute>>> factory)
         {
             NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root => root.AddRoute<TestRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain));

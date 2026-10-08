@@ -3,26 +3,43 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Xml.Linq;
 
 namespace RepositoryTools;
 
 internal static class UnityConsumer
 {
-    internal static void Configure (string project, string version)
+    internal static void Configure (string project, string version, string configuration)
     {
-        using JsonDocument manifest = JsonDocument.Parse(File.ReadAllText(Path.Combine(project, "Packages", "manifest.json")));
-        PackageArtifacts.Require(!manifest.RootElement.GetProperty("dependencies").EnumerateObject().Any(property => property.Name.StartsWith("com.mackysoft.navigathena", StringComparison.Ordinal)), "Navigathena must be restored from NuGet, not from UPM or repository sources.");
+        string manifestPath = Path.Combine(project, "Packages", "manifest.json");
+        JsonObject manifest = JsonNode.Parse(File.ReadAllText(manifestPath))!.AsObject();
+        JsonObject dependencies = manifest["dependencies"]!.AsObject();
+        using JsonDocument settingsDocument = JsonDocument.Parse(File.ReadAllText(configuration));
+        JsonElement configurationSettings = settingsDocument.RootElement;
+        if (configurationSettings.TryGetProperty("packageVersions", out JsonElement packageVersions))
+        {
+            foreach (JsonProperty item in packageVersions.EnumerateObject())
+            {
+                dependencies[item.Name] = item.Value.GetString();
+            }
+        }
+        PackageArtifacts.Require(!dependencies.Any(property => property.Key.StartsWith("com.mackysoft.navigathena", StringComparison.Ordinal)), "Navigathena must be restored from NuGet, not from UPM or repository sources.");
         Dictionary<string, string> packages = PackageVersions(project);
         PackageArtifacts.Require(packages.Values.All(value => value == version), "Unity packages.config does not match the release version.");
+        File.WriteAllText(manifestPath, manifest.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) + "\n");
+        if (configurationSettings.TryGetProperty("editorVersion", out JsonElement editorVersion))
+        {
+            File.WriteAllText(Path.Combine(project, "ProjectSettings", "ProjectVersion.txt"), $"m_EditorVersion: {editorVersion.GetString()}\n");
+        }
         string path = Path.Combine(project, "Assets", "NuGet.config");
         XDocument config = XDocument.Load(path);
         config.Root!.Element("packageSources")!.Elements("add").Single(item => (string?)item.Attribute("key") == "local").SetAttributeValue("value", "../../unity-feed");
-        XElement settings = config.Root.Element("config")!;
-        XElement? cache = settings.Elements("add").SingleOrDefault(item => (string?)item.Attribute("key") == "InstallFromCache");
+        XElement nugetSettings = config.Root.Element("config")!;
+        XElement? cache = nugetSettings.Elements("add").SingleOrDefault(item => (string?)item.Attribute("key") == "InstallFromCache");
         if (cache is null)
         {
-            settings.Add(new XElement("add", new XAttribute("key", "InstallFromCache"), new XAttribute("value", "false")));
+            nugetSettings.Add(new XElement("add", new XAttribute("key", "InstallFromCache"), new XAttribute("value", "false")));
         }
         else
         {

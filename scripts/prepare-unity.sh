@@ -2,11 +2,16 @@
 set -euo pipefail
 
 repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
-if [[ $# -ne 1 ]]; then
-  printf 'Usage: %s <verified-package-directory>\n' "$0" >&2
+if [[ $# -lt 1 || $# -gt 2 ]]; then
+  printf 'Usage: %s <verified-package-directory> [unity-6|unity-2021]\n' "$0" >&2
   exit 2
 fi
 package_directory="$(cd -- "$1" && pwd -P)"
+unity_configuration="${2:-unity-6}"
+case "$unity_configuration" in
+  unity-6|unity-2021) ;;
+  *) printf 'Unknown Unity configuration: %s\n' "$unity_configuration" >&2; exit 2 ;;
+esac
 cd "$repository_root"
 project_directory="$repository_root/artifacts/unity-project"
 feed_directory="$repository_root/artifacts/unity-feed"
@@ -27,8 +32,8 @@ for directory in Assets Packages ProjectSettings; do
   rm -rf -- "$project_directory/$directory"
   cp -R "tests/Unity/$directory" "$project_directory/$directory"
 done
-dotnet run --project eng/RepositoryTools --configuration Release -- configure-unity "$project_directory" "$version"
-printf 'Unity consumer: %s\n' "$project_directory"
+dotnet run --project eng/RepositoryTools --configuration Release -- configure-unity "$project_directory" "$version" "$repository_root/tests/Unity/Configurations/$unity_configuration.json"
+printf 'Unity consumer: %s (%s)\n' "$project_directory" "$unity_configuration"
 dotnet tool restore
 dotnet tool run nugetforunity restore artifacts/unity-project
 dotnet run --project eng/RepositoryTools --configuration Release -- verify-unity-packages "$feed_directory" "$project_directory"
