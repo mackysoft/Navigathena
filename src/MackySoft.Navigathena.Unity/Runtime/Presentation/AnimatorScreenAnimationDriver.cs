@@ -121,7 +121,7 @@ namespace MackySoft.Navigathena.Unity
                     {
                         throw new TimeoutException("The screen animation did not finish within its configured timeout.");
                     }
-                    await Awaitable.NextFrameAsync(cancellationToken);
+                    await UnityFrame.NextAsync(cancellationToken);
                 }
             }
             finally

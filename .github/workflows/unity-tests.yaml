@@ -22,8 +22,15 @@ permissions:
 
 jobs:
   test:
+    name: Unity behavior tests (${{ matrix.configuration }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration:
+          - unity-6
+          - unity-2021
     steps:
       - uses: actions/checkout@v5
         with:
@@ -36,7 +43,7 @@ jobs:
           name: release-packages
           path: artifacts/packages
       - name: Restore release packages for the Unity tests
-        run: bash scripts/prepare-unity.sh artifacts/packages
+        run: bash scripts/prepare-unity.sh artifacts/packages '${{ matrix.configuration }}'
       - name: Run Unity PlayMode tests
         uses: game-ci/unity-test-runner@32e57712352b500e17974b245a6dce9e11a73213
         env:
@@ -50,19 +57,19 @@ jobs:
           cliVersion: v0.1.69
           projectPath: artifacts/unity-project
           testMode: PlayMode
-          customParameters: ${{ inputs.build-documentation && '-exportDocfxProjects' || '' }}
+          customParameters: ${{ inputs.build-documentation && matrix.configuration == 'unity-6' && '-exportDocfxProjects' || '' }}
           artifactsPath: artifacts/unity-results/playmode
           githubToken: ''
       - name: Require successful adapter test results
         run: dotnet run --project eng/RepositoryTools --configuration Release -- verify-unity-results artifacts/unity-results/playmode
       - name: Build public documentation
-        if: inputs.build-documentation
+        if: inputs.build-documentation && matrix.configuration == 'unity-6'
         run: |
           # Unity runs in a root-owned container; DocFX runs as the host runner.
           sudo chown -R "$(id -u):$(id -g)" artifacts/documentation
           bash scripts/build-documentation.sh
       - name: Upload public documentation
-        if: inputs.build-documentation
+        if: inputs.build-documentation && matrix.configuration == 'unity-6'
         uses: actions/upload-artifact@v7
         with:
           name: documentation-site
@@ -71,6 +78,6 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: unity-test-results
+          name: unity-test-results-${{ matrix.configuration }}
           path: artifacts/unity-results
           if-no-files-found: warn

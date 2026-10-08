@@ -3,6 +3,7 @@
   "rootNamespace": "MackySoft.Navigathena.Unity.Addressables",
   "references": [
     "MackySoft.Navigathena.Unity",
+    "UniTask",
     "Unity.Addressables",
     "Unity.ResourceManager"
   ],

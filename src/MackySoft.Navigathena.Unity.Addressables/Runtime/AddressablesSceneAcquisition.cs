@@ -33,7 +33,7 @@ namespace MackySoft.Navigathena.Unity.Addressables
             while (!handle.IsDone)
             {
                 reports.Report(new AddressablesAcquisitionProgress(reference.AssetGUID, handle.PercentComplete, handle.GetDownloadStatus()));
-                await Awaitable.NextFrameAsync();
+                await UnityFrame.NextAsync(CancellationToken.None);
             }
             if (handle.Status != AsyncOperationStatus.Succeeded)
             {
@@ -74,7 +74,7 @@ namespace MackySoft.Navigathena.Unity.Addressables
             while (!unload.IsDone)
             {
                 reports.Report(unload.PercentComplete);
-                await Awaitable.NextFrameAsync();
+                await UnityFrame.NextAsync(CancellationToken.None);
             }
             if (unload.Status != AsyncOperationStatus.Succeeded)
             {

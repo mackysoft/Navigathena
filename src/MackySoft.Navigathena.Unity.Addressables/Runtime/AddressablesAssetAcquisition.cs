@@ -26,7 +26,7 @@ namespace MackySoft.Navigathena.Unity.Addressables
             while (!handle.IsDone)
             {
                 reports.Report(new AddressablesAcquisitionProgress(reference.AssetGUID, handle.PercentComplete, handle.GetDownloadStatus()));
-                await Awaitable.NextFrameAsync();
+                await UnityFrame.NextAsync(CancellationToken.None);
             }
             GameObject asset = handle.Result;
             if (handle.Status != AsyncOperationStatus.Succeeded || asset == null)

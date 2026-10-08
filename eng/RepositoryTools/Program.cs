@@ -21,8 +21,8 @@ internal static class Program
                 case ["verify-packages", string root, string directory, string version, string commit]:
                     PackageArtifacts.Verify(directory, root, version, commit);
                     break;
-                case ["configure-unity", string project, string version]:
-                    UnityConsumer.Configure(project, version);
+                case ["configure-unity", string project, string version, string configuration]:
+                    UnityConsumer.Configure(project, version, configuration);
                     break;
                 case ["verify-unity-packages", string feed, string project]:
                     UnityConsumer.VerifyPackages(feed, project);

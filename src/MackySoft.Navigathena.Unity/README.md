@@ -4,9 +4,20 @@ Connects Unity scenes, prefabs, configured screen views, and Animator playback t
 
 Install this NuGet package through [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity). Keep all Navigathena packages at the same version. NuGet dependencies provide the common Runtime and, where required, the base Unity adapter.
 
-Tested with Unity 6000.5.5f1.
-
 This package contains Unity source files, assembly definitions, and asset metadata. NuGetForUnity restores them under the package's `Sources` directory for Unity to compile. It does not embed Unity, third-party assemblies, or another copy of the Navigathena Runtime. Do not install a Navigathena UPM package alongside it.
+
+## Requirements
+
+Use Unity 2021.3 or newer, with the built-in Animation module enabled.
+
+- On Unity versions earlier than 2023.1, install [UniTask](https://github.com/Cysharp/UniTask) 2.1 or newer.
+- On Unity 2023.1 and newer, UniTask is optional. Navigathena uses UniTask for frame waits when available, including on Unity 6; otherwise it uses Unity's `Awaitable`.
+
+Installing UniTask as the `com.cysharp.unitask` UPM package enables its use automatically. If you copy UniTask into `Assets` instead, add `NAVIGATHENA_UNITASK` to **Scripting Define Symbols** in Player Settings and keep its `UniTask` assembly definition.
+
+Install adapter dependencies separately, choosing versions that support your Unity Editor. NuGet does not install UniTask, uGUI, Addressables, or VContainer for you. The common Navigathena runtime does not depend on UniTask, and public asynchronous APIs continue to use `Task` and `ValueTask`.
+
+Verified with Unity 2021.3.45f2 and UniTask 2.5.11, and Unity 6000.5.5f1 with and without UniTask 2.5.11, using NuGetForUnity 4.5.0.
 
 ## Configure a screen in the Inspector
 

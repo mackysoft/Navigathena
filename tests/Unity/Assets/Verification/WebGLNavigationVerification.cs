@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using MackySoft.Navigathena.Hosting;
 using MackySoft.Navigathena.Integration;
 using UnityEngine;
@@ -114,9 +115,9 @@ namespace MackySoft.Navigathena.Unity.Verification
             active.View.Lose();
             while (host.State.Current.Presentations.Values.All(presentation => presentation.Materialization != PresentationMaterialization.Lost))
             {
-                await Awaitable.NextFrameAsync();
+                await UniTask.NextFrame();
             }
-            await Awaitable.NextFrameAsync();
+            await UniTask.NextFrame();
             active.ContinueActivation.TrySetResult(true);
             try
             {
@@ -188,7 +189,7 @@ namespace MackySoft.Navigathena.Unity.Verification
             public TaskCompletionSource<bool> ActivationEntered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
             public TaskCompletionSource<bool> ContinueActivation { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
             public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
-            public async ValueTask PrepareAsync (ProbeRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => await Awaitable.NextFrameAsync();
+            public async ValueTask PrepareAsync (ProbeRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => await UniTask.NextFrame();
             public async ValueTask ActivateAsync (ProbeRoute route, ScreenActivityContext activity)
             {
                 if (failActivation())
@@ -204,16 +205,16 @@ namespace MackySoft.Navigathena.Unity.Verification
                 {
                     while (!context.CancellationToken.IsCancellationRequested)
                     {
-                        await Awaitable.NextFrameAsync();
+                        await UniTask.NextFrame();
                     }
-                    await Awaitable.NextFrameAsync();
+                    await UniTask.NextFrame();
                     if (Disposed)
                     {
                         violations.Add("Screen resources were released before owned work ended.");
                     }
                 });
             }
-            public async ValueTask DeactivateAsync () => await Awaitable.NextFrameAsync();
+            public async ValueTask DeactivateAsync () => await UniTask.NextFrame();
             public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
             public void Dispose () => Disposed = true;
         }
