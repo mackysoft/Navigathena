@@ -90,51 +90,81 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h2 id="200-preview2---2026-10-07">[2.0.0-preview.2] - 2026-10-07</h2>
+<h2 id="200-preview3---2026-10-09">[2.0.0-preview.3] - 2026-10-09</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Changed Unity frame waits to prefer UniTask 2.1 or newer when installed, including on Unity 6. Unity 2023.1 and newer use the native Awaitable when UniTask is absent.</li>
+</ul>
 <h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed Unity 2021.3 and Unity 2022.3 compilation for scene loading, prefab cleanup, Animator playback, and Addressables operations. UniTask 2.1 or newer is required on Unity versions before 2023.1. (#25)</li>
+<li>Fixed uGUI and UI Toolkit adapter compilation on Unity versions before 6000.4 by using object identities available in those editors.</li>
+<li>Fixed missing-dependency diagnostics on editors without Awaitable: compilation now reports that UniTask 2.1 or newer must be installed through Unity Package Manager.</li>
+</ul>
+<h2 id="200-preview2---2026-10-07">[2.0.0-preview.2] - 2026-10-07</h2>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>Fixed navigation requests, cancellation waits, recovery coordination, and shutdown stalling in Unity WebGL.</li>
 <li>Fixed competing native scene acquisitions waiting for managed worker threads in Unity WebGL.</li>
 <li>Fixed recovery of Single screen definitions after activation failures. Recovery now waits for the previous instance's resources to be released and preserves the committed history entry and route.</li>
 </ul>
+<h2 id="200-preview1---2026-10-01">[2.0.0-preview.1] - 2026-10-01</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Added an engine-independent .NET Standard 2.1 runtime with Task and ValueTask APIs, without Unity or UniTask dependencies in the common runtime.</li>
+<li>Added typed routes and an application-owned NavigationHost for screen lifecycles, history, state restoration, reload, and independently navigated child regions.</li>
+<li>Added result-returning screen calls and screen-owned asynchronous work that can continue across activity suspension.</li>
+<li>Added explicit ownership of acquired and borrowed screen resources, with awaited screen termination and host shutdown.</li>
+<li>Added separate Unity scene, prefab, uGUI, UI Toolkit, Addressables, and Animator integrations, plus Microsoft.Extensions.DependencyInjection and VContainer adapters.</li>
+<li>Added screen animations, whole-transition effects, and typed loading progress for application-specific loading displays.</li>
+</ul>
+<h3 id="changed-1">Changed</h3>
+<ul>
+<li><strong>Breaking:</strong> Replaced the 1.x scene-navigation and entry-point APIs with typed routes, screen factories, and lifecycle handlers. Existing screen implementations require migration, not just a package-reference update.</li>
+<li><strong>Breaking:</strong> Changed distribution from the com.mackysoft.navigathena UPM package to seven NuGet packages. Remove the old UPM package and manually installed Navigathena files before installing 2.0; use NuGetForUnity for Unity and keep all Navigathena packages at the same version. Install adapter dependencies separately through Unity Package Manager.</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>Removed arbitrary history mutation, the interruptOperation parameter, and the OnEditorFirstPreInitialize hook. Use supported navigation commands, route preparation, and application startup code instead.</li>
+</ul>
 <h2 id="104---2023-11-07">[1.0.4] - 2023-11-07</h2>
-<h3 id="changed">Changed</h3>
+<h3 id="changed-2">Changed</h3>
 <ul>
 <li><code>ScopedSceneEntryPoint</code> now ensures that <code>autoRun</code> set to disabled when <code>LifetimeScope</code> activation.</li>
 <li>Rename the <code>Create LifetimeScope</code> button to <code>Create Default LifetimeScope</code> in the <code>ScopedSceneEntryPoint</code> inspector.</li>
 </ul>
 <h2 id="103---2023-11-04">[1.0.3] - 2023-11-04</h2>
-<h3 id="added">Added</h3>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>Added <code>HistoryAssert</code>, an API for testing to ensure the correctness of the history.</li>
 <li>Added <code>ISceneEntryPointLifecycleAsserter</code>, an API for testing to ensure that the <code>ISceneEntryPoint</code> lifecycle history is correct.</li>
 </ul>
-<h3 id="changed-1">Changed</h3>
+<h3 id="changed-3">Changed</h3>
 <ul>
 <li><code>BlankSceneIdentifier</code> is now a test-only API.</li>
 <li>Rename from <code>BlankSceneIdentifier</code> to <code>AnonymousSceneIdentifier</code>.</li>
 </ul>
-<h3 id="fixed-1">Fixed</h3>
+<h3 id="fixed-2">Fixed</h3>
 <ul>
 <li>Fixed that scenes were not being cleaned up during test setup and that some tests were not functioning correctly.</li>
 <li>Fixed many compiler warnings.</li>
 </ul>
 <h2 id="102---2023-11-01">[1.0.2] - 2023-11-01</h2>
-<h3 id="added-1">Added</h3>
+<h3 id="added-2">Added</h3>
 <ul>
 <li>Added <code>StandardSceneNavigatorTest</code>. This improves the stability of the features.</li>
 </ul>
-<h3 id="changed-2">Changed</h3>
+<h3 id="changed-4">Changed</h3>
 <ul>
 <li><code>BlankSceneIdentifier</code> make to generic.</li>
 </ul>
-<h3 id="fixed-2">Fixed</h3>
+<h3 id="fixed-3">Fixed</h3>
 <ul>
 <li>Fixed incorrect history on interrupt pop during pop.</li>
 <li><code>OnExit</code> is no longer called if <code>OnEnter</code> was not called on a SceneEntryPoint when the transition process was canceled.</li>
 </ul>
 <h2 id="101---2023-10-31">[1.0.1] - 2023-10-31</h2>
-<h3 id="added-2">Added</h3>
+<h3 id="added-3">Added</h3>
 <ul>
 <li>Add members into <code>ISceneHistoryBuilder</code>.</li>
 <li>Add <code>IContainerBuilder.RegisterSceneLifecycle</code> extension method.</li>

@@ -144,10 +144,10 @@
 <h2 id="unity-installation">Unity installation</h2>
 <ol>
 <li>Install <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>.</li>
-<li>Install the dependencies required by your adapters through Unity Package Manager. Obtain uGUI, Addressables, and VContainer from their official distributions. UI Toolkit uses Unity's built-in module.</li>
+<li>Check the <a href="src/MackySoft.Navigathena.Unity/README.html#requirements">Unity requirements</a>, then install the dependencies required by your adapters through Unity Package Manager. Obtain uGUI, Addressables, and VContainer from their official distributions. UI Toolkit uses Unity's built-in module.</li>
 <li>In NuGetForUnity, install <code>MackySoft.Navigathena.Unity</code> and the UI, Addressables, or dependency injection adapters you need. The core runtime is installed as a NuGet dependency. Keep all Navigathena packages at the same version.</li>
 </ol>
-<p>Tested with Unity 6000.5.5f1 and NuGetForUnity 4.5.0. NuGet does not install UPM dependencies for you.</p>
+<p>Unity 2021.3 and newer are supported. UniTask is required before Unity 2023.1; on Unity 2023.1 and newer, it is optional. NuGet does not install UPM dependencies for you.</p>
 <h3 id="net-installation">.NET installation</h3>
 <p>Install <code>MackySoft.Navigathena</code> from NuGet. Add <code>MackySoft.Navigathena.Extensions.DependencyInjection</code> only if you use Microsoft.Extensions.DependencyInjection. The common runtime targets .NET Standard 2.1 and uses <code>Task</code> and <code>ValueTask</code>; it does not require Unity or UniTask.</p>
 <h2 id="getting-started">Getting started</h2>

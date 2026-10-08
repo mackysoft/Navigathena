@@ -75,8 +75,16 @@
 
 <p>Connects Unity scenes, prefabs, configured screen views, and Animator playback to the common Navigathena runtime. There is no separate Unity navigation host: create <code>NavigationHost</code> from <code>MackySoft.Navigathena.Hosting</code>.</p>
 <p>Install this NuGet package through <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>. Keep all Navigathena packages at the same version. NuGet dependencies provide the common Runtime and, where required, the base Unity adapter.</p>
-<p>Tested with Unity 6000.5.5f1.</p>
 <p>This package contains Unity source files, assembly definitions, and asset metadata. NuGetForUnity restores them under the package's <code>Sources</code> directory for Unity to compile. It does not embed Unity, third-party assemblies, or another copy of the Navigathena Runtime. Do not install a Navigathena UPM package alongside it.</p>
+<h2 id="requirements">Requirements</h2>
+<p>Use Unity 2021.3 or newer, with the built-in Animation module enabled.</p>
+<ul>
+<li>On Unity versions earlier than 2023.1, install <a href="https://github.com/Cysharp/UniTask">UniTask</a> 2.1 or newer.</li>
+<li>On Unity 2023.1 and newer, UniTask is optional. Navigathena uses UniTask for frame waits when available, including on Unity 6; otherwise it uses Unity's <code>Awaitable</code>.</li>
+</ul>
+<p>Installing UniTask as the <code>com.cysharp.unitask</code> UPM package enables its use automatically. If you copy UniTask into <code>Assets</code> instead, add <code>NAVIGATHENA_UNITASK</code> to <strong>Scripting Define Symbols</strong> in Player Settings and keep its <code>UniTask</code> assembly definition.</p>
+<p>Install adapter dependencies separately, choosing versions that support your Unity Editor. NuGet does not install UniTask, uGUI, Addressables, or VContainer for you. The common Navigathena runtime does not depend on UniTask, and public asynchronous APIs continue to use <code>Task</code> and <code>ValueTask</code>.</p>
+<p>Verified with Unity 2021.3.45f2 and UniTask 2.5.11, and Unity 6000.5.5f1 with and without UniTask 2.5.11, using NuGetForUnity 4.5.0.</p>
 <h2 id="configure-a-screen-in-the-inspector">Configure a screen in the Inspector</h2>
 <p>For a uGUI screen, create a scene object or prefab with:</p>
 <pre><code class="lang-text">Campaign screen
