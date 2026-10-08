@@ -20,9 +20,9 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
         private VisualElement? closedReplacement;
 
         public event Action<string>? Lost;
-        public object Identity => Document.GetEntityId();
+        public object Identity => UnityObjectIdentity.Get(Document);
         public object OrderingDomain => Document.panelSettings != null
-            ? (Document.panelSettings.GetEntityId(), baseSortingOrder)
+            ? (UnityObjectIdentity.Get(Document.panelSettings), baseSortingOrder)
             : throw new NavigationConfigurationException("A UIDocument requires PanelSettings.");
         public bool IsAlive => this != null && document != null && enabled && gameObject.activeInHierarchy && root is not null && ReferenceEquals(root, document.rootVisualElement);
         public ViewPresentation Presentation { get; private set; }

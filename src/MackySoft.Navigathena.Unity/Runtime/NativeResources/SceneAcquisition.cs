@@ -44,7 +44,7 @@ namespace MackySoft.Navigathena.Unity
             while (loading)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Awaitable.NextFrameAsync();
+                await UnityFrame.NextAsync(CancellationToken.None);
             }
             cancellationToken.ThrowIfCancellationRequested();
             loading = true;
@@ -65,7 +65,7 @@ namespace MackySoft.Navigathena.Unity
                 while (!operation.isDone)
                 {
                     progress.Report(new SceneProgress(scenePath, operation.progress, operation.isDone));
-                    await Awaitable.NextFrameAsync();
+                    await UnityFrame.NextAsync(CancellationToken.None);
                 }
                 cancellationToken.ThrowIfCancellationRequested();
                 if (!scene.IsValid() || !scene.isLoaded)
@@ -95,7 +95,7 @@ namespace MackySoft.Navigathena.Unity
                 while (!operation.isDone)
                 {
                     reports.Report(new SceneProgress(scenePath, operation.progress, operation.isDone));
-                    await Awaitable.NextFrameAsync();
+                    await UnityFrame.NextAsync(CancellationToken.None);
                 }
                 if (scene.IsValid() && scene.isLoaded)
                 {

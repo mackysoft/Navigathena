@@ -52,7 +52,7 @@ namespace MackySoft.Navigathena.Unity.NativeResources
                 // Native destruction is deferred. Do not release the source asset before it finishes.
                 while (instance != null)
                 {
-                    await Awaitable.NextFrameAsync();
+                    await UnityFrame.NextAsync(CancellationToken.None);
                 }
                 reports.Report(1);
             }
