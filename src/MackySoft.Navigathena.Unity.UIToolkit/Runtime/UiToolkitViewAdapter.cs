@@ -5,141 +5,78 @@ using UnityEngine.UIElements;
 
 namespace MackySoft.Navigathena.Unity.UIToolkit
 {
-    /// <summary>Connects a UIDocument to runtime visibility, ordering, and event interception without disabled styling.</summary>
-    [RequireComponent(typeof(UIDocument))]
-    [DefaultExecutionOrder(100)]
-    public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter
+    /// <summary>Connects an acquired UI Toolkit screen to its presentation host.</summary>
+    /// <remarks>Assign UXML to ContentAsset. The host owns the native document and panel; presentation permissions belong to the navigation runtime.</remarks>
+    [DisallowMultipleComponent]
+    public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewPresentationBatchAdapter
     {
-        private const string HiddenClass = "navigathena-view-hidden";
-        [SerializeField] private bool presentBeforeNavigation;
-        [SerializeField] private int baseSortingOrder;
-        private UIDocument? document;
-        private VisualElement? root;
-        private ViewInputBoundary? input;
+        [SerializeField] private VisualTreeAsset? contentAsset;
+        private UiToolkitViewBinding? binding;
         private bool lost;
-        private VisualElement? closedReplacement;
 
         public event Action<string>? Lost;
-        public object Identity => UnityObjectIdentity.Get(Document);
-        public object OrderingDomain => Document.panelSettings != null
-            ? (UnityObjectIdentity.Get(Document.panelSettings), baseSortingOrder)
-            : throw new NavigationConfigurationException("A UIDocument requires PanelSettings.");
-        public bool IsAlive => this != null && document != null && enabled && gameObject.activeInHierarchy && root is not null && ReferenceEquals(root, document.rootVisualElement);
-        public ViewPresentation Presentation { get; private set; }
-        private UIDocument Document => document != null ? document : document = GetComponent<UIDocument>();
 
-        private void Awake ()
+        /// <summary>The borrowed UXML used to construct this view's content before native attachment.</summary>
+        public VisualTreeAsset? ContentAsset
         {
-            Initialize();
-            Apply(new ViewPresentation(presentBeforeNavigation, false, checked((int)Document.sortingOrder - baseSortingOrder)));
-        }
-
-        private void Initialize ()
-        {
-            if (root is not null)
+            get => contentAsset;
+            set
             {
-                return;
-            }
-
-            root = Document.rootVisualElement ?? throw new NavigationConfigurationException("The UIDocument has no initialized root.");
-            StyleSheet visibilityStyleSheet = Resources.Load<StyleSheet>("NavigathenaViewVisibility")
-                ?? throw new NavigationConfigurationException("The UI Toolkit adapter's visibility stylesheet is missing.");
-            root.styleSheets.Add(visibilityStyleSheet);
-            input = new ViewInputBoundary();
-            root.AddManipulator(input);
-        }
-
-        public void Validate (ViewPresentation presentation)
-        {
-            UnityThread.AssertCurrent();
-            if (!IsAlive)
-            {
-                throw new InvalidOperationException("The UIDocument or its registered visual tree was replaced or destroyed.");
-            }
-
-            if (Document.panelSettings == null || Document.panelSettings.targetTexture != null)
-            {
-                throw new NavigationConfigurationException("This adapter requires a display panel, not a render-texture panel.");
-            }
-            if (transform.parent != null && transform.parent.GetComponentInParent<UIDocument>(true) != null)
-            {
-                throw new NavigationConfigurationException("A managed UIDocument must be a top-level document in its panel.");
-            }
-
-            int order = checked(baseSortingOrder + presentation.Order);
-            if (order < -16777216 || order > 16777216)
-            {
-                throw new NavigationConfigurationException("The UIDocument sorting order must be exactly representable as a float.");
-            }
-        }
-
-        public void Apply (ViewPresentation presentation)
-        {
-            UnityThread.AssertCurrent();
-            Initialize();
-            Validate(presentation);
-
-            Document.sortingOrder = checked(baseSortingOrder + presentation.Order);
-            input!.Enabled = presentation.InputEnabled && presentation.OutputEnabled;
-            root!.EnableInClassList(HiddenClass, !presentation.OutputEnabled);
-            if (!input.Enabled && root.panel is IPanel panel)
-            {
-                for (int pointer = 0; pointer < PointerId.maxPointers; pointer++)
+                if (binding is not null)
                 {
-                    if (panel.GetCapturingElement(pointer) is VisualElement captured && (ReferenceEquals(captured, root) || root.Contains(captured)))
-                    {
-                        captured.ReleasePointer(pointer);
-                    }
+                    throw new InvalidOperationException("Content must be configured before the view is connected.");
                 }
+                contentAsset = value;
             }
-            if (!input.Enabled && root.panel?.focusController.focusedElement is VisualElement focused && root.Contains(focused))
-            {
-                focused.Blur();
-            }
+        }
 
-            Presentation = presentation;
+        /// <summary>The screen implementation's content and input-session interface.</summary>
+        public IUiToolkitView View => RequireBinding();
+        internal UiToolkitViewBinding? Binding => binding;
+        internal bool HasBinding => binding is not null;
+        public object Identity => RequireBinding().Identity;
+        public object OrderingDomain => RequireBinding().Host;
+        public bool IsAlive => binding?.IsAlive == true;
+        public ViewPresentation Presentation => binding?.Presentation ?? default;
+        IViewPresentationBatch IViewPresentationBatchAdapter.PresentationBatch => RequireBinding().Host;
+
+        internal void Bind (UiToolkitViewBinding value) => binding = value;
+
+        public void Validate (ViewPresentation presentation) => RequireBinding().Validate(presentation);
+
+        void IViewAdapter.Apply (ViewPresentation presentation)
+        {
+            UnityThread.AssertCurrent();
+            UiToolkitViewBinding current = RequireBinding();
+            current.Host.ApplySynchronous(current, presentation);
         }
 
         private void Update ()
         {
-            if (!IsAlive)
+            if (binding is not null)
             {
-                CloseReplacementTree();
-                ReportLoss();
+                if (!binding.IsAlive)
+                {
+                    binding.ReportLoss();
+                }
             }
         }
 
-        private void CloseReplacementTree ()
+        private void OnDisable () => binding?.ReportLoss();
+
+        private void OnDestroy () => binding?.Dispose();
+
+        internal void ReportLoss ()
         {
-            VisualElement? replacement = document != null ? document.rootVisualElement : null;
-            if (replacement is null || ReferenceEquals(replacement, root) || ReferenceEquals(replacement, closedReplacement))
+            if (lost)
             {
                 return;
             }
-
-            closedReplacement = replacement;
-            replacement.AddManipulator(new ViewInputBoundary());
-        }
-
-        private void OnDisable () => ReportLoss();
-        private void OnDestroy ()
-        {
-            ReportLoss();
-            if (root is not null && input is not null)
-            {
-                root.RemoveManipulator(input);
-            }
-        }
-
-        private void ReportLoss ()
-        {
-            if (lost || Lost is null)
-            {
-                return;
-            }
-
             lost = true;
-            Lost.Invoke("The registered UIDocument or visual tree is no longer available.");
+            Lost?.Invoke("The registered UI Toolkit document or native input scope is no longer available.");
         }
+
+        private UiToolkitViewBinding RequireBinding () => binding
+            ?? throw new NavigationConfigurationException("Connect the view to UiToolkitPresentationHost before registering its presentation.");
     }
 }

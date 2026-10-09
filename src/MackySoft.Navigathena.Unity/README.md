@@ -41,7 +41,7 @@ Campaign screen
 4. If the screen animates, assign an `IScreenAnimator` component, such as `AnimatorScreenAnimationDriver`, to **Animator** in `ScreenPresentation`.
 5. Use **Validate Screen Presentation** from the component's context menu to check its references. All referenced components must belong to this screen's hierarchy.
 
-For UI Toolkit, use `UIDocument` and `UiToolkitViewAdapter` instead of the Canvas components. Do not disable the root GameObject to hide an active managed screen: Navigathena controls output and input through the adapter. Application subscriptions still belong to `ActivateAsync` and `DeactivateAsync`.
+For UI Toolkit, use its [screen acquisition and input-scope API](../MackySoft.Navigathena.Unity.UIToolkit/README.md). Its presentation host creates a separate native panel for each view and connects input-closed content before returning it to the screen factory. Do not disable the root GameObject to hide an active managed screen: Navigathena controls output and input through the adapter. Application subscriptions still belong to `ActivateAsync` and `DeactivateAsync`.
 
 The requested view or installer component and `ScreenPresentation` must be on the same GameObject. The view need not expose adapter or animator properties just to connect the screen.
 
