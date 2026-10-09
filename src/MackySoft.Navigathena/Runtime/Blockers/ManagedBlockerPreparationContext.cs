@@ -19,7 +19,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
         public override void RegisterViewAdapter (IViewAdapter adapter)
         {
             lifetime.EnsureOpen();
-            ViewRegistration registration = views.Register(adapter, false);
+            ViewRegistration registration = views.Register(adapter, false, ViewInputMode.PointerOnly);
             Registrations.Add(registration);
             registration.ObserveLoss(lifetime.ReportLoss);
             registration.Apply(new ViewPresentation(false, false, registration.Original.Order));

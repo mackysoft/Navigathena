@@ -106,16 +106,14 @@ namespace MackySoft.Navigathena.Runtime.Execution
             {
                 inputFailures.Add(exception);
             }
-            foreach (ScreenInstance screen in before.Keys)
+            try
             {
-                try
-                {
-                    screen.Apply(new ViewPresentation(screen.Presentation.OutputEnabled, false, screen.Presentation.Order));
-                }
-                catch (Exception exception)
-                {
-                    inputFailures.Add(exception);
-                }
+                await ScreenInstance.ApplyBatchAsync(before.Keys.Select(screen => (screen,
+                    new ViewPresentation(screen.Presentation.OutputEnabled, false, screen.Presentation.Order))).ToArray());
+            }
+            catch (Exception exception)
+            {
+                inputFailures.Add(exception);
             }
             foreach (ScreenInstance screen in before.Keys)
             {
@@ -444,11 +442,13 @@ namespace MackySoft.Navigathena.Runtime.Execution
                         await screen.ActivateAsync(ActivationFor(screen.Entry));
                     }
 
-                    foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)))
+                    ScreenInstance[] retained = created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)).Distinct().ToArray();
+                    await ScreenInstance.ApplyBatchAsync(retained.Select(screen =>
                     {
-                        PresentationParticipation? participation = GetParticipation(screen, composition);
-                        screen.Apply(new ViewPresentation(participation?.OutputPresented == true, participation?.OutputPresented == true && screen.IsActive, screen.Presentation.Order));
-                    }
+                        bool output = GetParticipation(screen, composition)?.OutputPresented == true;
+                        bool input = output && screen.IsActive && GetParticipation(screen, composition)?.Foreground == true;
+                        return (screen, new ViewPresentation(output, input, screen.Presentation.Order));
+                    }).ToArray());
                     blockers?.OpenInput();
                 }
                 try
@@ -616,14 +616,15 @@ namespace MackySoft.Navigathena.Runtime.Execution
             {
                 if (!playback.Departed)
                 {
-                    foreach (ScreenInstance screen in before.Keys.Where(screen => !screen.IsEnding && !playback.Retains(screen)))
+                    ScreenInstance[] restoring = before.Keys.Where(screen => !screen.IsEnding && !playback.Retains(screen)).ToArray();
+                    foreach (ScreenInstance screen in restoring)
                     {
                         if (activeBefore.Contains(screen))
                         {
                             await screen.ActivateAsync();
                         }
-                        screen.Apply(before[screen]);
                     }
+                    await ScreenInstance.ApplyBatchAsync(restoring.Select(screen => (screen, before[screen])).ToArray());
                 }
                 foreach (BlockerCoordinator.SuspendedConnection connection in suspendedBlockers)
                 {

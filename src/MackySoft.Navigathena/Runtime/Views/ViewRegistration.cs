@@ -7,16 +7,18 @@ namespace MackySoft.Navigathena.Runtime.Views
         private readonly ViewRegistry registry;
         private readonly object identity;
         private readonly bool preserve;
+        private readonly ViewInputMode inputMode;
         private bool released;
         private int? order;
         private Action<string>? loss;
 
-        public ViewRegistration (ViewRegistry registry, object identity, object orderingDomain, IViewAdapter adapter, bool preserve)
+        public ViewRegistration (ViewRegistry registry, object identity, object orderingDomain, IViewAdapter adapter, bool preserve, ViewInputMode inputMode = ViewInputMode.All)
         {
             OrderingDomain = orderingDomain;
             this.registry = registry;
             this.identity = identity;
             this.preserve = preserve;
+            this.inputMode = inputMode;
             Adapter = adapter;
             Original = adapter.Presentation;
         }
@@ -50,15 +52,21 @@ namespace MackySoft.Navigathena.Runtime.Views
 
         public void Apply (ViewPresentation presentation)
         {
-            presentation = new ViewPresentation(presentation.OutputEnabled, presentation.InputEnabled, Order);
+            ViewPresentationChange change = CreateChange(presentation);
+            Adapter.Apply(change.Presentation);
+        }
+
+        public ViewPresentationChange CreateChange (ViewPresentation presentation)
+        {
+            presentation = new ViewPresentation(presentation.OutputEnabled, presentation.InputEnabled, Order, inputMode);
             Validate(presentation);
-            Adapter.Apply(presentation);
+            return new ViewPresentationChange(Adapter, presentation);
         }
 
         public void ValidateOrder (int value)
         {
             ViewPresentation presentation = Adapter.Presentation;
-            Validate(new ViewPresentation(presentation.OutputEnabled, presentation.InputEnabled, value));
+            Validate(new ViewPresentation(presentation.OutputEnabled, presentation.InputEnabled, value, inputMode));
         }
 
         public void SetOrder (int value)
@@ -77,7 +85,7 @@ namespace MackySoft.Navigathena.Runtime.Views
 
             if (Adapter.IsAlive)
             {
-                Adapter.Apply(preserve ? Original : new ViewPresentation(false, false, Original.Order));
+                Adapter.Apply(preserve ? Original : new ViewPresentation(false, false, Original.Order, inputMode));
             }
 
             Adapter.Lost -= loss;
