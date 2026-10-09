@@ -1,0 +1,8 @@
+{
+  "editorVersion": "2023.2.22f1",
+  "packageVersions": {
+    "com.unity.addressables": "1.21.21",
+    "com.unity.test-framework": "1.1.33",
+    "com.unity.ugui": "1.0.0"
+  }
+}

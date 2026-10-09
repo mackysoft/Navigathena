@@ -27,8 +27,8 @@ internal static class Program
                 case ["verify-unity-packages", string feed, string project]:
                     UnityConsumer.VerifyPackages(feed, project);
                     break;
-                case ["verify-unity-results", string directory]:
-                    UnityConsumer.VerifyResults(directory);
+                case ["verify-unity-results", string directory, string project]:
+                    UnityConsumer.VerifyResults(directory, project);
                     break;
                 case ["prepare-publication", string artifacts, string version, string destination]:
                     bool required = await Publication.PrepareAsync(artifacts, version, destination);

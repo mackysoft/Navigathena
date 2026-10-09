@@ -1,0 +1,10 @@
+{
+  "editorVersion": "2021.3.45f2",
+  "activeInputHandling": 2,
+  "packageVersions": {
+    "com.unity.inputsystem": "1.7.0",
+    "com.unity.addressables": "1.21.21",
+    "com.unity.test-framework": "1.1.33",
+    "com.unity.ugui": "1.0.0"
+  }
+}

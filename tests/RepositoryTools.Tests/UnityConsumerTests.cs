@@ -45,6 +45,48 @@ public sealed class UnityConsumerTests : IDisposable
         Assert.False(manifest.RootElement.GetProperty("dependencies").TryGetProperty("com.mackysoft.navigathena", out _));
     }
 
+    [Fact]
+    public void Input_System_configuration_enables_the_backend_and_keeps_other_player_settings ()
+    {
+        Configure("{\"activeInputHandling\":2,\"packageVersions\":{\"com.unity.inputsystem\":\"1.17.0\"}}");
+
+        using JsonDocument manifest = ReadManifest();
+        Assert.Equal("1.17.0", manifest.RootElement.GetProperty("dependencies").GetProperty("com.unity.inputsystem").GetString());
+        string settings = File.ReadAllText(Path.Combine(temporary.FullName, "ProjectSettings", "ProjectSettings.asset"));
+        Assert.Contains("  activeInputHandler: 2", settings);
+        Assert.Contains("  productName: Test consumer", settings);
+    }
+
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(3)]
+    public void Unsupported_input_handling_modes_fail_instead_of_generating_invalid_settings (int mode)
+        => Assert.Throws<InvalidDataException>(() => Configure("{\"activeInputHandling\":" + mode + "}"));
+
+    [Fact]
+    public void Results_must_include_the_device_tests_when_Input_System_is_installed ()
+    {
+        Configure("{\"packageVersions\":{\"com.unity.inputsystem\":\"1.17.0\"}}");
+        string results = Path.Combine(temporary.FullName, "results");
+        Directory.CreateDirectory(results);
+        XDocument report = new(new XElement("test-run", PassedAssembly("MackySoft.Navigathena.Unity.Tests.dll")));
+        string path = Path.Combine(results, "results.xml");
+        report.Save(path);
+
+        Assert.Throws<InvalidDataException>(() => UnityConsumer.VerifyResults(results, temporary.FullName));
+        report.Root!.Add(PassedAssembly("MackySoft.Navigathena.Unity.InputSystem.Tests.dll"));
+        report.Save(path);
+        UnityConsumer.VerifyResults(results, temporary.FullName);
+        report.Root!.Elements("test-suite").Last().SetAttributeValue("result", "Failed");
+        report.Save(path);
+        Assert.Throws<InvalidDataException>(() => UnityConsumer.VerifyResults(results, temporary.FullName));
+    }
+
+    private static XElement PassedAssembly (string name) => new("test-suite",
+        new XAttribute("type", "Assembly"), new XAttribute("name", name), new XAttribute("total", 1),
+        new XAttribute("passed", 1), new XAttribute("result", "Passed"),
+        new XElement("properties", new XElement("property", new XAttribute("name", "platform"), new XAttribute("value", "PlayMode"))));
+
     private void Configure (string configuration)
     {
         string project = temporary.FullName;
@@ -53,6 +95,7 @@ public sealed class UnityConsumerTests : IDisposable
         Directory.CreateDirectory(Path.Combine(project, "ProjectSettings"));
         File.WriteAllText(Path.Combine(project, "Packages", "manifest.json"), "{\"dependencies\":{\"com.cysharp.unitask\":\"unitask-git-package\",\"com.unity.addressables\":\"2.9.1\",\"com.unity.ugui\":\"2.5.0\",\"com.github-glitchenzo.nugetforunity\":\"nugetforunity-git-package\"}}");
         File.WriteAllText(Path.Combine(project, "ProjectSettings", "ProjectVersion.txt"), "m_EditorVersion: 6000.5.5f1\n");
+        File.WriteAllText(Path.Combine(project, "ProjectSettings", "ProjectSettings.asset"), "PlayerSettings:\n  activeInputHandler: 0\n  productName: Test consumer\n");
         string[] packages =
         [
             "MackySoft.Navigathena", "MackySoft.Navigathena.Extensions.DependencyInjection", "MackySoft.Navigathena.Unity",
