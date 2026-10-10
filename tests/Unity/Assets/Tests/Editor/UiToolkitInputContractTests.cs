@@ -294,18 +294,17 @@ namespace MackySoft.Navigathena.Unity.Tests
 
             OpenDropdown(dropdown);
             await UniTask.NextFrame();
-            ScrollView menu = dropdown.panel.visualTree.Q<ScrollView>(className: GenericDropdownMenu.containerInnerUssClassName);
+            VisualElement menu = dropdown.panel.visualTree.Q(className: GenericDropdownMenu.ussClassName);
             Assert.That(menu, Is.Not.Null);
-            VisualElement content = menu.contentContainer;
-            Assert.That(content, Is.Not.Null);
-            Assert.That(content.canGrabFocus, Is.True);
-            await UniTask.WaitUntil(() => ReferenceEquals(nativeFocus, content), cancellationToken: timeout.Token);
+            await UniTask.WaitUntil(() => nativeFocus is not null && menu.Contains(nativeFocus), cancellationToken: timeout.Token);
+            VisualElement focused = nativeFocus!;
+            Assert.That(focused.canGrabFocus, Is.True);
             using (KeyDownEvent end = KeyDownEvent.GetPooled('\0', KeyCode.End, EventModifiers.None))
             {
-                end.target = content;
-                content.SendEvent(end);
+                end.target = focused;
+                focused.SendEvent(end);
             }
-            SendSubmit(content);
+            SendSubmit(focused);
             await UniTask.NextFrame();
             Assert.That(dropdown.value, Is.EqualTo("Two"));
 #if UNITY_6000_0_OR_NEWER
@@ -314,16 +313,15 @@ namespace MackySoft.Navigathena.Unity.Tests
 #endif
             Assert.That(dropdown.panel.visualTree.Q(className: GenericDropdownMenu.ussClassName), Is.Null);
 
+            nativeFocus = null;
             OpenDropdown(dropdown);
             await UniTask.NextFrame();
-            menu = dropdown.panel.visualTree.Q<ScrollView>(className: GenericDropdownMenu.containerInnerUssClassName);
+            menu = dropdown.panel.visualTree.Q(className: GenericDropdownMenu.ussClassName);
             Assert.That(menu, Is.Not.Null);
-            content = menu.contentContainer;
-            Assert.That(content, Is.Not.Null);
-            await UniTask.WaitUntil(() => ReferenceEquals(nativeFocus, content), cancellationToken: timeout.Token);
+            await UniTask.WaitUntil(() => nativeFocus is not null && menu.Contains(nativeFocus), cancellationToken: timeout.Token);
             using (NavigationCancelEvent cancel = NavigationCancelEvent.GetPooled())
             {
-                content.SendEvent(cancel);
+                nativeFocus!.SendEvent(cancel);
             }
             await UniTask.NextFrame();
             Assert.That(dropdown.value, Is.EqualTo("Two"));
