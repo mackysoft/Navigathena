@@ -6,11 +6,11 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
     internal sealed class NativeFocusBoundary : BaseField<bool>
     {
         private readonly VisualElement content;
-        private readonly UiToolkitViewBinding binding;
+        private readonly UiToolkitViewBinding viewBinding;
 
         public NativeFocusBoundary (UiToolkitViewBinding binding, VisualElement content) : base(null, content)
         {
-            this.binding = binding;
+            viewBinding = binding;
             this.content = content;
             RemoveFromClassList(ussClassName);
             content.RemoveFromClassList(inputUssClassName);
@@ -25,6 +25,6 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
         // BaseField calls this override during construction, before content is assigned.
         public override VisualElement contentContainer => content ?? this;
 
-        public override bool canGrabFocus => binding is not null && binding.CanReceiveFocus && base.canGrabFocus;
+        public override bool canGrabFocus => viewBinding is not null && viewBinding.CanReceiveFocus && base.canGrabFocus;
     }
 }
