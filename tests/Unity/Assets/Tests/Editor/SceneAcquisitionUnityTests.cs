@@ -299,7 +299,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 return new Handler();
             }, ScreenInstancePolicy.Multiple);
             NavigationHost host = NavigationHost.Create(ScreenCatalog.Build(screens =>
-                screens.Register(RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace, LowerPresentationPolicy.BlockInput, screen)));
+                screens.Register(RouteEntryOperations.Reset | RouteEntryOperations.Push | RouteEntryOperations.Replace, LowerPresentationPolicy.SuspendActivity, screen)));
             hosts.Add(host);
             return host;
         }

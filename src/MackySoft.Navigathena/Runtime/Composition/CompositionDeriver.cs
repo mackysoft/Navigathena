@@ -13,6 +13,7 @@ namespace MackySoft.Navigathena.Runtime.Composition
             List<EffectivePresentation> effective = new(structure.Count);
             List<InputBoundary> boundaries = new();
             Dictionary<NavigationEntryId, bool> availableTrees = new();
+            HashSet<RegionInstanceId> outputRegions = new();
             foreach (ScopedPresentation item in structure)
             {
                 NavigationEntry entry = state.GetEntry(item.EntryId);
@@ -22,15 +23,21 @@ namespace MackySoft.Navigathena.Runtime.Composition
                 availableTrees.Add(entry.Id, treeAvailable);
                 bool retained = item.Policy.Retention == LowerPresentationRetention.Retain;
                 bool output = treeAvailable && retained && item.Policy.Output == LowerPresentationOutput.Preserve;
-                bool input = treeAvailable && retained && item.Policy.Input == LowerPresentationInput.PassThrough;
+                bool activity = treeAvailable && retained && item.Policy.Activity == LowerPresentationActivity.Continue;
+                bool foreground = treeAvailable && item.Foreground;
                 effective.Add(new EffectivePresentation(entry.Id, available
-                    ? new PresentationParticipation(true, treeAvailable && item.Foreground, output, input)
+                    ? new PresentationParticipation(true, foreground, output, activity)
                     : PresentationParticipation.Unavailable));
 
-                LowerPresentationPolicy policy = definition.GetRoute(entry.RouteDefinitionKey.RegionId, entry.Route).LowerPresentationPolicy;
-                if (output && input && policy.Input == LowerPresentationInput.Block)
+                // A visible lower screen requires a pointer boundary even when its activity continues.
+                LowerPresentationPolicy ownPolicy = definition.GetRoute(entry.RouteDefinitionKey.RegionId, entry.Route).LowerPresentationPolicy;
+                if (output && foreground && (ownPolicy.Boundary == LowerPresentationBoundary.Required || outputRegions.Contains(entry.RegionId)))
                 {
                     boundaries.Add(new InputBoundary(entry.RegionId, entry.Id));
+                }
+                if (output)
+                {
+                    outputRegions.Add(entry.RegionId);
                 }
             }
 
@@ -47,17 +54,18 @@ namespace MackySoft.Navigathena.Runtime.Composition
         private static IReadOnlyList<ScopedPresentation> GetStructure (NavigationDefinition definition, NavigationState state)
         {
             List<ScopedPresentation> order = new();
-            AppendRegion(definition, state, state.RootRegionInstanceId, LowerPresentationPolicy.Preserve, true, order);
+            AppendRegion(definition, state, state.RootRegionInstanceId,
+                new InheritedPresentationPolicy(LowerPresentationOutput.Preserve, LowerPresentationActivity.Continue, LowerPresentationRetention.Retain), true, order);
             order.Reverse();
             return order;
         }
 
         private static void AppendRegion (NavigationDefinition definition, NavigationState state, RegionInstanceId regionId,
-            LowerPresentationPolicy inherited, bool foreground, List<ScopedPresentation> order)
+            InheritedPresentationPolicy inherited, bool foreground, List<ScopedPresentation> order)
         {
             RegionState region = state.GetRegion(regionId);
             IEnumerable<NavigationEntryId> entries = definition.GetRegion(region.DefinitionId).Mode == RegionCompositionMode.Exclusive ? region.Entries.TakeLast(1) : region.Entries;
-            LowerPresentationPolicy policy = inherited;
+            InheritedPresentationPolicy policy = inherited;
             foreach (NavigationEntryId entryId in entries.Reverse())
             {
                 NavigationEntry entry = state.GetEntry(entryId);
@@ -70,14 +78,15 @@ namespace MackySoft.Navigathena.Runtime.Composition
                 }
                 order.Add(new ScopedPresentation(entryId, policy, entryForeground));
                 LowerPresentationPolicy lower = route.LowerPresentationPolicy;
-                policy = new LowerPresentationPolicy(
+                policy = new InheritedPresentationPolicy(
                     policy.Output == LowerPresentationOutput.Hide ? policy.Output : lower.Output,
-                    policy.Input == LowerPresentationInput.Block ? policy.Input : lower.Input,
+                    policy.Activity == LowerPresentationActivity.Suspend ? policy.Activity : lower.Activity,
                     policy.Retention == LowerPresentationRetention.Release ? policy.Retention : lower.Retention);
             }
         }
 
-        private sealed record ScopedPresentation (NavigationEntryId EntryId, LowerPresentationPolicy Policy, bool Foreground);
+        private sealed record InheritedPresentationPolicy (LowerPresentationOutput Output, LowerPresentationActivity Activity, LowerPresentationRetention Retention);
+        private sealed record ScopedPresentation (NavigationEntryId EntryId, InheritedPresentationPolicy Policy, bool Foreground);
     }
 
 }

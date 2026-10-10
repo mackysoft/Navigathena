@@ -459,8 +459,8 @@ public sealed class ScreenRuntimeContractTests
         {
             root.AddRoute<FirstRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
             root.AddRoute<SecondRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRetain);
-            root.AddRoute<ModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
-            root.AddRoute<CustomModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
+            root.AddRoute<ModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity);
+            root.AddRoute<CustomModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity);
         });
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens =>
         {

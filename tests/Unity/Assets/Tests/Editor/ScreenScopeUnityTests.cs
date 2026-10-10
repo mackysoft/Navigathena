@@ -51,7 +51,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             ScreenCatalog catalog = ScreenCatalog.Build(Root, RegionCompositionMode.Layered, screens =>
             {
                 screens.Register(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, caller);
-                screens.Register<QuestionRoute, bool>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput, (creation, _) =>
+                screens.Register<QuestionRoute, bool>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity, (creation, _) =>
                 {
                     creation.ConnectPresentation(new ScreenPresentationBinding(new[] { answerView }, returnState: ScreenAnimationState.BeforeEnter));
                     if (mode == 0)

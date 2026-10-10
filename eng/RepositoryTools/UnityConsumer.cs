@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace RepositoryTools;
@@ -28,6 +29,16 @@ internal static class UnityConsumer
         Dictionary<string, string> packages = PackageVersions(project);
         PackageArtifacts.Require(packages.Values.All(value => value == version), "Unity packages.config does not match the release version.");
         File.WriteAllText(manifestPath, manifest.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) + "\n");
+        if (configurationSettings.TryGetProperty("activeInputHandling", out JsonElement inputHandling))
+        {
+            int mode = inputHandling.GetInt32();
+            PackageArtifacts.Require(mode is >= 0 and <= 2, "The Unity input handling mode must be legacy (0), Input System (1), or both (2).");
+            string settingsPath = Path.Combine(project, "ProjectSettings", "ProjectSettings.asset");
+            string settings = File.ReadAllText(settingsPath);
+            const string inputPattern = "^  activeInputHandler: [0-2]\\r?$";
+            PackageArtifacts.Require(Regex.Matches(settings, inputPattern, RegexOptions.Multiline).Count == 1, "The Unity consumer requires one active input handling setting.");
+            File.WriteAllText(settingsPath, Regex.Replace(settings, inputPattern, "  activeInputHandler: " + mode, RegexOptions.Multiline));
+        }
         if (configurationSettings.TryGetProperty("editorVersion", out JsonElement editorVersion))
         {
             File.WriteAllText(Path.Combine(project, "ProjectSettings", "ProjectVersion.txt"), $"m_EditorVersion: {editorVersion.GetString()}\n");
@@ -75,18 +86,27 @@ internal static class UnityConsumer
         }
     }
 
-    internal static void VerifyResults (string directory)
+    internal static void VerifyResults (string directory, string project)
     {
-        const string assemblyName = "MackySoft.Navigathena.Unity.Tests.dll";
-        XElement[] assemblies = Directory.EnumerateFiles(directory, "*.xml", SearchOption.AllDirectories)
+        using JsonDocument manifest = JsonDocument.Parse(File.ReadAllText(Path.Combine(project, "Packages", "manifest.json")));
+        List<string> expected = ["MackySoft.Navigathena.Unity.Tests.dll"];
+        if (manifest.RootElement.GetProperty("dependencies").TryGetProperty("com.unity.inputsystem", out _))
+        {
+            expected.Add("MackySoft.Navigathena.Unity.InputSystem.Tests.dll");
+        }
+        XElement[] results = Directory.EnumerateFiles(directory, "*.xml", SearchOption.AllDirectories)
             .SelectMany(path => XDocument.Load(path).Descendants("test-suite"))
-            .Where(element => (string?)element.Attribute("type") == "Assembly" && (string?)element.Attribute("name") == assemblyName).ToArray();
-        PackageArtifacts.Require(assemblies.Length == 1, $"Expected one Navigathena Unity test assembly result; found {assemblies.Length}.");
-        XElement assembly = assemblies[0];
-        PackageArtifacts.Require(assembly.Elements("properties").Elements("property").Any(item => (string?)item.Attribute("name") == "platform" && (string?)item.Attribute("value") == "PlayMode"), "Navigathena Unity tests must execute in PlayMode.");
-        int total = (int?)assembly.Attribute("total") ?? 0;
-        PackageArtifacts.Require(total > 0 && (string?)assembly.Attribute("result") == "Passed" && (int?)assembly.Attribute("passed") == total, "All Navigathena Unity tests must execute and pass, without skipped tests.");
-        Console.WriteLine($"Unity PlayMode tests: {total} passed");
+            .Where(element => (string?)element.Attribute("type") == "Assembly").ToArray();
+        foreach (string name in expected)
+        {
+            XElement[] assemblies = results.Where(element => (string?)element.Attribute("name") == name).ToArray();
+            PackageArtifacts.Require(assemblies.Length == 1, $"Expected one result for {name}; found {assemblies.Length}.");
+            XElement assembly = assemblies[0];
+            PackageArtifacts.Require(assembly.Elements("properties").Elements("property").Any(item => (string?)item.Attribute("name") == "platform" && (string?)item.Attribute("value") == "PlayMode"), "Navigathena Unity tests must execute in PlayMode.");
+            int total = (int?)assembly.Attribute("total") ?? 0;
+            PackageArtifacts.Require(total > 0 && (string?)assembly.Attribute("result") == "Passed" && (int?)assembly.Attribute("passed") == total, "All Navigathena Unity tests must execute and pass, without skipped tests: " + name);
+            Console.WriteLine($"{name}: {total} Unity PlayMode tests passed");
+        }
     }
 
     private static Dictionary<string, string> PackageVersions (string project)

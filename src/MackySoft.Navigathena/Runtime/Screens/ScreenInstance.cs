@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MackySoft.Navigathena.Presentation;
@@ -25,6 +26,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
         private bool handlerActive;
         private bool handlerTerminated;
         private CancellationTokenSource? activity;
+        private CancellationTokenSource? foreground;
         private Task? stoppingActivity;
         private Task? termination;
         private int users;
@@ -113,25 +115,6 @@ namespace MackySoft.Navigathena.Runtime.Screens
             {
                 activityCancellationFailure = exception;
             }
-            List<Exception> failures = new();
-            foreach (ViewRegistration view in Creation.Registrations)
-            {
-                try
-                {
-                    if (view.Adapter.IsAlive)
-                    {
-                        view.Apply(new ViewPresentation(view.Adapter.Presentation.OutputEnabled, false, view.Adapter.Presentation.Order));
-                    }
-                }
-                catch (Exception exception)
-                {
-                    failures.Add(exception);
-                }
-            }
-            if (failures.Count > 0)
-            {
-                throw new AggregateException("Some native inputs could not be closed.", failures);
-            }
         }
 
         public bool DependsOn (ScreenInstance ancestor) => Parent is not null && (ReferenceEquals(Parent, ancestor) || Parent.DependsOn(ancestor));
@@ -145,6 +128,60 @@ namespace MackySoft.Navigathena.Runtime.Screens
             if (LifecycleHandler is INavigationChangeHandler changeHandler)
             {
                 changeHandler.OnNavigationChanged(context);
+            }
+        }
+
+        internal void PublishForeground ()
+        {
+            if (foreground is not null || IsEnding || !IsActive || !Presentation.OutputEnabled || !Presentation.InputEnabled
+                || LifecycleHandler is not IScreenForegroundLifecycleHandler observer)
+            {
+                return;
+            }
+
+            CancellationTokenSource current = new();
+            foreground = current;
+            ScreenForegroundContext context = new(Entry.Id, Entry.RegionId, current.Token);
+            NavigationCallbackScope.Run(() => observer.OnForegroundAvailable(context));
+        }
+
+        private void EndForeground ()
+        {
+            CancellationTokenSource? current = foreground;
+            if (current is null)
+            {
+                return;
+            }
+
+            // A revoked period cannot be reused, even when cancellation or notification fails.
+            foreground = null;
+            List<Exception> failures = new();
+            try
+            {
+                current.Cancel();
+            }
+            catch (Exception exception)
+            {
+                failures.Add(exception);
+            }
+            try
+            {
+                if (LifecycleHandler is IScreenForegroundLifecycleHandler observer)
+                {
+                    NavigationCallbackScope.Run(observer.OnForegroundUnavailable);
+                }
+            }
+            catch (Exception exception)
+            {
+                failures.Add(exception);
+            }
+            finally
+            {
+                current.Dispose();
+            }
+            if (failures.Count > 0)
+            {
+                throw new AggregateException("The screen's foreground period did not end safely.", failures);
             }
         }
         public IScreenNavigation ConnectNavigation (Func<bool> connected) => new ActivityNavigation(navigation, () => connected() && IsActive, state);
@@ -368,12 +405,13 @@ namespace MackySoft.Navigathena.Runtime.Screens
             Exception? failure = null;
             try
             {
-                InvalidateActivity();
+                await ApplyAsync(new ViewPresentation(!IsEnding && Presentation.OutputEnabled, false, Presentation.Order));
             }
             catch (Exception exception)
             {
                 failure = exception;
             }
+            InvalidateActivity();
             try
             {
                 await DeactivateAsync();
@@ -446,12 +484,107 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 throw new InvalidOperationException("An ending screen cannot be published.");
             }
 
-            foreach (ViewRegistration view in Creation.Registrations)
+            try
             {
-                view.Apply(presentation);
+                foreach (ViewRegistration view in Creation.Registrations)
+                {
+                    view.Apply(presentation);
+                }
+
+                Presentation = presentation;
+            }
+            catch (Exception failure)
+            {
+                if (!presentation.InputEnabled || !presentation.OutputEnabled)
+                {
+                    try
+                    {
+                        EndForeground();
+                    }
+                    catch (Exception endingFailure)
+                    {
+                        throw new AggregateException("Presentation and foreground closure failed.", failure, endingFailure);
+                    }
+                }
+                throw;
+            }
+            if (!presentation.InputEnabled || !presentation.OutputEnabled)
+            {
+                EndForeground();
+            }
+        }
+
+        public ValueTask ApplyAsync (ViewPresentation presentation)
+            => ApplyBatchAsync(new[] { (Screen: this, Presentation: presentation) });
+
+        /// <summary>Publishes a complete permission phase before admitting new input.</summary>
+        internal static async ValueTask ApplyBatchAsync (IReadOnlyList<(ScreenInstance Screen, ViewPresentation Presentation)> updates)
+        {
+            List<ViewPresentationChange> changes = new();
+            List<Exception> failures = new();
+            foreach (var update in updates)
+            {
+                if (update.Screen.IsEnding && update.Presentation.OutputEnabled)
+                {
+                    throw new InvalidOperationException("An ending screen cannot be published.");
+                }
+                foreach (ViewRegistration view in update.Screen.Creation.Registrations)
+                {
+                    if (!update.Presentation.OutputEnabled && !update.Presentation.InputEnabled && !view.Adapter.IsAlive)
+                    {
+                        continue;
+                    }
+                    try
+                    {
+                        changes.Add(view.CreateChange(update.Presentation));
+                    }
+                    catch (Exception exception)
+                    {
+                        failures.Add(exception);
+                    }
+                }
             }
 
-            Presentation = presentation;
+            if (failures.Count != 0)
+            {
+                // A view rejected during validation is still part of the failed phase.
+                // Close every live participant using its last applied native order.
+                changes = updates.SelectMany(update => update.Screen.Creation.Registrations)
+                    .Select(view => view.Adapter).Distinct().Where(view => view.IsAlive)
+                    .Select(view => new ViewPresentationChange(view,
+                        new ViewPresentation(view.Presentation.OutputEnabled, false, view.Presentation.Order, view.Presentation.InputMode))).ToList();
+            }
+            try
+            {
+                await ViewPresentationApplication.ApplyAsync(new ViewPresentationChangeSet(changes));
+            }
+            catch (Exception exception)
+            {
+                failures.Add(exception);
+            }
+            // Native closure precedes lifecycle notification. Failed phases also revoke every old period.
+            foreach (var update in updates)
+            {
+                if (failures.Count != 0 || !update.Presentation.InputEnabled || !update.Presentation.OutputEnabled)
+                {
+                    try
+                    {
+                        update.Screen.EndForeground();
+                    }
+                    catch (Exception exception)
+                    {
+                        failures.Add(exception);
+                    }
+                }
+            }
+            if (failures.Count != 0)
+            {
+                throw new AggregateException("Screen presentation could not be applied; affected input remains closed.", failures);
+            }
+            foreach (var update in updates)
+            {
+                update.Screen.Presentation = update.Presentation;
+            }
         }
 
         public PresentationStateCapture? CaptureState ()
@@ -496,6 +629,14 @@ namespace MackySoft.Navigathena.Runtime.Screens
         {
             await prepared.Task;
             List<Exception> inputFailures = new();
+            try
+            {
+                await ApplyAsync(new ViewPresentation(false, false, Presentation.Order));
+            }
+            catch (Exception exception)
+            {
+                inputFailures.Add(exception);
+            }
             try
             {
                 InvalidateActivity();

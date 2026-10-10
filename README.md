@@ -182,6 +182,10 @@ Navigathena checks cancellation before and after cancellable lifecycle callbacks
 
 For a new screen, initialization and route preparation finish before its entry animation and the transition effect finish. `ActivateAsync` runs after those visual steps, and native input opens only after activation completes. Progress reports, including a fraction of `1`, never advance this sequence; completion of the awaited callbacks does.
 
+Activity and foreground availability are separate periods. A covered screen can keep activity without remaining an input target. Returning to the foreground does not call `ActivateAsync` again when that activity continued.
+
+Implement `IScreenForegroundLifecycleHandler` on the same presenter to receive `OnForegroundAvailable` after native view permissions, blockers, and ordering are ready. Your application chooses and sets its initial or returning focus target there, using the native UI API. The supplied `ScreenForegroundContext.CancellationToken` ends that foreground period independently of the activity token. Native admission closes before `OnForegroundUnavailable`; returning supplies a fresh context, and an old context never becomes valid again. These notifications also cover transition suspension, presentation loss, and shutdown.
+
 ### Navigation from a lifecycle callback
 
 Do not await a navigation operation inside the lifecycle callback that the current transition is waiting for. To redirect after successful activation, use the deferred methods:
@@ -304,12 +308,14 @@ Each route specifies how it affects lower screens in its region:
 
 | `LowerPresentationPolicy` | Lower screens |
 | --- | --- |
-| `Preserve` | Keep their output and input policy. |
-| `BlockInput` | Remain visible, but no longer accept input or continue input-related activity. |
+| `Preserve` | Keep their output, activity, and instances. Background native input remains closed. |
+| `SuspendActivity` | Remain visible, but end their activity periods; keep instances for returning. |
 | `HideAndRetain` | Hide and stop activity; keep instances for returning. |
 | `HideAndRelease` | Hide and release instances; keep history for reconstruction. |
 
 For example, give the editor `HideAndRetain` to temporarily move the HUD and popups below it out of view; Back returns to the retained menu. The policy includes descendants of those lower screens, but not the owning parent or unrelated regions.
+
+Output, activity, retention, and the input boundary are separate policy settings. `LowerPresentationBoundary.WhenLowerVisible` establishes a boundary over visible lower history. `Required` also establishes one without lower history, such as a first popup in a child region. A registered or default blocker is used when lower output is preserved, independently of whether lower activity continues. These policies do not change the game-defined enabled state or disabled styling of controls.
 
 Use `NavigationDefinition.Build` and `route.AddChildRegion(...)` when defining a hierarchy. Register each region's factories through `ScreenCatalog.Build(definition, ...)`. Factories can also register child construction through `creation.RegisterScreens(...)` after acquiring a parent scene's references. See the [region example](src/MackySoft.Navigathena/README.md#child-regions).
 

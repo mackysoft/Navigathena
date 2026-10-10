@@ -31,6 +31,10 @@ jobs:
         configuration:
           - unity-6
           - unity-2021
+          - unity-2022
+          - unity-2023
+          - unity-6-input-system
+          - unity-2021-input-system
     steps:
       - uses: actions/checkout@v5
         with:
@@ -61,7 +65,7 @@ jobs:
           artifactsPath: artifacts/unity-results/playmode
           githubToken: ''
       - name: Require successful adapter test results
-        run: dotnet run --project eng/RepositoryTools --configuration Release -- verify-unity-results artifacts/unity-results/playmode
+        run: dotnet run --project eng/RepositoryTools --configuration Release -- verify-unity-results artifacts/unity-results/playmode artifacts/unity-project
       - name: Build public documentation
         if: inputs.build-documentation && matrix.configuration == 'unity-6'
         run: |

@@ -433,7 +433,7 @@ public sealed class RegionPresentationContractTests
             NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
             {
                 root.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
-                root.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+                root.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.SuspendActivity);
                 root.AddRoute<Editor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
                 root.AddRoute<ReleaseEditor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
                 root.AddRoute<Shell>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
@@ -444,14 +444,14 @@ public sealed class RegionPresentationContractTests
         {
             hud.AddChildRegion(Details, RegionCompositionMode.Layered, RegionOccupancy.Optional, details => details.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve));
         });
-        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.SuspendActivity);
         child.AddRoute<Editor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
         child.AddRoute<ReleaseEditor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
     });
     route.AddChildRegion(Right, RegionCompositionMode.Layered, RegionOccupancy.Required, child =>
     {
         child.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
-        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.SuspendActivity);
         child.AddRoute<Editor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
         child.AddRoute<ReleaseEditor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
     });

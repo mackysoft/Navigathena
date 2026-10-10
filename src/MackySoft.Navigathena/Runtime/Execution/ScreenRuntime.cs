@@ -559,17 +559,16 @@ namespace MackySoft.Navigathena.Runtime.Execution
             {
                 affected = owned.Values.Where(screen => !screen.IsEnding && !screen.IsTerminated && snapshot.Presentations.Values.Any(presentation => presentation.Id == screen.Id)).ToArray();
             }
+            try
             {
-                foreach (ScreenInstance screen in affected)
-                {
-                    try
-                    {
-                        screen.InvalidateActivity();
-                    }
-                    catch
-                    { /* Other current views still have to be closed. */
-                    }
-                }
+                await ScreenInstance.ApplyBatchAsync(affected.Select(screen => (screen,
+                    new ViewPresentation(screen.Presentation.OutputEnabled, false, screen.Presentation.Order))).ToArray());
+            }
+            catch
+            { /* The incident reports native closure failure; close activity on every affected screen. */ }
+            foreach (ScreenInstance screen in affected)
+            {
+                screen.InvalidateActivity();
             }
             await incidents!.ReportAsync(new NavigationHostIncident(new NavigationIncidentId(Guid.NewGuid()), reason, CurrentReferences(affected)));
             foreach (ScreenInstance screen in affected)
@@ -598,17 +597,16 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
         private async Task HandleLossAsync (ScreenInstance screen, IReadOnlyList<ScreenInstance> users, string reason)
         {
+            try
             {
-                foreach (ScreenInstance user in users)
-                {
-                    try
-                    {
-                        user.InvalidateActivity();
-                    }
-                    catch
-                    { /* Lost native outputs cannot be updated; activity permission is already invalid. */
-                    }
-                }
+                await ScreenInstance.ApplyBatchAsync(users.Select(user => (user,
+                    new ViewPresentation(false, false, user.Presentation.Order))).ToArray());
+            }
+            catch
+            { /* Lost views cannot be updated; the batch still closes remaining native grants. */ }
+            foreach (ScreenInstance user in users)
+            {
+                user.InvalidateActivity();
             }
             await loss!.ReportAsync(new PresentationLoss(CurrentReferences(users), reason));
             try

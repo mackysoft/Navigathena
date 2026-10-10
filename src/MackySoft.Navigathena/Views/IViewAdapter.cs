@@ -13,6 +13,8 @@ namespace MackySoft.Navigathena
         event Action<string>? Lost;
         /// <summary>Checks native presentation constraints without changing the view.</summary>
         void Validate (ViewPresentation presentation);
+        /// <summary>Applies a synchronous presentation change.</summary>
+        /// <remarks>For IViewPresentationBatchAdapter, route input permission changes through its PresentationBatch. Synchronous Apply is reserved for initial closed state and order-only changes.</remarks>
         void Apply (ViewPresentation presentation);
     }
 }

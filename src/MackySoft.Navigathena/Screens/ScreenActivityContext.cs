@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 
 namespace MackySoft.Navigathena
 {
-    /// <summary>Provides navigation and cancellation for exactly one activity period.</summary>
+    /// <summary>Provides navigation and cancellation for exactly one activity period, which may continue while the screen is covered.</summary>
+    /// <remarks>Foreground availability has its own lifetime and does not extend this activity's cancellation token.</remarks>
     public class ScreenActivityContext
     {
         internal IScreenCallScope Calls { get; }

@@ -374,7 +374,7 @@ public sealed class ScreenCallContractTests
     [InlineData(true, ScreenEnterAnimationMode.Skip, 1)]
     public async Task Back_controls_enter_animation_independently_of_preparation (bool hide, ScreenEnterAnimationMode animation, int enters)
     {
-        await using Harness game = new(detailsLower: hide ? LowerPresentationPolicy.HideAndRetain : LowerPresentationPolicy.BlockInput);
+        await using Harness game = new(detailsLower: hide ? LowerPresentationPolicy.HideAndRetain : LowerPresentationPolicy.SuspendActivity);
         await game.Host.StartAsync(new HomeRoute("chapter"));
         ScreenActivityContext first = game.Home.Activity!;
         Assert.True(first.IsFirstActivation);
@@ -949,11 +949,11 @@ public sealed class ScreenCallContractTests
             RegionDefinitionId rootId = new("game");
             NavigationDefinition definition = NavigationDefinition.Build(rootId, RegionCompositionMode.Layered, root =>
             {
-                root.AddRoute<HomeRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, homeLower ?? LowerPresentationPolicy.BlockInput);
-                root.AddRoute<DetailsRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, detailsLower ?? LowerPresentationPolicy.BlockInput);
-                root.AddRoute<EndRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
-                root.AddRoute<QuestionRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, releaseCaller ? LowerPresentationPolicy.HideAndRelease : LowerPresentationPolicy.BlockInput);
-                root.AddRoute<NameRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+                root.AddRoute<HomeRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, homeLower ?? LowerPresentationPolicy.SuspendActivity);
+                root.AddRoute<DetailsRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, detailsLower ?? LowerPresentationPolicy.SuspendActivity);
+                root.AddRoute<EndRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.SuspendActivity);
+                root.AddRoute<QuestionRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, releaseCaller ? LowerPresentationPolicy.HideAndRelease : LowerPresentationPolicy.SuspendActivity);
+                root.AddRoute<NameRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.SuspendActivity);
             });
             ScreenCatalog catalog = ScreenCatalog.Build(definition, catalog => catalog.RegisterScreens(rootId, screens =>
             {

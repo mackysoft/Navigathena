@@ -184,7 +184,7 @@ public sealed class ScreenCancellationContractTests
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
             root.AddRoute<HomeRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
-            root.AddRoute<DialogRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
+            root.AddRoute<DialogRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity);
         });
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens =>
         {
