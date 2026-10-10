@@ -89,7 +89,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             foreach (var pair in singles.OrderBy(pair => pair.Value.Min(entry => Depth(entry.RegionId, candidate))))
             {
                 NavigationEntry[] available = pair.Value.Where(entry => presentations[entry.Id].Materialization == PresentationMaterialization.Available).ToArray();
-                NavigationEntry[] visible = available.Where(entry => participation[entry.Id].OutputPresented || participation[entry.Id].SemanticInputEligible).ToArray();
+                NavigationEntry[] visible = available.Where(entry => participation[entry.Id].OutputPresented || participation[entry.Id].ActivityEligible).ToArray();
                 if (visible.Length > 1)
                 {
                     throw new NavigationConfigurationException("A single screen instance cannot display or activate multiple history entries at the same time. Use a multiple-instance definition for independent screens.");

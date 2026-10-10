@@ -65,7 +65,7 @@ public sealed class NavigationCallbackFaultContractTests
         return NavigationDefinition.Build(Root, RegionCompositionMode.Exclusive, root =>
             root.AddRoute<MainRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, main =>
 {
-    main.AddChildRegion(Notices, RegionCompositionMode.Layered, RegionOccupancy.Optional, notices => notices.AddRoute<NoticeRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput));
+    main.AddChildRegion(Notices, RegionCompositionMode.Layered, RegionOccupancy.Optional, notices => notices.AddRoute<NoticeRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity));
 }));
     }
 

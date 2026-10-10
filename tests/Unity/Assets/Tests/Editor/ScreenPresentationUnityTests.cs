@@ -344,7 +344,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                         route.AddChildRegion(region, RegionCompositionMode.Layered, RegionOccupancy.Required, child =>
                         {
                             child.AddRoute<PanelRoute>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
-                            child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+                            child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.SuspendActivity);
                             child.AddRoute<EditorRoute>(RouteEntryOperations.Push | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
                         });
                     }
@@ -495,7 +495,7 @@ namespace MackySoft.Navigathena.Unity.Tests
         private NavigationHost CreateHost (Func<ScreenCreationContext<Popup>, CancellationToken, ValueTask<IScreenLifecycleHandler<Popup>>> create)
         {
             RegionDefinitionId root = new("root");
-            NavigationDefinition definition = NavigationDefinition.Build(root, RegionCompositionMode.Layered, builder => builder.AddRoute<Popup>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput));
+            NavigationDefinition definition = NavigationDefinition.Build(root, RegionCompositionMode.Layered, builder => builder.AddRoute<Popup>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity));
             ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(root, screens => screens.RegisterScreen(new ScreenDefinition<Popup>(create, ScreenInstancePolicy.Multiple))));
             NavigationHost host = NavigationHost.Create(catalog);
             hosts.Add(host);

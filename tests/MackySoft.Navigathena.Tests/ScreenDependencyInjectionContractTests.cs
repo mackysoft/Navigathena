@@ -26,7 +26,7 @@ public sealed class ScreenDependencyInjectionContractTests
         ScreenCatalog catalog = ScreenCatalog.Build(screens =>
         {
             screens.Register<OtherRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, (_, _) => new(new OtherPresenter()));
-            screens.Register<SelectionRoute, int>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput, async (creation, token) =>
+            screens.Register<SelectionRoute, int>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity, async (creation, token) =>
 {
     await creation.Lifetime.AcquireAsync(new Acquisition(() => shared.Ending.Add("resource.dispose")), token);
     if (useDI)

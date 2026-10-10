@@ -201,7 +201,7 @@ public sealed class ScreenPresentationContractTests
     {
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            root.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Reset | RouteEntryOperations.Replace, policy ?? LowerPresentationPolicy.BlockInput);
+            root.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Reset | RouteEntryOperations.Replace, policy ?? LowerPresentationPolicy.SuspendActivity);
         });
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, registrations =>
         {

@@ -67,7 +67,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
             HashSet<RegionInstanceId> regions = new(update.Changes.Where(change => change.Before?.Id != change.After?.Id
                 || change.BeforeParticipation?.OutputPresented != change.AfterParticipation?.OutputPresented
-                || change.BeforeParticipation?.SemanticInputEligible != change.AfterParticipation?.SemanticInputEligible)
+                || change.BeforeParticipation?.ActivityEligible != change.AfterParticipation?.ActivityEligible)
                 .Select(change => (change.AfterEntry ?? change.BeforeEntry)!.RegionId));
             foreach (NavigationEntry entry in update.Before.Entries.Values)
             {
@@ -118,7 +118,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
             foreach (ScreenInstance screen in before.Keys)
             {
                 if (playback.Configuration.Scope == NavigationTransitionScope.Host || !WillRetain(screen, update.ProposedAfter)
-                    || GetParticipation(screen, update.ProposedComposition)?.SemanticInputEligible != true
+                    || GetParticipation(screen, update.ProposedComposition)?.ActivityEligible != true
                     || (GetReturnOptions(screen) is ScreenHistoryReturnOptions returning
                         && (returning.Preparation == ScreenPreparationMode.Always || returning.EnterAnimation == ScreenEnterAnimationMode.Always)))
                 {
@@ -437,7 +437,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
                 if (failures.All(failure => failure.Scope == PresentationFailureScope.RetiredResources))
                 {
-                    foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed) && GetParticipation(screen, composition)?.SemanticInputEligible == true))
+                    foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed) && GetParticipation(screen, composition)?.ActivityEligible == true))
                     {
                         await screen.ActivateAsync(ActivationFor(screen.Entry));
                     }
@@ -451,17 +451,30 @@ namespace MackySoft.Navigathena.Runtime.Execution
                     }).ToArray());
                     blockers?.OpenInput();
                 }
-                try
+                runtime.Orders.Refresh();
+                if (failures.All(failure => failure.Scope == PresentationFailureScope.RetiredResources))
                 {
-                    runtime.Orders.Refresh();
-                }
-                catch (Exception exception)
-                {
-                    failures.Add(new PresentationFailure(PresentationFailureScope.RetiredResources, NavigationPhase.Complete, exception.Message, Array.Empty<PresentationReference>()) { Exception = exception });
+                    foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)).Distinct())
+                    {
+                        screen.PublishForeground();
+                    }
                 }
             }
             catch (Exception exception)
             {
+                ScreenInstance[] affected = created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)).Distinct().ToArray();
+                // Revoke native admission before an asynchronous failure-settlement effect can yield.
+                try
+                {
+                    await ScreenInstance.ApplyBatchAsync(affected.Select(screen => (screen,
+                        new ViewPresentation(!screen.IsEnding && screen.Presentation.OutputEnabled, false, screen.Presentation.Order))).ToArray());
+                }
+                catch (Exception closureFailure)
+                {
+                    failures.Add(new PresentationFailure(PresentationFailureScope.CurrentPresentations, NavigationPhase.Complete, closureFailure.Message,
+                        affected.Select(screen => new PresentationReference(screen.Entry.Id, screen.Id)).ToArray())
+                    { Exception = closureFailure });
+                }
                 try
                 {
                     blockers?.CloseInput();
@@ -479,7 +492,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                     failures.Add(new PresentationFailure(PresentationFailureScope.RetiredResources, NavigationPhase.Complete, settlementFailure.Message, Array.Empty<PresentationReference>()) { Exception = settlementFailure });
                 }
 
-                foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)))
+                foreach (ScreenInstance screen in affected)
                 {
                     try
                     {
@@ -632,6 +645,13 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 }
                 blockers?.Rollback();
                 runtime.Blockers.RestoreInput(before.Keys);
+                if (!playback.Departed)
+                {
+                    foreach (ScreenInstance screen in before.Keys.Where(screen => !screen.IsEnding && !playback.Retains(screen)))
+                    {
+                        screen.PublishForeground();
+                    }
+                }
             }
             catch (Exception exception)
             {

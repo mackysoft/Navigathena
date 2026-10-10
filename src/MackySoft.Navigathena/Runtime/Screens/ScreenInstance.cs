@@ -26,6 +26,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
         private bool handlerActive;
         private bool handlerTerminated;
         private CancellationTokenSource? activity;
+        private CancellationTokenSource? foreground;
         private Task? stoppingActivity;
         private Task? termination;
         private int users;
@@ -127,6 +128,60 @@ namespace MackySoft.Navigathena.Runtime.Screens
             if (LifecycleHandler is INavigationChangeHandler changeHandler)
             {
                 changeHandler.OnNavigationChanged(context);
+            }
+        }
+
+        internal void PublishForeground ()
+        {
+            if (foreground is not null || IsEnding || !IsActive || !Presentation.OutputEnabled || !Presentation.InputEnabled
+                || LifecycleHandler is not IScreenForegroundLifecycleHandler observer)
+            {
+                return;
+            }
+
+            CancellationTokenSource current = new();
+            foreground = current;
+            ScreenForegroundContext context = new(Entry.Id, Entry.RegionId, current.Token);
+            NavigationCallbackScope.Run(() => observer.OnForegroundAvailable(context));
+        }
+
+        private void EndForeground ()
+        {
+            CancellationTokenSource? current = foreground;
+            if (current is null)
+            {
+                return;
+            }
+
+            // A revoked period cannot be reused, even when cancellation or notification fails.
+            foreground = null;
+            List<Exception> failures = new();
+            try
+            {
+                current.Cancel();
+            }
+            catch (Exception exception)
+            {
+                failures.Add(exception);
+            }
+            try
+            {
+                if (LifecycleHandler is IScreenForegroundLifecycleHandler observer)
+                {
+                    NavigationCallbackScope.Run(observer.OnForegroundUnavailable);
+                }
+            }
+            catch (Exception exception)
+            {
+                failures.Add(exception);
+            }
+            finally
+            {
+                current.Dispose();
+            }
+            if (failures.Count > 0)
+            {
+                throw new AggregateException("The screen's foreground period did not end safely.", failures);
             }
         }
         public IScreenNavigation ConnectNavigation (Func<bool> connected) => new ActivityNavigation(navigation, () => connected() && IsActive, state);
@@ -429,12 +484,34 @@ namespace MackySoft.Navigathena.Runtime.Screens
                 throw new InvalidOperationException("An ending screen cannot be published.");
             }
 
-            foreach (ViewRegistration view in Creation.Registrations)
+            try
             {
-                view.Apply(presentation);
-            }
+                foreach (ViewRegistration view in Creation.Registrations)
+                {
+                    view.Apply(presentation);
+                }
 
-            Presentation = presentation;
+                Presentation = presentation;
+            }
+            catch (Exception failure)
+            {
+                if (!presentation.InputEnabled || !presentation.OutputEnabled)
+                {
+                    try
+                    {
+                        EndForeground();
+                    }
+                    catch (Exception endingFailure)
+                    {
+                        throw new AggregateException("Presentation and foreground closure failed.", failure, endingFailure);
+                    }
+                }
+                throw;
+            }
+            if (!presentation.InputEnabled || !presentation.OutputEnabled)
+            {
+                EndForeground();
+            }
         }
 
         public ValueTask ApplyAsync (ViewPresentation presentation)
@@ -484,6 +561,21 @@ namespace MackySoft.Navigathena.Runtime.Screens
             catch (Exception exception)
             {
                 failures.Add(exception);
+            }
+            // Native closure precedes lifecycle notification. Failed phases also revoke every old period.
+            foreach (var update in updates)
+            {
+                if (failures.Count != 0 || !update.Presentation.InputEnabled || !update.Presentation.OutputEnabled)
+                {
+                    try
+                    {
+                        update.Screen.EndForeground();
+                    }
+                    catch (Exception exception)
+                    {
+                        failures.Add(exception);
+                    }
+                }
             }
             if (failures.Count != 0)
             {

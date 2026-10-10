@@ -59,7 +59,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             NavigationDefinition definition = NavigationDefinition.Build(rootId, RegionCompositionMode.Layered, root =>
             {
                 root.AddRoute<TitleRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
-                root.AddRoute<PopupRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace, LowerPresentationPolicy.BlockInput);
+                root.AddRoute<PopupRoute>(RouteEntryOperations.Push | RouteEntryOperations.Replace, LowerPresentationPolicy.SuspendActivity);
                 root.AddRoute<FullRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRetain);
             });
             ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(rootId, screens =>
@@ -159,7 +159,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                     {
                         route.AddChildRegion(region, RegionCompositionMode.Layered, RegionOccupancy.Optional, child =>
                         {
-                            child.AddRoute<PopupRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
+                            child.AddRoute<PopupRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity);
                         });
                     }
                 });

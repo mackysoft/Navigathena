@@ -9,6 +9,8 @@ namespace MackySoft.Navigathena
     /// (using the activity token for activation). Implementations need not repeat the entry check, but must forward the token
     /// to asynchronous work and cooperate with cancellation during execution. Cancellation cannot atomically prevent entry
     /// or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after cancellation; resources remain owned until stopping completes.
+    /// Activity can continue while the screen is covered. Implement IScreenForegroundLifecycleHandler on this participant
+    /// to observe foreground availability after native presentation completes, separately from activity start and stop.
     /// </remarks>
     public interface IScreenLifecycleHandler<in TRoute> where TRoute : Route
     {
@@ -18,7 +20,8 @@ namespace MackySoft.Navigathena
         ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken);
         /// <summary>Prepares the route's data and saved state before presentation. Does not run again for an ordinary activity-only resume.</summary>
         ValueTask PrepareAsync (TRoute route, ScreenPreparationContext preparation, CancellationToken cancellationToken);
-        /// <summary>Starts activity after preparation and transition effects finish. Native input opens only after this callback completes.</summary>
+        /// <summary>Starts one activity period after preparation and transition effects finish. A retained background screen may remain active.</summary>
+        /// <remarks>Native input and foreground availability open only after this callback completes. A foreground return does not restart an activity that continued while covered.</remarks>
         ValueTask ActivateAsync (TRoute route, ScreenActivityContext activity);
         ValueTask DeactivateAsync ();
         /// <summary>Completes final screen-specific shutdown after activity and owned work stop, while screen resources remain available.</summary>

@@ -361,6 +361,61 @@ namespace MackySoft.Navigathena.Unity.Tests
             Assert.That(acquired == null, Is.True);
         });
 
+        [UnityTest]
+        public IEnumerator Game_foreground_callbacks_can_focus_on_open_and_return_without_restarting_retained_activity () => UniTask.ToCoroutine(async () =>
+        {
+            List<ForegroundHandler> screens = new();
+            RegionDefinitionId root = new("root");
+            NavigationDefinition definition = NavigationDefinition.Build(root, RegionCompositionMode.Layered,
+                region => region.AddRoute<Popup>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
+            ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(root,
+                registration => registration.RegisterScreen(new ScreenDefinition<Popup>((creation, _) =>
+                {
+                    UiToolkitViewAdapter view = Create();
+                    ForegroundHandler screen = creation.Lifetime.CreateOwned(() => new ForegroundHandler(view, AddButton(view)));
+                    screens.Add(screen);
+                    creation.ConnectPresentation(new ScreenPresentationBinding(new[] { view }));
+                    return new ValueTask<IScreenLifecycleHandler<Popup>>(screen);
+                }, ScreenInstancePolicy.Multiple))));
+            NavigationHost runtime = NavigationHost.Create(catalog);
+            navigation.Add(runtime);
+
+            await runtime.StartAsync(new Popup());
+            await UniTask.NextFrame();
+            ForegroundHandler first = screens[0];
+            ScreenForegroundContext initial = first.Foregrounds[0];
+            Assert.That(first.HasNativeFocus, Is.True);
+            SendSubmit(first.Target.panel.visualTree);
+            Assert.That(first.Submits, Is.EqualTo(1));
+            await runtime.Client.PushAsync(runtime.Root, Destination.For(new Popup()));
+            await UniTask.NextFrame();
+            ForegroundHandler popup = screens[1];
+            Assert.That(initial.IsValid, Is.False);
+            Assert.That(first.Activity.CancellationToken.IsCancellationRequested, Is.False);
+            Assert.That(first.HasNativeFocus, Is.False);
+            Assert.That(first.Target.canGrabFocus, Is.False);
+            Assert.That(first.Target.enabledSelf, Is.True);
+            Assert.That(popup.HasNativeFocus, Is.True);
+            SendSubmit(popup.Target.panel.visualTree);
+            Assert.That(popup.Submits, Is.EqualTo(1));
+            Assert.That(first.Submits, Is.EqualTo(1));
+
+            await runtime.Client.BackAsync(runtime.Root);
+            await UniTask.NextFrame();
+
+            Assert.That(first.Activations, Is.EqualTo(1));
+            Assert.That(first.Foregrounds.Count, Is.EqualTo(2));
+            Assert.That(first.Foregrounds[1].IsValid, Is.True);
+            Assert.That(initial.IsValid, Is.False);
+            Assert.That(first.HasNativeFocus, Is.True);
+            SendSubmit(first.Target.panel.visualTree);
+            Assert.That(first.Submits, Is.EqualTo(2));
+            Assert.That(popup.HasNativeFocus, Is.False);
+            Assert.That(popup.Foregrounds[0].IsValid, Is.False);
+            await runtime.ShutdownAsync();
+            Assert.That(first.Foregrounds[1].IsValid, Is.False);
+        });
+
         private UiToolkitViewAdapter Create ()
         {
             GameObject value = Track(new GameObject("UI screen"));
@@ -416,6 +471,49 @@ namespace MackySoft.Navigathena.Unity.Tests
         }
 
         private sealed record Popup : Route;
+
+        private sealed class ForegroundHandler : IScreenLifecycleHandler<Popup>, IScreenForegroundLifecycleHandler, IDisposable
+        {
+            private readonly UiToolkitViewAdapter view;
+            public ForegroundHandler (UiToolkitViewAdapter view, Button target)
+            {
+                this.view = view;
+                Target = target;
+                target.RegisterCallback<FocusEvent>(_ => HasNativeFocus = true);
+                target.RegisterCallback<BlurEvent>(_ => HasNativeFocus = false);
+                target.clicked += () => Submits++;
+            }
+            public Button Target { get; }
+            public bool HasNativeFocus { get; private set; }
+            public int Submits { get; private set; }
+            public ScreenActivityContext Activity { get; private set; } = null!;
+            public int Activations { get; private set; }
+            public List<ScreenForegroundContext> Foregrounds { get; } = new();
+            public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
+            public ValueTask PrepareAsync (Popup route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => default;
+            public ValueTask ActivateAsync (Popup route, ScreenActivityContext activity)
+            {
+                Activity = activity;
+                Activations++;
+                return default;
+            }
+            public ValueTask DeactivateAsync () => default;
+            public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
+            public void OnForegroundAvailable (ScreenForegroundContext foreground)
+            {
+                Assert.That(foreground.IsValid, Is.True);
+                Assert.That(view.Presentation.InputEnabled, Is.True);
+                Foregrounds.Add(foreground);
+                // The application chooses and applies its target through the native UI API.
+                Target.Focus();
+            }
+            public void OnForegroundUnavailable ()
+            {
+                Assert.That(Foregrounds[Foregrounds.Count - 1].IsValid, Is.False);
+                Assert.That(view.Presentation.InputEnabled, Is.False);
+            }
+            public void Dispose () { }
+        }
 
         private sealed class Handler : IScreenLifecycleHandler<Popup>, IDisposable
         {
