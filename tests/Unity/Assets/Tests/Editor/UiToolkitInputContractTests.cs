@@ -400,7 +400,7 @@ namespace MackySoft.Navigathena.Unity.Tests
 
         private static void OpenDropdown (DropdownField dropdown)
         {
-#if UNITY_2023_2_OR_NEWER
+#if UNITY_2022_2_OR_NEWER
             SendSubmit(dropdown);
 #else
             using KeyDownEvent enter = KeyDownEvent.GetPooled('\n', KeyCode.Return, EventModifiers.None);
