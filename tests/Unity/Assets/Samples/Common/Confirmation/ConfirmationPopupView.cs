@@ -17,6 +17,27 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
         public Button Decline => decline;
         public Button Close => close;
 
+        public void ConfigureNavigation ()
+        {
+            accept.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnRight = decline,
+                selectOnDown = close
+            };
+            decline.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnLeft = accept,
+                selectOnDown = close
+            };
+            close.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnUp = decline
+            };
+        }
+
         public void Render (ConfirmationRoute route)
         {
             title.text = route.Title;

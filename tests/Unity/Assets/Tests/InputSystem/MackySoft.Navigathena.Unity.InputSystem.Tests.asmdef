@@ -4,6 +4,7 @@
   "references": [
     "MackySoft.Navigathena.Unity",
     "MackySoft.Navigathena.Unity.UIToolkit",
+    "MackySoft.Navigathena.Unity.UGUI",
     "Unity.InputSystem",
     "UnityEngine.UI",
     "UniTask"
