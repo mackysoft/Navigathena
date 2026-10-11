@@ -15,14 +15,6 @@
   "overrideReferences": true,
   "precompiledReferences": ["MackySoft.Navigathena.dll"],
   "autoReferenced": false,
-  "defineConstraints": ["NAVIGATHENA_INPUT_SYSTEM_TESTS"],
-  "versionDefines": [
-    {
-      "name": "com.unity.inputsystem",
-      "expression": "1.3.0",
-      "define": "NAVIGATHENA_INPUT_SYSTEM_TESTS"
-    }
-  ],
   "noEngineReferences": false,
   "optionalUnityReferences": ["TestAssemblies"]
 }

@@ -29,12 +29,10 @@ jobs:
       fail-fast: false
       matrix:
         configuration:
-          - unity-6
-          - unity-2021
-          - unity-2022
-          - unity-2023
-          - unity-6-input-system
-          - unity-2021-input-system
+          # Cover the minimum supported editor and distinct native input-admission APIs.
+          - unity-2021 # PreventDefault.
+          - unity-2023 # IgnoreEvent and PreventDefault.
+          - unity-6 # IgnoreEvent.
     steps:
       - uses: actions/checkout@v5
         with:
@@ -65,7 +63,7 @@ jobs:
           artifactsPath: artifacts/unity-results/playmode
           githubToken: ''
       - name: Require successful adapter test results
-        run: dotnet run --project eng/RepositoryTools --configuration Release -- verify-unity-results artifacts/unity-results/playmode artifacts/unity-project
+        run: dotnet run --project eng/RepositoryTools --configuration Release -- verify-unity-results artifacts/unity-results/playmode
       - name: Build public documentation
         if: inputs.build-documentation && matrix.configuration == 'unity-6'
         run: |
