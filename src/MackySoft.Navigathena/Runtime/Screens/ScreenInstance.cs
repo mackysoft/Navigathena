@@ -141,8 +141,8 @@ namespace MackySoft.Navigathena.Runtime.Screens
 
             CancellationTokenSource current = new();
             foreground = current;
-            ScreenForegroundContext context = new(Entry.Id, Entry.RegionId, current.Token);
-            NavigationCallbackScope.Run(() => observer.OnForegroundAvailable(context));
+            ScreenForegroundToken token = new(Entry.Id, Entry.RegionId, current.Token);
+            NavigationCallbackScope.Run(() => observer.OnForegroundAvailable(token));
         }
 
         private void EndForeground ()
@@ -166,7 +166,7 @@ namespace MackySoft.Navigathena.Runtime.Screens
             }
             try
             {
-                if (LifecycleHandler is IScreenForegroundLifecycleHandler observer)
+                if (LifecycleHandler is IScreenForegroundUnavailableHandler observer)
                 {
                     NavigationCallbackScope.Run(observer.OnForegroundUnavailable);
                 }

@@ -168,7 +168,7 @@ This example connects screen logic only. To let Navigathena also manage physical
 | --- | --- |
 | `InitializeAsync(initialization, token)` | Initialize stable dependencies once per screen instance. Acquire instance-owned resources through `initialization.Lifetime` and report through `initialization.Progress`. |
 | `PrepareAsync(route, preparation, token)` | Load data for this route, populate the view, and restore `preparation.SavedState` before presentation. |
-| `ActivateAsync(route, activity)` | Subscribe to input and start activity for the current visit. |
+| `ActivateAsync(route, activity)` | Start screen activity and its subscriptions. That activity can continue while the screen is covered. |
 | `DeactivateAsync()` | Remove subscriptions and await the end of activity. Do not destroy the view or its dependencies here. |
 | `TerminateAsync(progress)` | Finish remaining screen-specific work and report its progress before the owner releases resources. |
 
@@ -184,7 +184,9 @@ For a new screen, initialization and route preparation finish before its entry a
 
 Activity and foreground availability are separate periods. A covered screen can keep activity without remaining an input target. Returning to the foreground does not call `ActivateAsync` again when that activity continued.
 
-Implement `IScreenForegroundLifecycleHandler` on the same presenter to receive `OnForegroundAvailable` after native view permissions, blockers, and ordering are ready. Your application chooses and sets its initial or returning focus target there, using the native UI API. The supplied `ScreenForegroundContext.CancellationToken` ends that foreground period independently of the activity token. Native admission closes before `OnForegroundUnavailable`; returning supplies a fresh context, and an old context never becomes valid again. These notifications also cover transition suspension, presentation loss, and shutdown.
+Implement `IScreenForegroundLifecycleHandler` on the same presenter to receive `OnForegroundAvailable` after native view permissions, blockers, and ordering are ready. Your application chooses and sets its initial or returning focus target there, using the native UI API. Retain the supplied `ScreenForegroundToken` and check its `IsValid` at application operation entry points. Returning supplies a fresh token; an old token never becomes valid again.
+
+The token's `CancellationToken` signals the end of that foreground period independently of the activity token, including transition suspension, presentation loss, and shutdown. Implement `IScreenForegroundUnavailableHandler` when application work also needs `OnForegroundUnavailable`. Native admission closes and the foreground token becomes invalid before that optional notification. A presenter that only sets foreground focus does not need an end callback.
 
 ### Navigation from a lifecycle callback
 

@@ -381,7 +381,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             await runtime.StartAsync(new Popup());
             await UniTask.NextFrame();
             ForegroundHandler first = screens[0];
-            ScreenForegroundContext initial = first.Foregrounds[0];
+            ScreenForegroundToken initial = first.Foregrounds[0];
             Assert.That(first.HasNativeFocus, Is.True);
             SendSubmit(first.Target.panel.visualTree);
             Assert.That(first.Submits, Is.EqualTo(1));
@@ -470,7 +470,7 @@ namespace MackySoft.Navigathena.Unity.Tests
 
         private sealed record Popup : Route;
 
-        private sealed class ForegroundHandler : IScreenLifecycleHandler<Popup>, IScreenForegroundLifecycleHandler, IDisposable
+        private sealed class ForegroundHandler : IScreenLifecycleHandler<Popup>, IScreenForegroundUnavailableHandler, IDisposable
         {
             private readonly UiToolkitViewAdapter view;
             public ForegroundHandler (UiToolkitViewAdapter view, Button target)
@@ -486,7 +486,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             public int Submits { get; private set; }
             public ScreenActivityContext Activity { get; private set; } = null!;
             public int Activations { get; private set; }
-            public List<ScreenForegroundContext> Foregrounds { get; } = new();
+            public List<ScreenForegroundToken> Foregrounds { get; } = new();
             public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
             public ValueTask PrepareAsync (Popup route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => default;
             public ValueTask ActivateAsync (Popup route, ScreenActivityContext activity)
@@ -497,7 +497,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             }
             public ValueTask DeactivateAsync () => default;
             public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
-            public void OnForegroundAvailable (ScreenForegroundContext foreground)
+            public void OnForegroundAvailable (ScreenForegroundToken foreground)
             {
                 Assert.That(foreground.IsValid, Is.True);
                 Assert.That(view.Presentation.InputEnabled, Is.True);

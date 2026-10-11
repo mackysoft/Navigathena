@@ -12,6 +12,14 @@ public sealed class ViewInputPublicationContractTests
 {
     private static readonly RegionDefinitionId Root = new("root");
 
+    [Fact]
+    public void Default_foreground_token_does_not_authorize_operations ()
+    {
+        ScreenForegroundToken foreground = default;
+
+        Assert.False(foreground.IsValid);
+    }
+
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -29,8 +37,10 @@ public sealed class ViewInputPublicationContractTests
         Screen first = Assert.Single(screens);
         Assert.True(first.View.Presentation.InputEnabled);
         ScreenActivityContext activity = Assert.Single(first.Activities);
-        ScreenForegroundContext initialForeground = Assert.Single(first.Foregrounds);
+        ScreenForegroundToken initialForeground = Assert.Single(first.Foregrounds);
+        ScreenForegroundToken copiedForeground = initialForeground;
         Assert.True(initialForeground.IsValid);
+        Assert.True(copiedForeground.IsValid);
 
         await host.Client.PushAsync(host.Root, Destination.For(new Page(1)));
         Screen second = screens[1];
@@ -38,6 +48,7 @@ public sealed class ViewInputPublicationContractTests
         Assert.False(first.View.Presentation.InputEnabled);
         Assert.True(second.View.Presentation.InputEnabled);
         Assert.False(initialForeground.IsValid);
+        Assert.False(copiedForeground.IsValid);
         Assert.True(initialForeground.CancellationToken.IsCancellationRequested);
         Assert.Equal(!retainActivity, activity.CancellationToken.IsCancellationRequested);
         if (!retainActivity)
@@ -52,6 +63,7 @@ public sealed class ViewInputPublicationContractTests
         Assert.Equal(2, first.Foregrounds.Count);
         Assert.True(first.Foregrounds[1].IsValid);
         Assert.False(initialForeground.IsValid);
+        Assert.False(copiedForeground.IsValid);
         Assert.All(second.Foregrounds, foreground => Assert.False(foreground.IsValid));
         await host.ShutdownAsync();
         Assert.All(screens, screen => Assert.False(screen.View.Presentation.InputEnabled));
@@ -85,7 +97,7 @@ public sealed class ViewInputPublicationContractTests
             .Child(left, Destination.For(new Page(1))).Child(right, Destination.For(new Page(2))));
         RegionInstanceId leftInstance = host.State.Current.Regions.Values.Single(region => region.DefinitionId == left).Id;
         Screen unchangedRight = screens.Single(screen => screen.RouteId == 2);
-        ScreenForegroundContext rightForeground = Assert.Single(unchangedRight.Foregrounds);
+        ScreenForegroundToken rightForeground = Assert.Single(unchangedRight.Foregrounds);
         await host.Client.PushAsync(leftInstance, Destination.For(new Page(3)));
         Screen newLeft = screens.Single(screen => screen.RouteId == 3);
 
@@ -93,7 +105,7 @@ public sealed class ViewInputPublicationContractTests
         Assert.True(unchangedRight.View.Presentation.InputEnabled);
         Assert.True(newLeft.View.Presentation.InputEnabled);
         Assert.False(screens.Single(screen => screen.RouteId == 1).View.Presentation.InputEnabled);
-        Assert.Same(rightForeground, Assert.Single(unchangedRight.Foregrounds));
+        Assert.Single(unchangedRight.Foregrounds);
         Assert.True(rightForeground.IsValid);
         Assert.True(Assert.Single(newLeft.Foregrounds).IsValid);
     }
@@ -146,7 +158,7 @@ public sealed class ViewInputPublicationContractTests
         await using NavigationHost host = NavigationHost.Create(catalog);
         await host.StartAsync(new Page(0));
         Screen first = Assert.Single(screens);
-        ScreenForegroundContext old = Assert.Single(first.Foregrounds);
+        ScreenForegroundToken old = Assert.Single(first.Foregrounds);
         backend.Failure = "preparation";
 
         NavigationException failure = await Assert.ThrowsAsync<NavigationException>(() => host.Client.PushAsync(host.Root, Destination.For(new Page(1))));
@@ -198,7 +210,7 @@ public sealed class ViewInputPublicationContractTests
         await using NavigationHost host = NavigationHost.Create(catalog);
         await host.StartAsync(new Page(0));
         Screen first = Assert.Single(screens);
-        ScreenForegroundContext old = Assert.Single(first.Foregrounds);
+        ScreenForegroundToken old = Assert.Single(first.Foregrounds);
         using CancellationTokenRegistration registration = notificationFails ? default
             : old.CancellationToken.Register(() => throw new InvalidOperationException("Application cancellation failed."));
         if (notificationFails)
@@ -251,7 +263,7 @@ public sealed class ViewInputPublicationContractTests
         await using NavigationHost host = NavigationHost.Create(catalog);
         await host.StartAsync(new Page(0));
         Screen screen = Assert.Single(screens);
-        ScreenForegroundContext foreground = Assert.Single(screen.Foregrounds);
+        ScreenForegroundToken foreground = Assert.Single(screen.Foregrounds);
 
         screen.View.Lose();
 
@@ -273,7 +285,7 @@ public sealed class ViewInputPublicationContractTests
 
     private sealed record Page (int Id) : Route;
 
-    private sealed class Screen : IScreenLifecycleHandler<Page>, IScreenForegroundLifecycleHandler, IDisposable
+    private sealed class Screen : IScreenLifecycleHandler<Page>, IScreenForegroundUnavailableHandler, IDisposable
     {
         private readonly Backend backend;
         public Screen (Backend backend)
@@ -285,7 +297,7 @@ public sealed class ViewInputPublicationContractTests
         public int RouteId { get; private set; }
         public bool ClosedDuringDeactivation { get; private set; }
         public List<ScreenActivityContext> Activities { get; } = new();
-        public List<ScreenForegroundContext> Foregrounds { get; } = new();
+        public List<ScreenForegroundToken> Foregrounds { get; } = new();
         public int ForegroundClosures { get; private set; }
         public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
         public ValueTask PrepareAsync (Page route, ScreenPreparationContext preparation, CancellationToken cancellationToken)
@@ -322,7 +334,7 @@ public sealed class ViewInputPublicationContractTests
             Assert.All(Foregrounds, foreground => Assert.False(foreground.IsValid));
             return default;
         }
-        public void OnForegroundAvailable (ScreenForegroundContext foreground)
+        public void OnForegroundAvailable (ScreenForegroundToken foreground)
         {
             Assert.True(View.Presentation.OutputEnabled);
             Assert.True(View.Presentation.InputEnabled);
