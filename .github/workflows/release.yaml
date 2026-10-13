@@ -138,12 +138,21 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          release_notes="$(mktemp)"
+          trap 'rm -f -- "$release_notes"' EXIT
+          # The versioned changelog owns user-facing release notes, including previews.
+          awk -v heading="## [$RELEASE_TAG] " '
+            index($0, heading) == 1 { capture = 1; next }
+            capture && /^## / { exit }
+            capture { print }
+          ' Documentation/changelog/CHANGELOG.md > "$release_notes"
+          if ! grep -q '[^[:space:]]' "$release_notes"; then
+            printf 'No release notes found for %s in CHANGELOG.md.\n' "$RELEASE_TAG" >&2
+            exit 1
+          fi
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" artifacts/published/*.nupkg --clobber
+            gh release edit "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file "$release_notes" --draft=false --prerelease=false --latest
           else
-            release_options=(--verify-tag --title "$RELEASE_TAG" --generate-notes)
-            if [[ "$RELEASE_TAG" == *-* ]]; then
-              release_options+=(--prerelease --latest=false)
-            fi
-            gh release create "$RELEASE_TAG" artifacts/published/*.nupkg "${release_options[@]}"
+            gh release create "$RELEASE_TAG" artifacts/published/*.nupkg --verify-tag --title "$RELEASE_TAG" --notes-file "$release_notes" --latest
           fi
