@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Interface IScreenLifecycleHandler&lt;TRoute&gt; | Navigathena ">
       
-      <meta name="description" content="Implements awaited screen lifecycle work. The runtime controls invocation; the registered owner controls disposal.">
+      <meta name="description" content="Implements awaited instance initialization, content preparation, foreground entry and departure, and final termination.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="MackySoft_Navigathena_IScreenLifecycleHandler_1" data-uid="MackySoft.Navigathena.IScreenLifecycleHandler`1" class="text-break">
-Interface IScreenLifecycleHandler&lt;TRoute&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Interface IScreenLifecycleHandler&lt;TRoute&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,7 @@ Interface IScreenLifecycleHandler&lt;TRoute&gt;  <a class="header-action link-se
   <dl><dt>Assembly</dt><dd>MackySoft.Navigathena.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Implements awaited screen lifecycle work. The runtime controls invocation; the registered owner controls disposal.</p>
+  <div class="markdown summary"><p>Implements awaited instance initialization, content preparation, foreground entry and departure, and final termination.</p>
 </div>
   <div class="markdown conceptual"></div>
 
@@ -124,7 +124,11 @@ Interface IScreenLifecycleHandler&lt;TRoute&gt;  <a class="header-action link-se
   <div class="markdown level0 remarks"><p>The runtime checks the supplied token immediately before and after InitializeAsync, PrepareAsync and ActivateAsync
 (using the activity token for activation). Implementations need not repeat the entry check, but must forward the token
 to asynchronous work and cooperate with cancellation during execution. Cancellation cannot atomically prevent entry
-or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after cancellation; resources remain owned until stopping completes.</p>
+or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after cancellation; resources remain owned until stopping completes.
+Each foreground departure ends the activation period, including modal cover. Retained output, game simulation,
+data updates and binding-owned work have independent lifetimes; deactivation does not hide or destroy the screen.
+Native input and focus admission are ready when ActivateAsync starts. Choose the focus target and establish
+operation subscriptions there, retaining the supplied foreground token when qualification is needed.</p>
 </div>
 
 
@@ -136,10 +140,10 @@ or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after
 
   <h3 id="MackySoft_Navigathena_IScreenLifecycleHandler_1_ActivateAsync__0_MackySoft_Navigathena_ScreenActivityContext_" data-uid="MackySoft.Navigathena.IScreenLifecycleHandler`1.ActivateAsync(`0,MackySoft.Navigathena.ScreenActivityContext)">
   ActivateAsync(TRoute, ScreenActivityContext)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Starts activity after preparation and transition effects finish. Native input opens only after this callback completes.</p>
+  <div class="markdown level1 summary"><p>Starts operation of a prepared screen after transition effects, ordering, and native input admission are ready.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -167,6 +171,9 @@ or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after
 
 
 
+  <h4 class="section" id="MackySoft_Navigathena_IScreenLifecycleHandler_1_ActivateAsync__0_MackySoft_Navigathena_ScreenActivityContext__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Establish operation subscriptions and initial or returning focus here. Every retained return receives a new activity context and valid foreground token. User input is permitted during this callback; prerequisites that must finish before operation belong in initialization, preparation, or presentation effects. Do not await a user's eventual popup answer here.</p>
+</div>
 
 
 
@@ -175,10 +182,11 @@ or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after
 
   <h3 id="MackySoft_Navigathena_IScreenLifecycleHandler_1_DeactivateAsync" data-uid="MackySoft.Navigathena.IScreenLifecycleHandler`1.DeactivateAsync">
   DeactivateAsync()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Ends the started foreground period before departure or cover effects, including removal of operation subscriptions.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -198,6 +206,9 @@ or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after
 
 
 
+  <h4 class="section" id="MackySoft_Navigathena_IScreenLifecycleHandler_1_DeactivateAsync_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Qualification is revoked and native input is closed first. This callback is also awaited to clean up a partially failed activation. It does not end retained output, independent display subscriptions, game simulation, or binding-owned work.</p>
+</div>
 
 
 
@@ -206,7 +217,7 @@ or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after
 
   <h3 id="MackySoft_Navigathena_IScreenLifecycleHandler_1_InitializeAsync_MackySoft_Navigathena_ScreenInitializationContext_System_Threading_CancellationToken_" data-uid="MackySoft.Navigathena.IScreenLifecycleHandler`1.InitializeAsync(MackySoft.Navigathena.ScreenInitializationContext,System.Threading.CancellationToken)">
   InitializeAsync(ScreenInitializationContext, CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L22"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes the instance once, optionally acquiring instance-owned resources and reporting progress.</p>
@@ -247,10 +258,10 @@ or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after
 
   <h3 id="MackySoft_Navigathena_IScreenLifecycleHandler_1_PrepareAsync__0_MackySoft_Navigathena_ScreenPreparationContext_System_Threading_CancellationToken_" data-uid="MackySoft.Navigathena.IScreenLifecycleHandler`1.PrepareAsync(`0,MackySoft.Navigathena.ScreenPreparationContext,System.Threading.CancellationToken)">
   PrepareAsync(TRoute, ScreenPreparationContext, CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Prepares the route's data and saved state before presentation. Does not run again for an ordinary activity-only resume.</p>
+  <div class="markdown level1 summary"><p>Prepares this route's display content and saved state before entry effects. An ordinary retained foreground return does not repeat preparation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -288,7 +299,7 @@ or forcibly stop work. DeactivateAsync and TerminateAsync are awaited even after
 
   <h3 id="MackySoft_Navigathena_IScreenLifecycleHandler_1_TerminateAsync_MackySoft_Navigathena_NavigationProgressReporter_" data-uid="MackySoft.Navigathena.IScreenLifecycleHandler`1.TerminateAsync(MackySoft.Navigathena.NavigationProgressReporter)">
   TerminateAsync(NavigationProgressReporter)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/IScreenLifecycleHandler.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Completes final screen-specific shutdown after activity and owned work stop, while screen resources remain available.</p>

@@ -116,7 +116,7 @@ Interface IBlockerPresenter  <a class="header-action link-secondary" title="View
 
 
   <h2 id="MackySoft_Navigathena_IBlockerPresenter_remarks">Remarks</h2>
-  <div class="markdown level0 remarks"><p>The runtime checks cancellation immediately before and after PrepareAsync. Implementations forward the token to ongoing work without duplicating the entry check. TerminateAsync is awaited even after cancellation.</p>
+  <div class="markdown level0 remarks"><p>The runtime checks cancellation immediately before and after PrepareAsync. Implementations forward the token to ongoing work without duplicating the entry check. TerminateAsync is awaited even after cancellation. Shown registered views intercept pointers independently of the associated screen's operation qualification; the supplied navigation follows its foreground period.</p>
 </div>
 
 

@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Interface IViewAdapter | Navigathena ">
       
-      <meta name="description" content="Applies runtime output and physical input permissions to one concrete view.">
+      <meta name="description" content="Applies runtime output, native focus, and user-input permissions to one concrete view.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -97,7 +97,7 @@ Interface IViewAdapter  <a class="header-action link-secondary" title="View sour
   <dl><dt>Assembly</dt><dd>MackySoft.Navigathena.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Applies runtime output and physical input permissions to one concrete view.</p>
+  <div class="markdown summary"><p>Applies runtime output, native focus, and user-input permissions to one concrete view.</p>
 </div>
   <div class="markdown conceptual"></div>
 
@@ -256,10 +256,11 @@ Interface IViewAdapter  <a class="header-action link-secondary" title="View sour
 
   <h3 id="MackySoft_Navigathena_IViewAdapter_Apply_MackySoft_Navigathena_ViewPresentation_" data-uid="MackySoft.Navigathena.IViewAdapter.Apply(MackySoft.Navigathena.ViewPresentation)">
   Apply(ViewPresentation)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Views/IViewAdapter.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Views/IViewAdapter.cs/#L18"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Applies a synchronous presentation change without changing semantic control availability.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -279,6 +280,9 @@ Interface IViewAdapter  <a class="header-action link-secondary" title="View sour
 
 
 
+  <h4 class="section" id="MackySoft_Navigathena_IViewAdapter_Apply_MackySoft_Navigathena_ViewPresentation__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>For IViewPresentationBatchAdapter, route permission changes through its PresentationBatch; synchronous Apply is reserved for initial closed state and order-only changes.</p>
+</div>
 
 
 

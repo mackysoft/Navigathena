@@ -123,7 +123,7 @@ Interface IScreenLifecycleHandler&lt;TRoute, TResult&gt;  <a class="header-actio
 
 
   <h2 id="MackySoft_Navigathena_IScreenLifecycleHandler_2_remarks">Remarks</h2>
-  <div class="markdown level0 remarks"><p>Initialization, preparation, stopping, and resource ownership follow the same contract as a screen without a result. Activation receives the typed call endpoint only after transition effects finish.</p>
+  <div class="markdown level0 remarks"><p>Initialization, preparation, stopping, and resource ownership follow the same contract as a screen without a result. Activation receives the typed call endpoint and a valid foreground token after transition effects, ordering, and native input admission finish. Establish operation subscriptions and native focus during activation.</p>
 </div>
 
 

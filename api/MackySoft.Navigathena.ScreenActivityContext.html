@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class ScreenActivityContext | Navigathena ">
       
-      <meta name="description" content="Provides navigation and cancellation for exactly one activity period.">
+      <meta name="description" content="Provides navigation and cancellation for one foreground activation period.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="MackySoft_Navigathena_ScreenActivityContext" data-uid="MackySoft.Navigathena.ScreenActivityContext" class="text-break">
-Class ScreenActivityContext  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L8"><i class="bi bi-code-slash"></i></a>
+Class ScreenActivityContext  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L9"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,7 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
   <dl><dt>Assembly</dt><dd>MackySoft.Navigathena.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Provides navigation and cancellation for exactly one activity period.</p>
+  <div class="markdown summary"><p>Provides navigation and cancellation for one foreground activation period.</p>
 </div>
   <div class="markdown conceptual"></div>
 
@@ -153,6 +153,9 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
 
 
 
+  <h2 id="MackySoft_Navigathena_ScreenActivityContext_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>The period ends on departure or modal cover. A retained return receives a new context. Rendering, game simulation and binding-owned work are not owned by this period.</p>
+</div>
 
 
   <h2 class="section" id="properties">Properties
@@ -163,10 +166,11 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_ScreenActivityContext_CancellationToken" data-uid="MackySoft.Navigathena.ScreenActivityContext.CancellationToken">
   CancellationToken
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Signals the end of this activation period. Use a separate lifetime for work that must survive modal cover.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -194,7 +198,7 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_ScreenActivityContext_EntryId" data-uid="MackySoft.Navigathena.ScreenActivityContext.EntryId">
   EntryId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L25"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L27"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -221,11 +225,46 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
 
 
 
+  <a id="MackySoft_Navigathena_ScreenActivityContext_ForegroundToken_" data-uid="MackySoft.Navigathena.ScreenActivityContext.ForegroundToken*"></a>
+
+  <h3 id="MackySoft_Navigathena_ScreenActivityContext_ForegroundToken" data-uid="MackySoft.Navigathena.ScreenActivityContext.ForegroundToken">
+  ForegroundToken
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The valid operation qualification for this activation. Native input and focus admission are ready when activation starts.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ScreenForegroundToken ForegroundToken { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MackySoft.Navigathena.ScreenForegroundToken.html">ScreenForegroundToken</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="MackySoft_Navigathena_ScreenActivityContext_ForegroundToken_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Retain this value when accepting an operation. Departure invalidates it before native focus-loss callbacks; a later activation supplies a different token.</p>
+</div>
+
+
+
+
   <a id="MackySoft_Navigathena_ScreenActivityContext_IsFirstActivation_" data-uid="MackySoft.Navigathena.ScreenActivityContext.IsFirstActivation*"></a>
 
   <h3 id="MackySoft_Navigathena_ScreenActivityContext_IsFirstActivation" data-uid="MackySoft.Navigathena.ScreenActivityContext.IsFirstActivation">
   IsFirstActivation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>True until this history entry has successfully completed its first activation transition.</p>
@@ -257,7 +296,7 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_ScreenActivityContext_Navigation" data-uid="MackySoft.Navigathena.ScreenActivityContext.Navigation">
   Navigation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L29"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -288,7 +327,7 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_ScreenActivityContext_PreparationReason" data-uid="MackySoft.Navigathena.ScreenActivityContext.PreparationReason">
   PreparationReason
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L37"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -319,7 +358,7 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_ScreenActivityContext_Reason" data-uid="MackySoft.Navigathena.ScreenActivityContext.Reason">
   Reason
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L29"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -350,7 +389,7 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_ScreenActivityContext_RegionId" data-uid="MackySoft.Navigathena.ScreenActivityContext.RegionId">
   RegionId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -385,7 +424,7 @@ Class ScreenActivityContext  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_ScreenActivityContext_StartWork_System_Func_MackySoft_Navigathena_ScreenWorkContext_System_Threading_Tasks_ValueTask__" data-uid="MackySoft.Navigathena.ScreenActivityContext.StartWork(System.Func{MackySoft.Navigathena.ScreenWorkContext,System.Threading.Tasks.ValueTask})">
   StartWork(Func&lt;ScreenWorkContext, ValueTask&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Screens/ScreenActivityContext.cs/#L47"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Schedules owned work after the current navigation settles. Do not await its completion inside a lifecycle callback.</p>

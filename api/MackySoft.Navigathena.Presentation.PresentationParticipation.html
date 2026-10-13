@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class PresentationParticipation | Navigathena ">
       
-      <meta name="description" content="Describes an entry&#39;s derived availability, output, and semantic input participation.">
+      <meta name="description" content="Describes derived availability, foreground position, and output.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="MackySoft_Navigathena_Presentation_PresentationParticipation" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation" class="text-break">
-Class PresentationParticipation  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L5"><i class="bi bi-code-slash"></i></a>
+Class PresentationParticipation  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L6"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,7 @@ Class PresentationParticipation  <a class="header-action link-secondary" title="
   <dl><dt>Assembly</dt><dd>MackySoft.Navigathena.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Describes an entry's derived availability, output, and semantic input participation.</p>
+  <div class="markdown summary"><p>Describes derived availability, foreground position, and output.</p>
 </div>
   <div class="markdown conceptual"></div>
 
@@ -150,6 +150,9 @@ Class PresentationParticipation  <a class="header-action link-secondary" title="
 
 
 
+  <h2 id="MackySoft_Navigathena_Presentation_PresentationParticipation_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>A screen is eligible for activation only while it is available, in the foreground, and presented. Eligibility does not indicate that preparation or native input admission has finished.</p>
+</div>
 
 
   <h2 class="section" id="constructors">Constructors
@@ -158,17 +161,17 @@ Class PresentationParticipation  <a class="header-action link-secondary" title="
 
   <a id="MackySoft_Navigathena_Presentation_PresentationParticipation__ctor_" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.#ctor*"></a>
 
-  <h3 id="MackySoft_Navigathena_Presentation_PresentationParticipation__ctor_System_Boolean_System_Boolean_System_Boolean_System_Boolean_" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
-  PresentationParticipation(bool, bool, bool, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L5"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MackySoft_Navigathena_Presentation_PresentationParticipation__ctor_System_Boolean_System_Boolean_System_Boolean_" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.#ctor(System.Boolean,System.Boolean,System.Boolean)">
+  PresentationParticipation(bool, bool, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L6"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Describes an entry's derived availability, output, and semantic input participation.</p>
+  <div class="markdown level1 summary"><p>Describes derived availability, foreground position, and output.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PresentationParticipation(bool Available, bool Foreground, bool OutputPresented, bool SemanticInputEligible)</code></pre>
+    <pre><code class="lang-csharp hljs">public PresentationParticipation(bool Available, bool Foreground, bool OutputPresented)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -179,7 +182,47 @@ Class PresentationParticipation  <a class="header-action link-secondary" title="
     <dd></dd>
     <dt><code>OutputPresented</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
     <dd></dd>
-    <dt><code>SemanticInputEligible</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="MackySoft_Navigathena_Presentation_PresentationParticipation__ctor_System_Boolean_System_Boolean_System_Boolean__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>A screen is eligible for activation only while it is available, in the foreground, and presented. Eligibility does not indicate that preparation or native input admission has finished.</p>
+</div>
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="MackySoft_Navigathena_Presentation_PresentationParticipation_ActivityEligible_" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.ActivityEligible*"></a>
+
+  <h3 id="MackySoft_Navigathena_Presentation_PresentationParticipation_ActivityEligible" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.ActivityEligible">
+  ActivityEligible
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L8"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ActivityEligible { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
     <dd></dd>
   </dl>
 
@@ -190,19 +233,11 @@ Class PresentationParticipation  <a class="header-action link-secondary" title="
 
 
 
-
-
-
-
-  <h2 class="section" id="properties">Properties
-</h2>
-
-
   <a id="MackySoft_Navigathena_Presentation_PresentationParticipation_Available_" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.Available*"></a>
 
   <h3 id="MackySoft_Navigathena_Presentation_PresentationParticipation_Available" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.Available">
   Available
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L5"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L6"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -233,7 +268,7 @@ Class PresentationParticipation  <a class="header-action link-secondary" title="
 
   <h3 id="MackySoft_Navigathena_Presentation_PresentationParticipation_Foreground" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.Foreground">
   Foreground
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L5"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L6"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -264,7 +299,7 @@ Class PresentationParticipation  <a class="header-action link-secondary" title="
 
   <h3 id="MackySoft_Navigathena_Presentation_PresentationParticipation_OutputPresented" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.OutputPresented">
   OutputPresented
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L5"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L6"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -272,37 +307,6 @@ Class PresentationParticipation  <a class="header-action link-secondary" title="
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool OutputPresented { get; init; }</code></pre>
-  </div>
-
-
-
-
-
-  <h4 class="section">Property Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
-  <a id="MackySoft_Navigathena_Presentation_PresentationParticipation_SemanticInputEligible_" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.SemanticInputEligible*"></a>
-
-  <h3 id="MackySoft_Navigathena_Presentation_PresentationParticipation_SemanticInputEligible" data-uid="MackySoft.Navigathena.Presentation.PresentationParticipation.SemanticInputEligible">
-  SemanticInputEligible
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Presentation/PresentationParticipation.cs/#L5"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool SemanticInputEligible { get; init; }</code></pre>
   </div>
 
 

@@ -161,8 +161,8 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
 
   <a id="MackySoft_Navigathena_LowerPresentationPolicy__ctor_" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.#ctor*"></a>
 
-  <h3 id="MackySoft_Navigathena_LowerPresentationPolicy__ctor_MackySoft_Navigathena_LowerPresentationOutput_MackySoft_Navigathena_LowerPresentationInput_MackySoft_Navigathena_LowerPresentationRetention_" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.#ctor(MackySoft.Navigathena.LowerPresentationOutput,MackySoft.Navigathena.LowerPresentationInput,MackySoft.Navigathena.LowerPresentationRetention)">
-  LowerPresentationPolicy(LowerPresentationOutput, LowerPresentationInput, LowerPresentationRetention)
+  <h3 id="MackySoft_Navigathena_LowerPresentationPolicy__ctor_MackySoft_Navigathena_LowerPresentationOutput_MackySoft_Navigathena_LowerPresentationRetention_MackySoft_Navigathena_LowerPresentationBoundary_" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.#ctor(MackySoft.Navigathena.LowerPresentationOutput,MackySoft.Navigathena.LowerPresentationRetention,MackySoft.Navigathena.LowerPresentationBoundary)">
+  LowerPresentationPolicy(LowerPresentationOutput, LowerPresentationRetention, LowerPresentationBoundary)
   <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L8"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -171,16 +171,16 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public LowerPresentationPolicy(LowerPresentationOutput Output, LowerPresentationInput Input, LowerPresentationRetention Retention)</code></pre>
+    <pre><code class="lang-csharp hljs">public LowerPresentationPolicy(LowerPresentationOutput Output, LowerPresentationRetention Retention, LowerPresentationBoundary Boundary)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>Output</code> <a class="xref" href="MackySoft.Navigathena.LowerPresentationOutput.html">LowerPresentationOutput</a></dt>
     <dd></dd>
-    <dt><code>Input</code> <a class="xref" href="MackySoft.Navigathena.LowerPresentationInput.html">LowerPresentationInput</a></dt>
-    <dd></dd>
     <dt><code>Retention</code> <a class="xref" href="MackySoft.Navigathena.LowerPresentationRetention.html">LowerPresentationRetention</a></dt>
+    <dd></dd>
+    <dt><code>Boundary</code> <a class="xref" href="MackySoft.Navigathena.LowerPresentationBoundary.html">LowerPresentationBoundary</a></dt>
     <dd></dd>
   </dl>
 
@@ -191,7 +191,7 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
 
 
 
-  <h4 class="section" id="MackySoft_Navigathena_LowerPresentationPolicy__ctor_MackySoft_Navigathena_LowerPresentationOutput_MackySoft_Navigathena_LowerPresentationInput_MackySoft_Navigathena_LowerPresentationRetention__remarks">Remarks</h4>
+  <h4 class="section" id="MackySoft_Navigathena_LowerPresentationPolicy__ctor_MackySoft_Navigathena_LowerPresentationOutput_MackySoft_Navigathena_LowerPresentationRetention_MackySoft_Navigathena_LowerPresentationBoundary__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>Effects do not propagate to the owning screen, sibling regions, or the entry's own child screens.</p>
 </div>
 
@@ -202,19 +202,18 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
 </h2>
 
 
-  <a id="MackySoft_Navigathena_LowerPresentationPolicy_BlockInput_" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.BlockInput*"></a>
+  <a id="MackySoft_Navigathena_LowerPresentationPolicy_Boundary_" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.Boundary*"></a>
 
-  <h3 id="MackySoft_Navigathena_LowerPresentationPolicy_BlockInput" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.BlockInput">
-  BlockInput
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L13"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MackySoft_Navigathena_LowerPresentationPolicy_Boundary" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.Boundary">
+  Boundary
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L8"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Blocks lower input while leaving output unchanged and retaining the presentations.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static LowerPresentationPolicy BlockInput { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public LowerPresentationBoundary Boundary { get; init; }</code></pre>
   </div>
 
 
@@ -223,7 +222,7 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
 
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationPolicy.html">LowerPresentationPolicy</a></dt>
+    <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationBoundary.html">LowerPresentationBoundary</a></dt>
     <dd></dd>
   </dl>
 
@@ -238,10 +237,10 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
 
   <h3 id="MackySoft_Navigathena_LowerPresentationPolicy_HideAndRelease" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.HideAndRelease">
   HideAndRelease
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L20"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Hides lower output, blocks input, and releases the presentations without removing their history entries.</p>
+  <div class="markdown level1 summary"><p>Hides lower output and releases presentations without removing their history entries.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -270,10 +269,10 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
 
   <h3 id="MackySoft_Navigathena_LowerPresentationPolicy_HideAndRetain" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.HideAndRetain">
   HideAndRetain
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Hides lower output and blocks input while retaining the presentations.</p>
+  <div class="markdown level1 summary"><p>Hides lower output while retaining the presentations.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -298,18 +297,19 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
 
 
 
-  <a id="MackySoft_Navigathena_LowerPresentationPolicy_Input_" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.Input*"></a>
+  <a id="MackySoft_Navigathena_LowerPresentationPolicy_Modal_" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.Modal*"></a>
 
-  <h3 id="MackySoft_Navigathena_LowerPresentationPolicy_Input" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.Input">
-  Input
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L8"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MackySoft_Navigathena_LowerPresentationPolicy_Modal" data-uid="MackySoft.Navigathena.LowerPresentationPolicy.Modal">
+  Modal
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L14"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Retains lower presentations and their output, and requires an input boundary even without lower history.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public LowerPresentationInput Input { get; init; }</code></pre>
+    <pre><code class="lang-csharp hljs">public static LowerPresentationPolicy Modal { get; }</code></pre>
   </div>
 
 
@@ -318,7 +318,7 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
 
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationInput.html">LowerPresentationInput</a></dt>
+    <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationPolicy.html">LowerPresentationPolicy</a></dt>
     <dd></dd>
   </dl>
 
@@ -367,7 +367,7 @@ Class LowerPresentationPolicy  <a class="header-action link-secondary" title="Vi
   <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationPolicy.cs/#L11"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Leaves lower output and input unchanged and retains the presentations.</p>
+  <div class="markdown level1 summary"><p>Retains lower presentations and their output, with an input boundary when lower history is visible.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

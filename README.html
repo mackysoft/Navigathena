@@ -272,11 +272,11 @@ public static class ChapterNavigation
 </tr>
 <tr>
 <td><code>ActivateAsync(route, activity)</code></td>
-<td>Subscribe to input and start activity for the current visit.</td>
+<td>Start each foreground entry period and establish operation subscriptions after the entry effects finish.</td>
 </tr>
 <tr>
 <td><code>DeactivateAsync()</code></td>
-<td>Remove subscriptions and await the end of activity. Do not destroy the view or its dependencies here.</td>
+<td>End each foreground period and remove operation subscriptions before departure or cover effects. Do not destroy the view or its dependencies here.</td>
 </tr>
 <tr>
 <td><code>TerminateAsync(progress)</code></td>
@@ -285,10 +285,14 @@ public static class ChapterNavigation
 </tbody>
 </table>
 <p>Route input belongs in <code>PrepareAsync</code> and <code>ActivateAsync</code>, not in the constructor or a DI registration. The same screen instance can display a different route value later.</p>
-<p>A modal can stop a lower screen's activity while leaving its view visible. <code>DeactivateAsync</code> therefore does not mean <code>GameObject.SetActive(false)</code>, hiding the screen, or disposing its scope. When activity resumes, Navigathena passes a new activity context and the route belonging to that history entry. A retained screen resuming behind a closed modal normally does not need preparation again.</p>
+<p>A popup ends the lower screen's foreground period while its view can remain visible. Navigathena calls <code>DeactivateAsync</code> on cover and <code>ActivateAsync</code> again on return, with a new context and the history entry's route. A retained return normally repeats neither initialization nor preparation. <code>DeactivateAsync</code> does not mean <code>GameObject.SetActive(false)</code>, hiding the screen, or disposing its scope.</p>
+<p>Operation subscriptions belong to that foreground period. Display subscriptions, background animation, game simulation and accepted asynchronous operations have their own lifetimes; do not stop them merely because the screen is covered. The application decides whether opening a menu also pauses its game.</p>
 <p>Use <code>activity.Reason</code>, <code>activity.PreparationReason</code>, and <code>activity.IsFirstActivation</code> when behavior depends on the reason for entry. Do not keep using an activity context after its activity has ended.</p>
 <p>Navigathena checks cancellation before and after cancellable lifecycle callbacks. Forward the token to your asynchronous operations and cooperate with cancellation during their execution; you do not need to repeat an entry check solely for Navigathena. Stopping and termination are awaited even after cancellation.</p>
-<p>For a new screen, initialization and route preparation finish before its entry animation and the transition effect finish. <code>ActivateAsync</code> runs after those visual steps, and native input opens only after activation completes. Progress reports, including a fraction of <code>1</code>, never advance this sequence; completion of the awaited callbacks does.</p>
+<p>For a new screen, initialization and route preparation finish before its entry animation and the transition effect finish. Navigathena then finishes native input admission and ordering for all affected views before calling <code>ActivateAsync</code>. The screen can receive input and native focus when activation starts. Complete prerequisites for operation in initialization, preparation, or presentation effects, not by waiting inside activation with an expectation that input remains blocked. Progress reports, including a fraction of <code>1</code>, never advance this sequence; completion of the awaited callbacks does.</p>
+<p>In <code>ActivateAsync</code>, establish operation subscriptions, retain <code>activity.ForegroundToken</code>, and choose and set initial or returning focus using the native UI API. The token is valid when the callback starts. Check its <code>IsValid</code> at application operation entry points. Every return supplies a fresh token; an old token never becomes valid again.</p>
+<p>On departure, qualification and the old token become invalid before native focus-loss or cancellation callbacks. Native input closes and owned focus is released before <code>DeactivateAsync</code>; remove operation subscriptions there. Departure or cover effects follow its completion. The token's <code>CancellationToken</code> signals the end of the issued period, including transition suspension, presentation loss and shutdown. Use it only for work that must end with that period.</p>
+<p>Lifecycle callbacks are serialized per instance. If <code>ActivateAsync</code> partially fails, Navigathena revokes qualification and native input before awaiting <code>DeactivateAsync</code> to clean up its started subscriptions. Do not await a user's eventual response or the current navigation's completion from a lifecycle callback.</p>
 <h3 id="navigation-from-a-lifecycle-callback">Navigation from a lifecycle callback</h3>
 <p>Do not await a navigation operation inside the lifecycle callback that the current transition is waiting for. To redirect after successful activation, use the deferred methods:</p>
 <pre><code class="lang-csharp">activity.Navigation.PostReplace(new ChapterRoute(2));
@@ -376,7 +380,7 @@ if (accepted)
 </code></pre>
 <p>The Decline button instead submits <code>activity.Call.Complete(false)</code>, which is still a successful answer. A separate Close button can call <code>activity.Call.Dismiss()</code> to close without an answer.</p>
 <p>Do not also call Back after <code>Complete</code>: it already requests the call's closure. Dismissal or closing the result screen through Back cancels the waiting task with <code>OperationCanceledException</code>; it is not the same as answering <code>false</code>.</p>
-<p><code>InvokeAsync&lt;TResult&gt;</code> returns after the call has closed, its resources have finished, and a surviving screen caller has resumed activity. Suspending the caller to display the popup does not itself cancel an accepted call. Use a cancellation token appropriate for the requesting operation, not the activity token merely because it is nearby. The application owns the surrounding business operation and its shutdown.</p>
+<p><code>InvokeAsync&lt;TResult&gt;</code> returns after the call has closed, its resources have finished, and a surviving screen caller's returning <code>ActivateAsync</code> has completed successfully. Input and focus are already available during that callback; admitting them does not complete the call. Suspending the caller to display the popup does not itself cancel an accepted call. Use a cancellation token appropriate for the requesting operation, not the activity token merely because it is nearby. The application owns the surrounding business operation and its shutdown.</p>
 <p>For a screen with no answer value, <code>await navigation.InvokeAsync(ordinaryRoute)</code> waits for its closure and caller resumption. Use <code>PushAsync</code> if you only need to wait for it to open. Do not await a user's eventual answer from <code>ActivateAsync</code>; use screen-owned work or start the request from an event or application operation after activation.</p>
 <h3 id="screen-owned-asynchronous-work">Screen-owned asynchronous work</h3>
 <p>Use <code>activity.StartWork(async work =&gt; { ... })</code> for an operation that must keep using screen resources across a popup or activity suspension. The callback receives its own navigation and cancellation token. Its ownership belongs to the screen instance's current history binding, not to one activity period.</p>
@@ -396,15 +400,15 @@ if (accepted)
 <tbody>
 <tr>
 <td><code>Preserve</code></td>
-<td>Keep their output and input policy.</td>
+<td>Keep output and instances; require a boundary when lower history is visible.</td>
 </tr>
 <tr>
-<td><code>BlockInput</code></td>
-<td>Remain visible, but no longer accept input or continue input-related activity.</td>
+<td><code>Modal</code></td>
+<td>Keep output and instances; always require an input boundary.</td>
 </tr>
 <tr>
 <td><code>HideAndRetain</code></td>
-<td>Hide and stop activity; keep instances for returning.</td>
+<td>Hide output; keep instances for returning.</td>
 </tr>
 <tr>
 <td><code>HideAndRelease</code></td>
@@ -413,6 +417,7 @@ if (accepted)
 </tbody>
 </table>
 <p>For example, give the editor <code>HideAndRetain</code> to temporarily move the HUD and popups below it out of view; Back returns to the retained menu. The policy includes descendants of those lower screens, but not the owning parent or unrelated regions.</p>
+<p>Output, retention, and the input boundary are separate policy settings. Covered screens always leave their foreground activation period; retained output and binding-owned work do not extend operation eligibility. <code>LowerPresentationBoundary.WhenLowerVisible</code> establishes a boundary over visible lower history. <code>Required</code> also establishes one without lower history, such as a first popup in a child region. A registered or default blocker is used when lower output is preserved. These policies do not change the game-defined enabled state or disabled styling of controls.</p>
 <p>Use <code>NavigationDefinition.Build</code> and <code>route.AddChildRegion(...)</code> when defining a hierarchy. Register each region's factories through <code>ScreenCatalog.Build(definition, ...)</code>. Factories can also register child construction through <code>creation.RegisterScreens(...)</code> after acquiring a parent scene's references. See the <a href="src/MackySoft.Navigathena/README.html#child-regions">region example</a>.</p>
 <p>Inside a screen, target another permitted region explicitly:</p>
 <pre><code class="lang-csharp">IScreenNavigation rootNavigation =
@@ -566,6 +571,7 @@ await host.StartAsync(initialRoute,
 <p>A blocker supplies the view between an input-blocking popup and the screens below it. It is not another history entry and does not replace lifecycle-based stopping of input subscriptions.</p>
 <p>Set <code>NavigationHostOptions.DefaultBlocker</code> to a <code>BlockerDefinition</code> for a reusable default. A region's <code>RegisterBlocker&lt;TRoute&gt;(definition)</code> supplies a route-specific choice. Share the definition to share one blocker instance within a host, rather than registering a new instance for every region.</p>
 <p>Implement <code>IBlockerPresenter</code> for its content and, optionally, <code>IBlockerAnimator</code> for decoration. <code>SetScreenContext</code> supplies the screen context currently associated with the blocker, allowing game-specific help text. Navigathena manages preparation, connection, sorting, animation completion, and termination. When a higher screen hides the lower content, the obsolete blocker is no longer shown.</p>
+<p>A shown blocker's pointer surface remains active independently of the associated screen's operation qualification, and is ready before that screen starts <code>ActivateAsync</code>. Navigation supplied through <code>BlockerScreenContext</code> follows that screen's foreground period: it is available during activation and revoked on departure. Closing that qualification does not itself remove the pointer surface. Decorative exit output does not keep an obsolete boundary active.</p>
 <h2 id="dependency-injection">Dependency injection</h2>
 <p>DI changes construction, not the route or lifecycle contract. The same presenter can be created manually, resolved by Microsoft.Extensions.DependencyInjection, or resolved by VContainer.</p>
 <table>

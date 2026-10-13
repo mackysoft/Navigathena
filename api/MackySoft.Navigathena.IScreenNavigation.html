@@ -171,7 +171,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_Back_MackySoft_Navigathena_BackOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.Back(MackySoft.Navigathena.BackOptions)">
   Back(BackOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L25"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -207,7 +207,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_GetRegionNavigation_MackySoft_Navigathena_RegionTarget_" data-uid="MackySoft.Navigathena.IScreenNavigation.GetRegionNavigation(MackySoft.Navigathena.RegionTarget)">
   GetRegionNavigation(RegionTarget)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L25"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L27"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -243,7 +243,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_InvokeAsync_MackySoft_Navigathena_Route_MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_" data-uid="MackySoft.Navigathena.IScreenNavigation.InvokeAsync(MackySoft.Navigathena.Route,MackySoft.Navigathena.NavigationOptions,System.Threading.CancellationToken)">
   InvokeAsync(Route, NavigationOptions?, CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L11"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Waits for a screen to close, its resources to finish and the caller to resume. Activity suspension does not cancel an accepted call.</p>
@@ -276,6 +276,9 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
 
 
+  <h4 class="section" id="MackySoft_Navigathena_IScreenNavigation_InvokeAsync_MackySoft_Navigathena_Route_MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Caller resumption awaits its ActivateAsync callback. Input admission at that callback's entry does not complete the call.</p>
+</div>
 
 
 
@@ -284,7 +287,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_InvokeAsync__1_MackySoft_Navigathena_Route___0__MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken_" data-uid="MackySoft.Navigathena.IScreenNavigation.InvokeAsync``1(MackySoft.Navigathena.Route{``0},MackySoft.Navigathena.NavigationOptions,System.Threading.CancellationToken)">
   InvokeAsync&lt;TResult&gt;(Route&lt;TResult&gt;, NavigationOptions?, CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L12"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L14"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the answer after cleanup and caller resumption. Closing without an answer cancels the task.</p>
@@ -322,6 +325,9 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
 
 
+  <h4 class="section" id="MackySoft_Navigathena_IScreenNavigation_InvokeAsync__1_MackySoft_Navigathena_Route___0__MackySoft_Navigathena_NavigationOptions_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Caller resumption awaits its ActivateAsync callback. Input admission at that callback's entry does not complete the call.</p>
+</div>
 
 
 
@@ -330,7 +336,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_PostBack_MackySoft_Navigathena_BackOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostBack(MackySoft.Navigathena.BackOptions)">
   PostBack(BackOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L19"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -361,7 +367,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_PostPush__1___0_MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostPush``1(``0,MackySoft.Navigathena.NavigationOptions)">
   PostPush&lt;TRoute&gt;(TRoute, NavigationOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Runs a request after successful activation; the runtime observes completion and failure.</p>
@@ -400,7 +406,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_PostReplace__1___0_MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostReplace``1(``0,MackySoft.Navigathena.NavigationOptions)">
   PostReplace&lt;TRoute&gt;(TRoute, NavigationOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -438,7 +444,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_PostReset__1___0_MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.PostReset``1(``0,MackySoft.Navigathena.NavigationOptions)">
   PostReset&lt;TRoute&gt;(TRoute, NavigationOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L18"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -476,7 +482,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_Push__1_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.Push``1(MackySoft.Navigathena.NavigationDestinationTree{``0},MackySoft.Navigathena.NavigationOptions)">
   Push&lt;TRoute&gt;(NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L20"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -519,7 +525,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_Reload_MackySoft_Navigathena_ReloadOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.Reload(MackySoft.Navigathena.ReloadOptions)">
   Reload(ReloadOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -555,7 +561,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_ReplaceFrom__1_MackySoft_Navigathena_HistoryTarget_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.ReplaceFrom``1(MackySoft.Navigathena.HistoryTarget,MackySoft.Navigathena.NavigationDestinationTree{``0},MackySoft.Navigathena.NavigationOptions)">
   ReplaceFrom&lt;TRoute&gt;(HistoryTarget, NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L23"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Replaces the selected entry and every entry above it, including their child regions, with one destination.</p>
@@ -604,7 +610,7 @@ Interface IScreenNavigation  <a class="header-action link-secondary" title="View
 
   <h3 id="MackySoft_Navigathena_IScreenNavigation_Reset__1_MackySoft_Navigathena_NavigationDestinationTree___0__MackySoft_Navigathena_NavigationOptions_" data-uid="MackySoft.Navigathena.IScreenNavigation.Reset``1(MackySoft.Navigathena.NavigationDestinationTree{``0},MackySoft.Navigathena.NavigationOptions)">
   Reset&lt;TRoute&gt;(NavigationDestinationTree&lt;TRoute&gt;, NavigationOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Navigation/IScreenNavigation.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>

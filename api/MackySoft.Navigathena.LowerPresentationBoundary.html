@@ -2,11 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Enum LowerPresentationInput | Navigathena </title>
+      <title>Enum LowerPresentationBoundary | Navigathena </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Enum LowerPresentationInput | Navigathena ">
+      <meta name="title" content="Enum LowerPresentationBoundary | Navigathena ">
       
-      <meta name="description" content="Specifies the input effect applied to lower presentations.">
+      <meta name="description" content="Determines when a foreground screen establishes an input boundary, independently of lower activity.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/new/main/apiSpec/new?filename=MackySoft_Navigathena_LowerPresentationInput.md&amp;value=---%0Auid%3A%20MackySoft.Navigathena.LowerPresentationInput%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="docfx:docurl" content="https://github.com/mackysoft/Navigathena/new/main/apiSpec/new?filename=MackySoft_Navigathena_LowerPresentationBoundary.md&amp;value=---%0Auid%3A%20MackySoft.Navigathena.LowerPresentationBoundary%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -84,13 +84,13 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="MackySoft.Navigathena.LowerPresentationInput">
+        <article data-uid="MackySoft.Navigathena.LowerPresentationBoundary">
 
 
 
 
-  <h1 id="MackySoft_Navigathena_LowerPresentationInput" data-uid="MackySoft.Navigathena.LowerPresentationInput" class="text-break">
-Enum LowerPresentationInput  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationInput.cs/#L5"><i class="bi bi-code-slash"></i></a>
+  <h1 id="MackySoft_Navigathena_LowerPresentationBoundary" data-uid="MackySoft.Navigathena.LowerPresentationBoundary" class="text-break">
+Enum LowerPresentationBoundary  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena/Definitions/LowerPresentationBoundary.cs/#L4"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -98,12 +98,12 @@ Enum LowerPresentationInput  <a class="header-action link-secondary" title="View
   <dl><dt>Assembly</dt><dd>MackySoft.Navigathena.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Specifies the input effect applied to lower presentations.</p>
+  <div class="markdown summary"><p>Determines when a foreground screen establishes an input boundary, independently of lower activity.</p>
 </div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public enum LowerPresentationInput</code></pre>
+    <pre><code class="lang-csharp hljs">public enum LowerPresentationBoundary</code></pre>
   </div>
 
 
@@ -117,12 +117,15 @@ Enum LowerPresentationInput  <a class="header-action link-secondary" title="View
   <h2 id="fields">Fields
 </h2>
   <dl class="parameters">
-    <dt id="MackySoft_Navigathena_LowerPresentationInput_Block"><code>Block = 1</code></dt>
+    <dt id="MackySoft_Navigathena_LowerPresentationBoundary_Required"><code>Required = 1</code></dt>
+  <dd><p>Establishes a boundary even when the region has no visible lower history.</p>
+<p>A registered or default blocker can therefore shield the application's surrounding content.</p>
+</dd>
   
-  <dd></dd>
-    <dt id="MackySoft_Navigathena_LowerPresentationInput_PassThrough"><code>PassThrough = 0</code></dt>
+    <dt id="MackySoft_Navigathena_LowerPresentationBoundary_WhenLowerVisible"><code>WhenLowerVisible = 0</code></dt>
   
-  <dd></dd>
+  <dd><p>Establishes a boundary when the same region has visible lower screens.</p>
+</dd>
   </dl>
 
 

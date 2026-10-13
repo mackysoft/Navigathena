@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class UiToolkitViewAdapter | Navigathena ">
       
-      <meta name="description" content="Connects a UIDocument to runtime visibility, ordering, and event interception without disabled styling.">
+      <meta name="description" content="Connects an acquired UI Toolkit screen to its presentation host.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter" class="text-break">
-Class UiToolkitViewAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class UiToolkitViewAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L10"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,14 +97,13 @@ Class UiToolkitViewAdapter  <a class="header-action link-secondary" title="View 
   <dl><dt>Assembly</dt><dd>MackySoft.Navigathena.Unity.UIToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Connects a UIDocument to runtime visibility, ordering, and event interception without disabled styling.</p>
+  <div class="markdown summary"><p>Connects an acquired UI Toolkit screen to its presentation host.</p>
 </div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[RequireComponent(typeof(UIDocument))]
-[DefaultExecutionOrder(100)]
-public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
+    <pre><code class="lang-csharp hljs">[DisallowMultipleComponent]
+public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewPresentationBatchAdapter, IViewAdapter</code></pre>
   </div>
 
 
@@ -125,6 +124,7 @@ public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter</code></p
   <dl class="typelist implements">
     <dt>Implements</dt>
     <dd>
+      <div><a class="xref" href="MackySoft.Navigathena.IViewPresentationBatchAdapter.html">IViewPresentationBatchAdapter</a></div>
       <div><a class="xref" href="MackySoft.Navigathena.IViewAdapter.html">IViewAdapter</a></div>
     </dd>
   </dl>
@@ -567,17 +567,52 @@ public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter</code></p
 
 
 
+  <h2 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Assign UXML to ContentAsset. The host owns the native document and panel; presentation permissions belong to the navigation runtime.</p>
+</div>
 
 
   <h2 class="section" id="properties">Properties
 </h2>
 
 
+  <a id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_ContentAsset_" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.ContentAsset*"></a>
+
+  <h3 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_ContentAsset" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.ContentAsset">
+  ContentAsset
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The borrowed UXML used to construct this view's content before native attachment.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public VisualTreeAsset? ContentAsset { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">VisualTreeAsset</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Identity_" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Identity*"></a>
 
   <h3 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Identity" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Identity">
   Identity
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L37"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -608,7 +643,7 @@ public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter</code></p
 
   <h3 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_IsAlive" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.IsAlive">
   IsAlive
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -639,7 +674,7 @@ public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter</code></p
 
   <h3 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_OrderingDomain" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.OrderingDomain">
   OrderingDomain
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -670,7 +705,7 @@ public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter</code></p
 
   <h3 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Presentation" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Presentation">
   Presentation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L40"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -697,27 +732,28 @@ public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter</code></p
 
 
 
-  <h2 class="section" id="methods">Methods
-</h2>
+  <a id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_View_" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.View*"></a>
 
-
-  <a id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Apply_" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Apply*"></a>
-
-  <h3 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Apply_MackySoft_Navigathena_ViewPresentation_" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Apply(MackySoft.Navigathena.ViewPresentation)">
-  Apply(ViewPresentation)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_View" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.View">
+  View
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L34"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The screen implementation's content and input-session interface.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Apply(ViewPresentation presentation)</code></pre>
+    <pre><code class="lang-csharp hljs">public IUiToolkitView View { get; }</code></pre>
   </div>
 
-  <h4 class="section">Parameters</h4>
+
+
+
+
+  <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><code>presentation</code> <a class="xref" href="MackySoft.Navigathena.ViewPresentation.html">ViewPresentation</a></dt>
+    <dt><a class="xref" href="MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.html">IUiToolkitView</a></dt>
     <dd></dd>
   </dl>
 
@@ -728,15 +764,15 @@ public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter</code></p
 
 
 
-
-
+  <h2 class="section" id="methods">Methods
+</h2>
 
 
   <a id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Validate_" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Validate*"></a>
 
   <h3 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Validate_MackySoft_Navigathena_ViewPresentation_" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Validate(MackySoft.Navigathena.ViewPresentation)">
   Validate(ViewPresentation)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -770,7 +806,7 @@ public sealed class UiToolkitViewAdapter : MonoBehaviour, IViewAdapter</code></p
 
   <h3 id="MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Lost" data-uid="MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Lost">
   Lost
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UIToolkit/Runtime/UiToolkitViewAdapter.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>

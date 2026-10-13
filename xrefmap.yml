@@ -1751,6 +1751,44 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.IViewAdapter.Validate
   nameWithType: IViewAdapter.Validate
+- uid: MackySoft.Navigathena.IViewPresentationBatch
+  name: IViewPresentationBatch
+  href: api/MackySoft.Navigathena.IViewPresentationBatch.html
+  commentId: T:MackySoft.Navigathena.IViewPresentationBatch
+  fullName: MackySoft.Navigathena.IViewPresentationBatch
+  nameWithType: IViewPresentationBatch
+- uid: MackySoft.Navigathena.IViewPresentationBatch.ApplyAsync(MackySoft.Navigathena.ViewPresentationChangeSet)
+  name: ApplyAsync(ViewPresentationChangeSet)
+  href: api/MackySoft.Navigathena.IViewPresentationBatch.html#MackySoft_Navigathena_IViewPresentationBatch_ApplyAsync_MackySoft_Navigathena_ViewPresentationChangeSet_
+  commentId: M:MackySoft.Navigathena.IViewPresentationBatch.ApplyAsync(MackySoft.Navigathena.ViewPresentationChangeSet)
+  fullName: MackySoft.Navigathena.IViewPresentationBatch.ApplyAsync(MackySoft.Navigathena.ViewPresentationChangeSet)
+  nameWithType: IViewPresentationBatch.ApplyAsync(ViewPresentationChangeSet)
+- uid: MackySoft.Navigathena.IViewPresentationBatch.ApplyAsync*
+  name: ApplyAsync
+  href: api/MackySoft.Navigathena.IViewPresentationBatch.html#MackySoft_Navigathena_IViewPresentationBatch_ApplyAsync_
+  commentId: Overload:MackySoft.Navigathena.IViewPresentationBatch.ApplyAsync
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.IViewPresentationBatch.ApplyAsync
+  nameWithType: IViewPresentationBatch.ApplyAsync
+- uid: MackySoft.Navigathena.IViewPresentationBatchAdapter
+  name: IViewPresentationBatchAdapter
+  href: api/MackySoft.Navigathena.IViewPresentationBatchAdapter.html
+  commentId: T:MackySoft.Navigathena.IViewPresentationBatchAdapter
+  fullName: MackySoft.Navigathena.IViewPresentationBatchAdapter
+  nameWithType: IViewPresentationBatchAdapter
+- uid: MackySoft.Navigathena.IViewPresentationBatchAdapter.PresentationBatch
+  name: PresentationBatch
+  href: api/MackySoft.Navigathena.IViewPresentationBatchAdapter.html#MackySoft_Navigathena_IViewPresentationBatchAdapter_PresentationBatch
+  commentId: P:MackySoft.Navigathena.IViewPresentationBatchAdapter.PresentationBatch
+  fullName: MackySoft.Navigathena.IViewPresentationBatchAdapter.PresentationBatch
+  nameWithType: IViewPresentationBatchAdapter.PresentationBatch
+- uid: MackySoft.Navigathena.IViewPresentationBatchAdapter.PresentationBatch*
+  name: PresentationBatch
+  href: api/MackySoft.Navigathena.IViewPresentationBatchAdapter.html#MackySoft_Navigathena_IViewPresentationBatchAdapter_PresentationBatch_
+  commentId: Overload:MackySoft.Navigathena.IViewPresentationBatchAdapter.PresentationBatch
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.IViewPresentationBatchAdapter.PresentationBatch
+  nameWithType: IViewPresentationBatchAdapter.PresentationBatch
 - uid: MackySoft.Navigathena.Integration
   name: MackySoft.Navigathena.Integration
   href: api/MackySoft.Navigathena.Integration.html
@@ -1830,24 +1868,24 @@ references:
   fullName.vb: MackySoft.Navigathena.LifetimeContext.CreateOwned(Of T)(System.Func(Of T))
   nameWithType: LifetimeContext.CreateOwned<T>(Func<T>)
   nameWithType.vb: LifetimeContext.CreateOwned(Of T)(Func(Of T))
-- uid: MackySoft.Navigathena.LowerPresentationInput
-  name: LowerPresentationInput
-  href: api/MackySoft.Navigathena.LowerPresentationInput.html
-  commentId: T:MackySoft.Navigathena.LowerPresentationInput
-  fullName: MackySoft.Navigathena.LowerPresentationInput
-  nameWithType: LowerPresentationInput
-- uid: MackySoft.Navigathena.LowerPresentationInput.Block
-  name: Block
-  href: api/MackySoft.Navigathena.LowerPresentationInput.html#MackySoft_Navigathena_LowerPresentationInput_Block
-  commentId: F:MackySoft.Navigathena.LowerPresentationInput.Block
-  fullName: MackySoft.Navigathena.LowerPresentationInput.Block
-  nameWithType: LowerPresentationInput.Block
-- uid: MackySoft.Navigathena.LowerPresentationInput.PassThrough
-  name: PassThrough
-  href: api/MackySoft.Navigathena.LowerPresentationInput.html#MackySoft_Navigathena_LowerPresentationInput_PassThrough
-  commentId: F:MackySoft.Navigathena.LowerPresentationInput.PassThrough
-  fullName: MackySoft.Navigathena.LowerPresentationInput.PassThrough
-  nameWithType: LowerPresentationInput.PassThrough
+- uid: MackySoft.Navigathena.LowerPresentationBoundary
+  name: LowerPresentationBoundary
+  href: api/MackySoft.Navigathena.LowerPresentationBoundary.html
+  commentId: T:MackySoft.Navigathena.LowerPresentationBoundary
+  fullName: MackySoft.Navigathena.LowerPresentationBoundary
+  nameWithType: LowerPresentationBoundary
+- uid: MackySoft.Navigathena.LowerPresentationBoundary.Required
+  name: Required
+  href: api/MackySoft.Navigathena.LowerPresentationBoundary.html#MackySoft_Navigathena_LowerPresentationBoundary_Required
+  commentId: F:MackySoft.Navigathena.LowerPresentationBoundary.Required
+  fullName: MackySoft.Navigathena.LowerPresentationBoundary.Required
+  nameWithType: LowerPresentationBoundary.Required
+- uid: MackySoft.Navigathena.LowerPresentationBoundary.WhenLowerVisible
+  name: WhenLowerVisible
+  href: api/MackySoft.Navigathena.LowerPresentationBoundary.html#MackySoft_Navigathena_LowerPresentationBoundary_WhenLowerVisible
+  commentId: F:MackySoft.Navigathena.LowerPresentationBoundary.WhenLowerVisible
+  fullName: MackySoft.Navigathena.LowerPresentationBoundary.WhenLowerVisible
+  nameWithType: LowerPresentationBoundary.WhenLowerVisible
 - uid: MackySoft.Navigathena.LowerPresentationOutput
   name: LowerPresentationOutput
   href: api/MackySoft.Navigathena.LowerPresentationOutput.html
@@ -1872,15 +1910,15 @@ references:
   commentId: T:MackySoft.Navigathena.LowerPresentationPolicy
   fullName: MackySoft.Navigathena.LowerPresentationPolicy
   nameWithType: LowerPresentationPolicy
-- uid: MackySoft.Navigathena.LowerPresentationPolicy.#ctor(MackySoft.Navigathena.LowerPresentationOutput,MackySoft.Navigathena.LowerPresentationInput,MackySoft.Navigathena.LowerPresentationRetention)
-  name: LowerPresentationPolicy(LowerPresentationOutput, LowerPresentationInput, LowerPresentationRetention)
-  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy__ctor_MackySoft_Navigathena_LowerPresentationOutput_MackySoft_Navigathena_LowerPresentationInput_MackySoft_Navigathena_LowerPresentationRetention_
-  commentId: M:MackySoft.Navigathena.LowerPresentationPolicy.#ctor(MackySoft.Navigathena.LowerPresentationOutput,MackySoft.Navigathena.LowerPresentationInput,MackySoft.Navigathena.LowerPresentationRetention)
-  name.vb: New(LowerPresentationOutput, LowerPresentationInput, LowerPresentationRetention)
-  fullName: MackySoft.Navigathena.LowerPresentationPolicy.LowerPresentationPolicy(MackySoft.Navigathena.LowerPresentationOutput, MackySoft.Navigathena.LowerPresentationInput, MackySoft.Navigathena.LowerPresentationRetention)
-  fullName.vb: MackySoft.Navigathena.LowerPresentationPolicy.New(MackySoft.Navigathena.LowerPresentationOutput, MackySoft.Navigathena.LowerPresentationInput, MackySoft.Navigathena.LowerPresentationRetention)
-  nameWithType: LowerPresentationPolicy.LowerPresentationPolicy(LowerPresentationOutput, LowerPresentationInput, LowerPresentationRetention)
-  nameWithType.vb: LowerPresentationPolicy.New(LowerPresentationOutput, LowerPresentationInput, LowerPresentationRetention)
+- uid: MackySoft.Navigathena.LowerPresentationPolicy.#ctor(MackySoft.Navigathena.LowerPresentationOutput,MackySoft.Navigathena.LowerPresentationRetention,MackySoft.Navigathena.LowerPresentationBoundary)
+  name: LowerPresentationPolicy(LowerPresentationOutput, LowerPresentationRetention, LowerPresentationBoundary)
+  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy__ctor_MackySoft_Navigathena_LowerPresentationOutput_MackySoft_Navigathena_LowerPresentationRetention_MackySoft_Navigathena_LowerPresentationBoundary_
+  commentId: M:MackySoft.Navigathena.LowerPresentationPolicy.#ctor(MackySoft.Navigathena.LowerPresentationOutput,MackySoft.Navigathena.LowerPresentationRetention,MackySoft.Navigathena.LowerPresentationBoundary)
+  name.vb: New(LowerPresentationOutput, LowerPresentationRetention, LowerPresentationBoundary)
+  fullName: MackySoft.Navigathena.LowerPresentationPolicy.LowerPresentationPolicy(MackySoft.Navigathena.LowerPresentationOutput, MackySoft.Navigathena.LowerPresentationRetention, MackySoft.Navigathena.LowerPresentationBoundary)
+  fullName.vb: MackySoft.Navigathena.LowerPresentationPolicy.New(MackySoft.Navigathena.LowerPresentationOutput, MackySoft.Navigathena.LowerPresentationRetention, MackySoft.Navigathena.LowerPresentationBoundary)
+  nameWithType: LowerPresentationPolicy.LowerPresentationPolicy(LowerPresentationOutput, LowerPresentationRetention, LowerPresentationBoundary)
+  nameWithType.vb: LowerPresentationPolicy.New(LowerPresentationOutput, LowerPresentationRetention, LowerPresentationBoundary)
 - uid: MackySoft.Navigathena.LowerPresentationPolicy.#ctor*
   name: LowerPresentationPolicy
   href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy__ctor_
@@ -1891,19 +1929,19 @@ references:
   fullName.vb: MackySoft.Navigathena.LowerPresentationPolicy.New
   nameWithType: LowerPresentationPolicy.LowerPresentationPolicy
   nameWithType.vb: LowerPresentationPolicy.New
-- uid: MackySoft.Navigathena.LowerPresentationPolicy.BlockInput
-  name: BlockInput
-  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_BlockInput
-  commentId: P:MackySoft.Navigathena.LowerPresentationPolicy.BlockInput
-  fullName: MackySoft.Navigathena.LowerPresentationPolicy.BlockInput
-  nameWithType: LowerPresentationPolicy.BlockInput
-- uid: MackySoft.Navigathena.LowerPresentationPolicy.BlockInput*
-  name: BlockInput
-  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_BlockInput_
-  commentId: Overload:MackySoft.Navigathena.LowerPresentationPolicy.BlockInput
+- uid: MackySoft.Navigathena.LowerPresentationPolicy.Boundary
+  name: Boundary
+  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_Boundary
+  commentId: P:MackySoft.Navigathena.LowerPresentationPolicy.Boundary
+  fullName: MackySoft.Navigathena.LowerPresentationPolicy.Boundary
+  nameWithType: LowerPresentationPolicy.Boundary
+- uid: MackySoft.Navigathena.LowerPresentationPolicy.Boundary*
+  name: Boundary
+  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_Boundary_
+  commentId: Overload:MackySoft.Navigathena.LowerPresentationPolicy.Boundary
   isSpec: "True"
-  fullName: MackySoft.Navigathena.LowerPresentationPolicy.BlockInput
-  nameWithType: LowerPresentationPolicy.BlockInput
+  fullName: MackySoft.Navigathena.LowerPresentationPolicy.Boundary
+  nameWithType: LowerPresentationPolicy.Boundary
 - uid: MackySoft.Navigathena.LowerPresentationPolicy.HideAndRelease
   name: HideAndRelease
   href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_HideAndRelease
@@ -1930,19 +1968,19 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.LowerPresentationPolicy.HideAndRetain
   nameWithType: LowerPresentationPolicy.HideAndRetain
-- uid: MackySoft.Navigathena.LowerPresentationPolicy.Input
-  name: Input
-  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_Input
-  commentId: P:MackySoft.Navigathena.LowerPresentationPolicy.Input
-  fullName: MackySoft.Navigathena.LowerPresentationPolicy.Input
-  nameWithType: LowerPresentationPolicy.Input
-- uid: MackySoft.Navigathena.LowerPresentationPolicy.Input*
-  name: Input
-  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_Input_
-  commentId: Overload:MackySoft.Navigathena.LowerPresentationPolicy.Input
+- uid: MackySoft.Navigathena.LowerPresentationPolicy.Modal
+  name: Modal
+  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_Modal
+  commentId: P:MackySoft.Navigathena.LowerPresentationPolicy.Modal
+  fullName: MackySoft.Navigathena.LowerPresentationPolicy.Modal
+  nameWithType: LowerPresentationPolicy.Modal
+- uid: MackySoft.Navigathena.LowerPresentationPolicy.Modal*
+  name: Modal
+  href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_Modal_
+  commentId: Overload:MackySoft.Navigathena.LowerPresentationPolicy.Modal
   isSpec: "True"
-  fullName: MackySoft.Navigathena.LowerPresentationPolicy.Input
-  nameWithType: LowerPresentationPolicy.Input
+  fullName: MackySoft.Navigathena.LowerPresentationPolicy.Modal
+  nameWithType: LowerPresentationPolicy.Modal
 - uid: MackySoft.Navigathena.LowerPresentationPolicy.Output
   name: Output
   href: api/MackySoft.Navigathena.LowerPresentationPolicy.html#MackySoft_Navigathena_LowerPresentationPolicy_Output
@@ -5183,15 +5221,15 @@ references:
   commentId: T:MackySoft.Navigathena.Presentation.PresentationParticipation
   fullName: MackySoft.Navigathena.Presentation.PresentationParticipation
   nameWithType: PresentationParticipation
-- uid: MackySoft.Navigathena.Presentation.PresentationParticipation.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)
-  name: PresentationParticipation(bool, bool, bool, bool)
-  href: api/MackySoft.Navigathena.Presentation.PresentationParticipation.html#MackySoft_Navigathena_Presentation_PresentationParticipation__ctor_System_Boolean_System_Boolean_System_Boolean_System_Boolean_
-  commentId: M:MackySoft.Navigathena.Presentation.PresentationParticipation.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)
-  name.vb: New(Boolean, Boolean, Boolean, Boolean)
-  fullName: MackySoft.Navigathena.Presentation.PresentationParticipation.PresentationParticipation(bool, bool, bool, bool)
-  fullName.vb: MackySoft.Navigathena.Presentation.PresentationParticipation.New(Boolean, Boolean, Boolean, Boolean)
-  nameWithType: PresentationParticipation.PresentationParticipation(bool, bool, bool, bool)
-  nameWithType.vb: PresentationParticipation.New(Boolean, Boolean, Boolean, Boolean)
+- uid: MackySoft.Navigathena.Presentation.PresentationParticipation.#ctor(System.Boolean,System.Boolean,System.Boolean)
+  name: PresentationParticipation(bool, bool, bool)
+  href: api/MackySoft.Navigathena.Presentation.PresentationParticipation.html#MackySoft_Navigathena_Presentation_PresentationParticipation__ctor_System_Boolean_System_Boolean_System_Boolean_
+  commentId: M:MackySoft.Navigathena.Presentation.PresentationParticipation.#ctor(System.Boolean,System.Boolean,System.Boolean)
+  name.vb: New(Boolean, Boolean, Boolean)
+  fullName: MackySoft.Navigathena.Presentation.PresentationParticipation.PresentationParticipation(bool, bool, bool)
+  fullName.vb: MackySoft.Navigathena.Presentation.PresentationParticipation.New(Boolean, Boolean, Boolean)
+  nameWithType: PresentationParticipation.PresentationParticipation(bool, bool, bool)
+  nameWithType.vb: PresentationParticipation.New(Boolean, Boolean, Boolean)
 - uid: MackySoft.Navigathena.Presentation.PresentationParticipation.#ctor*
   name: PresentationParticipation
   href: api/MackySoft.Navigathena.Presentation.PresentationParticipation.html#MackySoft_Navigathena_Presentation_PresentationParticipation__ctor_
@@ -5202,6 +5240,19 @@ references:
   fullName.vb: MackySoft.Navigathena.Presentation.PresentationParticipation.New
   nameWithType: PresentationParticipation.PresentationParticipation
   nameWithType.vb: PresentationParticipation.New
+- uid: MackySoft.Navigathena.Presentation.PresentationParticipation.ActivityEligible
+  name: ActivityEligible
+  href: api/MackySoft.Navigathena.Presentation.PresentationParticipation.html#MackySoft_Navigathena_Presentation_PresentationParticipation_ActivityEligible
+  commentId: P:MackySoft.Navigathena.Presentation.PresentationParticipation.ActivityEligible
+  fullName: MackySoft.Navigathena.Presentation.PresentationParticipation.ActivityEligible
+  nameWithType: PresentationParticipation.ActivityEligible
+- uid: MackySoft.Navigathena.Presentation.PresentationParticipation.ActivityEligible*
+  name: ActivityEligible
+  href: api/MackySoft.Navigathena.Presentation.PresentationParticipation.html#MackySoft_Navigathena_Presentation_PresentationParticipation_ActivityEligible_
+  commentId: Overload:MackySoft.Navigathena.Presentation.PresentationParticipation.ActivityEligible
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Presentation.PresentationParticipation.ActivityEligible
+  nameWithType: PresentationParticipation.ActivityEligible
 - uid: MackySoft.Navigathena.Presentation.PresentationParticipation.Available
   name: Available
   href: api/MackySoft.Navigathena.Presentation.PresentationParticipation.html#MackySoft_Navigathena_Presentation_PresentationParticipation_Available
@@ -5241,19 +5292,6 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.Presentation.PresentationParticipation.OutputPresented
   nameWithType: PresentationParticipation.OutputPresented
-- uid: MackySoft.Navigathena.Presentation.PresentationParticipation.SemanticInputEligible
-  name: SemanticInputEligible
-  href: api/MackySoft.Navigathena.Presentation.PresentationParticipation.html#MackySoft_Navigathena_Presentation_PresentationParticipation_SemanticInputEligible
-  commentId: P:MackySoft.Navigathena.Presentation.PresentationParticipation.SemanticInputEligible
-  fullName: MackySoft.Navigathena.Presentation.PresentationParticipation.SemanticInputEligible
-  nameWithType: PresentationParticipation.SemanticInputEligible
-- uid: MackySoft.Navigathena.Presentation.PresentationParticipation.SemanticInputEligible*
-  name: SemanticInputEligible
-  href: api/MackySoft.Navigathena.Presentation.PresentationParticipation.html#MackySoft_Navigathena_Presentation_PresentationParticipation_SemanticInputEligible_
-  commentId: Overload:MackySoft.Navigathena.Presentation.PresentationParticipation.SemanticInputEligible
-  isSpec: "True"
-  fullName: MackySoft.Navigathena.Presentation.PresentationParticipation.SemanticInputEligible
-  nameWithType: PresentationParticipation.SemanticInputEligible
 - uid: MackySoft.Navigathena.Presentation.PresentationRecoveryContext
   name: PresentationRecoveryContext
   href: api/MackySoft.Navigathena.Presentation.PresentationRecoveryContext.html
@@ -7313,6 +7351,19 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.ScreenActivityContext.EntryId
   nameWithType: ScreenActivityContext.EntryId
+- uid: MackySoft.Navigathena.ScreenActivityContext.ForegroundToken
+  name: ForegroundToken
+  href: api/MackySoft.Navigathena.ScreenActivityContext.html#MackySoft_Navigathena_ScreenActivityContext_ForegroundToken
+  commentId: P:MackySoft.Navigathena.ScreenActivityContext.ForegroundToken
+  fullName: MackySoft.Navigathena.ScreenActivityContext.ForegroundToken
+  nameWithType: ScreenActivityContext.ForegroundToken
+- uid: MackySoft.Navigathena.ScreenActivityContext.ForegroundToken*
+  name: ForegroundToken
+  href: api/MackySoft.Navigathena.ScreenActivityContext.html#MackySoft_Navigathena_ScreenActivityContext_ForegroundToken_
+  commentId: Overload:MackySoft.Navigathena.ScreenActivityContext.ForegroundToken
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.ScreenActivityContext.ForegroundToken
+  nameWithType: ScreenActivityContext.ForegroundToken
 - uid: MackySoft.Navigathena.ScreenActivityContext.IsFirstActivation
   name: IsFirstActivation
   href: api/MackySoft.Navigathena.ScreenActivityContext.html#MackySoft_Navigathena_ScreenActivityContext_IsFirstActivation
@@ -8101,6 +8152,64 @@ references:
   commentId: F:MackySoft.Navigathena.ScreenEnterAnimationMode.WhenShown
   fullName: MackySoft.Navigathena.ScreenEnterAnimationMode.WhenShown
   nameWithType: ScreenEnterAnimationMode.WhenShown
+- uid: MackySoft.Navigathena.ScreenForegroundToken
+  name: ScreenForegroundToken
+  href: api/MackySoft.Navigathena.ScreenForegroundToken.html
+  commentId: T:MackySoft.Navigathena.ScreenForegroundToken
+  fullName: MackySoft.Navigathena.ScreenForegroundToken
+  nameWithType: ScreenForegroundToken
+- uid: MackySoft.Navigathena.ScreenForegroundToken.CancellationToken
+  name: CancellationToken
+  href: api/MackySoft.Navigathena.ScreenForegroundToken.html#MackySoft_Navigathena_ScreenForegroundToken_CancellationToken
+  commentId: P:MackySoft.Navigathena.ScreenForegroundToken.CancellationToken
+  fullName: MackySoft.Navigathena.ScreenForegroundToken.CancellationToken
+  nameWithType: ScreenForegroundToken.CancellationToken
+- uid: MackySoft.Navigathena.ScreenForegroundToken.CancellationToken*
+  name: CancellationToken
+  href: api/MackySoft.Navigathena.ScreenForegroundToken.html#MackySoft_Navigathena_ScreenForegroundToken_CancellationToken_
+  commentId: Overload:MackySoft.Navigathena.ScreenForegroundToken.CancellationToken
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.ScreenForegroundToken.CancellationToken
+  nameWithType: ScreenForegroundToken.CancellationToken
+- uid: MackySoft.Navigathena.ScreenForegroundToken.EntryId
+  name: EntryId
+  href: api/MackySoft.Navigathena.ScreenForegroundToken.html#MackySoft_Navigathena_ScreenForegroundToken_EntryId
+  commentId: P:MackySoft.Navigathena.ScreenForegroundToken.EntryId
+  fullName: MackySoft.Navigathena.ScreenForegroundToken.EntryId
+  nameWithType: ScreenForegroundToken.EntryId
+- uid: MackySoft.Navigathena.ScreenForegroundToken.EntryId*
+  name: EntryId
+  href: api/MackySoft.Navigathena.ScreenForegroundToken.html#MackySoft_Navigathena_ScreenForegroundToken_EntryId_
+  commentId: Overload:MackySoft.Navigathena.ScreenForegroundToken.EntryId
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.ScreenForegroundToken.EntryId
+  nameWithType: ScreenForegroundToken.EntryId
+- uid: MackySoft.Navigathena.ScreenForegroundToken.IsValid
+  name: IsValid
+  href: api/MackySoft.Navigathena.ScreenForegroundToken.html#MackySoft_Navigathena_ScreenForegroundToken_IsValid
+  commentId: P:MackySoft.Navigathena.ScreenForegroundToken.IsValid
+  fullName: MackySoft.Navigathena.ScreenForegroundToken.IsValid
+  nameWithType: ScreenForegroundToken.IsValid
+- uid: MackySoft.Navigathena.ScreenForegroundToken.IsValid*
+  name: IsValid
+  href: api/MackySoft.Navigathena.ScreenForegroundToken.html#MackySoft_Navigathena_ScreenForegroundToken_IsValid_
+  commentId: Overload:MackySoft.Navigathena.ScreenForegroundToken.IsValid
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.ScreenForegroundToken.IsValid
+  nameWithType: ScreenForegroundToken.IsValid
+- uid: MackySoft.Navigathena.ScreenForegroundToken.RegionId
+  name: RegionId
+  href: api/MackySoft.Navigathena.ScreenForegroundToken.html#MackySoft_Navigathena_ScreenForegroundToken_RegionId
+  commentId: P:MackySoft.Navigathena.ScreenForegroundToken.RegionId
+  fullName: MackySoft.Navigathena.ScreenForegroundToken.RegionId
+  nameWithType: ScreenForegroundToken.RegionId
+- uid: MackySoft.Navigathena.ScreenForegroundToken.RegionId*
+  name: RegionId
+  href: api/MackySoft.Navigathena.ScreenForegroundToken.html#MackySoft_Navigathena_ScreenForegroundToken_RegionId_
+  commentId: Overload:MackySoft.Navigathena.ScreenForegroundToken.RegionId
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.ScreenForegroundToken.RegionId
+  nameWithType: ScreenForegroundToken.RegionId
 - uid: MackySoft.Navigathena.ScreenHistoryReturnOptions
   name: ScreenHistoryReturnOptions
   href: api/MackySoft.Navigathena.ScreenHistoryReturnOptions.html
@@ -9393,25 +9502,188 @@ references:
   commentId: N:MackySoft.Navigathena.Unity.UIToolkit
   fullName: MackySoft.Navigathena.Unity.UIToolkit
   nameWithType: MackySoft.Navigathena.Unity.UIToolkit
+- uid: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView
+  name: IUiToolkitView
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.html
+  commentId: T:MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView
+  nameWithType: IUiToolkitView
+- uid: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.ContentRoot
+  name: ContentRoot
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.html#MackySoft_Navigathena_Unity_UIToolkit_IUiToolkitView_ContentRoot
+  commentId: P:MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.ContentRoot
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.ContentRoot
+  nameWithType: IUiToolkitView.ContentRoot
+- uid: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.ContentRoot*
+  name: ContentRoot
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.html#MackySoft_Navigathena_Unity_UIToolkit_IUiToolkitView_ContentRoot_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.ContentRoot
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.ContentRoot
+  nameWithType: IUiToolkitView.ContentRoot
+- uid: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.TryCaptureInput(MackySoft.Navigathena.Unity.UIToolkit.UiInputSession@)
+  name: TryCaptureInput(out UiInputSession)
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.html#MackySoft_Navigathena_Unity_UIToolkit_IUiToolkitView_TryCaptureInput_MackySoft_Navigathena_Unity_UIToolkit_UiInputSession__
+  commentId: M:MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.TryCaptureInput(MackySoft.Navigathena.Unity.UIToolkit.UiInputSession@)
+  name.vb: TryCaptureInput(UiInputSession)
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.TryCaptureInput(out MackySoft.Navigathena.Unity.UIToolkit.UiInputSession)
+  fullName.vb: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.TryCaptureInput(MackySoft.Navigathena.Unity.UIToolkit.UiInputSession)
+  nameWithType: IUiToolkitView.TryCaptureInput(out UiInputSession)
+  nameWithType.vb: IUiToolkitView.TryCaptureInput(UiInputSession)
+- uid: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.TryCaptureInput*
+  name: TryCaptureInput
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.html#MackySoft_Navigathena_Unity_UIToolkit_IUiToolkitView_TryCaptureInput_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.TryCaptureInput
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.IUiToolkitView.TryCaptureInput
+  nameWithType: IUiToolkitView.TryCaptureInput
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession
+  name: UiInputSession
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.html
+  commentId: T:MackySoft.Navigathena.Unity.UIToolkit.UiInputSession
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession
+  nameWithType: UiInputSession
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.IsValid
+  name: IsValid
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.html#MackySoft_Navigathena_Unity_UIToolkit_UiInputSession_IsValid
+  commentId: P:MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.IsValid
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.IsValid
+  nameWithType: UiInputSession.IsValid
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.IsValid*
+  name: IsValid
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.html#MackySoft_Navigathena_Unity_UIToolkit_UiInputSession_IsValid_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.IsValid
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.IsValid
+  nameWithType: UiInputSession.IsValid
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.Revoked
+  name: Revoked
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.html#MackySoft_Navigathena_Unity_UIToolkit_UiInputSession_Revoked
+  commentId: P:MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.Revoked
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.Revoked
+  nameWithType: UiInputSession.Revoked
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.Revoked*
+  name: Revoked
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.html#MackySoft_Navigathena_Unity_UIToolkit_UiInputSession_Revoked_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.Revoked
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiInputSession.Revoked
+  nameWithType: UiInputSession.Revoked
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost
+  name: UiToolkitPresentationHost
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.html
+  commentId: T:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost
+  nameWithType: UiToolkitPresentationHost
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.#ctor(UnityEngine.UIElements.PanelSettings,System.Int32)
+  name: UiToolkitPresentationHost(PanelSettings, int)
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost__ctor_UnityEngine_UIElements_PanelSettings_System_Int32_
+  commentId: M:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.#ctor(UnityEngine.UIElements.PanelSettings,System.Int32)
+  name.vb: New(PanelSettings, Integer)
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.UiToolkitPresentationHost(UnityEngine.UIElements.PanelSettings, int)
+  fullName.vb: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.New(UnityEngine.UIElements.PanelSettings, Integer)
+  nameWithType: UiToolkitPresentationHost.UiToolkitPresentationHost(PanelSettings, int)
+  nameWithType.vb: UiToolkitPresentationHost.New(PanelSettings, Integer)
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.#ctor*
+  name: UiToolkitPresentationHost
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost__ctor_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.UiToolkitPresentationHost
+  fullName.vb: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.New
+  nameWithType: UiToolkitPresentationHost.UiToolkitPresentationHost
+  nameWithType.vb: UiToolkitPresentationHost.New
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.ApplyAsync(MackySoft.Navigathena.ViewPresentationChangeSet)
+  name: ApplyAsync(ViewPresentationChangeSet)
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost_ApplyAsync_MackySoft_Navigathena_ViewPresentationChangeSet_
+  commentId: M:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.ApplyAsync(MackySoft.Navigathena.ViewPresentationChangeSet)
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.ApplyAsync(MackySoft.Navigathena.ViewPresentationChangeSet)
+  nameWithType: UiToolkitPresentationHost.ApplyAsync(ViewPresentationChangeSet)
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.ApplyAsync*
+  name: ApplyAsync
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost_ApplyAsync_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.ApplyAsync
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.ApplyAsync
+  nameWithType: UiToolkitPresentationHost.ApplyAsync
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Connect(MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter)
+  name: Connect(UiToolkitViewAdapter)
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost_Connect_MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_
+  commentId: M:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Connect(MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter)
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Connect(MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter)
+  nameWithType: UiToolkitPresentationHost.Connect(UiToolkitViewAdapter)
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Connect*
+  name: Connect
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost_Connect_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Connect
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Connect
+  nameWithType: UiToolkitPresentationHost.Connect
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Dispose
+  name: Dispose()
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost_Dispose
+  commentId: M:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Dispose
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Dispose()
+  nameWithType: UiToolkitPresentationHost.Dispose()
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Dispose*
+  name: Dispose
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost_Dispose_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Dispose
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost.Dispose
+  nameWithType: UiToolkitPresentationHost.Dispose
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions
+  name: UiToolkitScreenCreationExtensions
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.html
+  commentId: T:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions
+  nameWithType: UiToolkitScreenCreationExtensions
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitScreenAsync(MackySoft.Navigathena.ScreenCreationContext,MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter,MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost,System.Threading.CancellationToken)
+  name: AcquireUiToolkitScreenAsync(ScreenCreationContext, UiToolkitViewAdapter, UiToolkitPresentationHost, CancellationToken)
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitScreenCreationExtensions_AcquireUiToolkitScreenAsync_MackySoft_Navigathena_ScreenCreationContext_MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitScreenAsync(MackySoft.Navigathena.ScreenCreationContext,MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter,MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitScreenAsync(MackySoft.Navigathena.ScreenCreationContext, MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter, MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost, System.Threading.CancellationToken)
+  nameWithType: UiToolkitScreenCreationExtensions.AcquireUiToolkitScreenAsync(ScreenCreationContext, UiToolkitViewAdapter, UiToolkitPresentationHost, CancellationToken)
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitScreenAsync*
+  name: AcquireUiToolkitScreenAsync
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitScreenCreationExtensions_AcquireUiToolkitScreenAsync_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitScreenAsync
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitScreenAsync
+  nameWithType: UiToolkitScreenCreationExtensions.AcquireUiToolkitScreenAsync
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitViewAsync(MackySoft.Navigathena.LifetimeContext,MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter,MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost,System.Threading.CancellationToken)
+  name: AcquireUiToolkitViewAsync(LifetimeContext, UiToolkitViewAdapter, UiToolkitPresentationHost, CancellationToken)
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitScreenCreationExtensions_AcquireUiToolkitViewAsync_MackySoft_Navigathena_LifetimeContext_MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_MackySoft_Navigathena_Unity_UIToolkit_UiToolkitPresentationHost_System_Threading_CancellationToken_
+  commentId: M:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitViewAsync(MackySoft.Navigathena.LifetimeContext,MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter,MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost,System.Threading.CancellationToken)
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitViewAsync(MackySoft.Navigathena.LifetimeContext, MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter, MackySoft.Navigathena.Unity.UIToolkit.UiToolkitPresentationHost, System.Threading.CancellationToken)
+  nameWithType: UiToolkitScreenCreationExtensions.AcquireUiToolkitViewAsync(LifetimeContext, UiToolkitViewAdapter, UiToolkitPresentationHost, CancellationToken)
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitViewAsync*
+  name: AcquireUiToolkitViewAsync
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitScreenCreationExtensions_AcquireUiToolkitViewAsync_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitViewAsync
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitScreenCreationExtensions.AcquireUiToolkitViewAsync
+  nameWithType: UiToolkitScreenCreationExtensions.AcquireUiToolkitViewAsync
 - uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter
   name: UiToolkitViewAdapter
   href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.html
   commentId: T:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter
   fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter
   nameWithType: UiToolkitViewAdapter
-- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Apply(MackySoft.Navigathena.ViewPresentation)
-  name: Apply(ViewPresentation)
-  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Apply_MackySoft_Navigathena_ViewPresentation_
-  commentId: M:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Apply(MackySoft.Navigathena.ViewPresentation)
-  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Apply(MackySoft.Navigathena.ViewPresentation)
-  nameWithType: UiToolkitViewAdapter.Apply(ViewPresentation)
-- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Apply*
-  name: Apply
-  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Apply_
-  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Apply
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.ContentAsset
+  name: ContentAsset
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_ContentAsset
+  commentId: P:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.ContentAsset
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.ContentAsset
+  nameWithType: UiToolkitViewAdapter.ContentAsset
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.ContentAsset*
+  name: ContentAsset
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_ContentAsset_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.ContentAsset
   isSpec: "True"
-  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Apply
-  nameWithType: UiToolkitViewAdapter.Apply
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.ContentAsset
+  nameWithType: UiToolkitViewAdapter.ContentAsset
 - uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Identity
   name: Identity
   href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_Identity
@@ -9483,6 +9755,19 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.Validate
   nameWithType: UiToolkitViewAdapter.Validate
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.View
+  name: View
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_View
+  commentId: P:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.View
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.View
+  nameWithType: UiToolkitViewAdapter.View
+- uid: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.View*
+  name: View
+  href: api/MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.html#MackySoft_Navigathena_Unity_UIToolkit_UiToolkitViewAdapter_View_
+  commentId: Overload:MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.View
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.Unity.UIToolkit.UiToolkitViewAdapter.View
+  nameWithType: UiToolkitViewAdapter.View
 - uid: MackySoft.Navigathena.Unity.UnityLifetimeExtensions
   name: UnityLifetimeExtensions
   href: api/MackySoft.Navigathena.Unity.UnityLifetimeExtensions.html
@@ -9785,21 +10070,39 @@ references:
   fullName.vb: MackySoft.Navigathena.VContainer.ScreenContainerBuilderExtensions.RegisterScreenLifecycleHandler(Of T)(VContainer.IContainerBuilder)
   nameWithType: ScreenContainerBuilderExtensions.RegisterScreenLifecycleHandler<T>(IContainerBuilder)
   nameWithType.vb: ScreenContainerBuilderExtensions.RegisterScreenLifecycleHandler(Of T)(IContainerBuilder)
+- uid: MackySoft.Navigathena.ViewInputMode
+  name: ViewInputMode
+  href: api/MackySoft.Navigathena.ViewInputMode.html
+  commentId: T:MackySoft.Navigathena.ViewInputMode
+  fullName: MackySoft.Navigathena.ViewInputMode
+  nameWithType: ViewInputMode
+- uid: MackySoft.Navigathena.ViewInputMode.All
+  name: All
+  href: api/MackySoft.Navigathena.ViewInputMode.html#MackySoft_Navigathena_ViewInputMode_All
+  commentId: F:MackySoft.Navigathena.ViewInputMode.All
+  fullName: MackySoft.Navigathena.ViewInputMode.All
+  nameWithType: ViewInputMode.All
+- uid: MackySoft.Navigathena.ViewInputMode.PointerOnly
+  name: PointerOnly
+  href: api/MackySoft.Navigathena.ViewInputMode.html#MackySoft_Navigathena_ViewInputMode_PointerOnly
+  commentId: F:MackySoft.Navigathena.ViewInputMode.PointerOnly
+  fullName: MackySoft.Navigathena.ViewInputMode.PointerOnly
+  nameWithType: ViewInputMode.PointerOnly
 - uid: MackySoft.Navigathena.ViewPresentation
   name: ViewPresentation
   href: api/MackySoft.Navigathena.ViewPresentation.html
   commentId: T:MackySoft.Navigathena.ViewPresentation
   fullName: MackySoft.Navigathena.ViewPresentation
   nameWithType: ViewPresentation
-- uid: MackySoft.Navigathena.ViewPresentation.#ctor(System.Boolean,System.Boolean,System.Int32)
-  name: ViewPresentation(bool, bool, int)
-  href: api/MackySoft.Navigathena.ViewPresentation.html#MackySoft_Navigathena_ViewPresentation__ctor_System_Boolean_System_Boolean_System_Int32_
-  commentId: M:MackySoft.Navigathena.ViewPresentation.#ctor(System.Boolean,System.Boolean,System.Int32)
-  name.vb: New(Boolean, Boolean, Integer)
-  fullName: MackySoft.Navigathena.ViewPresentation.ViewPresentation(bool, bool, int)
-  fullName.vb: MackySoft.Navigathena.ViewPresentation.New(Boolean, Boolean, Integer)
-  nameWithType: ViewPresentation.ViewPresentation(bool, bool, int)
-  nameWithType.vb: ViewPresentation.New(Boolean, Boolean, Integer)
+- uid: MackySoft.Navigathena.ViewPresentation.#ctor(System.Boolean,System.Boolean,System.Int32,MackySoft.Navigathena.ViewInputMode)
+  name: ViewPresentation(bool, bool, int, ViewInputMode)
+  href: api/MackySoft.Navigathena.ViewPresentation.html#MackySoft_Navigathena_ViewPresentation__ctor_System_Boolean_System_Boolean_System_Int32_MackySoft_Navigathena_ViewInputMode_
+  commentId: M:MackySoft.Navigathena.ViewPresentation.#ctor(System.Boolean,System.Boolean,System.Int32,MackySoft.Navigathena.ViewInputMode)
+  name.vb: New(Boolean, Boolean, Integer, ViewInputMode)
+  fullName: MackySoft.Navigathena.ViewPresentation.ViewPresentation(bool, bool, int, MackySoft.Navigathena.ViewInputMode)
+  fullName.vb: MackySoft.Navigathena.ViewPresentation.New(Boolean, Boolean, Integer, MackySoft.Navigathena.ViewInputMode)
+  nameWithType: ViewPresentation.ViewPresentation(bool, bool, int, ViewInputMode)
+  nameWithType.vb: ViewPresentation.New(Boolean, Boolean, Integer, ViewInputMode)
 - uid: MackySoft.Navigathena.ViewPresentation.#ctor*
   name: ViewPresentation
   href: api/MackySoft.Navigathena.ViewPresentation.html#MackySoft_Navigathena_ViewPresentation__ctor_
@@ -9823,6 +10126,19 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.ViewPresentation.InputEnabled
   nameWithType: ViewPresentation.InputEnabled
+- uid: MackySoft.Navigathena.ViewPresentation.InputMode
+  name: InputMode
+  href: api/MackySoft.Navigathena.ViewPresentation.html#MackySoft_Navigathena_ViewPresentation_InputMode
+  commentId: P:MackySoft.Navigathena.ViewPresentation.InputMode
+  fullName: MackySoft.Navigathena.ViewPresentation.InputMode
+  nameWithType: ViewPresentation.InputMode
+- uid: MackySoft.Navigathena.ViewPresentation.InputMode*
+  name: InputMode
+  href: api/MackySoft.Navigathena.ViewPresentation.html#MackySoft_Navigathena_ViewPresentation_InputMode_
+  commentId: Overload:MackySoft.Navigathena.ViewPresentation.InputMode
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.ViewPresentation.InputMode
+  nameWithType: ViewPresentation.InputMode
 - uid: MackySoft.Navigathena.ViewPresentation.Order
   name: Order
   href: api/MackySoft.Navigathena.ViewPresentation.html#MackySoft_Navigathena_ViewPresentation_Order
@@ -9849,3 +10165,92 @@ references:
   isSpec: "True"
   fullName: MackySoft.Navigathena.ViewPresentation.OutputEnabled
   nameWithType: ViewPresentation.OutputEnabled
+- uid: MackySoft.Navigathena.ViewPresentationChange
+  name: ViewPresentationChange
+  href: api/MackySoft.Navigathena.ViewPresentationChange.html
+  commentId: T:MackySoft.Navigathena.ViewPresentationChange
+  fullName: MackySoft.Navigathena.ViewPresentationChange
+  nameWithType: ViewPresentationChange
+- uid: MackySoft.Navigathena.ViewPresentationChange.#ctor(MackySoft.Navigathena.IViewAdapter,MackySoft.Navigathena.ViewPresentation)
+  name: ViewPresentationChange(IViewAdapter, ViewPresentation)
+  href: api/MackySoft.Navigathena.ViewPresentationChange.html#MackySoft_Navigathena_ViewPresentationChange__ctor_MackySoft_Navigathena_IViewAdapter_MackySoft_Navigathena_ViewPresentation_
+  commentId: M:MackySoft.Navigathena.ViewPresentationChange.#ctor(MackySoft.Navigathena.IViewAdapter,MackySoft.Navigathena.ViewPresentation)
+  name.vb: New(IViewAdapter, ViewPresentation)
+  fullName: MackySoft.Navigathena.ViewPresentationChange.ViewPresentationChange(MackySoft.Navigathena.IViewAdapter, MackySoft.Navigathena.ViewPresentation)
+  fullName.vb: MackySoft.Navigathena.ViewPresentationChange.New(MackySoft.Navigathena.IViewAdapter, MackySoft.Navigathena.ViewPresentation)
+  nameWithType: ViewPresentationChange.ViewPresentationChange(IViewAdapter, ViewPresentation)
+  nameWithType.vb: ViewPresentationChange.New(IViewAdapter, ViewPresentation)
+- uid: MackySoft.Navigathena.ViewPresentationChange.#ctor*
+  name: ViewPresentationChange
+  href: api/MackySoft.Navigathena.ViewPresentationChange.html#MackySoft_Navigathena_ViewPresentationChange__ctor_
+  commentId: Overload:MackySoft.Navigathena.ViewPresentationChange.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: MackySoft.Navigathena.ViewPresentationChange.ViewPresentationChange
+  fullName.vb: MackySoft.Navigathena.ViewPresentationChange.New
+  nameWithType: ViewPresentationChange.ViewPresentationChange
+  nameWithType.vb: ViewPresentationChange.New
+- uid: MackySoft.Navigathena.ViewPresentationChange.Presentation
+  name: Presentation
+  href: api/MackySoft.Navigathena.ViewPresentationChange.html#MackySoft_Navigathena_ViewPresentationChange_Presentation
+  commentId: P:MackySoft.Navigathena.ViewPresentationChange.Presentation
+  fullName: MackySoft.Navigathena.ViewPresentationChange.Presentation
+  nameWithType: ViewPresentationChange.Presentation
+- uid: MackySoft.Navigathena.ViewPresentationChange.Presentation*
+  name: Presentation
+  href: api/MackySoft.Navigathena.ViewPresentationChange.html#MackySoft_Navigathena_ViewPresentationChange_Presentation_
+  commentId: Overload:MackySoft.Navigathena.ViewPresentationChange.Presentation
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.ViewPresentationChange.Presentation
+  nameWithType: ViewPresentationChange.Presentation
+- uid: MackySoft.Navigathena.ViewPresentationChange.View
+  name: View
+  href: api/MackySoft.Navigathena.ViewPresentationChange.html#MackySoft_Navigathena_ViewPresentationChange_View
+  commentId: P:MackySoft.Navigathena.ViewPresentationChange.View
+  fullName: MackySoft.Navigathena.ViewPresentationChange.View
+  nameWithType: ViewPresentationChange.View
+- uid: MackySoft.Navigathena.ViewPresentationChange.View*
+  name: View
+  href: api/MackySoft.Navigathena.ViewPresentationChange.html#MackySoft_Navigathena_ViewPresentationChange_View_
+  commentId: Overload:MackySoft.Navigathena.ViewPresentationChange.View
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.ViewPresentationChange.View
+  nameWithType: ViewPresentationChange.View
+- uid: MackySoft.Navigathena.ViewPresentationChangeSet
+  name: ViewPresentationChangeSet
+  href: api/MackySoft.Navigathena.ViewPresentationChangeSet.html
+  commentId: T:MackySoft.Navigathena.ViewPresentationChangeSet
+  fullName: MackySoft.Navigathena.ViewPresentationChangeSet
+  nameWithType: ViewPresentationChangeSet
+- uid: MackySoft.Navigathena.ViewPresentationChangeSet.#ctor(System.Collections.Generic.IReadOnlyList{MackySoft.Navigathena.ViewPresentationChange})
+  name: ViewPresentationChangeSet(IReadOnlyList<ViewPresentationChange>)
+  href: api/MackySoft.Navigathena.ViewPresentationChangeSet.html#MackySoft_Navigathena_ViewPresentationChangeSet__ctor_System_Collections_Generic_IReadOnlyList_MackySoft_Navigathena_ViewPresentationChange__
+  commentId: M:MackySoft.Navigathena.ViewPresentationChangeSet.#ctor(System.Collections.Generic.IReadOnlyList{MackySoft.Navigathena.ViewPresentationChange})
+  name.vb: New(IReadOnlyList(Of ViewPresentationChange))
+  fullName: MackySoft.Navigathena.ViewPresentationChangeSet.ViewPresentationChangeSet(System.Collections.Generic.IReadOnlyList<MackySoft.Navigathena.ViewPresentationChange>)
+  fullName.vb: MackySoft.Navigathena.ViewPresentationChangeSet.New(System.Collections.Generic.IReadOnlyList(Of MackySoft.Navigathena.ViewPresentationChange))
+  nameWithType: ViewPresentationChangeSet.ViewPresentationChangeSet(IReadOnlyList<ViewPresentationChange>)
+  nameWithType.vb: ViewPresentationChangeSet.New(IReadOnlyList(Of ViewPresentationChange))
+- uid: MackySoft.Navigathena.ViewPresentationChangeSet.#ctor*
+  name: ViewPresentationChangeSet
+  href: api/MackySoft.Navigathena.ViewPresentationChangeSet.html#MackySoft_Navigathena_ViewPresentationChangeSet__ctor_
+  commentId: Overload:MackySoft.Navigathena.ViewPresentationChangeSet.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: MackySoft.Navigathena.ViewPresentationChangeSet.ViewPresentationChangeSet
+  fullName.vb: MackySoft.Navigathena.ViewPresentationChangeSet.New
+  nameWithType: ViewPresentationChangeSet.ViewPresentationChangeSet
+  nameWithType.vb: ViewPresentationChangeSet.New
+- uid: MackySoft.Navigathena.ViewPresentationChangeSet.Changes
+  name: Changes
+  href: api/MackySoft.Navigathena.ViewPresentationChangeSet.html#MackySoft_Navigathena_ViewPresentationChangeSet_Changes
+  commentId: P:MackySoft.Navigathena.ViewPresentationChangeSet.Changes
+  fullName: MackySoft.Navigathena.ViewPresentationChangeSet.Changes
+  nameWithType: ViewPresentationChangeSet.Changes
+- uid: MackySoft.Navigathena.ViewPresentationChangeSet.Changes*
+  name: Changes
+  href: api/MackySoft.Navigathena.ViewPresentationChangeSet.html#MackySoft_Navigathena_ViewPresentationChangeSet_Changes_
+  commentId: Overload:MackySoft.Navigathena.ViewPresentationChangeSet.Changes
+  isSpec: "True"
+  fullName: MackySoft.Navigathena.ViewPresentationChangeSet.Changes
+  nameWithType: ViewPresentationChangeSet.Changes

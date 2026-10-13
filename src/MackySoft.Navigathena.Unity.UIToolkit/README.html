@@ -73,11 +73,58 @@
         <article data-uid="">
 <h1 id="mackysoftnavigathenaunityuitoolkit">MackySoft.Navigathena.Unity.UIToolkit</h1>
 
-<p>UIDocument visibility, sorting, input adapters, and the required visibility stylesheet.</p>
+<p>Screen input permissions, native focus eligibility, pointer interception, and panel ordering for UI Toolkit.</p>
 <p>Install this NuGet package through <a href="https://github.com/GlitchEnzo/NuGetForUnity">NuGetForUnity</a>. Keep all Navigathena packages at the same version. NuGet dependencies provide the common Runtime and, where required, the base Unity adapter.</p>
 <p>Enable Unity's built-in UI Toolkit module. The package includes its Resources stylesheet and Unity metadata.</p>
 <p>This package contains Unity source files, assembly definitions, and asset metadata. NuGetForUnity restores them under the package's <code>Sources</code> directory for Unity to compile. It does not embed Unity, third-party assemblies, or another copy of the Navigathena Runtime. Do not install a Navigathena UPM package alongside it.</p>
 <p>See the <a href="https://github.com/mackysoft/Navigathena#unity-installation">Unity installation instructions</a> and <a href="https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples">Unity examples</a>.</p>
+<h2 id="configure-and-acquire-a-screen">Configure and acquire a screen</h2>
+<p>Put <code>UiToolkitViewAdapter</code> and <code>ScreenPresentation</code> on the prefab root. Assign your UXML to <strong>Content Asset</strong> on <code>UiToolkitViewAdapter</code>, and add the adapter to <strong>Views</strong> on <code>ScreenPresentation</code>. Do not add <code>UIDocument</code> to the managed prefab: the host owns its native document and panel.</p>
+<p>The application owner creates one <code>UiToolkitPresentationHost</code> for the navigation host. Supply a <code>PanelSettings</code> asset as a template. The host clones the settings for each view; it does not modify the shared asset or relocate the native theme. Managed views share a drawing-order domain but have separate native focus controllers.</p>
+<pre><code class="lang-csharp">var ui = new UiToolkitPresentationHost(panelSettings);
+
+// Inside a screen factory; screenPrefab is an Inspector-owned adapter reference.
+IUiToolkitView view = await creation.AcquireUiToolkitScreenAsync(screenPrefab, ui, token);
+return creation.Lifetime.CreateOwned(() =&gt; new MenuPresenter(view));
+</code></pre>
+<p><code>AcquireUiToolkitScreenAsync</code> owns the instance and its panel. It builds a closed input boundary while the instance is inactive, activates the instance, explicitly attaches the host-owned document, and then connects its screen presentation. Initialization does not depend on application script execution order.</p>
+<p>Use <code>view.ContentRoot.Q&lt;Button&gt;(&quot;confirm&quot;)</code> to obtain application controls. Screen implementations receive <code>IUiToolkitView</code>; they do not receive presentation permission setters. For an already acquired, active scene adapter, the composition code can call <code>ui.Connect(adapter)</code> and then <code>creation.ConnectScreen(adapter)</code>. The acquiring lifetime still owns that scene or instance.</p>
+<p>Keep application controls within <code>ContentRoot</code>. The host owns the surrounding hierarchy and native objects; screen code does not configure or reconstruct the document. Disabling or destroying the adapter ends that connection; reenabling it does not restore input. Release all screen resources before disposing <code>ui</code> and its borrowed dependencies.</p>
+<h2 id="observe-screen-input-permission">Observe screen input permission</h2>
+<p>Establish operation subscriptions, retain <code>activity.ForegroundToken</code>, and set initial or returning focus with the control's native <code>Focus()</code> in <code>ActivateAsync</code>. All affected adapters have finished applying input admission before this callback starts; controls can receive input and an input session can be captured. Remove operation subscriptions in <code>DeactivateAsync</code>, including cover by a popup. Display updates and separately owned work do not end with that subscription period.</p>
+<p><code>TryCaptureInput</code> observes the currently permitted input period. <code>UiInputSession</code> exposes only its validity and revocation token; it does not operate individual controls or choose focus targets.</p>
+<p>Capture one session when a user operation starts and retain it across awaits:</p>
+<pre><code class="lang-csharp">Button confirm = view.ContentRoot.Q&lt;Button&gt;(&quot;confirm&quot;);
+
+async Task RefreshAsync()
+{
+    if (!view.TryCaptureInput(out UiInputSession session))
+    {
+        return;
+    }
+
+    try
+    {
+        await LoadDataAsync(session.Revoked);
+        if (!session.IsValid)
+        {
+            return;
+        }
+
+        // Updating and focusing this application control remain application work.
+        confirm.Focus();
+    }
+    catch (OperationCanceledException) when (session.Revoked.IsCancellationRequested)
+    {
+        // This operation's input period ended.
+    }
+}
+</code></pre>
+<p><code>IsValid</code> and <code>Revoked</code> describe the captured screen input permission. Closing and reopening a screen never revives an old session. The permission period is distinct from a control's availability and the screen's work lifetime: a retained screen can keep working while its input is blocked. Query UI state on the Unity player thread.</p>
+<p>Controls in a managed view whose input permission is closed cannot acquire native focus, including through direct <code>Focus()</code> calls or dynamically added controls. Navigation's pointer blockers intercept physical input without granting focus eligibility to their controls. The framework does not write application controls' enabled state, <code>focusable</code>, or <code>tabIndex</code>; game-defined availability and disabled styling remain the application's responsibility.</p>
+<h2 id="responsibility-boundary">Responsibility boundary</h2>
+<p>Navigathena determines whether a registered screen can receive input. The adapter enforces that permission within the managed content hierarchy and ends its owned focus and pointer captures when input closes. It does not infer ownership of UI attached elsewhere in the native panel.</p>
+<p>The application and Unity's UI system determine initial focus, focus movement, control activation, dropdown behavior, and input delivery within permitted UI. The package exposes no individual-control focus operations. Configure and own the UI input backend in the application; no action or axis observer is required by this package. Native events are passed through or rejected within a closed scope, not buffered or redistributed to a different view.</p>
 
 </article>
 

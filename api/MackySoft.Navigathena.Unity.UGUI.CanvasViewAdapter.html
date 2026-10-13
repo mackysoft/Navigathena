@@ -89,7 +89,7 @@
 
 
   <h1 id="MackySoft_Navigathena_Unity_UGUI_CanvasViewAdapter" data-uid="MackySoft.Navigathena.Unity.UGUI.CanvasViewAdapter" class="text-break">
-Class CanvasViewAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L11"><i class="bi bi-code-slash"></i></a>
+Class CanvasViewAdapter  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L15"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -103,7 +103,6 @@ Class CanvasViewAdapter  <a class="header-action link-secondary" title="View sou
 
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[RequireComponent(typeof(Canvas), typeof(GraphicRaycaster))]
-[DefaultExecutionOrder(-32000)]
 public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
   </div>
 
@@ -568,7 +567,9 @@ public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
 
 
   <h2 id="MackySoft_Navigathena_Unity_UGUI_CanvasViewAdapter_remarks">Remarks</h2>
-  <div class="markdown level0 remarks"><p>Own the Canvas and GraphicRaycaster exclusively. Game input subscriptions belong to screen activity. Custom input modules must not force selection into a closed screen.</p>
+  <div class="markdown level0 remarks"><p>Own the Canvas and GraphicRaycaster exclusively. The application selects a foreground control in
+ActivateAsync and keeps explicit navigation links within that screen.
+This adapter releases existing selection when input closes; it does not filter uGUI's automatic navigation search.</p>
 </div>
 
 
@@ -580,7 +581,7 @@ public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
 
   <h3 id="MackySoft_Navigathena_Unity_UGUI_CanvasViewAdapter_Identity" data-uid="MackySoft.Navigathena.Unity.UGUI.CanvasViewAdapter.Identity">
   Identity
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L25"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -611,7 +612,7 @@ public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
 
   <h3 id="MackySoft_Navigathena_Unity_UGUI_CanvasViewAdapter_IsAlive" data-uid="MackySoft.Navigathena.Unity.UGUI.CanvasViewAdapter.IsAlive">
   IsAlive
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L27"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -642,7 +643,7 @@ public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
 
   <h3 id="MackySoft_Navigathena_Unity_UGUI_CanvasViewAdapter_OrderingDomain" data-uid="MackySoft.Navigathena.Unity.UGUI.CanvasViewAdapter.OrderingDomain">
   OrderingDomain
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -673,7 +674,7 @@ public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
 
   <h3 id="MackySoft_Navigathena_Unity_UGUI_CanvasViewAdapter_Presentation" data-uid="MackySoft.Navigathena.Unity.UGUI.CanvasViewAdapter.Presentation">
   Presentation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L25"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -708,7 +709,7 @@ public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
 
   <h3 id="MackySoft_Navigathena_Unity_UGUI_CanvasViewAdapter_Apply_MackySoft_Navigathena_ViewPresentation_" data-uid="MackySoft.Navigathena.Unity.UGUI.CanvasViewAdapter.Apply(MackySoft.Navigathena.ViewPresentation)">
   Apply(ViewPresentation)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L63"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -739,7 +740,7 @@ public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
 
   <h3 id="MackySoft_Navigathena_Unity_UGUI_CanvasViewAdapter_Validate_MackySoft_Navigathena_ViewPresentation_" data-uid="MackySoft.Navigathena.Unity.UGUI.CanvasViewAdapter.Validate(MackySoft.Navigathena.ViewPresentation)">
   Validate(ViewPresentation)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L37"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -773,7 +774,7 @@ public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter</code></pre>
 
   <h3 id="MackySoft_Navigathena_Unity_UGUI_CanvasViewAdapter_Lost" data-uid="MackySoft.Navigathena.Unity.UGUI.CanvasViewAdapter.Lost">
   Lost
-  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/mackysoft/Navigathena/blob/main/src/MackySoft.Navigathena.Unity.UGUI/Runtime/CanvasViewAdapter.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>

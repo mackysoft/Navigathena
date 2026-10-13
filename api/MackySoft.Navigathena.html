@@ -359,7 +359,7 @@ Classes
     </dl>
     <dl class="jumplist">
       <dt><a class="xref" href="MackySoft.Navigathena.ScreenActivityContext.html">ScreenActivityContext</a></dt>
-      <dd><p>Provides navigation and cancellation for exactly one activity period.</p>
+      <dd><p>Provides navigation and cancellation for one foreground activation period.</p>
 </dd>
     </dl>
     <dl class="jumplist">
@@ -443,7 +443,7 @@ Classes
     </dl>
     <dl class="jumplist">
       <dt><a class="xref" href="MackySoft.Navigathena.ScreenPreparationContext.html">ScreenPreparationContext</a></dt>
-      <dd><p>Input-specific preparation and lifetime for one displayed history entry; never a DI registration context.</p>
+      <dd><p>Provides route-specific content preparation and resource ownership before entry effects; never a DI registration context.</p>
 </dd>
     </dl>
     <dl class="jumplist">
@@ -482,6 +482,11 @@ Classes
     <dl class="jumplist">
       <dt><a class="xref" href="MackySoft.Navigathena.TransitionTargetsContext.html">TransitionTargetsContext</a></dt>
       <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ViewPresentationChangeSet.html">ViewPresentationChangeSet</a></dt>
+      <dd><p>Describes one related set of screen presentation permissions.</p>
+</dd>
     </dl>
     <h3 id="structs">
 Structs
@@ -527,8 +532,18 @@ Structs
 </dd>
     </dl>
     <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ScreenForegroundToken.html">ScreenForegroundToken</a></dt>
+      <dd><p>Represents the eligibility of a screen for application operations during one foreground period.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
       <dt><a class="xref" href="MackySoft.Navigathena.ViewPresentation.html">ViewPresentation</a></dt>
       <dd><p>Runtime permissions, separate from the view's own opacity, enabled styling, and animation state.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ViewPresentationChange.html">ViewPresentationChange</a></dt>
+      <dd><p>Pairs one registered view with the presentation to apply.</p>
 </dd>
     </dl>
     <h3 id="interfaces">
@@ -590,7 +605,7 @@ Interfaces
     </dl>
     <dl class="jumplist">
       <dt><a class="xref" href="MackySoft.Navigathena.IScreenLifecycleHandler-1.html">IScreenLifecycleHandler&lt;TRoute&gt;</a></dt>
-      <dd><p>Implements awaited screen lifecycle work. The runtime controls invocation; the registered owner controls disposal.</p>
+      <dd><p>Implements awaited instance initialization, content preparation, foreground entry and departure, and final termination.</p>
 </dd>
     </dl>
     <dl class="jumplist">
@@ -610,15 +625,25 @@ Interfaces
     </dl>
     <dl class="jumplist">
       <dt><a class="xref" href="MackySoft.Navigathena.IViewAdapter.html">IViewAdapter</a></dt>
-      <dd><p>Applies runtime output and physical input permissions to one concrete view.</p>
+      <dd><p>Applies runtime output, native focus, and user-input permissions to one concrete view.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IViewPresentationBatch.html">IViewPresentationBatch</a></dt>
+      <dd><p>Applies related native views after the current event dispatch has settled.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.IViewPresentationBatchAdapter.html">IViewPresentationBatchAdapter</a></dt>
+      <dd><p>Identifies a view whose permission changes must be applied with its native event-dispatch batch.</p>
 </dd>
     </dl>
     <h3 id="enums">
 Enums
 </h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationInput.html">LowerPresentationInput</a></dt>
-      <dd><p>Specifies the input effect applied to lower presentations.</p>
+      <dt><a class="xref" href="MackySoft.Navigathena.LowerPresentationBoundary.html">LowerPresentationBoundary</a></dt>
+      <dd><p>Determines when a foreground screen establishes an input boundary, independently of lower activity.</p>
 </dd>
     </dl>
     <dl class="jumplist">
@@ -736,6 +761,11 @@ Enums
     <dl class="jumplist">
       <dt><a class="xref" href="MackySoft.Navigathena.TransitionSettlementTarget.html">TransitionSettlementTarget</a></dt>
       <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MackySoft.Navigathena.ViewInputMode.html">ViewInputMode</a></dt>
+      <dd><p>Identifies the input channels used by a registered presentation.</p>
+</dd>
     </dl>
     <h3 id="delegates">
 Delegates
