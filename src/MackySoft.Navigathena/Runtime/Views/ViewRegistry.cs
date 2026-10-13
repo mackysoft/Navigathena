@@ -40,7 +40,7 @@ namespace MackySoft.Navigathena.Runtime.Views
             }
         }
 
-        public ViewRegistration Register (IViewAdapter adapter, bool preserve)
+        public ViewRegistration Register (IViewAdapter adapter, bool preserve, ViewInputMode inputMode = ViewInputMode.All)
         {
             if (adapter is null)
             {
@@ -49,7 +49,7 @@ namespace MackySoft.Navigathena.Runtime.Views
 
             object identity = adapter.Identity ?? throw new NavigationConfigurationException("A view adapter must provide a stable native identity.");
             object domain = adapter.OrderingDomain ?? throw new NavigationConfigurationException("A view adapter must identify its ordering domain.");
-            ViewRegistration registration = new(this, identity, domain, adapter, preserve);
+            ViewRegistration registration = new(this, identity, domain, adapter, preserve, inputMode);
             lock (sync)
             {
                 if (registrations.ContainsKey(identity))

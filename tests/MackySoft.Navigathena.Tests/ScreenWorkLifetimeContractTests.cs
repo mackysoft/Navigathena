@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ public sealed class ScreenWorkLifetimeContractTests
             await work.WaitAsync().WaitAsync(TestTimeout);
         }
 
-        Collect();
+        await CollectAsync(payload);
 
         Assert.False(payload.IsAlive);
         Assert.Equal(0, screen.Disposals);
@@ -59,7 +60,7 @@ public sealed class ScreenWorkLifetimeContractTests
     {
         (ScreenWork work, WeakReference screen) = await CompleteAndEndScreenAsync();
 
-        Collect();
+        await CollectAsync(screen);
 
         Assert.False(screen.IsAlive);
         await work.WaitAsync().WaitAsync(TestTimeout);
@@ -246,11 +247,23 @@ public sealed class ScreenWorkLifetimeContractTests
         return (work, new WeakReference(screen));
     }
 
-    private static void Collect ()
+    private static async Task CollectAsync (WeakReference reference)
+    {
+        Stopwatch waiting = Stopwatch.StartNew();
+        while (!IsCollected(reference) && waiting.Elapsed < TestTimeout)
+        {
+            // Completion can resume its observer before the producer's stack has returned.
+            await Task.Delay(1);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static bool IsCollected (WeakReference reference)
     {
         GC.Collect();
         GC.WaitForPendingFinalizers();
         GC.Collect();
+        return !reference.IsAlive;
     }
 
     private static TaskCompletionSource<bool> Signal () => new(TaskCreationOptions.RunContinuationsAsynchronously);

@@ -7,8 +7,10 @@ namespace MackySoft.Navigathena
     public interface IScreenNavigation
     {
         /// <summary>Waits for a screen to close, its resources to finish and the caller to resume. Activity suspension does not cancel an accepted call.</summary>
+        /// <remarks>Caller resumption awaits its ActivateAsync callback. Input admission at that callback's entry does not complete the call.</remarks>
         Task InvokeAsync (Route route, NavigationOptions? options = null, CancellationToken cancellationToken = default);
         /// <summary>Returns the answer after cleanup and caller resumption. Closing without an answer cancels the task.</summary>
+        /// <remarks>Caller resumption awaits its ActivateAsync callback. Input admission at that callback's entry does not complete the call.</remarks>
         Task<TResult> InvokeAsync<TResult> (Route<TResult> route, NavigationOptions? options = null, CancellationToken cancellationToken = default);
         /// <summary>Runs a request after successful activation; the runtime observes completion and failure.</summary>
         void PostPush<TRoute> (TRoute route, NavigationOptions? options = null) where TRoute : Route;

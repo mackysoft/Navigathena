@@ -18,7 +18,6 @@ namespace MackySoft.Navigathena.Runtime.Execution
         private readonly TransitionPlayback playback;
         private readonly Dictionary<ScreenInstance, ViewPresentation> before = new();
         private readonly Dictionary<ScreenInstance, ScreenAnimationState> appearanceBefore = new();
-        private readonly HashSet<ScreenInstance> activeBefore = new();
         private readonly List<ScreenInstance> created = new();
         private readonly Dictionary<ScreenInstance, (NavigationEntry Entry, IScreenNavigation Navigation)> rebound = new();
         private readonly List<BlockerCoordinator.SuspendedConnection> suspendedBlockers = new();
@@ -67,7 +66,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
             HashSet<RegionInstanceId> regions = new(update.Changes.Where(change => change.Before?.Id != change.After?.Id
                 || change.BeforeParticipation?.OutputPresented != change.AfterParticipation?.OutputPresented
-                || change.BeforeParticipation?.SemanticInputEligible != change.AfterParticipation?.SemanticInputEligible)
+                || change.BeforeParticipation?.ActivityEligible != change.AfterParticipation?.ActivityEligible)
                 .Select(change => (change.AfterEntry ?? change.BeforeEntry)!.RegionId));
             foreach (NavigationEntry entry in update.Before.Entries.Values)
             {
@@ -90,17 +89,25 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 screen.PreparationReason = null;
                 before.Add(screen, screen.Presentation);
                 appearanceBefore.Add(screen, Appearance(screen.Entry.Id, update.BeforeComposition));
-                if (screen.IsActive)
-                {
-                    activeBefore.Add(screen);
-                }
-
             }
 
             List<Exception> inputFailures = new();
+            foreach (ScreenInstance screen in before.Keys)
+            {
+                screen.InvalidateForeground();
+            }
             try
             {
-                runtime.Blockers.CloseInput(before.Keys);
+                runtime.Blockers.CloseNavigation(before.Keys);
+            }
+            catch (Exception exception)
+            {
+                inputFailures.Add(exception);
+            }
+            try
+            {
+                await ScreenInstance.ApplyBatchAsync(before.Keys.Select(screen => (screen,
+                    new ViewPresentation(screen.Presentation.OutputEnabled, false, screen.Presentation.Order))).ToArray());
             }
             catch (Exception exception)
             {
@@ -110,28 +117,13 @@ namespace MackySoft.Navigathena.Runtime.Execution
             {
                 try
                 {
-                    screen.Apply(new ViewPresentation(screen.Presentation.OutputEnabled, false, screen.Presentation.Order));
+                    // Every affected entry period ends before transition effects, regardless
+                    // of retained output or binding-owned work continuing in the background.
+                    await screen.CloseActivityAsync();
                 }
                 catch (Exception exception)
                 {
                     inputFailures.Add(exception);
-                }
-            }
-            foreach (ScreenInstance screen in before.Keys)
-            {
-                if (playback.Configuration.Scope == NavigationTransitionScope.Host || !WillRetain(screen, update.ProposedAfter)
-                    || GetParticipation(screen, update.ProposedComposition)?.SemanticInputEligible != true
-                    || (GetReturnOptions(screen) is ScreenHistoryReturnOptions returning
-                        && (returning.Preparation == ScreenPreparationMode.Always || returning.EnterAnimation == ScreenEnterAnimationMode.Always)))
-                {
-                    try
-                    {
-                        await screen.CloseActivityAsync();
-                    }
-                    catch (Exception exception)
-                    {
-                        inputFailures.Add(exception);
-                    }
                 }
             }
             if (inputFailures.Count > 0)
@@ -439,32 +431,37 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
                 if (failures.All(failure => failure.Scope == PresentationFailureScope.RetiredResources))
                 {
-                    foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed) && GetParticipation(screen, composition)?.SemanticInputEligible == true))
+                    ScreenInstance[] retained = created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)).Distinct().ToArray();
+                    await ActivateForegroundAsync(retained.Select(screen =>
                     {
-                        await screen.ActivateAsync(ActivationFor(screen.Entry));
-                    }
-
-                    foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)))
-                    {
-                        PresentationParticipation? participation = GetParticipation(screen, composition);
-                        screen.Apply(new ViewPresentation(participation?.OutputPresented == true, participation?.OutputPresented == true && screen.IsActive, screen.Presentation.Order));
-                    }
-                    blockers?.OpenInput();
+                        bool output = GetParticipation(screen, composition)?.OutputPresented == true;
+                        bool input = GetParticipation(screen, composition)?.ActivityEligible == true;
+                        return (screen, new ViewPresentation(output, input, screen.Presentation.Order));
+                    }).ToArray());
                 }
-                try
+                else
                 {
                     runtime.Orders.Refresh();
-                }
-                catch (Exception exception)
-                {
-                    failures.Add(new PresentationFailure(PresentationFailureScope.RetiredResources, NavigationPhase.Complete, exception.Message, Array.Empty<PresentationReference>()) { Exception = exception });
                 }
             }
             catch (Exception exception)
             {
+                ScreenInstance[] affected = created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)).Distinct().ToArray();
+                // Revoke native admission before an asynchronous failure-settlement effect can yield.
                 try
                 {
-                    blockers?.CloseInput();
+                    await ScreenInstance.ApplyBatchAsync(affected.Select(screen => (screen,
+                        new ViewPresentation(!screen.IsEnding && screen.Presentation.OutputEnabled, false, screen.Presentation.Order))).ToArray());
+                }
+                catch (Exception closureFailure)
+                {
+                    failures.Add(new PresentationFailure(PresentationFailureScope.CurrentPresentations, NavigationPhase.Complete, closureFailure.Message,
+                        affected.Select(screen => new PresentationReference(screen.Entry.Id, screen.Id)).ToArray())
+                    { Exception = closureFailure });
+                }
+                try
+                {
+                    blockers?.CloseNavigation();
                 }
                 catch (Exception blockerFailure)
                 {
@@ -479,7 +476,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                     failures.Add(new PresentationFailure(PresentationFailureScope.RetiredResources, NavigationPhase.Complete, settlementFailure.Message, Array.Empty<PresentationReference>()) { Exception = settlementFailure });
                 }
 
-                foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)))
+                foreach (ScreenInstance screen in affected)
                 {
                     try
                     {
@@ -614,23 +611,16 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
             try
             {
-                if (!playback.Departed)
-                {
-                    foreach (ScreenInstance screen in before.Keys.Where(screen => !screen.IsEnding && !playback.Retains(screen)))
-                    {
-                        if (activeBefore.Contains(screen))
-                        {
-                            await screen.ActivateAsync();
-                        }
-                        screen.Apply(before[screen]);
-                    }
-                }
                 foreach (BlockerCoordinator.SuspendedConnection connection in suspendedBlockers)
                 {
                     connection.Restore();
                 }
                 blockers?.Rollback();
-                runtime.Blockers.RestoreInput(before.Keys);
+                if (!playback.Departed)
+                {
+                    ScreenInstance[] restoring = before.Keys.Where(screen => !screen.IsEnding && !playback.Retains(screen)).ToArray();
+                    await ActivateForegroundAsync(restoring.Select(screen => (screen, before[screen])).ToArray(), true);
+                }
             }
             catch (Exception exception)
             {
@@ -647,6 +637,25 @@ namespace MackySoft.Navigathena.Runtime.Execution
             {
                 usage.Dispose();
                 users.Remove(screen);
+            }
+        }
+
+        private async ValueTask ActivateForegroundAsync (IReadOnlyList<(ScreenInstance Screen, ViewPresentation Presentation)> updates, bool restoring = false)
+        {
+            // Settle native admission and ordering for the whole affected composition.
+            // Presenters can subscribe, retain qualification, and focus in one activation.
+            // Shown blockers already intercept pointers. Their navigation connection is
+            // ready first, but its screen qualification still opens only at activation entry.
+            runtime.Blockers.RestoreNavigation(updates.Where(update => update.Presentation.OutputEnabled && update.Presentation.InputEnabled)
+                .Select(update => update.Screen));
+            await ScreenInstance.ApplyBatchAsync(updates);
+            runtime.Orders.Refresh();
+            foreach (var update in updates)
+            {
+                if (update.Presentation.OutputEnabled && update.Presentation.InputEnabled)
+                {
+                    await update.Screen.ActivateAsync(restoring ? ScreenActivationReason.Recovery : ActivationFor(update.Screen.Entry));
+                }
             }
         }
 

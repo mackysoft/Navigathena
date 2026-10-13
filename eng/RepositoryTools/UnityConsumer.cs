@@ -77,16 +77,20 @@ internal static class UnityConsumer
 
     internal static void VerifyResults (string directory)
     {
-        const string assemblyName = "MackySoft.Navigathena.Unity.Tests.dll";
-        XElement[] assemblies = Directory.EnumerateFiles(directory, "*.xml", SearchOption.AllDirectories)
+        string[] expected = ["MackySoft.Navigathena.Unity.Tests.dll", "MackySoft.Navigathena.Unity.InputSystem.Tests.dll"];
+        XElement[] results = Directory.EnumerateFiles(directory, "*.xml", SearchOption.AllDirectories)
             .SelectMany(path => XDocument.Load(path).Descendants("test-suite"))
-            .Where(element => (string?)element.Attribute("type") == "Assembly" && (string?)element.Attribute("name") == assemblyName).ToArray();
-        PackageArtifacts.Require(assemblies.Length == 1, $"Expected one Navigathena Unity test assembly result; found {assemblies.Length}.");
-        XElement assembly = assemblies[0];
-        PackageArtifacts.Require(assembly.Elements("properties").Elements("property").Any(item => (string?)item.Attribute("name") == "platform" && (string?)item.Attribute("value") == "PlayMode"), "Navigathena Unity tests must execute in PlayMode.");
-        int total = (int?)assembly.Attribute("total") ?? 0;
-        PackageArtifacts.Require(total > 0 && (string?)assembly.Attribute("result") == "Passed" && (int?)assembly.Attribute("passed") == total, "All Navigathena Unity tests must execute and pass, without skipped tests.");
-        Console.WriteLine($"Unity PlayMode tests: {total} passed");
+            .Where(element => (string?)element.Attribute("type") == "Assembly").ToArray();
+        foreach (string name in expected)
+        {
+            XElement[] assemblies = results.Where(element => (string?)element.Attribute("name") == name).ToArray();
+            PackageArtifacts.Require(assemblies.Length == 1, $"Expected one result for {name}; found {assemblies.Length}.");
+            XElement assembly = assemblies[0];
+            PackageArtifacts.Require(assembly.Elements("properties").Elements("property").Any(item => (string?)item.Attribute("name") == "platform" && (string?)item.Attribute("value") == "PlayMode"), "Navigathena Unity tests must execute in PlayMode.");
+            int total = (int?)assembly.Attribute("total") ?? 0;
+            PackageArtifacts.Require(total > 0 && (string?)assembly.Attribute("result") == "Passed" && (int?)assembly.Attribute("passed") == total, "All Navigathena Unity tests must execute and pass, without skipped tests: " + name);
+            Console.WriteLine($"{name}: {total} Unity PlayMode tests passed");
+        }
     }
 
     private static Dictionary<string, string> PackageVersions (string project)

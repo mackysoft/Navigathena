@@ -1,0 +1,20 @@
+{
+  "name": "MackySoft.Navigathena.Unity.InputSystem.Tests",
+  "rootNamespace": "MackySoft.Navigathena.Unity.Tests",
+  "references": [
+    "MackySoft.Navigathena.Unity",
+    "MackySoft.Navigathena.Unity.UIToolkit",
+    "MackySoft.Navigathena.Unity.UGUI",
+    "Unity.InputSystem",
+    "UnityEngine.UI",
+    "UniTask"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": ["MackySoft.Navigathena.dll"],
+  "autoReferenced": false,
+  "noEngineReferences": false,
+  "optionalUnityReferences": ["TestAssemblies"]
+}

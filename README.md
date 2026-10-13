@@ -168,19 +168,27 @@ This example connects screen logic only. To let Navigathena also manage physical
 | --- | --- |
 | `InitializeAsync(initialization, token)` | Initialize stable dependencies once per screen instance. Acquire instance-owned resources through `initialization.Lifetime` and report through `initialization.Progress`. |
 | `PrepareAsync(route, preparation, token)` | Load data for this route, populate the view, and restore `preparation.SavedState` before presentation. |
-| `ActivateAsync(route, activity)` | Subscribe to input and start activity for the current visit. |
-| `DeactivateAsync()` | Remove subscriptions and await the end of activity. Do not destroy the view or its dependencies here. |
+| `ActivateAsync(route, activity)` | Start each foreground entry period and establish operation subscriptions after the entry effects finish. |
+| `DeactivateAsync()` | End each foreground period and remove operation subscriptions before departure or cover effects. Do not destroy the view or its dependencies here. |
 | `TerminateAsync(progress)` | Finish remaining screen-specific work and report its progress before the owner releases resources. |
 
 Route input belongs in `PrepareAsync` and `ActivateAsync`, not in the constructor or a DI registration. The same screen instance can display a different route value later.
 
-A modal can stop a lower screen's activity while leaving its view visible. `DeactivateAsync` therefore does not mean `GameObject.SetActive(false)`, hiding the screen, or disposing its scope. When activity resumes, Navigathena passes a new activity context and the route belonging to that history entry. A retained screen resuming behind a closed modal normally does not need preparation again.
+A popup ends the lower screen's foreground period while its view can remain visible. Navigathena calls `DeactivateAsync` on cover and `ActivateAsync` again on return, with a new context and the history entry's route. A retained return normally repeats neither initialization nor preparation. `DeactivateAsync` does not mean `GameObject.SetActive(false)`, hiding the screen, or disposing its scope.
+
+Operation subscriptions belong to that foreground period. Display subscriptions, background animation, game simulation and accepted asynchronous operations have their own lifetimes; do not stop them merely because the screen is covered. The application decides whether opening a menu also pauses its game.
 
 Use `activity.Reason`, `activity.PreparationReason`, and `activity.IsFirstActivation` when behavior depends on the reason for entry. Do not keep using an activity context after its activity has ended.
 
 Navigathena checks cancellation before and after cancellable lifecycle callbacks. Forward the token to your asynchronous operations and cooperate with cancellation during their execution; you do not need to repeat an entry check solely for Navigathena. Stopping and termination are awaited even after cancellation.
 
-For a new screen, initialization and route preparation finish before its entry animation and the transition effect finish. `ActivateAsync` runs after those visual steps, and native input opens only after activation completes. Progress reports, including a fraction of `1`, never advance this sequence; completion of the awaited callbacks does.
+For a new screen, initialization and route preparation finish before its entry animation and the transition effect finish. Navigathena then finishes native input admission and ordering for all affected views before calling `ActivateAsync`. The screen can receive input and native focus when activation starts. Complete prerequisites for operation in initialization, preparation, or presentation effects, not by waiting inside activation with an expectation that input remains blocked. Progress reports, including a fraction of `1`, never advance this sequence; completion of the awaited callbacks does.
+
+In `ActivateAsync`, establish operation subscriptions, retain `activity.ForegroundToken`, and choose and set initial or returning focus using the native UI API. The token is valid when the callback starts. Check its `IsValid` at application operation entry points. Every return supplies a fresh token; an old token never becomes valid again.
+
+On departure, qualification and the old token become invalid before native focus-loss or cancellation callbacks. Native input closes and owned focus is released before `DeactivateAsync`; remove operation subscriptions there. Departure or cover effects follow its completion. The token's `CancellationToken` signals the end of the issued period, including transition suspension, presentation loss and shutdown. Use it only for work that must end with that period.
+
+Lifecycle callbacks are serialized per instance. If `ActivateAsync` partially fails, Navigathena revokes qualification and native input before awaiting `DeactivateAsync` to clean up its started subscriptions. Do not await a user's eventual response or the current navigation's completion from a lifecycle callback.
 
 ### Navigation from a lifecycle callback
 
@@ -282,7 +290,7 @@ The Decline button instead submits `activity.Call.Complete(false)`, which is sti
 
 Do not also call Back after `Complete`: it already requests the call's closure. Dismissal or closing the result screen through Back cancels the waiting task with `OperationCanceledException`; it is not the same as answering `false`.
 
-`InvokeAsync<TResult>` returns after the call has closed, its resources have finished, and a surviving screen caller has resumed activity. Suspending the caller to display the popup does not itself cancel an accepted call. Use a cancellation token appropriate for the requesting operation, not the activity token merely because it is nearby. The application owns the surrounding business operation and its shutdown.
+`InvokeAsync<TResult>` returns after the call has closed, its resources have finished, and a surviving screen caller's returning `ActivateAsync` has completed successfully. Input and focus are already available during that callback; admitting them does not complete the call. Suspending the caller to display the popup does not itself cancel an accepted call. Use a cancellation token appropriate for the requesting operation, not the activity token merely because it is nearby. The application owns the surrounding business operation and its shutdown.
 
 For a screen with no answer value, `await navigation.InvokeAsync(ordinaryRoute)` waits for its closure and caller resumption. Use `PushAsync` if you only need to wait for it to open. Do not await a user's eventual answer from `ActivateAsync`; use screen-owned work or start the request from an event or application operation after activation.
 
@@ -304,12 +312,14 @@ Each route specifies how it affects lower screens in its region:
 
 | `LowerPresentationPolicy` | Lower screens |
 | --- | --- |
-| `Preserve` | Keep their output and input policy. |
-| `BlockInput` | Remain visible, but no longer accept input or continue input-related activity. |
-| `HideAndRetain` | Hide and stop activity; keep instances for returning. |
+| `Preserve` | Keep output and instances; require a boundary when lower history is visible. |
+| `Modal` | Keep output and instances; always require an input boundary. |
+| `HideAndRetain` | Hide output; keep instances for returning. |
 | `HideAndRelease` | Hide and release instances; keep history for reconstruction. |
 
 For example, give the editor `HideAndRetain` to temporarily move the HUD and popups below it out of view; Back returns to the retained menu. The policy includes descendants of those lower screens, but not the owning parent or unrelated regions.
+
+Output, retention, and the input boundary are separate policy settings. Covered screens always leave their foreground activation period; retained output and binding-owned work do not extend operation eligibility. `LowerPresentationBoundary.WhenLowerVisible` establishes a boundary over visible lower history. `Required` also establishes one without lower history, such as a first popup in a child region. A registered or default blocker is used when lower output is preserved. These policies do not change the game-defined enabled state or disabled styling of controls.
 
 Use `NavigationDefinition.Build` and `route.AddChildRegion(...)` when defining a hierarchy. Register each region's factories through `ScreenCatalog.Build(definition, ...)`. Factories can also register child construction through `creation.RegisterScreens(...)` after acquiring a parent scene's references. See the [region example](src/MackySoft.Navigathena/README.md#child-regions).
 
@@ -489,6 +499,8 @@ A blocker supplies the view between an input-blocking popup and the screens belo
 Set `NavigationHostOptions.DefaultBlocker` to a `BlockerDefinition` for a reusable default. A region's `RegisterBlocker<TRoute>(definition)` supplies a route-specific choice. Share the definition to share one blocker instance within a host, rather than registering a new instance for every region.
 
 Implement `IBlockerPresenter` for its content and, optionally, `IBlockerAnimator` for decoration. `SetScreenContext` supplies the screen context currently associated with the blocker, allowing game-specific help text. Navigathena manages preparation, connection, sorting, animation completion, and termination. When a higher screen hides the lower content, the obsolete blocker is no longer shown.
+
+A shown blocker's pointer surface remains active independently of the associated screen's operation qualification, and is ready before that screen starts `ActivateAsync`. Navigation supplied through `BlockerScreenContext` follows that screen's foreground period: it is available during activation and revoked on departure. Closing that qualification does not itself remove the pointer surface. Decorative exit output does not keep an obsolete boundary active.
 
 ## Dependency injection
 

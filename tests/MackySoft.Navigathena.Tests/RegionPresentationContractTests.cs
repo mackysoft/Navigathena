@@ -179,6 +179,64 @@ public sealed class RegionPresentationContractTests
         Assert.Equal(0, game.Blockers.Single(blocker => blocker.Region == right).Disposals);
     }
 
+    [Fact]
+    public async Task Caller_resumption_does_not_complete_its_call_or_hold_up_an_independent_siblings_navigation ()
+    {
+        Fixture game = new(independentBlockers: true);
+        await using NavigationHost host = game.Host;
+        await game.StartSplitAsync();
+        RegionInstanceId left = game.Region(Left);
+        RegionInstanceId right = game.Region(Right);
+        Screen caller = game.Current(left);
+        TaskCompletionSource opened = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        game.OperationCompleted = result =>
+        {
+            NavigationEntryId top = result.FinalSnapshot.GetRegion(left).Entries.Last();
+            if (result.FinalSnapshot.GetEntry(top).Route is Popup)
+            {
+                opened.TrySetResult();
+            }
+        };
+        Task call = caller.Activity.Navigation.InvokeAsync(new Popup());
+        await opened.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        TaskCompletionSource entered = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource release = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        game.Activating = screen =>
+        {
+            if (!ReferenceEquals(screen, caller))
+            {
+                return default;
+            }
+            entered.TrySetResult();
+            return new ValueTask(release.Task);
+        };
+        Task returning = host.Client.BackAsync(left);
+        Task? sibling = null;
+        try
+        {
+            await entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            Assert.True(caller.Activity.ForegroundToken.IsValid);
+            Assert.True(caller.View.Presentation.InputEnabled);
+            sibling = host.Client.PushAsync(right, Destination.For(new Popup()));
+            await sibling.WaitAsync(TimeSpan.FromSeconds(5));
+            Assert.False(returning.IsCompleted);
+            Assert.False(call.IsCompleted);
+            Assert.True(game.Current(right).View.Presentation.InputEnabled);
+        }
+        finally
+        {
+            release.TrySetResult();
+            await returning.WaitAsync(TimeSpan.FromSeconds(5));
+            if (sibling is not null)
+            {
+                await sibling.WaitAsync(TimeSpan.FromSeconds(5));
+            }
+        }
+        await call.WaitAsync(TimeSpan.FromSeconds(5));
+        Assert.Same(caller, game.Current(left));
+        Assert.Equal(2, caller.Activations);
+    }
+
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -422,6 +480,8 @@ public sealed class RegionPresentationContractTests
         public List<object> Endings { get; } = new();
         private readonly bool parentOwnedBlocker;
         public Func<Screen, ScreenAnimation, Task>? Play { get; set; }
+        public Func<Screen, ValueTask>? Activating { get; set; }
+        public Action<NavigationResult>? OperationCompleted { get; set; }
         public Func<Screen, bool>? FailPrepare { get; set; }
         public Func<Screen, bool>? FailValidation { get; set; }
         public NavigationHost Host { get; }
@@ -433,7 +493,7 @@ public sealed class RegionPresentationContractTests
             NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
             {
                 root.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
-                root.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+                root.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Modal);
                 root.AddRoute<Editor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
                 root.AddRoute<ReleaseEditor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
                 root.AddRoute<Shell>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve, route =>
@@ -444,14 +504,14 @@ public sealed class RegionPresentationContractTests
         {
             hud.AddChildRegion(Details, RegionCompositionMode.Layered, RegionOccupancy.Optional, details => details.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve));
         });
-        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Modal);
         child.AddRoute<Editor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
         child.AddRoute<ReleaseEditor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
     });
     route.AddChildRegion(Right, RegionCompositionMode.Layered, RegionOccupancy.Required, child =>
     {
         child.AddRoute<Hud>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
-        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.BlockInput);
+        child.AddRoute<Popup>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.Modal);
         child.AddRoute<Editor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
         child.AddRoute<ReleaseEditor>(RouteEntryOperations.Push | RouteEntryOperations.Replace | RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRelease);
     });
@@ -487,7 +547,11 @@ public sealed class RegionPresentationContractTests
             });
             Host = NavigationHost.Create(catalog, new NavigationHostOptions
             {
-                DefaultBlocker = sharedRegistration ? null : common
+                DefaultBlocker = sharedRegistration ? null : common,
+                OperationCompleted = result =>
+                {
+                    OperationCompleted?.Invoke(result);
+                }
             });
         }
 
@@ -565,7 +629,7 @@ public sealed class RegionPresentationContractTests
         {
             Activity = activity;
             Activations++;
-            return default;
+            return game.Activating?.Invoke(this) ?? default;
         }
         public ValueTask DeactivateAsync () => default;
         public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;

@@ -3,6 +3,7 @@
   "rootNamespace": "MackySoft.Navigathena.Unity.Tests",
   "references": [
     "MackySoft.Navigathena.Unity",
+    "MackySoft.Navigathena.Samples",
     "MackySoft.Navigathena.VContainer",
     "VContainer",
     "MackySoft.Navigathena.Unity.UIToolkit",

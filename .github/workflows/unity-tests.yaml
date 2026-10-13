@@ -29,8 +29,10 @@ jobs:
       fail-fast: false
       matrix:
         configuration:
-          - unity-6
-          - unity-2021
+          # Cover the minimum supported editor and distinct native input-admission APIs.
+          - unity-2021 # PreventDefault.
+          - unity-2023 # IgnoreEvent and PreventDefault.
+          - unity-6 # IgnoreEvent.
     steps:
       - uses: actions/checkout@v5
         with:

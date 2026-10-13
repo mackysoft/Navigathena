@@ -459,8 +459,8 @@ public sealed class ScreenRuntimeContractTests
         {
             root.AddRoute<FirstRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.HideAndRetain);
             root.AddRoute<SecondRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.HideAndRetain);
-            root.AddRoute<ModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
-            root.AddRoute<CustomModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
+            root.AddRoute<ModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Modal);
+            root.AddRoute<CustomModalRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Modal);
         });
         ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(Root, screens =>
         {
@@ -780,7 +780,7 @@ public sealed class ScreenRuntimeContractTests
 
         public ValueTask ActivateAsync (Route route, ScreenActivityContext activity)
         {
-            Assert.False(View.Presentation.InputEnabled);
+            Assert.True(activity.ForegroundToken.IsValid);
             Activities.Add(activity);
             events.Enqueue(name + ".activate");
             return default;

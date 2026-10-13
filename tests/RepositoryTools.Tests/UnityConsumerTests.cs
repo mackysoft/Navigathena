@@ -20,6 +20,7 @@ public sealed class UnityConsumerTests : IDisposable
         JsonElement dependencies = manifest.RootElement.GetProperty("dependencies");
         Assert.Equal("unitask-git-package", dependencies.GetProperty("com.cysharp.unitask").GetString());
         Assert.Equal("2.9.1", dependencies.GetProperty("com.unity.addressables").GetString());
+        Assert.Equal("1.20.0", dependencies.GetProperty("com.unity.inputsystem").GetString());
         Assert.Contains("m_EditorVersion: 6000.5.5f1", File.ReadAllText(Path.Combine(temporary.FullName, "ProjectSettings", "ProjectVersion.txt")));
     }
 
@@ -45,13 +46,36 @@ public sealed class UnityConsumerTests : IDisposable
         Assert.False(manifest.RootElement.GetProperty("dependencies").TryGetProperty("com.mackysoft.navigathena", out _));
     }
 
+    [Fact]
+    public void Results_require_all_adapter_and_device_tests ()
+    {
+        string results = Path.Combine(temporary.FullName, "results");
+        Directory.CreateDirectory(results);
+        XDocument report = new(new XElement("test-run", PassedAssembly("MackySoft.Navigathena.Unity.Tests.dll")));
+        string path = Path.Combine(results, "results.xml");
+        report.Save(path);
+
+        Assert.Throws<InvalidDataException>(() => UnityConsumer.VerifyResults(results));
+        report.Root!.Add(PassedAssembly("MackySoft.Navigathena.Unity.InputSystem.Tests.dll"));
+        report.Save(path);
+        UnityConsumer.VerifyResults(results);
+        report.Root!.Elements("test-suite").Last().SetAttributeValue("result", "Failed");
+        report.Save(path);
+        Assert.Throws<InvalidDataException>(() => UnityConsumer.VerifyResults(results));
+    }
+
+    private static XElement PassedAssembly (string name) => new("test-suite",
+        new XAttribute("type", "Assembly"), new XAttribute("name", name), new XAttribute("total", 1),
+        new XAttribute("passed", 1), new XAttribute("result", "Passed"),
+        new XElement("properties", new XElement("property", new XAttribute("name", "platform"), new XAttribute("value", "PlayMode"))));
+
     private void Configure (string configuration)
     {
         string project = temporary.FullName;
         Directory.CreateDirectory(Path.Combine(project, "Assets"));
         Directory.CreateDirectory(Path.Combine(project, "Packages"));
         Directory.CreateDirectory(Path.Combine(project, "ProjectSettings"));
-        File.WriteAllText(Path.Combine(project, "Packages", "manifest.json"), "{\"dependencies\":{\"com.cysharp.unitask\":\"unitask-git-package\",\"com.unity.addressables\":\"2.9.1\",\"com.unity.ugui\":\"2.5.0\",\"com.github-glitchenzo.nugetforunity\":\"nugetforunity-git-package\"}}");
+        File.WriteAllText(Path.Combine(project, "Packages", "manifest.json"), "{\"dependencies\":{\"com.cysharp.unitask\":\"unitask-git-package\",\"com.unity.addressables\":\"2.9.1\",\"com.unity.inputsystem\":\"1.20.0\",\"com.unity.ugui\":\"2.5.0\",\"com.github-glitchenzo.nugetforunity\":\"nugetforunity-git-package\"}}");
         File.WriteAllText(Path.Combine(project, "ProjectSettings", "ProjectVersion.txt"), "m_EditorVersion: 6000.5.5f1\n");
         string[] packages =
         [

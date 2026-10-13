@@ -1,5 +1,6 @@
 using MackySoft.Navigathena.Unity;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace MackySoft.Navigathena.Samples.Common.Confirmation
 {
@@ -7,19 +8,25 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
     public sealed class ConfirmationPopupRegistration : MonoBehaviour
     {
         [SerializeField] private ConfirmationPopupView prefab = null!;
+        [SerializeField] private EventSystem eventSystem = null!;
 
         public void DefineRoutes (RootRegionDefinitionBuilder root)
         {
-            root.AddRoute<ConfirmationRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.BlockInput);
+            root.AddRoute<ConfirmationRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Modal);
         }
 
         public void RegisterScreens (RegionScreenCatalogBuilder screens)
         {
+            if (eventSystem == null)
+            {
+                throw new NavigationConfigurationException("Assign the confirmation popup's EventSystem before registering its screens.");
+            }
             ConfirmationPopupView configuredPrefab = prefab;
+            EventSystem configuredEventSystem = eventSystem;
             screens.RegisterScreen(new ScreenDefinition<ConfirmationRoute, bool>(async (creation, token) =>
             {
                 ConfirmationPopupView view = await creation.AcquireScreenAsync(configuredPrefab, token);
-                return creation.Lifetime.CreateOwned(() => new ConfirmationPresenter(view));
+                return creation.Lifetime.CreateOwned(() => new ConfirmationPresenter(view, configuredEventSystem));
             }, ScreenInstancePolicy.Multiple));
         }
     }

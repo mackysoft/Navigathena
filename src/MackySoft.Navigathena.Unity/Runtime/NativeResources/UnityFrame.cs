@@ -1,4 +1,5 @@
 using System.Threading;
+using System.Threading.Tasks;
 
 #if NAVIGATHENA_UNITASK
 using FrameAwaitable = Cysharp.Threading.Tasks.UniTask;
@@ -12,6 +13,9 @@ namespace MackySoft.Navigathena.Unity.NativeResources
 {
     internal static class UnityFrame
     {
+        // Adapter assemblies depend on this stable boundary, not the optional awaitable's assembly.
+        internal static async ValueTask WaitNextAsync (CancellationToken cancellationToken) => await NextAsync(cancellationToken);
+
         // Return the selected awaitable directly, without another async state machine for each frame.
         internal static FrameAwaitable NextAsync (CancellationToken cancellationToken)
         {

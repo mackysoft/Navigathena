@@ -37,19 +37,19 @@ public sealed class PresentationCarrierContractTests
             transition.BeforeComposition,
             new[]
             {
-                (main.Id, new PresentationParticipation(true, true, true, true)),
-                (homeEntry.Id, new PresentationParticipation(true, true, true, true)),
-                (noticeEntry.Id, new PresentationParticipation(true, true, true, true)),
+                (main.Id, new PresentationParticipation(true, true, true)),
+                (homeEntry.Id, new PresentationParticipation(true, true, true)),
+                (noticeEntry.Id, new PresentationParticipation(true, true, true)),
             },
             Array.Empty<InputBoundary>());
         AssertComposition(
             transition.ProposedComposition,
             new[]
             {
-                (main.Id, new PresentationParticipation(false, false, false, false)),
-                (homeEntry.Id, new PresentationParticipation(false, false, false, false)),
-                (noticeEntry.Id, new PresentationParticipation(false, false, false, false)),
-                (overlayEntry.Id, new PresentationParticipation(true, true, true, true)),
+                (main.Id, new PresentationParticipation(false, false, false)),
+                (homeEntry.Id, new PresentationParticipation(false, false, false)),
+                (noticeEntry.Id, new PresentationParticipation(false, false, false)),
+                (overlayEntry.Id, new PresentationParticipation(true, true, true)),
             },
             new[] { new InputBoundary(host.Root, overlayEntry.Id) });
         AssertComposition(update.BeforeComposition, transition.BeforeComposition.Presentations.Select(presentation => (presentation.EntryId, presentation.Participation)), transition.BeforeComposition.InputBoundaries);

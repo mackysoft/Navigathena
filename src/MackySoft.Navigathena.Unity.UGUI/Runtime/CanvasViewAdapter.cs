@@ -7,9 +7,12 @@ using UnityEngine.UI;
 namespace MackySoft.Navigathena.Unity.UGUI
 {
     /// <summary>Controls an independently sorted Canvas and its raycaster without changing Selectable.interactable.</summary>
-    /// <remarks>Own the Canvas and GraphicRaycaster exclusively. Game input subscriptions belong to screen activity. Custom input modules must not force selection into a closed screen.</remarks>
+    /// <remarks>
+    /// Own the Canvas and GraphicRaycaster exclusively. The application selects a foreground control in
+    /// ActivateAsync and keeps explicit navigation links within that screen.
+    /// This adapter releases existing selection when input closes; it does not filter uGUI's automatic navigation search.
+    /// </remarks>
     [RequireComponent(typeof(Canvas), typeof(GraphicRaycaster))]
-    [DefaultExecutionOrder(-32000)]
     public sealed class CanvasViewAdapter : MonoBehaviour, IViewAdapter
     {
         [SerializeField] private bool presentBeforeNavigation;
@@ -65,7 +68,10 @@ namespace MackySoft.Navigathena.Unity.UGUI
             raycaster!.enabled = presentation.OutputEnabled && presentation.InputEnabled;
             canvas.enabled = presentation.OutputEnabled;
             Presentation = presentation;
-            ClearClosedSelection();
+            if (!presentation.OutputEnabled || !presentation.InputEnabled)
+            {
+                ReleaseSelection();
+            }
         }
 
         private void Update ()
@@ -73,17 +79,14 @@ namespace MackySoft.Navigathena.Unity.UGUI
             if (!IsAlive)
             {
                 ReportLoss();
-                return;
             }
-
-            ClearClosedSelection();
         }
 
-        private void ClearClosedSelection ()
+        private void ReleaseSelection ()
         {
             EventSystem system = EventSystem.current;
             GameObject? selected = system != null ? system.currentSelectedGameObject : null;
-            if (!Presentation.InputEnabled && system != null && selected != null && selected.transform.IsChildOf(transform))
+            if (system != null && selected != null && selected.transform.IsChildOf(transform))
             {
                 system.SetSelectedGameObject(null!);
             }
@@ -91,6 +94,7 @@ namespace MackySoft.Navigathena.Unity.UGUI
 
         private void OnDisable () => ReportLoss();
         private void OnDestroy () => ReportLoss();
+
         private void ReportLoss ()
         {
             if (lost || Lost is null)
@@ -99,7 +103,18 @@ namespace MackySoft.Navigathena.Unity.UGUI
             }
 
             lost = true;
-            Lost.Invoke("The registered Canvas or its input boundary is no longer available.");
+            if (raycaster != null)
+            {
+                raycaster.enabled = false;
+            }
+            try
+            {
+                Lost.Invoke("The registered Canvas or its input boundary is no longer available.");
+            }
+            finally
+            {
+                ReleaseSelection();
+            }
         }
     }
 }

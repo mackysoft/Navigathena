@@ -38,6 +38,16 @@ Use `creation.Lifetime` and `initialization.Lifetime` to register resources owne
 
 `InitializeAsync(initialization, token)` runs once per instance; `PrepareAsync(route, preparation, token)` runs for the current history input. Both can report typed progress. `TerminateAsync(progress)` stops screen-specific work, then acquisitions receive `ReleaseAsync(progress)` for the ending operation. Normal owned objects and DI scopes retain their standard disposal contracts. Progress is observational: initialization and preparation must finish, then visual effects must finish, before `ActivateAsync` and input opening.
 
+`ActivateAsync` starts each foreground entry period after required preparation and entry effects. `DeactivateAsync` ends it before departure or cover effects, including when a popup leaves the lower screen visible. Every retained return receives a new activation context, without normally repeating `InitializeAsync` or `PrepareAsync`. Operation subscriptions belong to that period; display updates, game simulation and binding-owned work have separate lifetimes.
+
+`ActivateAsync` is the application's operation entry. Native input admission and ordering for all affected views are ready before it starts. Establish operation subscriptions, retain `activity.ForegroundToken`, and choose and set initial or returning focus using application-owned UI code in that callback. User input is permitted during activation; prerequisites for operation belong in initialization, content preparation, or presentation effects. A later return supplies a new valid `ScreenForegroundToken`; an old token never becomes valid again.
+
+The token is an immutable value. Its `IsValid` represents eligibility during that foreground period; copies share the same period and become invalid together before native focus-loss or cancellation callbacks. Its `CancellationToken` signals the period's end for work that must end with it. Native admission closes and the token becomes invalid before `DeactivateAsync`, where operation subscriptions are removed. Transition suspension, failed publication, presentation loss, and shutdown also end foreground availability. A partially failed activation closes qualification and native input before deactivation cleanup.
+
+The application decides whether its game operations may run. Retain the `ScreenForegroundToken` supplied by `ActivateAsync`. A field starts with the invalid `default` value before the first activation. Check `foregroundToken.IsValid` when an operation starts; an invalid token rejects the operation. A covered screen has no valid foreground token. Subscriptions needed for background display or game processing must use their own appropriate lifetime, not this operation-subscription period.
+
+For work that must remain within one foreground period, capture the foreground token at the operation's start. Check that token's `IsValid` before applying an asynchronous result, and pass its `CancellationToken` to cancellable work. Do not substitute a new foreground token received on return: it authorizes new operations, not continuation of work from an expired period.
+
 Owned objects and acquisitions share one registration sequence and release in reverse order. Register dependencies before their users. At screen termination, preparation lifetimes release before the instance lifetime; perform final operations using initialization or preparation resources in `TerminateAsync`, while they remain available. See [ownership and shutdown](https://mackysoft.github.io/Navigathena/#ownership-and-shutdown) for release failures and external owners.
 
 `activity.StartWork` schedules a continuation owned by the screen's current history binding. It survives activity suspension; ending the binding cancels and awaits it before cleanup. `ScreenWork.WaitAsync` includes the entire callback and asynchronous `finally` blocks. Canceling that wait leaves execution running; `ScreenWork.Cancel` requests execution cancellation. A finished callback's exception remains observable without preventing cleanup. See [screen-owned asynchronous work](https://mackysoft.github.io/Navigathena/#screen-owned-asynchronous-work).
@@ -51,6 +61,8 @@ Your application owns the host's lifetime. Resetting the root region does not sh
 Use `Reset` to return to a starting point, or `ReplaceFromAsync` to replace a specific history entry and the entries above it. Set `NavigationOptions.RecreateInstance` to recreate the destination and its initial child screens, including their screen scopes. `Reload` rebuilds screen instances while preserving the current route and child history; it does not create a new visit.
 
 `LowerPresentationPolicy` applies to lower screens in the same region and their children. For example, place a HUD, menu, and editor screen in the same history, and give the editor `HideAndRetain` to hide the lower UI without destroying it. `Back` then returns to the menu. Parent and unrelated regions are not implicitly hidden. Shared blockers reuse one instance per definition across regions.
+
+`Preserve` retains lower output and instances, with a boundary when lower history is visible. `Modal` retains the same output and instances but always requires a boundary. Covered screens leave their activation periods in both cases; their rendering and independently owned work can continue. Output, retention and the input boundary are separate policy settings. `LowerPresentationBoundary.WhenLowerVisible` establishes a boundary over visible lower history; `Required` also establishes one without lower history, for example for a first popup in a child region. A registered or default blocker is used when lower output is preserved. Use distinct blocker definitions for simultaneously active independent regions.
 
 ## Child regions
 
@@ -138,7 +150,7 @@ Within a screen, use `ScreenActivityContext.Navigation`. From outside a screen, 
 | --- | --- |
 | `Push`, `Replace`, `Reset`, `Back`, `Reload` | Submit a request and return a `NavigationOperation`. Returning from the call does not mean the transition has completed. |
 | `PushAsync`, `ReplaceAsync`, `ResetAsync`, `BackAsync`, `ReloadAsync` | Extension methods that return a `Task` completing when the transition finishes. |
-| `InvokeAsync(Route, …)` | Wait for the called screen to close and release its resources. Calls made from a screen also wait for the caller to resume activity. |
+| `InvokeAsync(Route, …)` | Wait for the called screen to close and release its resources. Calls made from a screen also wait for the caller's returning `ActivateAsync` to complete. |
 | `InvokeAsync<TResult>(Route<TResult>, …)` | Wait for the same cleanup, then return `TResult`. Closing without an answer cancels the call. |
 
 Asynchronous navigation methods take the target, options, and `CancellationToken` in that order. Use a named argument to pass a token without specifying options.

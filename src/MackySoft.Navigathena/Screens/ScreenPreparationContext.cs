@@ -1,6 +1,6 @@
 namespace MackySoft.Navigathena
 {
-    /// <summary>Input-specific preparation and lifetime for one displayed history entry; never a DI registration context.</summary>
+    /// <summary> Provides route-specific content preparation and resource ownership before entry effects; never a DI registration context. </summary>
     public sealed class ScreenPreparationContext
     {
         internal ScreenPreparationContext (NavigationEntry entry, LifetimeContext lifetime, ScreenPreparationReason reason, NavigationProgressReporter progress)

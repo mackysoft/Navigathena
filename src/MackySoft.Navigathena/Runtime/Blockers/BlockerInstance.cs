@@ -19,7 +19,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
         private CancellationTokenSource? animationCancellation;
         private Task? termination;
         private long generation;
-        private bool connected;
+        private bool navigationEnabled;
         private bool ending;
         private bool shown;
         private readonly IDisposable? parentUsage;
@@ -71,11 +71,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
             }
         }
 
-        public void CloseInput ()
-        {
-            connected = false;
-            Apply(shown, false);
-        }
+        public void CloseNavigation () => navigationEnabled = false;
 
         public void Connect (ScreenInstance screen)
         {
@@ -86,23 +82,19 @@ namespace MackySoft.Navigathena.Runtime.Blockers
 
             generation++;
             long connection = generation;
-            connected = false;
+            navigationEnabled = false;
             Screen = screen;
             OrderAnchor = screen;
-            presenter?.SetScreenContext(new BlockerScreenContext(screen.Entry, screen.ConnectNavigation(() => generation == connection && connected && !IsEnding)));
+            presenter?.SetScreenContext(new BlockerScreenContext(screen.Entry, screen.ConnectNavigation(() => generation == connection && navigationEnabled && !IsEnding)));
         }
 
-        public void OpenInput ()
-        {
-            connected = shown && Screen?.IsActive == true && !IsEnding;
-            Apply(shown, connected);
-        }
+        public void OpenNavigation () => navigationEnabled = shown && Screen is not null && !IsEnding;
 
         public void Show (bool animate)
         {
             bool alreadyShown = shown;
             shown = true;
-            Apply(true, false);
+            Apply(true);
             if (alreadyShown)
             {
                 InvalidateAnimation(true);
@@ -119,19 +111,19 @@ namespace MackySoft.Navigathena.Runtime.Blockers
         public void Hide (bool animate)
         {
             generation++;
-            connected = false;
+            navigationEnabled = false;
             Screen = null;
             presenter?.SetScreenContext(null);
             InvalidateAnimation(animate);
             shown = false;
             if (animate && presenter is IBlockerAnimator)
             {
-                Apply(true, false);
+                Apply(true);
                 BeginAnimation(false);
             }
             else
             {
-                Apply(false, false);
+                Apply(false);
                 OrderAnchor = null;
             }
         }
@@ -192,7 +184,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
                     animator.SetAppearanceImmediately(enter);
                     if (!enter)
                     {
-                        Apply(false, false);
+                        Apply(false);
                         OrderAnchor = null;
                     }
                 }
@@ -203,19 +195,21 @@ namespace MackySoft.Navigathena.Runtime.Blockers
             catch (Exception exception)
             {
                 ending = true;
-                connected = false;
+                navigationEnabled = false;
                 reportFailure(this, exception.Message);
                 throw;
             }
         }
 
-        private void Apply (bool output, bool input)
+        private void Apply (bool output)
         {
             foreach (ViewRegistration view in Preparation.Registrations)
             {
                 if (view.Adapter.IsAlive)
                 {
-                    view.Apply(new ViewPresentation(output, input, view.Adapter.Presentation.Order));
+                    // A shown boundary intercepts pointers independently of navigation
+                    // qualification. Exit decoration may remain after the boundary is hidden.
+                    view.Apply(new ViewPresentation(output, output && shown, view.Adapter.Presentation.Order));
                 }
                 else if (output)
                 {

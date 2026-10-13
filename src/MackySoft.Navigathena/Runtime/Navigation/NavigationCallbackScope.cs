@@ -9,6 +9,22 @@ namespace MackySoft.Navigathena.Runtime.Navigation
         private static readonly AsyncLocal<Invocation?> Executing = new();
         public static bool IsExecuting => Executing.Value?.active == true;
 
+        public static void Run (Action callback)
+        {
+            Invocation? previous = Executing.Value;
+            Invocation invocation = new();
+            Executing.Value = invocation;
+            try
+            {
+                callback();
+            }
+            finally
+            {
+                invocation.active = false;
+                Executing.Value = previous;
+            }
+        }
+
         public static async ValueTask RunAsync (Func<ValueTask> callback)
         {
             Invocation? previous = Executing.Value;
