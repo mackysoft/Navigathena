@@ -20,19 +20,21 @@ The adapter controls `Canvas.enabled`, `GraphicRaycaster.enabled`, and sorting. 
 
 ## Foreground focus and navigation
 
-Use the standard uGUI `EventSystem` and input module. Implement `IScreenForegroundLifecycleHandler` on the screen's presenter and set the initial or returning selection in `OnForegroundAvailable`, after Navigathena has opened the foreground view and published blockers and ordering:
+Use the standard uGUI `EventSystem` and input module. In the screen's `ActivateAsync`, establish operation subscriptions, retain `activity.ForegroundToken`, and set the initial or returning selection. Native input admission, ordering, and the selected blocker's pointer surface are ready before this callback starts:
 
 ```csharp
 private ScreenForegroundToken foregroundToken;
 
-public void OnForegroundAvailable (ScreenForegroundToken foreground)
+public ValueTask ActivateAsync (ConfirmationRoute route, ScreenActivityContext<bool> activity)
 {
-    foregroundToken = foreground;
+    foregroundToken = activity.ForegroundToken;
+    // Establish this period's operation subscriptions before setting focus.
     eventSystem.SetSelectedGameObject(view.Decline.gameObject);
+    return default;
 }
 ```
 
-The application supplies the screen's `EventSystem` to its presenter and chooses the target. The [confirmation popup sample](https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples/Common/Confirmation) selects **Decline** on both initial entry and return. It does not need an `OnForegroundUnavailable` callback. Navigathena does not choose a default button or restore a previously selected control.
+The application supplies the screen's `EventSystem` to its presenter and chooses the target. The [confirmation popup sample](https://github.com/mackysoft/Navigathena/tree/main/tests/Unity/Assets/Samples/Common/Confirmation) selects **Decline** on both initial entry and return, and removes its operation subscriptions in `DeactivateAsync`. Navigathena does not choose a default button or restore a previously selected control.
 
 Set each control's Navigation mode to **Explicit** and keep all four directional links within the same screen, or leave a direction unset. Apply the same rule to controls added at runtime. Explicit navigation follows those links without searching other screens, so keyboard and gamepad movement stays within the foreground screen. Automatic navigation searches uGUI's global selectable set and is not isolated by this adapter.
 
@@ -46,7 +48,7 @@ Keep the adapter and its GameObject enabled while they are registered; disabling
 
 ## Application operations
 
-Keep screen activity subscriptions in `ActivateAsync` and remove them in `DeactivateAsync`. Activity can continue while covered, so an activity subscription alone does not mean the screen may execute a user operation. The confirmation popup keeps the `ScreenForegroundToken` supplied by `OnForegroundAvailable`. Its field starts with the invalid `default` value before the first notification, and a token becomes invalid when its foreground period ends. Its Accept listener, registered in `ActivateAsync`, checks that eligibility at the application's operation entry point:
+Establish operation subscriptions in each `ActivateAsync` and remove them in each `DeactivateAsync`, including modal cover and return. Keep display updates and game processing on their own appropriate lifetime. The confirmation popup keeps `activity.ForegroundToken` from activation. Its field starts with the invalid `default` value before the first activation, and a token becomes invalid before native selection-loss or cancellation callbacks. Its Accept listener checks that eligibility at the application's operation entry point:
 
 ```csharp
 accept = () =>
@@ -59,9 +61,9 @@ accept = () =>
 view.Accept.onClick.AddListener(accept);
 ```
 
-The sample applies the same check to Decline and Close. Navigathena supplies the foreground eligibility token; the application decides whether to execute its result handling or other game logic. A returning screen receives a fresh token without resubscribing if its activity continued. The old token remains invalid, so an end callback is not needed just to clear this field.
+The sample applies the same check to Decline and Close. Navigathena supplies the foreground eligibility token; the application decides whether to execute its result handling or other game logic. A returning screen runs `ActivateAsync` again and receives a fresh token. The old token remains invalid, so an extra end callback is not needed just to clear this field.
 
-For asynchronous game work, capture `foregroundToken` when the operation starts. Before applying a result after an await, check the captured token's `IsValid`, not the presenter's latest token. A return to the foreground must not authorize work from an expired period. Pass the token's `CancellationToken` to work that supports cancellation. See [lifecycle and ownership](https://mackysoft.github.io/Navigathena/src/MackySoft.Navigathena/README.html#lifecycle-and-ownership).
+For work whose result is valid only during one foreground period, capture `foregroundToken` when the operation starts. Before applying a result after an await, check the captured token's `IsValid`, not the presenter's latest token. A return to the foreground must not authorize a result from an expired period. Pass the token's `CancellationToken` only to work that must end with that period. Accepted operations that must survive modal cover use their own lifetime or screen-owned `ScreenWork`; foreground revocation does not automatically cancel them. See [lifecycle and ownership](https://mackysoft.github.io/Navigathena/src/MackySoft.Navigathena/README.html#lifecycle-and-ownership).
 
 This application-level check does not cancel native pointer state or suppress uGUI's own control updates. The raycaster gate, explicit navigation, and application operation checks have separate responsibilities.
 

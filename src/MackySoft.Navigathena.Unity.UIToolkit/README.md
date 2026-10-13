@@ -32,6 +32,8 @@ Keep application controls within `ContentRoot`. The host owns the surrounding hi
 
 ## Observe screen input permission
 
+Establish operation subscriptions, retain `activity.ForegroundToken`, and set initial or returning focus with the control's native `Focus()` in `ActivateAsync`. All affected adapters have finished applying input admission before this callback starts; controls can receive input and an input session can be captured. Remove operation subscriptions in `DeactivateAsync`, including cover by a popup. Display updates and separately owned work do not end with that subscription period.
+
 `TryCaptureInput` observes the currently permitted input period. `UiInputSession` exposes only its validity and revocation token; it does not operate individual controls or choose focus targets.
 
 Capture one session when a user operation starts and retain it across awaits:
@@ -66,7 +68,7 @@ async Task RefreshAsync()
 
 `IsValid` and `Revoked` describe the captured screen input permission. Closing and reopening a screen never revives an old session. The permission period is distinct from a control's availability and the screen's work lifetime: a retained screen can keep working while its input is blocked. Query UI state on the Unity player thread.
 
-Controls within a blocked view cannot acquire native focus, including through direct `Focus()` calls or dynamically added controls. Navigation's pointer blockers intercept physical input without granting focus eligibility to their controls. The framework does not write application controls' enabled state, `focusable`, or `tabIndex`; game-defined availability and disabled styling remain the application's responsibility.
+Controls in a managed view whose input permission is closed cannot acquire native focus, including through direct `Focus()` calls or dynamically added controls. Navigation's pointer blockers intercept physical input without granting focus eligibility to their controls. The framework does not write application controls' enabled state, `focusable`, or `tabIndex`; game-defined availability and disabled styling remain the application's responsibility.
 
 ## Responsibility boundary
 
