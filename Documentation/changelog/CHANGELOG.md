@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-preview.4] - 2026-10-13
+
+### Added
+
+- Added `ScreenActivityContext.ForegroundToken` for checking whether a screen may accept a game operation during its current foreground period. `ScreenForegroundToken` is an immutable value: `default` is invalid, copies expire together, and returning to the foreground issues a new token. (#27)
+- Added `IUiToolkitView.ContentRoot`, `TryCaptureInput`, and `UiInputSession` for accessing managed UI Toolkit content and retaining an input-permission period across asynchronous work. An expired session never becomes valid again. (#27)
+- Added `IViewPresentationBatchAdapter`, `IViewPresentationBatch`, and presentation change sets for adapters that must settle native event dispatch before applying related view permissions. `ViewPresentation.InputMode` distinguishes ordinary screen input from pointer-only blocker input. (#27)
+
+### Changed
+
+- **Breaking:** Changed `ActivateAsync` to start each foreground operation period after preparation, entry effects, native input admission, ordering, and pointer boundaries are ready. Input and native focus are available when the callback starts; navigation still awaits its completion. (#27)
+  - Establish operation subscriptions, retain `activity.ForegroundToken`, and set initial or returning focus in `ActivateAsync`. Remove operation subscriptions in `DeactivateAsync`, after qualification and native input have closed.
+  - Covering a screen calls `DeactivateAsync`; returning calls `ActivateAsync` with a fresh token. An ordinary retained return repeats neither `InitializeAsync` nor `PrepareAsync`.
+  - Keep display updates, game simulation, and work that must survive a popup on their own lifetimes. Deactivation does not hide or destroy the screen, or pause the game.
+- **Breaking:** Replaced `LowerPresentationInput` with `LowerPresentationBoundary` in `LowerPresentationPolicy`. Replace `LowerPresentationPolicy.BlockInput` with `Modal`. `Preserve` retains lower output and instances but no longer permits covered screens to operate; `Modal` additionally requires a boundary without visible lower history. Parent and unrelated regions remain independently scoped. (#27)
+- **Breaking:** Replaced `PresentationParticipation.SemanticInputEligible` with the derived `ActivityEligible` property and removed the fourth constructor argument. This property describes composition eligibility, not completed preparation or native input admission; use `ScreenForegroundToken.IsValid` for live application operation qualification. (#27)
+- **Breaking:** Changed UI Toolkit screen setup to host-owned native documents and separate panels. Assign UXML to `UiToolkitViewAdapter.ContentAsset`, remove `UIDocument` from managed prefabs, create `UiToolkitPresentationHost` from a `PanelSettings` template, and acquire screens through `AcquireUiToolkitScreenAsync`. Keep application controls under the returned `ContentRoot`; the host does not modify the shared settings asset. (#27)
+- Changed GitHub releases to use the matching CHANGELOG entry and publish as Latest, including versions with a preview suffix.
+
+### Fixed
+
+- Fixed registered background UI Toolkit content acquiring native focus or receiving input, including direct `Focus()` calls, traversal, and dynamically added controls. Closing input releases owned focus and pointer captures without changing controls' enabled state, `focusable`, `tabIndex`, or disabled styling. (#27)
+- Fixed uGUI view loss leaving native input or selection available. Losing a registered view now closes its raycaster and revokes operation qualification before selection cleanup, without selection polling or script execution-order requirements. (#27)
+  - Use the standard `EventSystem` and input module, and keep Explicit navigation links within each screen. Automatic navigation and arbitrary external selection calls are not filtered; closing the raycaster does not cancel a press or drag already held by the input module. `Selectable.interactable` and disabled styling remain unchanged.
+- Fixed shown pointer blockers losing interception while their associated screen is entering an asynchronous activation. The pointer surface follows the shown boundary independently of screen navigation qualification, so mouse and touch input cannot pass through that surface while activation awaits. Obsolete exit decoration does not retain an input boundary. (#27)
+
 ## [2.0.0-preview.3] - 2026-10-09
 
 ### Changed
