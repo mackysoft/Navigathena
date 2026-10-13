@@ -256,22 +256,22 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
                 }
             }
             List<Exception> failures = new();
-            foreach (ViewInputGrant grant in revoked)
+            foreach (UiToolkitViewBinding binding in views)
             {
                 try
                 {
-                    grant.NotifyRevocation();
+                    binding.CloseNativeOperations();
                 }
                 catch (Exception exception)
                 {
                     failures.Add(exception);
                 }
             }
-            foreach (UiToolkitViewBinding binding in views)
+            foreach (ViewInputGrant grant in revoked)
             {
                 try
                 {
-                    binding.CloseNativeOperations();
+                    grant.NotifyRevocation();
                 }
                 catch (Exception exception)
                 {

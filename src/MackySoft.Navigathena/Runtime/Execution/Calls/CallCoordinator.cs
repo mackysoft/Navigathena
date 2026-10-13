@@ -316,7 +316,8 @@ namespace MackySoft.Navigathena.Runtime.Execution
             foreach (CallRecord call in pending)
             {
                 if (!call.Completion.IsCompleted && !call.Discarded && call.Owner is NavigationEntryId owner
-                    && screens.Find(state.Current.GetPresentation(owner))?.IsActive != true)
+                    && (screens.Find(state.Current.GetPresentation(owner)) is not ScreenInstance callerScreen
+                        || !callerScreen.IsActivationComplete || !callerScreen.Presentation.InputEnabled))
                 {
                     continue;
                 }

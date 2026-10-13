@@ -23,13 +23,12 @@ namespace MackySoft.Navigathena.Runtime.Composition
                 availableTrees.Add(entry.Id, treeAvailable);
                 bool retained = item.Policy.Retention == LowerPresentationRetention.Retain;
                 bool output = treeAvailable && retained && item.Policy.Output == LowerPresentationOutput.Preserve;
-                bool activity = treeAvailable && retained && item.Policy.Activity == LowerPresentationActivity.Continue;
                 bool foreground = treeAvailable && item.Foreground;
                 effective.Add(new EffectivePresentation(entry.Id, available
-                    ? new PresentationParticipation(true, foreground, output, activity)
+                    ? new PresentationParticipation(true, foreground, output)
                     : PresentationParticipation.Unavailable));
 
-                // A visible lower screen requires a pointer boundary even when its activity continues.
+                // Retained output does not authorize operation of a covered screen.
                 LowerPresentationPolicy ownPolicy = definition.GetRoute(entry.RouteDefinitionKey.RegionId, entry.Route).LowerPresentationPolicy;
                 if (output && foreground && (ownPolicy.Boundary == LowerPresentationBoundary.Required || outputRegions.Contains(entry.RegionId)))
                 {
@@ -55,7 +54,7 @@ namespace MackySoft.Navigathena.Runtime.Composition
         {
             List<ScopedPresentation> order = new();
             AppendRegion(definition, state, state.RootRegionInstanceId,
-                new InheritedPresentationPolicy(LowerPresentationOutput.Preserve, LowerPresentationActivity.Continue, LowerPresentationRetention.Retain), true, order);
+                new InheritedPresentationPolicy(LowerPresentationOutput.Preserve, LowerPresentationRetention.Retain), true, order);
             order.Reverse();
             return order;
         }
@@ -80,12 +79,11 @@ namespace MackySoft.Navigathena.Runtime.Composition
                 LowerPresentationPolicy lower = route.LowerPresentationPolicy;
                 policy = new InheritedPresentationPolicy(
                     policy.Output == LowerPresentationOutput.Hide ? policy.Output : lower.Output,
-                    policy.Activity == LowerPresentationActivity.Suspend ? policy.Activity : lower.Activity,
                     policy.Retention == LowerPresentationRetention.Release ? policy.Retention : lower.Retention);
             }
         }
 
-        private sealed record InheritedPresentationPolicy (LowerPresentationOutput Output, LowerPresentationActivity Activity, LowerPresentationRetention Retention);
+        private sealed record InheritedPresentationPolicy (LowerPresentationOutput Output, LowerPresentationRetention Retention);
         private sealed record ScopedPresentation (NavigationEntryId EntryId, InheritedPresentationPolicy Policy, bool Foreground);
     }
 

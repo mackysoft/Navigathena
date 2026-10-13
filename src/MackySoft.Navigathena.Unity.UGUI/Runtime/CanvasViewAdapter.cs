@@ -9,7 +9,7 @@ namespace MackySoft.Navigathena.Unity.UGUI
     /// <summary>Controls an independently sorted Canvas and its raycaster without changing Selectable.interactable.</summary>
     /// <remarks>
     /// Own the Canvas and GraphicRaycaster exclusively. The application selects a foreground control in
-    /// IScreenForegroundLifecycleHandler.OnForegroundAvailable and keeps explicit navigation links within that screen.
+    /// ActivateAsync and keeps explicit navigation links within that screen.
     /// This adapter releases existing selection when input closes; it does not filter uGUI's automatic navigation search.
     /// </remarks>
     [RequireComponent(typeof(Canvas), typeof(GraphicRaycaster))]
@@ -103,8 +103,18 @@ namespace MackySoft.Navigathena.Unity.UGUI
             }
 
             lost = true;
-            ReleaseSelection();
-            Lost.Invoke("The registered Canvas or its input boundary is no longer available.");
+            if (raycaster != null)
+            {
+                raycaster.enabled = false;
+            }
+            try
+            {
+                Lost.Invoke("The registered Canvas or its input boundary is no longer available.");
+            }
+            finally
+            {
+                ReleaseSelection();
+            }
         }
     }
 }

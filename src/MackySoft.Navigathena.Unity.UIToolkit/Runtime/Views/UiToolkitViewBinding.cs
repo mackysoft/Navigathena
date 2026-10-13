@@ -188,7 +188,9 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
             }
             try
             {
-                grant?.NotifyRevocation();
+                // Report first so navigation revokes its screen qualification before
+                // native focus/capture loss reaches application callbacks.
+                adapter.ReportLoss();
             }
             finally
             {
@@ -198,7 +200,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
                 }
                 finally
                 {
-                    adapter.ReportLoss();
+                    grant?.NotifyRevocation();
                 }
             }
         }

@@ -522,7 +522,7 @@ public sealed class ScreenProgressContractTests
     }
 
     [Fact]
-    public async Task Full_progress_does_not_complete_initialization_or_open_input_before_preparation_settlement_and_activation ()
+    public async Task Full_progress_does_not_admit_input_before_initialization_preparation_and_effect_settlement ()
     {
         Gate initialization = new();
         Gate preparation = new();
@@ -554,9 +554,10 @@ public sealed class ScreenProgressContractTests
                 await preparation.HoldAsync();
                 preparationCompleted = true;
             },
-            Activate = (_, _) =>
+            Activate = (_, activity) =>
             {
                 Assert.True(effect.Settled);
+                Assert.True(activity.ForegroundToken.IsValid);
                 return activation.HoldAsync();
             }
         };
@@ -564,7 +565,9 @@ public sealed class ScreenProgressContractTests
         {
             if (presentation.InputEnabled)
             {
-                Assert.True(handler.Active);
+                Assert.True(initializationCompleted);
+                Assert.True(preparationCompleted);
+                Assert.True(effect.Settled);
             }
         };
         await using NavigationHost host = CreateHost(ScreenInstancePolicy.Single, handler);
@@ -598,7 +601,7 @@ public sealed class ScreenProgressContractTests
             settlement.Open();
             await activation.Entered.WaitAsync(Timeout);
             Assert.True(effect.Settled);
-            Assert.False(handler.View.Presentation.InputEnabled);
+            Assert.True(handler.View.Presentation.InputEnabled);
             Assert.False(operation.WaitAsync().IsCompleted);
             activation.Open();
             await operation.WaitAsync().WaitAsync(Timeout);

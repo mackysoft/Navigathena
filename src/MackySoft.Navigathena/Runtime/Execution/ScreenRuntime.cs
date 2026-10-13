@@ -453,6 +453,10 @@ namespace MackySoft.Navigathena.Runtime.Execution
             }
 
             List<Exception> failures = new();
+            foreach (ScreenInstance screen in screens)
+            {
+                screen.InvalidateForeground();
+            }
             try
             {
                 await Blockers.ShutdownAsync();

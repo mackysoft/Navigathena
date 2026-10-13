@@ -12,7 +12,7 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
 
         public void DefineRoutes (RootRegionDefinitionBuilder root)
         {
-            root.AddRoute<ConfirmationRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity);
+            root.AddRoute<ConfirmationRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Modal);
         }
 
         public void RegisterScreens (RegionScreenCatalogBuilder screens)

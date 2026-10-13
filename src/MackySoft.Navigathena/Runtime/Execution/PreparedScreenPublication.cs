@@ -18,7 +18,6 @@ namespace MackySoft.Navigathena.Runtime.Execution
         private readonly TransitionPlayback playback;
         private readonly Dictionary<ScreenInstance, ViewPresentation> before = new();
         private readonly Dictionary<ScreenInstance, ScreenAnimationState> appearanceBefore = new();
-        private readonly HashSet<ScreenInstance> activeBefore = new();
         private readonly List<ScreenInstance> created = new();
         private readonly Dictionary<ScreenInstance, (NavigationEntry Entry, IScreenNavigation Navigation)> rebound = new();
         private readonly List<BlockerCoordinator.SuspendedConnection> suspendedBlockers = new();
@@ -90,17 +89,16 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 screen.PreparationReason = null;
                 before.Add(screen, screen.Presentation);
                 appearanceBefore.Add(screen, Appearance(screen.Entry.Id, update.BeforeComposition));
-                if (screen.IsActive)
-                {
-                    activeBefore.Add(screen);
-                }
-
             }
 
             List<Exception> inputFailures = new();
+            foreach (ScreenInstance screen in before.Keys)
+            {
+                screen.InvalidateForeground();
+            }
             try
             {
-                runtime.Blockers.CloseInput(before.Keys);
+                runtime.Blockers.CloseNavigation(before.Keys);
             }
             catch (Exception exception)
             {
@@ -117,19 +115,15 @@ namespace MackySoft.Navigathena.Runtime.Execution
             }
             foreach (ScreenInstance screen in before.Keys)
             {
-                if (playback.Configuration.Scope == NavigationTransitionScope.Host || !WillRetain(screen, update.ProposedAfter)
-                    || GetParticipation(screen, update.ProposedComposition)?.ActivityEligible != true
-                    || (GetReturnOptions(screen) is ScreenHistoryReturnOptions returning
-                        && (returning.Preparation == ScreenPreparationMode.Always || returning.EnterAnimation == ScreenEnterAnimationMode.Always)))
+                try
                 {
-                    try
-                    {
-                        await screen.CloseActivityAsync();
-                    }
-                    catch (Exception exception)
-                    {
-                        inputFailures.Add(exception);
-                    }
+                    // Every affected entry period ends before transition effects, regardless
+                    // of retained output or binding-owned work continuing in the background.
+                    await screen.CloseActivityAsync();
+                }
+                catch (Exception exception)
+                {
+                    inputFailures.Add(exception);
                 }
             }
             if (inputFailures.Count > 0)
@@ -437,27 +431,17 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
                 if (failures.All(failure => failure.Scope == PresentationFailureScope.RetiredResources))
                 {
-                    foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed) && GetParticipation(screen, composition)?.ActivityEligible == true))
-                    {
-                        await screen.ActivateAsync(ActivationFor(screen.Entry));
-                    }
-
                     ScreenInstance[] retained = created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)).Distinct().ToArray();
-                    await ScreenInstance.ApplyBatchAsync(retained.Select(screen =>
+                    await ActivateForegroundAsync(retained.Select(screen =>
                     {
                         bool output = GetParticipation(screen, composition)?.OutputPresented == true;
-                        bool input = output && screen.IsActive && GetParticipation(screen, composition)?.Foreground == true;
+                        bool input = GetParticipation(screen, composition)?.ActivityEligible == true;
                         return (screen, new ViewPresentation(output, input, screen.Presentation.Order));
                     }).ToArray());
-                    blockers?.OpenInput();
                 }
-                runtime.Orders.Refresh();
-                if (failures.All(failure => failure.Scope == PresentationFailureScope.RetiredResources))
+                else
                 {
-                    foreach (ScreenInstance screen in created.Concat(before.Keys).Where(screen => WillRetain(screen, committed)).Distinct())
-                    {
-                        screen.PublishForeground();
-                    }
+                    runtime.Orders.Refresh();
                 }
             }
             catch (Exception exception)
@@ -477,7 +461,7 @@ namespace MackySoft.Navigathena.Runtime.Execution
                 }
                 try
                 {
-                    blockers?.CloseInput();
+                    blockers?.CloseNavigation();
                 }
                 catch (Exception blockerFailure)
                 {
@@ -627,30 +611,15 @@ namespace MackySoft.Navigathena.Runtime.Execution
 
             try
             {
-                if (!playback.Departed)
-                {
-                    ScreenInstance[] restoring = before.Keys.Where(screen => !screen.IsEnding && !playback.Retains(screen)).ToArray();
-                    foreach (ScreenInstance screen in restoring)
-                    {
-                        if (activeBefore.Contains(screen))
-                        {
-                            await screen.ActivateAsync();
-                        }
-                    }
-                    await ScreenInstance.ApplyBatchAsync(restoring.Select(screen => (screen, before[screen])).ToArray());
-                }
                 foreach (BlockerCoordinator.SuspendedConnection connection in suspendedBlockers)
                 {
                     connection.Restore();
                 }
                 blockers?.Rollback();
-                runtime.Blockers.RestoreInput(before.Keys);
                 if (!playback.Departed)
                 {
-                    foreach (ScreenInstance screen in before.Keys.Where(screen => !screen.IsEnding && !playback.Retains(screen)))
-                    {
-                        screen.PublishForeground();
-                    }
+                    ScreenInstance[] restoring = before.Keys.Where(screen => !screen.IsEnding && !playback.Retains(screen)).ToArray();
+                    await ActivateForegroundAsync(restoring.Select(screen => (screen, before[screen])).ToArray(), true);
                 }
             }
             catch (Exception exception)
@@ -668,6 +637,25 @@ namespace MackySoft.Navigathena.Runtime.Execution
             {
                 usage.Dispose();
                 users.Remove(screen);
+            }
+        }
+
+        private async ValueTask ActivateForegroundAsync (IReadOnlyList<(ScreenInstance Screen, ViewPresentation Presentation)> updates, bool restoring = false)
+        {
+            // Settle native admission and ordering for the whole affected composition.
+            // Presenters can subscribe, retain qualification, and focus in one activation.
+            // Shown blockers already intercept pointers. Their navigation connection is
+            // ready first, but its screen qualification still opens only at activation entry.
+            runtime.Blockers.RestoreNavigation(updates.Where(update => update.Presentation.OutputEnabled && update.Presentation.InputEnabled)
+                .Select(update => update.Screen));
+            await ScreenInstance.ApplyBatchAsync(updates);
+            runtime.Orders.Refresh();
+            foreach (var update in updates)
+            {
+                if (update.Presentation.OutputEnabled && update.Presentation.InputEnabled)
+                {
+                    await update.Screen.ActivateAsync(restoring ? ScreenActivationReason.Recovery : ActivationFor(update.Screen.Entry));
+                }
             }
         }
 

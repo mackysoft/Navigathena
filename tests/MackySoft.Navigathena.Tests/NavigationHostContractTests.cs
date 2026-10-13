@@ -222,7 +222,7 @@ public sealed class NavigationHostContractTests
     });
     main.AddChildRegion(Notices, RegionCompositionMode.Layered, RegionOccupancy.Optional, notices =>
     {
-        notices.AddRoute<NoticeRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity);
+        notices.AddRoute<NoticeRoute>(RouteEntryOperations.Push, LowerPresentationPolicy.Modal);
     });
 });
         });

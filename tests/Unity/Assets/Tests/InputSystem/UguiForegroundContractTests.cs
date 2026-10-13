@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
@@ -21,11 +22,13 @@ namespace MackySoft.Navigathena.Unity.Tests
 {
     public sealed class UguiForegroundContractTests
     {
+        private static readonly RegionDefinitionId ModalRegion = new("modal");
         private readonly List<Object> objects = new();
         private readonly List<InputDevice> devices = new();
         private readonly List<Screen> screens = new();
         private EventSystem events = null!;
         private NavigationHost host = null!;
+        private Func<Screen, ValueTask>? activating;
         private InputSettings.BackgroundBehavior previousBackgroundBehavior;
 #if UNITY_EDITOR
         private InputSettings.EditorInputBehaviorInPlayMode previousEditorBehavior;
@@ -34,6 +37,7 @@ namespace MackySoft.Navigathena.Unity.Tests
         [SetUp]
         public void SetUp ()
         {
+            activating = null;
             previousBackgroundBehavior = InputSystem.settings.backgroundBehavior;
             InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
 #if UNITY_EDITOR
@@ -48,9 +52,10 @@ namespace MackySoft.Navigathena.Unity.Tests
 
             RegionDefinitionId root = new("root");
             NavigationDefinition definition = NavigationDefinition.Build(root, RegionCompositionMode.Layered,
-                region => region.AddRoute<Page>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.Preserve));
-            ScreenCatalog catalog = ScreenCatalog.Build(definition, builder => builder.RegisterScreens(root, registration =>
-                registration.RegisterScreen(new ScreenDefinition<Page>((creation, _) =>
+                region => region.AddRoute<Page>(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.Preserve,
+                    route => route.AddChildRegion(ModalRegion, RegionCompositionMode.Layered, RegionOccupancy.Optional,
+                        modal => modal.AddRoute<Page>(RouteEntryOperations.Push, LowerPresentationPolicy.Modal))));
+            ScreenDefinition<Page> page = new((creation, _) =>
                 {
                     CanvasViewAdapter view = Canvas("uGUI page");
                     float y = screens.Count == 0 ? -100 : 100;
@@ -59,10 +64,16 @@ namespace MackySoft.Navigathena.Unity.Tests
                     first.navigation = new Navigation { mode = Navigation.Mode.Explicit, selectOnDown = second };
                     second.navigation = new Navigation { mode = Navigation.Mode.Explicit, selectOnUp = first };
                     Screen screen = creation.Lifetime.CreateOwned(() => new Screen(events, first, second));
+                    screen.OnActivate = () => activating?.Invoke(screen) ?? default;
                     screens.Add(screen);
                     creation.ConnectPresentation(new ScreenPresentationBinding(new[] { view }));
                     return new ValueTask<IScreenLifecycleHandler<Page>>(screen);
-                }, ScreenInstancePolicy.Multiple))));
+                }, ScreenInstancePolicy.Multiple);
+            ScreenCatalog catalog = ScreenCatalog.Build(definition, builder =>
+            {
+                builder.RegisterScreens(root, registration => registration.RegisterScreen(page));
+                builder.RegisterScreens(ModalRegion, registration => registration.RegisterScreen(page));
+            });
             host = NavigationHost.Create(catalog, new NavigationHostOptions
             {
                 DefaultBlocker = new BlockerDefinition((preparation, _) =>
@@ -106,7 +117,7 @@ namespace MackySoft.Navigathena.Unity.Tests
         });
 
         [UnityTest]
-        public IEnumerator Foreground_notifications_and_explicit_links_keep_keyboard_and_gamepad_on_the_current_screen () => UniTask.ToCoroutine(async () =>
+        public IEnumerator Activation_and_explicit_links_keep_keyboard_and_gamepad_on_the_current_screen () => UniTask.ToCoroutine(async () =>
         {
             Keyboard keyboard = Device<Keyboard>();
             Gamepad gamepad = Device<Gamepad>();
@@ -118,7 +129,9 @@ namespace MackySoft.Navigathena.Unity.Tests
             await host.Client.PushAsync(host.Root, Destination.For(new Page()));
             Screen popup = screens[1];
             Assert.That(initial.IsValid, Is.False);
-            Assert.That(lower.Activity.CancellationToken.IsCancellationRequested, Is.False);
+            Assert.That(lower.Activity.CancellationToken.IsCancellationRequested, Is.True);
+            Assert.That(lower.Deactivations, Is.EqualTo(1));
+            Assert.That(lower.DeselectionQualification, Is.EqualTo(new[] { false }));
             Assert.That(events.currentSelectedGameObject, Is.SameAs(popup.First.gameObject));
             int lowerSelections = lower.Selections;
             await Frames();
@@ -155,12 +168,27 @@ namespace MackySoft.Navigathena.Unity.Tests
 
             await host.Client.BackAsync(host.Root);
             Assert.That(events.currentSelectedGameObject, Is.SameAs(lower.First.gameObject));
-            Assert.That(lower.Activations, Is.EqualTo(1));
+            Assert.That(lower.Activations, Is.EqualTo(2));
             Assert.That(lower.Foregrounds.Count, Is.EqualTo(2));
             Assert.That(initial.IsValid, Is.False);
             Assert.That(lower.Foregrounds[1].IsValid, Is.True);
             await host.ShutdownAsync();
             Assert.That(events.currentSelectedGameObject, Is.Null);
+        });
+
+        [UnityTest]
+        public IEnumerator Native_canvas_loss_revokes_qualification_before_deselection_callbacks () => UniTask.ToCoroutine(async () =>
+        {
+            await host.StartAsync(new Page());
+            Screen screen = screens[0];
+            ScreenForegroundToken token = screen.Foregrounds[0];
+
+            screen.First.GetComponentInParent<CanvasViewAdapter>().enabled = false;
+
+            Assert.That(token.IsValid, Is.False);
+            Assert.That(events.currentSelectedGameObject, Is.Null);
+            Assert.That(screen.DeselectionQualification, Is.EqualTo(new[] { false }));
+            await host.ShutdownAsync();
         });
 
         [UnityTest]
@@ -194,6 +222,60 @@ namespace MackySoft.Navigathena.Unity.Tests
             await Tap(touch, popupPoint);
             Assert.That(popup.Clicks, Is.EqualTo(2));
             Assert.That(lower.Clicks, Is.EqualTo(1));
+        });
+
+        [UnityTest]
+        public IEnumerator First_child_modal_blocks_pointer_input_to_its_operable_parent_while_activation_is_awaited () => UniTask.ToCoroutine(async () =>
+        {
+            Mouse mouse = Device<Mouse>();
+            Touchscreen touch = Device<Touchscreen>();
+            await host.StartAsync(new Page());
+            await Frames();
+            Screen parent = screens[0];
+            ScreenForegroundToken parentToken = parent.Foregrounds[0];
+            Vector2 parentPoint = RectTransformUtility.WorldToScreenPoint(null, parent.First.transform.position);
+            await Click(mouse, parentPoint);
+            Assert.That(parent.Clicks, Is.EqualTo(1));
+            TaskCompletionSource<bool> entered = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            TaskCompletionSource<bool> finish = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            activating = screen =>
+            {
+                if (ReferenceEquals(screen, parent))
+                {
+                    return default;
+                }
+                entered.TrySetResult(true);
+                return new ValueTask(finish.Task);
+            };
+            RegionInstanceId modal = host.State.Current.Regions.Values.Single(region => region.DefinitionId == ModalRegion).Id;
+            Task opening = host.Client.PushAsync(modal, Destination.For(new Page()));
+            try
+            {
+                await entered.Task.AsUniTask().Timeout(TimeSpan.FromSeconds(10));
+                Screen popup = screens[1];
+                Assert.That(opening.IsCompleted, Is.False);
+                Assert.That(parentToken.IsValid, Is.True);
+                Assert.That(parent.First.GetComponentInParent<CanvasViewAdapter>().Presentation.InputEnabled, Is.True);
+                Assert.That(popup.Activity.ForegroundToken.IsValid, Is.True);
+                await Click(mouse, parentPoint);
+                await Tap(touch, parentPoint);
+                Assert.That(parent.Clicks, Is.EqualTo(1));
+                Assert.That(parent.First.IsInteractable(), Is.True);
+                Vector2 popupPoint = RectTransformUtility.WorldToScreenPoint(null, popup.First.transform.position);
+                await Click(mouse, popupPoint);
+                await Tap(touch, popupPoint);
+                Assert.That(popup.Clicks, Is.EqualTo(2));
+                Assert.That(opening.IsCompleted, Is.False);
+            }
+            finally
+            {
+                finish.TrySetResult(true);
+                await opening.AsUniTask().Timeout(TimeSpan.FromSeconds(10));
+            }
+            await host.Client.BackAsync(modal);
+            await Click(mouse, parentPoint);
+            Assert.That(parent.Clicks, Is.EqualTo(2));
+            Assert.That(parentToken.IsValid, Is.True);
         });
 
         private CanvasViewAdapter Canvas (string name)
@@ -252,7 +334,7 @@ namespace MackySoft.Navigathena.Unity.Tests
 
         private sealed record Page : Route;
 
-        private sealed class Screen : IScreenLifecycleHandler<Page>, IScreenForegroundLifecycleHandler
+        private sealed class Screen : IScreenLifecycleHandler<Page>
         {
             private readonly EventSystem events;
             public Screen (EventSystem events, Button first, Button second)
@@ -262,11 +344,13 @@ namespace MackySoft.Navigathena.Unity.Tests
                 Second = second;
                 foreach (Button button in new[] { first, second })
                 {
-                    button.onClick.AddListener(() => Clicks++);
                     EventTrigger observer = button.gameObject.AddComponent<EventTrigger>();
                     EventTrigger.Entry selected = new() { eventID = EventTriggerType.Select };
                     selected.callback.AddListener(_ => Selections++);
                     observer.triggers.Add(selected);
+                    EventTrigger.Entry deselected = new() { eventID = EventTriggerType.Deselect };
+                    deselected.callback.AddListener(_ => DeselectionQualification.Add(Foregrounds.Count > 0 && Foregrounds[Foregrounds.Count - 1].IsValid));
+                    observer.triggers.Add(deselected);
                 }
             }
             public Button First { get; }
@@ -274,23 +358,39 @@ namespace MackySoft.Navigathena.Unity.Tests
             public int Clicks { get; private set; }
             public int Selections { get; private set; }
             public int Activations { get; private set; }
+            public int Deactivations { get; private set; }
+            public List<bool> DeselectionQualification { get; } = new();
             public ScreenActivityContext Activity { get; private set; } = null!;
             public List<ScreenForegroundToken> Foregrounds { get; } = new();
+            public Func<ValueTask>? OnActivate { get; set; }
             public ValueTask InitializeAsync (ScreenInitializationContext initialization, CancellationToken cancellationToken) => default;
             public ValueTask PrepareAsync (Page route, ScreenPreparationContext preparation, CancellationToken cancellationToken) => default;
             public ValueTask ActivateAsync (Page route, ScreenActivityContext activity)
             {
                 Activity = activity;
                 Activations++;
+                Assert.That(activity.ForegroundToken.IsValid, Is.True);
+                Foregrounds.Add(activity.ForegroundToken);
+                First.onClick.AddListener(Click);
+                Second.onClick.AddListener(Click);
+                events.SetSelectedGameObject(First.gameObject);
+                return OnActivate?.Invoke() ?? default;
+            }
+            public ValueTask DeactivateAsync ()
+            {
+                Deactivations++;
+                First.onClick.RemoveListener(Click);
+                Second.onClick.RemoveListener(Click);
                 return default;
             }
-            public ValueTask DeactivateAsync () => default;
-            public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
-            public void OnForegroundAvailable (ScreenForegroundToken foreground)
+            private void Click ()
             {
-                Foregrounds.Add(foreground);
-                events.SetSelectedGameObject(First.gameObject);
+                if (Foregrounds.Count > 0 && Foregrounds[Foregrounds.Count - 1].IsValid)
+                {
+                    Clicks++;
+                }
             }
+            public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
         }
 
         private sealed class Blocker : IBlockerPresenter

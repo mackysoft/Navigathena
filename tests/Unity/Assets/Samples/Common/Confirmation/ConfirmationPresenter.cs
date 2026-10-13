@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace MackySoft.Navigathena.Samples.Common.Confirmation
 {
-    public sealed class ConfirmationPresenter : IScreenLifecycleHandler<ConfirmationRoute, bool>, IScreenForegroundLifecycleHandler
+    public sealed class ConfirmationPresenter : IScreenLifecycleHandler<ConfirmationRoute, bool>
     {
         private readonly ConfirmationPopupView view;
         private readonly EventSystem eventSystem;
@@ -32,14 +32,9 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
             return default;
         }
 
-        public void OnForegroundAvailable (ScreenForegroundToken foreground)
-        {
-            foregroundToken = foreground;
-            eventSystem.SetSelectedGameObject(view.Decline.gameObject);
-        }
-
         public ValueTask ActivateAsync (ConfirmationRoute route, ScreenActivityContext<bool> activity)
         {
+            foregroundToken = activity.ForegroundToken;
             accept = () =>
             {
                 if (foregroundToken.IsValid)
@@ -64,6 +59,7 @@ namespace MackySoft.Navigathena.Samples.Common.Confirmation
             view.Accept.onClick.AddListener(accept);
             view.Decline.onClick.AddListener(decline);
             view.Close.onClick.AddListener(close);
+            eventSystem.SetSelectedGameObject(view.Decline.gameObject);
             return default;
         }
 

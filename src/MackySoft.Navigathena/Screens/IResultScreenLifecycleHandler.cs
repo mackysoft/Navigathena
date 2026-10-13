@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace MackySoft.Navigathena
 {
     /// <summary>The single lifecycle entry point for an answering screen. Runtime gates cancellation around callbacks.</summary>
-    /// <remarks>Initialization, preparation, stopping, and resource ownership follow the same contract as a screen without a result. Activation receives the typed call endpoint only after transition effects finish.</remarks>
+    /// <remarks>Initialization, preparation, stopping, and resource ownership follow the same contract as a screen without a result. Activation receives the typed call endpoint and a valid foreground token after transition effects, ordering, and native input admission finish. Establish operation subscriptions and native focus during activation.</remarks>
     public interface IScreenLifecycleHandler<in TRoute, TResult> where TRoute : Route<TResult>
     {
         /// <summary>Initializes the instance once. The context registers instance-owned resources and reports initialization progress only during this callback.</summary>

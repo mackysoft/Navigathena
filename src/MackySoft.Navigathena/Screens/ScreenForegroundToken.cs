@@ -4,28 +4,30 @@ namespace MackySoft.Navigathena
 {
     /// <summary> Represents the eligibility of a screen for application operations during one foreground period. </summary>
     /// <remarks>
-    /// The runtime issues this token when foreground presentation is ready. The application can retain it and check
-    /// IsValid before executing an operation. Activity may outlive this period. Returning to the foreground issues
+    /// The runtime supplies this token through ScreenActivityContext after native input admission, when activation starts.
+    /// The application can retain it and check IsValid before executing an operation. Returning to the foreground issues
     /// a new token; an invalid token never becomes valid again. Copies refer to the same foreground period.
     /// The default value is invalid.
     /// </remarks>
     public readonly struct ScreenForegroundToken
     {
-        internal ScreenForegroundToken (NavigationEntryId entryId, RegionInstanceId regionId, CancellationToken cancellationToken)
+        private readonly ScreenForegroundPeriod? period;
+
+        internal ScreenForegroundToken (NavigationEntryId entryId, RegionInstanceId regionId, ScreenForegroundPeriod period)
         {
             EntryId = entryId;
             RegionId = regionId;
-            CancellationToken = cancellationToken;
+            this.period = period;
         }
 
         public NavigationEntryId EntryId { get; }
         public RegionInstanceId RegionId { get; }
 
         /// <summary> Is true while the token's foreground period remains available for application operations. </summary>
-        public bool IsValid => CancellationToken.CanBeCanceled && !CancellationToken.IsCancellationRequested;
+        public bool IsValid => period?.IsValid == true;
 
-        /// <summary> Signals the end of an issued foreground period, independently of activity; pass it to cancellable asynchronous work. </summary>
-        /// <remarks> The default value returns CancellationToken.None. Check IsValid before starting an application operation. </remarks>
-        public CancellationToken CancellationToken { get; }
+        /// <summary> Signals revocation after native input closes; use it only for work that must end with this foreground period. </summary>
+        /// <remarks> Eligibility is invalidated before native focus-loss callbacks or cancellation notification. The default value returns CancellationToken.None. Work that must survive a popup needs a separate lifetime. </remarks>
+        public CancellationToken CancellationToken => period?.CancellationToken ?? CancellationToken.None;
     }
 }

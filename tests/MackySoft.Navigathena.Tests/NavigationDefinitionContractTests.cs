@@ -136,18 +136,16 @@ public sealed class NavigationDefinitionContractTests
     }
 
     [Theory]
-    [InlineData(LowerPresentationOutput.Preserve, LowerPresentationActivity.Suspend, LowerPresentationRetention.Release, LowerPresentationBoundary.Required)]
-    [InlineData(LowerPresentationOutput.Hide, LowerPresentationActivity.Continue, LowerPresentationRetention.Release, LowerPresentationBoundary.Required)]
-    [InlineData((LowerPresentationOutput)2, LowerPresentationActivity.Suspend, LowerPresentationRetention.Retain, LowerPresentationBoundary.Required)]
-    [InlineData(LowerPresentationOutput.Hide, (LowerPresentationActivity)2, LowerPresentationRetention.Retain, LowerPresentationBoundary.Required)]
-    [InlineData(LowerPresentationOutput.Hide, LowerPresentationActivity.Suspend, (LowerPresentationRetention)2, LowerPresentationBoundary.Required)]
-    [InlineData(LowerPresentationOutput.Hide, LowerPresentationActivity.Suspend, LowerPresentationRetention.Retain, (LowerPresentationBoundary)2)]
+    [InlineData(LowerPresentationOutput.Preserve, LowerPresentationRetention.Release, LowerPresentationBoundary.Required)]
+    [InlineData((LowerPresentationOutput)2, LowerPresentationRetention.Retain, LowerPresentationBoundary.Required)]
+    [InlineData(LowerPresentationOutput.Hide, (LowerPresentationRetention)2, LowerPresentationBoundary.Required)]
+    [InlineData(LowerPresentationOutput.Hide, LowerPresentationRetention.Retain, (LowerPresentationBoundary)2)]
     public void Invalid_lower_policy_does_not_reserve_the_route_type (
-        LowerPresentationOutput output, LowerPresentationActivity activity, LowerPresentationRetention retention, LowerPresentationBoundary boundary)
+        LowerPresentationOutput output, LowerPresentationRetention retention, LowerPresentationBoundary boundary)
     {
         NavigationDefinition definition = NavigationDefinition.Build(Root, RegionCompositionMode.Layered, root =>
         {
-            Assert.Throws<ArgumentException>(() => root.AddRoute<RootRoute>(RouteEntryOperations.Reset, new LowerPresentationPolicy(output, activity, retention, boundary)));
+            Assert.Throws<ArgumentException>(() => root.AddRoute<RootRoute>(RouteEntryOperations.Reset, new LowerPresentationPolicy(output, retention, boundary)));
             Assert.Throws<ArgumentNullException>(() => root.AddRoute<RootRoute>(RouteEntryOperations.Reset, null!));
             root.AddRoute<RootRoute>(RouteEntryOperations.Reset, LowerPresentationPolicy.Preserve);
         });
@@ -273,10 +271,10 @@ public sealed class NavigationDefinitionContractTests
     [Fact]
     public void Built_in_lower_presentation_policies_express_the_documented_effects ()
     {
-        Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Preserve, LowerPresentationActivity.Continue, LowerPresentationRetention.Retain, LowerPresentationBoundary.WhenLowerVisible), LowerPresentationPolicy.Preserve);
-        Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Preserve, LowerPresentationActivity.Suspend, LowerPresentationRetention.Retain, LowerPresentationBoundary.Required), LowerPresentationPolicy.SuspendActivity);
-        Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Hide, LowerPresentationActivity.Suspend, LowerPresentationRetention.Retain, LowerPresentationBoundary.Required), LowerPresentationPolicy.HideAndRetain);
-        Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Hide, LowerPresentationActivity.Suspend, LowerPresentationRetention.Release, LowerPresentationBoundary.Required), LowerPresentationPolicy.HideAndRelease);
+        Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Preserve, LowerPresentationRetention.Retain, LowerPresentationBoundary.WhenLowerVisible), LowerPresentationPolicy.Preserve);
+        Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Preserve, LowerPresentationRetention.Retain, LowerPresentationBoundary.Required), LowerPresentationPolicy.Modal);
+        Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Hide, LowerPresentationRetention.Retain, LowerPresentationBoundary.Required), LowerPresentationPolicy.HideAndRetain);
+        Assert.Equal(new LowerPresentationPolicy(LowerPresentationOutput.Hide, LowerPresentationRetention.Release, LowerPresentationBoundary.Required), LowerPresentationPolicy.HideAndRelease);
     }
 
     private sealed record RootRoute : Route;

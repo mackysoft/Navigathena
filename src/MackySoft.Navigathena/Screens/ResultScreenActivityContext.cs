@@ -6,7 +6,7 @@ namespace MackySoft.Navigathena
     public sealed class ScreenActivityContext<TResult> : ScreenActivityContext
     {
         internal ScreenActivityContext (ScreenActivityContext context)
-            : base(context.EntryId, context.RegionId, context.Navigation, context.CancellationToken, context.Calls, context.StartWork, context.IsFirstActivation, context.Reason, context.PreparationReason)
+            : base(context.EntryId, context.RegionId, context.Navigation, context.CancellationToken, context.ForegroundToken, context.Calls, context.StartWork, context.IsFirstActivation, context.Reason, context.PreparationReason)
         {
             Call = context.Calls.Connect<TResult>();
         }

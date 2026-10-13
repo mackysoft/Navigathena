@@ -59,7 +59,7 @@ namespace MackySoft.Navigathena.Unity.Tests
                 screens.Register(RouteEntryOperations.Reset | RouteEntryOperations.Push, LowerPresentationPolicy.Preserve,
                     new ScreenDefinition<Page>((_, _) => new ValueTask<IScreenLifecycleHandler<Page>>(new PagePresenter()),
                         ScreenInstancePolicy.Multiple));
-                screens.Register<ConfirmationRoute, bool>(RouteEntryOperations.Push, LowerPresentationPolicy.SuspendActivity,
+                screens.Register<ConfirmationRoute, bool>(RouteEntryOperations.Push, LowerPresentationPolicy.Modal,
                     (creation, _) =>
                     {
                         creation.ConnectPresentation(new ScreenPresentationBinding(new[] { adapter }));
@@ -117,7 +117,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             };
 
             await host.Client.PushAsync(host.Root, Destination.For(new Page()));
-            Assert.That(popup.Activity.CancellationToken.IsCancellationRequested, Is.False);
+            Assert.That(popup.Activity.CancellationToken.IsCancellationRequested, Is.True);
             Assert.That(initial.IsValid, Is.False);
 
             // Exercise the application callback, independently of native hit testing and gesture state.
@@ -127,7 +127,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             Assert.That(answer.IsCompleted, Is.False);
 
             await host.Client.BackAsync(host.Root);
-            Assert.That(popup.Activations, Is.EqualTo(1));
+            Assert.That(popup.Activations, Is.EqualTo(2));
             Assert.That(events.currentSelectedGameObject, Is.SameAs(view.Decline.gameObject));
             Assert.That(initial.IsValid, Is.False);
             Assert.That(popup.Foregrounds.Count, Is.EqualTo(2));
@@ -174,7 +174,7 @@ namespace MackySoft.Navigathena.Unity.Tests
             public ValueTask TerminateAsync (NavigationProgressReporter progress) => default;
         }
 
-        private sealed class ObservedPopup : IScreenLifecycleHandler<ConfirmationRoute, bool>, IScreenForegroundLifecycleHandler
+        private sealed class ObservedPopup : IScreenLifecycleHandler<ConfirmationRoute, bool>
         {
             private readonly ConfirmationPresenter presenter;
             public ObservedPopup (ConfirmationPresenter presenter) => this.presenter = presenter;
@@ -189,15 +189,11 @@ namespace MackySoft.Navigathena.Unity.Tests
             {
                 Activity = activity;
                 Activations++;
+                Foregrounds.Add(activity.ForegroundToken);
                 return presenter.ActivateAsync(route, activity);
             }
             public ValueTask DeactivateAsync () => presenter.DeactivateAsync();
             public ValueTask TerminateAsync (NavigationProgressReporter progress) => presenter.TerminateAsync(progress);
-            public void OnForegroundAvailable (ScreenForegroundToken foreground)
-            {
-                presenter.OnForegroundAvailable(foreground);
-                Foregrounds.Add(foreground);
-            }
         }
 
         private sealed class Blocker : IBlockerPresenter

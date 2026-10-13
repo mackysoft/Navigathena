@@ -153,7 +153,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
                     }
                     ConnectionUpdate change = new(this, definition, connected);
                     changes.Add(change);
-                    connected?.CloseInput();
+                    connected?.CloseNavigation();
                     BlockerInstance? target = next is null ? null : await GetOrCreateAsync(operation, definition, next.Owner, cancellationToken);
                     bool replacement = previous is not null && after.Values.Any(selection =>
                         update.ProposedAfter.GetEntry(selection.Entry).RegionId == update.Before.GetEntry(previous.Entry).RegionId);
@@ -250,10 +250,10 @@ namespace MackySoft.Navigathena.Runtime.Blockers
             }
         }
 
-        public void RestoreInput (IEnumerable<ScreenInstance> screens) => ApplyInput(screens, blocker => blocker.OpenInput());
-        public void CloseInput (IEnumerable<ScreenInstance> screens) => ApplyInput(screens, blocker => blocker.CloseInput());
+        public void RestoreNavigation (IEnumerable<ScreenInstance> screens) => ApplyNavigation(screens, blocker => blocker.OpenNavigation());
+        public void CloseNavigation (IEnumerable<ScreenInstance> screens) => ApplyNavigation(screens, blocker => blocker.CloseNavigation());
 
-        private void ApplyInput (IEnumerable<ScreenInstance> screens, Action<BlockerInstance> apply)
+        private void ApplyNavigation (IEnumerable<ScreenInstance> screens, Action<BlockerInstance> apply)
         {
             HashSet<ScreenInstance> affected = new(screens);
             BlockerInstance[] connected;
@@ -287,7 +287,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
             {
                 blocker.Connect(screen);
                 blocker.Show(false);
-                blocker.OpenInput();
+                blocker.OpenNavigation();
             }
         }
 
@@ -430,8 +430,7 @@ namespace MackySoft.Navigathena.Runtime.Blockers
                 }
                 ApplyAll(changes, change => change.Commit(state));
             }
-            public void OpenInput () => ApplyAll(changes, change => change.OpenInput());
-            public void CloseInput () => ApplyAll(changes, change => change.CloseInput());
+            public void CloseNavigation () => ApplyAll(changes, change => change.CloseNavigation());
             public void Rollback () => ApplyAll(changes, change => change.Rollback());
         }
 
@@ -483,13 +482,12 @@ namespace MackySoft.Navigathena.Runtime.Blockers
                     next.Show(enter);
                 }
             }
-            public void OpenInput () => next?.OpenInput();
-            public void CloseInput () => next?.CloseInput();
+            public void CloseNavigation () => next?.CloseNavigation();
             public void Rollback ()
             {
                 if (!committed)
                 {
-                    previous?.OpenInput();
+                    previous?.OpenNavigation();
                 }
             }
         }
