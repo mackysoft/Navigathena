@@ -90,6 +90,16 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="200-preview5---2026-10-23">[2.0.0-preview.5] - 2026-10-23</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Fixed UI Toolkit screens losing their content connection and event subscriptions when USS reimports rebuild their <code>UIDocument</code> during Editor Play Mode. Existing controls and the current input-permission period are retained without repeating screen activation.
+<ul>
+<li>Background and hidden views keep their input restrictions, and controls' enabled states remain unchanged.</li>
+<li>Structural UXML changes still require restarting Play Mode.</li>
+</ul>
+</li>
+</ul>
 <h2 id="200-preview4---2026-10-13">[2.0.0-preview.4] - 2026-10-13</h2>
 <h3 id="added">Added</h3>
 <ul>
@@ -111,7 +121,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li><strong>Breaking:</strong> Changed UI Toolkit screen setup to host-owned native documents and separate panels. Assign UXML to <code>UiToolkitViewAdapter.ContentAsset</code>, remove <code>UIDocument</code> from managed prefabs, create <code>UiToolkitPresentationHost</code> from a <code>PanelSettings</code> template, and acquire screens through <code>AcquireUiToolkitScreenAsync</code>. Keep application controls under the returned <code>ContentRoot</code>; the host does not modify the shared settings asset. (#27)</li>
 <li>Changed GitHub releases to use the matching CHANGELOG entry and publish as Latest, including versions with a preview suffix.</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>Fixed registered background UI Toolkit content acquiring native focus or receiving input, including direct <code>Focus()</code> calls, traversal, and dynamically added controls. Closing input releases owned focus and pointer captures without changing controls' enabled state, <code>focusable</code>, <code>tabIndex</code>, or disabled styling. (#27)</li>
 <li>Fixed uGUI view loss leaving native input or selection available. Losing a registered view now closes its raycaster and revokes operation qualification before selection cleanup, without selection polling or script execution-order requirements. (#27)
@@ -126,14 +136,14 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <ul>
 <li>Changed Unity frame waits to prefer UniTask 2.1 or newer when installed, including on Unity 6. Unity 2023.1 and newer use the native Awaitable when UniTask is absent.</li>
 </ul>
-<h3 id="fixed-1">Fixed</h3>
+<h3 id="fixed-2">Fixed</h3>
 <ul>
 <li>Fixed Unity adapter compilation on Unity 2021.3 and newer for scene loading, prefab cleanup, Animator playback, and Addressables operations. UniTask 2.1 or newer is required on Unity versions before 2023.1. (#25)</li>
 <li>Fixed uGUI and UI Toolkit adapter compilation on Unity versions before 6000.4 by using object identities available in those editors.</li>
 <li>Fixed missing-dependency diagnostics on editors without Awaitable: compilation now reports that UniTask 2.1 or newer must be installed through Unity Package Manager.</li>
 </ul>
 <h2 id="200-preview2---2026-10-07">[2.0.0-preview.2] - 2026-10-07</h2>
-<h3 id="fixed-2">Fixed</h3>
+<h3 id="fixed-3">Fixed</h3>
 <ul>
 <li>Fixed navigation requests, cancellation waits, recovery coordination, and shutdown stalling in Unity WebGL.</li>
 <li>Fixed competing native scene acquisitions waiting for managed worker threads in Unity WebGL.</li>
@@ -175,7 +185,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li><code>BlankSceneIdentifier</code> is now a test-only API.</li>
 <li>Rename from <code>BlankSceneIdentifier</code> to <code>AnonymousSceneIdentifier</code>.</li>
 </ul>
-<h3 id="fixed-3">Fixed</h3>
+<h3 id="fixed-4">Fixed</h3>
 <ul>
 <li>Fixed that scenes were not being cleaned up during test setup and that some tests were not functioning correctly.</li>
 <li>Fixed many compiler warnings.</li>
@@ -189,7 +199,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <ul>
 <li><code>BlankSceneIdentifier</code> make to generic.</li>
 </ul>
-<h3 id="fixed-4">Fixed</h3>
+<h3 id="fixed-5">Fixed</h3>
 <ul>
 <li>Fixed incorrect history on interrupt pop during pop.</li>
 <li><code>OnExit</code> is no longer called if <code>OnEnter</code> was not called on a SceneEntryPoint when the transition process was canceled.</li>
