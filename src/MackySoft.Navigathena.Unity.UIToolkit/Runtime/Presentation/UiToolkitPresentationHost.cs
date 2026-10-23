@@ -84,6 +84,9 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
                 UIDocument document = native.AddComponent<UIDocument>();
                 document.panelSettings = settings;
                 binding = new UiToolkitViewBinding(adapter, this, document, settings, adapter.ContentAsset);
+#if UNITY_EDITOR
+                native.AddComponent<UiToolkitDocumentLifecycle>().Bind(binding);
+#endif
                 bindings.Add(binding);
                 adapter.Bind(binding);
             }
