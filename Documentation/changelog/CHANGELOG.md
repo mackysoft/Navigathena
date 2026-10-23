@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-preview.5] - 2026-10-23
+
+### Fixed
+
+- Fixed UI Toolkit screens losing their content connection and event subscriptions when USS reimports rebuild their `UIDocument` during Editor Play Mode. Existing controls and the current input-permission period are retained without repeating screen activation.
+  - Background and hidden views keep their input restrictions, and controls' enabled states remain unchanged.
+  - Structural UXML changes still require restarting Play Mode.
+
 ## [2.0.0-preview.4] - 2026-10-13
 
 ### Added
