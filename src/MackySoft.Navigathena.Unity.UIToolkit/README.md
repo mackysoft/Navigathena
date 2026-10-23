@@ -30,6 +30,12 @@ Use `view.ContentRoot.Q<Button>("confirm")` to obtain application controls. Scre
 
 Keep application controls within `ContentRoot`. The host owns the surrounding hierarchy and native objects; screen code does not configure or reconstruct the document. Disabling or destroying the adapter ends that connection; reenabling it does not restore input. Release all screen resources before disposing `ui` and its borrowed dependencies.
 
+## Editor live reload
+
+In Play Mode, stylesheet reimports can cause Unity to recreate the native document root. The host reconnects the existing `ContentRoot` and controls, preserving event subscriptions and the current screen input permission period. It does not rerun the screen lifecycle or choose a new focus target. Input restrictions still apply to background and hidden screens.
+
+The constructed application content is retained rather than cloned again. Restart Play Mode to apply structural UXML changes.
+
 ## Observe screen input permission
 
 Establish operation subscriptions, retain `activity.ForegroundToken`, and set initial or returning focus with the control's native `Focus()` in `ActivateAsync`. All affected adapters have finished applying input admission before this callback starts; controls can receive input and an input session can be captured. Remove operation subscriptions in `DeactivateAsync`, including cover by a popup. Display updates and separately owned work do not end with that subscription period.

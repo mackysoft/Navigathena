@@ -57,7 +57,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
 
         private void OnDown (PointerDownEvent evt)
         {
-            if (!binding.InputAllowed)
+            if (!binding.NativeInputAllowed)
             {
                 Block(evt);
                 return;
@@ -67,7 +67,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
 
         private void OnMove (PointerMoveEvent evt)
         {
-            if (!binding.InputAllowed)
+            if (!binding.NativeInputAllowed)
             {
                 Block(evt);
                 return;
@@ -88,7 +88,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
 
         private void OnCapture (PointerCaptureEvent evt)
         {
-            if (!binding.InputAllowed && binding.Panel.GetCapturingElement(evt.pointerId) is VisualElement captured
+            if (!binding.NativeInputAllowed && binding.Panel.GetCapturingElement(evt.pointerId) is VisualElement captured
                 && binding.OwnsNative(captured))
             {
                 captured.ReleasePointer(evt.pointerId);
@@ -99,7 +99,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
 
         private void OnPointerInput (EventBase evt)
         {
-            if (!binding.InputAllowed)
+            if (!binding.NativeInputAllowed)
             {
                 Block(evt);
             }

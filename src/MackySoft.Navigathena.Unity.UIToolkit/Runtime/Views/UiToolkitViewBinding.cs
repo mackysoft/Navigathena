@@ -18,6 +18,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
         private VisualElement? documentRoot;
         private IPanel? panel;
         private NativeInputGate? input;
+        private bool rebuilding;
         private bool lost;
         private bool attached;
         private bool disposed;
@@ -42,19 +43,20 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
         public UiToolkitPresentationHost Host { get; }
         internal ViewInputGrant? Grant { get; private set; }
         internal bool InputAllowed => IsAlive && Grant is not null && Presentation.OutputEnabled && Presentation.InputEnabled;
-        internal bool CanReceiveFocus => InputAllowed && Presentation.InputMode == ViewInputMode.All;
+        internal bool NativeInputAllowed => !rebuilding && InputAllowed;
+        internal bool CanReceiveFocus => NativeInputAllowed && Presentation.InputMode == ViewInputMode.All;
         public VisualElement ContentRoot { get; }
         public IViewAdapter Adapter => adapter;
         public object Identity => UnityObjectIdentity.Get(document);
         public ViewPresentation Presentation { get; private set; }
         public bool IsAttached => attached;
         public IPanel Panel => panel ?? throw new InvalidOperationException("The view has no native panel.");
-        public VisualElement NativeRoot => documentRoot ?? throw new InvalidOperationException("The view has no native root.");
         public bool IsAlive => !lost && attached && adapter != null && adapter.enabled && adapter.gameObject.activeInHierarchy
             && document != null && document.isActiveAndEnabled && settings != null
-            && ReferenceEquals(document.rootVisualElement, documentRoot) && ReferenceEquals(document.panelSettings, settings)
-            && documentRoot is not null && ReferenceEquals(documentRoot.hierarchy.parent, boundary.contentContainer)
-            && ReferenceEquals(boundary.panel, panel);
+            && ReferenceEquals(document.panelSettings, settings) && ReferenceEquals(boundary.panel, panel)
+            && (rebuilding || documentRoot is not null && ReferenceEquals(document.rootVisualElement, documentRoot)
+                && ReferenceEquals(documentRoot.hierarchy.parent, boundary.contentContainer)
+                && ReferenceEquals(ContentRoot.hierarchy.parent, documentRoot));
 
         public void Attach ()
         {
@@ -80,6 +82,63 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
             boundary.contentContainer.AddManipulator(input);
             documentRoot.RegisterCallback<DetachFromPanelEvent>(OnDetached);
             attached = true;
+        }
+
+        internal void BeginDocumentReload ()
+        {
+            if (!attached || lost || disposed)
+            {
+                return;
+            }
+            if (!IsAlive)
+            {
+                ReportLoss();
+                return;
+            }
+            // Native reconstruction is not a new screen permission period. Keep the
+            // grant and application content, but admit no native work while detached.
+            rebuilding = true;
+            try
+            {
+                input?.CancelPointers();
+            }
+            catch
+            {
+                ReportLoss();
+                throw;
+            }
+        }
+
+        internal void CompleteDocumentReload ()
+        {
+            if (!rebuilding || lost || disposed)
+            {
+                return;
+            }
+            try
+            {
+                VisualElement root = document.rootVisualElement;
+                if (!IsAlive || root is null || !ReferenceEquals(root.panel, panel))
+                {
+                    throw new InvalidOperationException("The managed UIDocument could not reconnect after live reload.");
+                }
+                documentRoot?.UnregisterCallback<DetachFromPanelEvent>(OnDetached);
+                root.RemoveFromHierarchy();
+                boundary.Add(root);
+                root.Add(ContentRoot);
+                documentRoot = root;
+                root.RegisterCallback<DetachFromPanelEvent>(OnDetached);
+                rebuilding = false;
+                if (!IsAlive)
+                {
+                    throw new InvalidOperationException("The managed UI Toolkit connection changed during live reload.");
+                }
+            }
+            catch
+            {
+                ReportLoss();
+                throw;
+            }
         }
 
         public void Validate (ViewPresentation presentation)
@@ -163,8 +222,8 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
             {
                 using NativeDispatchCheckpoint checkpoint = NativeDispatchCheckpoint.GetPooled();
                 checkpoint.Completion = completion;
-                checkpoint.target = NativeRoot;
-                NativeRoot.SendEvent(checkpoint);
+                checkpoint.target = boundary.contentContainer;
+                boundary.contentContainer.SendEvent(checkpoint);
                 await completion.Task;
                 UnityThread.AssertCurrent();
             }
@@ -241,7 +300,7 @@ namespace MackySoft.Navigathena.Unity.UIToolkit
 
         private void OnDetached (DetachFromPanelEvent evt)
         {
-            if (ReferenceEquals(evt.target, documentRoot))
+            if (!rebuilding && ReferenceEquals(evt.target, documentRoot))
             {
                 ReportLoss();
             }
